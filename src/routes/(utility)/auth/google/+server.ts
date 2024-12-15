@@ -10,6 +10,7 @@ import { BelcodaError } from '$lib/server';
 export const POST = async function (event) {
 	try {
 		const tokenCookie = event.cookies.get('g_csrf_token');
+		const continueUrl = event.url.searchParams.get('continue');
 		const body = await event.request.formData();
 		const tokenBody = body.get('g_csrf_token');
 		const credential = body.get('credential');
@@ -24,7 +25,7 @@ export const POST = async function (event) {
 			body: parsedSignInDetails
 		});
 		event.cookies.set(COOKIE_SESSION_NAME, session, { path: '/' });
-		return redirect(302, '/');
+		return redirect(302, continueUrl ? continueUrl : '/');
 	} catch (err) {
 		if (err instanceof Error) {
 			throw new BelcodaError(

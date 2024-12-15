@@ -1,6 +1,13 @@
 <script lang="ts">
 	import { PUBLIC_HOST, PUBLIC_GOOGLE_AUTH_CLIENT_ID } from '$env/static/public';
 	import H2 from '$lib/comps/typography/H2.svelte';
+	import { page } from '$app/stores';
+
+    // Update the login_uri to include the continue parameter if it exists
+    $: continueUrl = $page.url.searchParams.get('continue');
+    $: loginUri = continueUrl 
+        ? `${PUBLIC_HOST}/auth/google?continue=${continueUrl}` 
+        : `${PUBLIC_HOST}/auth/google`;
 </script>
 
 <svelte:head>
@@ -24,7 +31,7 @@
 					data-client_id={PUBLIC_GOOGLE_AUTH_CLIENT_ID}
 					data-context="signin"
 					data-ux_mode="popup"
-					data-login_uri={`${PUBLIC_HOST}/auth/google`}
+					data-login_uri={loginUri}
 					data-auto_prompt="false"
 				></div>
 
