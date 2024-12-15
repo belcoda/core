@@ -93,9 +93,13 @@ const belcodaHandler: Handle = async ({ event, resolve }) => {
 	}
 
 	if (!authenticated) {
+		// Get the url that the user is trying to visit for redirection after login
+		const url = event.url.pathname + event.url.search;
 		return new Response(null, {
 			status: 302,
-			headers: { location: '/login' }
+			headers: {
+				location: '/login' + (url === '/login' || url === '/' ? '' : '?continue=' + url)
+			}
 		});
 	}
 
