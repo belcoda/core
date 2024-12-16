@@ -54,20 +54,29 @@ async function queueCustomFieldSet({
 	await Promise.all(promiseArr);
 }
 
+type CreateOptions = {
+	petitionId?: number;
+	petitionName?: string;
+	eventId?: number;
+	eventName?: string;
+};
+
 export async function create({
 	instance_id,
 	admin_id,
 	body,
 	t,
 	queue,
-	method
+	method,
+	options
 }: {
 	instance_id: number;
 	admin_id?: number;
 	body: schema.Create;
 	t: App.Localization;
 	queue: App.Queue;
-	method: 'manual' | 'import';
+	method: 'manual' | 'import' | 'event_registration' | 'petition_signature';
+	options?: CreateOptions;
 }) {
 	const parsed = v.parse(v.looseObject({ ...schema.create.entries }), body); //because we want to allow custom fields to be passed through to the function
 	//const parsed = parse(schema.create, body);
@@ -99,18 +108,75 @@ export async function create({
 	}
 	await redis.del(redisString(instance_id, 'all'));
 	const person = await read({ instance_id, person_id: inserted.id, t });
-	await queueInteraction({
-		personId: person.id,
-		adminId: point_person_id,
-		instanceId: instance_id,
-		details: {
-			type: 'person_added',
-			details: {
-				method: method
+
+	switch (method) {
+		case 'petition_signature': {
+			if (options?.petitionId && options?.petitionName) {
+				await queueInteraction({
+					personId: person.id,
+					adminId: point_person_id,
+					instanceId: instance_id,
+					details: {
+						type: 'person_joined',
+						details: {
+							method: 'petition_signature',
+							petition_id: options.petitionId,
+							petition_name: options.petitionName
+						}
+					},
+					queue: queue
+				});
+				//break is inside the if conditional because we DO want it fall through to the default case if we don't have the petitionId and petitionName
+				break;
 			}
-		},
-		queue: queue
-	});
+		}
+		case 'event_registration': {
+			if (options?.eventId && options.eventName) {
+				await queueInteraction({
+					personId: person.id,
+					adminId: point_person_id,
+					instanceId: instance_id,
+					details: {
+						type: 'person_joined',
+						details: {
+							method: 'event_registration',
+							event_id: options.eventId,
+							event_name: options.eventName
+						}
+					},
+					queue: queue
+				});
+				//break is inside the if conditional because we DO want it fall through to the default case if we don't have the petitionId and petitionName
+				break;
+			}
+		}
+		case 'import': {
+			await queueInteraction({
+				personId: person.id,
+				adminId: point_person_id,
+				instanceId: instance_id,
+				details: {
+					type: 'person_added',
+					details: { method: 'import' }
+				},
+				queue: queue
+			});
+			break;
+		}
+		default: {
+			await queueInteraction({
+				personId: person.id,
+				adminId: point_person_id,
+				instanceId: instance_id,
+				details: {
+					type: 'person_added',
+					details: { method: 'manual' }
+				},
+				queue: queue
+			});
+		}
+	}
+
 	return person;
 }
 
