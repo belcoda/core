@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { type List } from '$lib/schema/core/tags';
-	import { debounce } from '$lib/utils';
+	import { cn, debounce } from '$lib/utils';
 	import type { Snippet } from 'svelte';
 	type Props = {
 		item?: List['items'][number];
 		items?: List['items'];
-		value?: number;
+		value?: number | null;
 		onselect: (item: List['items'][number]) => void;
 		children?: Snippet;
 	};
@@ -24,7 +24,7 @@
 
 	import * as Command from '$lib/comps/ui/command';
 	import * as Popover from '$lib/comps/ui/popover';
-	import Button from '$lib/comps/ui/button/button.svelte';
+	import { buttonVariants } from '$lib/comps/ui/button/button.svelte';
 	import Plus from 'lucide-svelte/icons/plus';
 
 	import { onMount } from 'svelte';
@@ -45,7 +45,7 @@
 		item = items[selected];
 	}
 
-	let searchString: string | undefined = $state();
+	let searchString: string = $state('');
 
 	async function search() {
 		loading = true;
@@ -58,23 +58,21 @@
 	{@render popover()}
 </div>
 {#snippet popover()}
-	<Popover.Root bind:open let:ids>
-		<Popover.Trigger asChild let:builder>
-			<Button
-				size="sm"
-				builders={[builder]}
-				variant="outline"
-				class="justify-start gap-x-1 rounded-lg px-2 py-3"
-			>
-				{#if item}
-					{item.name}
-				{:else if children}
-					{@render children()}
-				{:else}
-					<Plus size={14} />
-					<div class="text-sm">{$page.data.t.forms.buttons.search()}</div>
-				{/if}
-			</Button>
+	<Popover.Root bind:open>
+		<Popover.Trigger
+			class={cn(
+				buttonVariants({ size: 'sm', variant: 'outline' }),
+				'justify-start gap-x-1 rounded-lg px-2 py-3'
+			)}
+		>
+			{#if item}
+				{item.name}
+			{:else if children}
+				{@render children()}
+			{:else}
+				<Plus size={14} />
+				<div class="text-sm">{$page.data.t.forms.buttons.search()}</div>
+			{/if}
 		</Popover.Trigger>
 		<Popover.Content class="p-0" align="start" side="right">
 			<Command.Root>
@@ -91,10 +89,8 @@
 						{#each items as object, i}
 							<Command.Item
 								value={`${object.id}:::${object.name}`}
-								onSelect={(v) => {
-									const id = v.split(':::')[0];
-									handleAdd(Number(id));
-									open = false;
+								onSelect={() => {
+									handleAdd(object.id);
 								}}
 							>
 								{object.name}
