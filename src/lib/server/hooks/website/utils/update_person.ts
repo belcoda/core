@@ -75,7 +75,7 @@ export default async function ({
 				: { petitionId: type.petition_id, petitionName: type.petition_name };
 		const created = await createPerson({
 			instance_id: instanceId,
-			body: { ...personInfo, country: personInfo.country || DEFAULT_COUNTRY, full_name },
+			body: { ...personInfo, country: personInfo.country || country, full_name },
 			admin_id: adminId,
 			queue,
 			method: type.method,
