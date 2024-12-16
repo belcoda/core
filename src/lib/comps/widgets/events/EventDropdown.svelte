@@ -7,7 +7,7 @@
 	type Props = {
 		item?: List['items'][number];
 		items?: List['items'];
-		value?: number;
+		value?: number | null;
 		onselect: (item: List['items'][number]) => void;
 		children?: Snippet;
 	};
@@ -46,7 +46,7 @@
 		item = items[selected];
 	}
 
-	let searchString: string | undefined = $state();
+	let searchString: string = $state('');
 
 	async function search() {
 		loading = true;

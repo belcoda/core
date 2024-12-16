@@ -7,7 +7,7 @@
 	type Props = {
 		list?: List['items'][number];
 		lists?: List['items'];
-		value?: number;
+		value?: number | null;
 		label?: string;
 		onSelectList?: (list: List['items'][number]) => void;
 		children?: Snippet;
