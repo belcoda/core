@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { type FilterGroup, DEFAULT_FILTER_TYPE } from '$lib/schema/people/filters/filters';
+	import { type FilterGroup } from '$lib/schema/people/filters/filters';
+	import { defaultFullName } from '$lib/schema/people/filters/defaults';
 	import FilterGroupWidet from './FilterGroupWidget.svelte';
 	import { page } from '$app/stores';
 	let {
@@ -63,7 +64,7 @@
 			>{$page.data.t.forms.buttons.filters.add_group()}</Button
 		> -->
 		<!-- TODO: There's a strange bug here with recursive state triggering multiple group creation -->
-		<Button onclick={() => filter.filters.push(structuredClone(DEFAULT_FILTER_TYPE))}
+		<Button onclick={() => filter.filters.push(structuredClone(defaultFullName))}
 			>{$page.data.t.forms.buttons.filters.add_filter()}</Button
 		>
 	</div>
