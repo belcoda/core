@@ -1,10 +1,13 @@
 <script lang="ts">
-	import { type FilterTypeNotRegisteredEvent } from '$lib/schema/people/filters/filters';
-	let { item = $bindable() }: { item: FilterTypeNotRegisteredEvent } = $props();
+	import {
+		type NotRegisteredEvent,
+		defaultNotRegisteredEvent
+	} from '$lib/schema/people/filters/defaults';
+	let { item = $bindable(defaultNotRegisteredEvent) }: { item: NotRegisteredEvent } = $props();
 	import EventDropdown from '$lib/comps/widgets/events/EventDropdown.svelte';
 	import * as Select from '$lib/comps/ui/select';
 
-	const statuses: { value: FilterTypeNotRegisteredEvent['status']; label: string }[] = [
+	const statuses: { value: NotRegisteredEvent['status']; label: string }[] = [
 		{ value: 'any', label: 'Any' },
 		{ value: 'registered', label: 'Registered' },
 		{ value: 'attended', label: 'Attended' },
@@ -22,7 +25,7 @@
 		value={statuses[0].value}
 		onValueChange={(val) => {
 			if (!val) return;
-			item.status = val as FilterTypeNotRegisteredEvent['status'];
+			item.status = val as NotRegisteredEvent['status'];
 		}}
 	>
 		<Select.Trigger class="w-[180px]">

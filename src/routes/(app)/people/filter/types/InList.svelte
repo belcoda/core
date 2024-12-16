@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { type FilterTypeInList } from '$lib/schema/people/filters/filters';
-	let { item = $bindable() }: { item: FilterTypeInList } = $props();
+	import { type InList, defaultInList } from '$lib/schema/people/filters/defaults';
+	let { item = $bindable(defaultInList) }: { item: InList } = $props();
 	import ListDropdown from '$lib/comps/widgets/lists/ListDropdown.svelte';
 </script>
 

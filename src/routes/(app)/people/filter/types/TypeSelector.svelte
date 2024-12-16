@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { type FilterType } from '$lib/schema/people/filters/filters';
-	let { value = $bindable() }: { value: FilterType } = $props();
+	import { generateDefaultFilterValue } from './generateDefaultType';
+	import { type DefaultFilterTypes } from '$lib/schema/people/filters/defaults';
+	let { value = $bindable() }: { value: DefaultFilterTypes } = $props();
 	import * as Select from '$lib/comps/ui/select/';
 	const items: { value: FilterType['type']; label: string }[] = [
 		{ value: 'full_name', label: 'Full Name' },
@@ -28,7 +30,7 @@
 	{items}
 	type="single"
 	onValueChange={(val) => {
-		value.type = val as (typeof items)[0]['value'];
+		value = generateDefaultFilterValue(val as DefaultFilterTypes['type']);
 	}}
 >
 	<Select.Trigger class="md:w-[175px] w-full">

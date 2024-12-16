@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { type FilterTypeHasTag } from '$lib/schema/people/filters/filters';
-	let { item = $bindable() }: { item: FilterTypeHasTag } = $props();
+	import { type HasTag, defaultHasTag } from '$lib/schema/people/filters/defaults';
+	let { item = $bindable(defaultHasTag) }: { item: HasTag } = $props();
 	import TagsDropdown from '$lib/comps/widgets/tags/dropdown/TagsDropdown.svelte';
 </script>
 

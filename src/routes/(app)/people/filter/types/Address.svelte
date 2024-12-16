@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { type FilterTypeAddress } from '$lib/schema/people/filters/filters';
-	let { item = $bindable() }: { item: FilterTypeAddress } = $props();
+	import { type Address, defaultAddress } from '$lib/schema/people/filters/defaults';
+	let { item = $bindable(defaultAddress) }: { item: Address } = $props();
 	import Input from '$lib/comps/ui/input/input.svelte';
 </script>
 

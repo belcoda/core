@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { type FilterTypeNotInList } from '$lib/schema/people/filters/filters';
-	let { item = $bindable() }: { item: FilterTypeNotInList } = $props();
+	import { type NotInList, defaultNotInList } from '$lib/schema/people/filters/defaults';
+	let { item = $bindable(defaultNotInList) }: { item: NotInList } = $props();
 	import ListDropdown from '$lib/comps/widgets/lists/ListDropdown.svelte';
 </script>
 

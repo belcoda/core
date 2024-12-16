@@ -1,10 +1,13 @@
 <script lang="ts">
-	import { type FilterTypeRegisteredEvent } from '$lib/schema/people/filters/filters';
-	let { item = $bindable() }: { item: FilterTypeRegisteredEvent } = $props();
+	import {
+		type RegisteredEvent,
+		defaultRegisteredEvent
+	} from '$lib/schema/people/filters/defaults';
+	let { item = $bindable(defaultRegisteredEvent) }: { item: RegisteredEvent } = $props();
 	import EventDropdown from '$lib/comps/widgets/events/EventDropdown.svelte';
 	import * as Select from '$lib/comps/ui/select';
 
-	const statuses: { value: FilterTypeRegisteredEvent['status']; label: string }[] = [
+	const statuses: { value: RegisteredEvent['status']; label: string }[] = [
 		{ value: 'any', label: 'Any' },
 		{ value: 'registered', label: 'Registered' },
 		{ value: 'attended', label: 'Attended' },
@@ -24,7 +27,7 @@
 		value={item.status}
 		onValueChange={(val) => {
 			if (!val) return;
-			item.status = val as FilterTypeRegisteredEvent['status'];
+			item.status = val as RegisteredEvent['status'];
 		}}
 	>
 		<Select.Trigger class="w-[180px]">

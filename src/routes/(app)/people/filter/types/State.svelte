@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { type FilterTypeState } from '$lib/schema/people/filters/filters';
-	let { item = $bindable() }: { item: FilterTypeState } = $props();
+	import { type State, defaultState } from '$lib/schema/people/filters/defaults';
+
+	let { item = $bindable(defaultState) }: { item: State } = $props();
 	import Input from '$lib/comps/ui/input/input.svelte';
 	import Label from '$lib/comps/ui/label/label.svelte';
 	import Checkbox from '$lib/comps/ui/checkbox/checkbox.svelte';
