@@ -1,6 +1,23 @@
 import { v, id, mediumStringNotEmpty, shortStringNotEmpty } from '$lib/schema/valibot';
 import { attendeeStatus } from '$lib/schema/events/attendees';
 
+export const filterTypesOptions = v.picklist([
+	'email',
+	'full_name',
+	'postcode',
+	'locality',
+	'state',
+	'address',
+	'phone_number',
+	'in_list',
+	'not_in_list',
+	'has_tag',
+	'not_has_tag',
+	'registered_event',
+	'not_registered_event'
+]);
+export type FilterTypesOptions = v.InferOutput<typeof filterTypesOptions>;
+
 export const filterTypes = {
 	email: v.object({
 		type: v.literal('email'),
@@ -98,24 +115,6 @@ export const filterType = v.variant('type', [
 	filterTypes.not_registered_event
 ]);
 export type FilterType = v.InferOutput<typeof filterType>;
-export const DEFAULT_FILTER_TYPE: FilterType = {
-	type: 'full_name',
-	name: '',
-	partial: true
-};
-export const DEFAULT_EMAIL_FILTER_TYPE: FilterType = {
-	type: 'email',
-	email: '',
-	partial: true,
-	mustBeSubscribed: false
-};
-export const DEFAULT_PHONE_NUMBER_FILTER_TYPE: FilterType = {
-	type: 'phone_number',
-	phone_number: '',
-	partial: true,
-	mustBeSubscribed: false,
-	mustBeWhatsapp: false
-};
 
 export type FilterGroup = {
 	type: 'group';
@@ -134,7 +133,13 @@ export const filterGroup: v.GenericSchema<FilterGroup> = v.object({
 export const DEFAULT_FILTER_GROUP: FilterGroup = {
 	type: 'group',
 	groups: [],
-	filters: [DEFAULT_FILTER_TYPE],
+	filters: [
+		{
+			type: 'full_name',
+			name: '',
+			partial: true
+		}
+	],
 	logic: 'AND'
 };
 
