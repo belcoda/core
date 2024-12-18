@@ -38,6 +38,6 @@
 				</Select.Group>
 			</Select.Content>
 		</Select.Root>
-		<Button variant="outline" type="submit">Register</Button>
+		<Button variant="outline" type="submit">{$page.data.t.forms.buttons.save()}</Button>
 	</div>
 </form>
