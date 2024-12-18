@@ -55,7 +55,7 @@
 		title?: string;
 		newItemHref?: string | null;
 		children?: Snippet;
-		content: Snippet<[T, number?]>;
+		content: Snippet<[T, number]>;
 		separator?: boolean;
 		filterKey?: string;
 		pagination?: boolean;
