@@ -1,14 +1,11 @@
 <script lang="ts">
-	export let data;
+	const { data } = $props();
 	import PageHeader from '$lib/comps/layout/PageHeader.svelte';
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import DataGrid from '$lib/comps/ui/custom/table/DataGrid.svelte';
 	import PersonBadge from '$lib/comps/widgets/PersonBadge.svelte';
 	import { renderAddress } from '$lib/utils/text/address';
 	import { formatDateTimeRange, formatDate } from '$lib/utils/text/date';
-	import * as Select from '$lib/comps/ui/select';
-	import Checkbox from '$lib/comps/ui/checkbox/checkbox.svelte';
-	import Label from '$lib/comps/ui/label/label.svelte';
 	import MapPin from 'lucide-svelte/icons/map-pin';
 	import CalendarClock from 'lucide-svelte/icons/calendar-clock';
 	import Link from 'lucide-svelte/icons/link';
@@ -16,7 +13,7 @@
 	import { page } from '$app/stores';
 	const url = new URL(PUBLIC_HOST);
 	const previewUrl = `${url.protocol}//${$page.data.instance.slug}.${url.host}/events/${data.event.slug}`;
-
+	import EditRegistrationForm from './EditRegistrationForm.svelte';
 	import Tags from '$lib/comps/widgets/tags/Tags.svelte';
 	import PointPerson from '$lib/comps/widgets/point_person/PointPerson.svelte';
 
@@ -30,6 +27,8 @@
 		value: status,
 		label: data.t.events.status[status].title()
 	}));
+
+	const attendees = $state(data.attendees.items);
 
 	function makeStatusOptions(status: (typeof attendanceStatus)[number]) {
 		return {
@@ -81,47 +80,15 @@
 	</div>
 </div>
 <div class="mt-12">
-	<DataGrid
-		title={data.t.pages.events.attendees()}
-		items={data.attendees.items}
-		count={data.attendees.count}
-	>
-		{#snippet content(attendee: typeof data.attendees.items[0])}
+	<DataGrid title={data.t.pages.events.attendees()} items={attendees} count={data.attendees.count}>
+		{#snippet content(attendee: (typeof data.attendees.items)[0], index: number)}
 			<div class="flex items-center justify-between gap-4">
 				<PersonBadge person={attendee} />
-
-				<div>
-					<form method="post" class="flex items-center gap-2">
-						<Label>{data.t.forms.fields.events.attendees.send_notifications.label()}</Label>
-						<Checkbox bind:checked={attendee.send_notifications} />
-						<input name="send_notifications" value={attendee.send_notifications} hidden />
-						<Select.Root
-							portal={null}
-							items={statusOptions}
-							selected={makeStatusOptions(attendee.status)}
-							onSelectedChange={(v) => {
-								v && (attendee.status = v.value);
-							}}
-						>
-							<Select.Trigger class="w-[180px]">
-								<Select.Value placeholder="Status" />
-							</Select.Trigger>
-							<Select.Content>
-								<Select.Group>
-									{#each statusOptions as status}
-										<Select.Item value={status.value} label={status.label}
-											>{status.label}</Select.Item
-										>
-									{/each}
-								</Select.Group>
-							</Select.Content>
-							<Select.Input name="status" />
-						</Select.Root>
-						<input name="status" value={attendee.status} hidden />
-						<input name="person_id" value={attendee.person_id} hidden />
-						<Button type="submit" variant="outline">{data.t.forms.buttons.update()}</Button>
-					</form>
-				</div>
+				<EditRegistrationForm
+					personId={attendee.person_id}
+					status={attendee.status}
+					sendNotifications={attendee.send_notifications}
+				/>
 			</div>
 		{/snippet}
 		{#snippet headerButton()}
