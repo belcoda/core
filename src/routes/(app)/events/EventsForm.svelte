@@ -219,14 +219,22 @@
 						{form}
 						name="custom_code.custom_css"
 						label={$page.data.t.forms.fields.custom_code.custom_css.label()}
-						options={{language: 'css', lineNumbers: true, value: $formData.custom_code.custom_css as string}}
+						options={{
+							language: 'css',
+							lineNumbers: true,
+							value: $formData.custom_code.custom_css as string
+						}}
 						bind:value={$formData.custom_code.custom_css as string}
 					/>
 					<Code
 						{form}
 						name="custom_code.custom_js"
 						label={$page.data.t.forms.fields.custom_code.custom_js.label()}
-						options={{language: 'js', lineNumbers: true, value: $formData.custom_code.custom_js as string}}
+						options={{
+							language: 'js',
+							lineNumbers: true,
+							value: $formData.custom_code.custom_js as string
+						}}
 						bind:value={$formData.custom_code.custom_js as string}
 					/>
 					<Code

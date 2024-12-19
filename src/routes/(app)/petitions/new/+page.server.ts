@@ -14,7 +14,10 @@ import { create, read } from '$lib/schema/petitions/petitions';
 import { parse } from '$lib/schema/valibot';
 const log = pino('(app)/events/new/+page.server.ts');
 export async function load(event) {
-	const form = await superValidate(valibot(create));
+	const form = await superValidate(
+		{ ...event.locals.instance.settings.events.default_event_info_settings },
+		valibot(create)
+	);
 	return { form };
 }
 
