@@ -10,7 +10,10 @@
 					'bg-secondary text-secondary-foreground hover:bg-secondary/80 border-transparent',
 				destructive:
 					'bg-destructive text-destructive-foreground hover:bg-destructive/80 border-transparent',
-				outline: 'text-foreground'
+				outline: 'text-foreground',
+				success: 'bg-success-400 text-success-foreground hover:bg-success/80 border-transparent',
+				warning: 'bg-warning-400 text-warning-foreground hover:bg-warning/80 border-transparent',
+				danger: 'bg-danger-400 text-danger-foreground hover:bg-danger/80 border-transparent'
 			}
 		},
 		defaultVariants: {
