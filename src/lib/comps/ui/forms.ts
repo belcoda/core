@@ -1,4 +1,5 @@
 export { default as Input } from '$lib/comps/ui/form/controls/input.svelte';
+export { default as Slug } from '$lib/comps/ui/form/controls/slug.svelte';
 export { default as Textarea } from '$lib/comps/ui/form/controls/textarea.svelte';
 export { default as Checkbox } from '$lib/comps/ui/form/controls/checkbox.svelte';
 export { default as Select } from '$lib/comps/ui/form/controls/select.svelte';

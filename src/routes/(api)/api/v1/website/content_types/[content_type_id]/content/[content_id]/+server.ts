@@ -28,7 +28,8 @@ export async function PUT(event) {
 			contentTypeId: Number(event.params.content_type_id),
 			contentId: Number(event.params.content_id),
 			t: event.locals.t,
-			body
+			body,
+			queue: event.locals.queue
 		});
 		return json(update);
 	} catch (err) {

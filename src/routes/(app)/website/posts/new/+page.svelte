@@ -6,5 +6,5 @@
 
 <PageHeader title={data.t.pages.website.pages.new()} />
 <div class="mt-6">
-	<ContentCreateForm isCreate={true} />
+	<ContentCreateForm isCreate={true} contentTypeSlug={'posts'} />
 </div>

@@ -9,6 +9,9 @@
 <PageHeader title={data.t.pages.events.edit_event()}>
 	{#snippet button()}
 		<div class="flex items-center gap-2">
+			<Button variant="outline" href={`/events/${$page.params.event_id}/edit/advanced`}
+				>{$page.data.t.forms.fields.events.advanced_settings.label()}</Button
+			>
 			<Button href="/events/{$page.params.event_id}/edit/notifications" variant="outline"
 				>Manage notifications</Button
 			>

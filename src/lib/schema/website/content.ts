@@ -45,8 +45,8 @@ export const list = v.object({
 export type List = v.InferOutput<typeof list>;
 
 export const create = v.object({
-	name: base.entries.name,
-	slug: base.entries.slug,
+	name: v.optional(base.entries.name),
+	slug: v.optional(base.entries.slug),
 	heading: base.entries.heading,
 	html: base.entries.html,
 	feature_image_upload_id: v.optional(base.entries.feature_image_upload_id),

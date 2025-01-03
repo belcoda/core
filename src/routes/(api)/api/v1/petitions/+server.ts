@@ -25,7 +25,8 @@ export async function POST(event) {
 			instanceId: event.locals.instance.id,
 			body: parsed,
 			adminId: event.locals.admin.id,
-			t: event.locals.t
+			t: event.locals.t,
+			queue: event.locals.queue
 		});
 		return json(response);
 	} catch (err) {

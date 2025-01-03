@@ -14,7 +14,8 @@ import {
 	url,
 	slug,
 	customCode,
-	htmlMetatags
+	htmlMetatags,
+	date
 } from '$lib/schema/valibot';
 
 import { read as readAdmin } from '$lib/schema/core/admin';
@@ -42,8 +43,8 @@ export const base = v.object({
 	slug: slug,
 	heading: shortStringNotEmpty,
 	html: longStringNotEmpty,
-	starts_at: timestamp,
-	ends_at: timestamp,
+	starts_at: date,
+	ends_at: date,
 	online: v.boolean(),
 	online_url: v.nullable(url),
 	online_instructions: v.nullable(longString),
@@ -119,8 +120,8 @@ export const list = v.object({
 export type List = v.InferOutput<typeof list>;
 
 export const create = v.object({
-	name: base.entries.name,
-	slug: base.entries.slug,
+	name: v.optional(base.entries.name),
+	slug: v.optional(base.entries.slug),
 	heading: base.entries.heading,
 	html: base.entries.html,
 	starts_at: base.entries.starts_at,

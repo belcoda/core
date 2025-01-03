@@ -45,6 +45,20 @@ export const timestamp = v.union([
 		v.transform((input) => new Date(input))
 	)
 ]);
+export const date = v.union([
+	v.pipe(
+		v.union([
+			v.pipe(
+				v.string(),
+				v.isoTimestamp(),
+				v.transform((input) => new Date(input)),
+				v.date()
+			),
+			v.date()
+		])
+	)
+]);
+export type DateType = v.InferOutput<typeof date>;
 export const isoTimestamp = v.pipe(v.string(), v.isoTimestamp());
 export const language = v.picklist(SUPPORTED_LANGUAGES);
 export const country = v.picklist(SUPPORTED_COUNTRIES);
@@ -102,29 +116,31 @@ export const emailMessage = v.object({
 export type EmailMessage = v.InferOutput<typeof emailMessage>;
 
 export const htmlMetatags = v.object({
-	title: v.optional(v.nullable(shortString), null),
-	description: v.optional(v.nullable(shortString), null),
-	subject: v.optional(v.nullable(shortString), null),
-	keywords: v.optional(v.nullable(shortString), null),
+	isManuallySet: v.optional(v.boolean(), false),
+	title: v.optional(v.nullable(mediumString), null),
+	description: v.optional(v.nullable(mediumString), null),
+	subject: v.optional(v.nullable(mediumString), null),
+	keywords: v.optional(v.nullable(mediumString), null),
 	openGraph: v.object({
-		title: v.optional(v.nullable(shortString), null),
+		title: v.optional(v.nullable(mediumString), null),
 		description: v.optional(v.nullable(mediumString), null),
 		image: v.optional(v.nullable(url), null),
-		image_alt: v.optional(v.nullable(shortString), null)
+		image_alt: v.optional(v.nullable(mediumString), null)
 	}),
 	twitter: v.object({
-		title: v.optional(v.nullable(shortString), null),
+		title: v.optional(v.nullable(mediumString), null),
 		description: v.optional(v.nullable(mediumString), null),
 		card: v.optional(
 			v.nullable(v.picklist(['summary', 'summary_large_image', 'app', 'player'])),
 			'summary'
 		),
 		image: v.optional(v.nullable(url), null),
-		image_alt: v.optional(v.nullable(shortString), null)
+		image_alt: v.optional(v.nullable(mediumString), null)
 	})
 });
 export type HtmlMetatags = v.InferOutput<typeof htmlMetatags>;
 export const DEFAULT_HTML_METATAGS: HtmlMetatags = {
+	isManuallySet: false,
 	title: null,
 	description: null,
 	subject: null,

@@ -1020,11 +1020,11 @@ export default function (locale: SL) {
 			custom_code: {
 				header: () => {
 					return t(locale, {
-						en: 'Edit custom code',
-						ja: 'カスタムコードを編集',
-						pt: 'Editar código personalizado',
-						es: 'Editar código personalizado',
-						fr: 'Modifier le code personnalisé',
+						en: 'Custom code',
+						ja: 'カスタムコード',
+						pt: 'Código personalizado',
+						es: 'Código personalizado',
+						fr: 'Code personnalisé',
 						sw: 'Hariri nambari ya kibinafsi',
 						th: 'แก้ไขรหัสที่กำหนดเอง',
 						zh: '编辑自定义代码'
@@ -1135,18 +1135,37 @@ export default function (locale: SL) {
 					}
 				}
 			},
+			feature_image: {
+				label: () => {
+					return t(locale, {
+						en: 'Upload or select feature image'
+					});
+				}
+			},
 			metatags: {
 				header: () => {
 					return t(locale, {
-						en: 'Edit SEO/social media metatags',
-						ja: 'SEO/SNSメタタグを編集',
-						pt: 'Editar metatags de SEO/mídias sociais',
-						es: 'Editar metatags de SEO/redes sociales',
-						fr: 'Modifier les métadonnées SEO/réseaux sociaux',
+						en: 'SEO/social media metatags',
+						ja: 'SEO/SNSメタタグ',
+						pt: 'Metatags de SEO/mídias sociais',
+						es: 'Metatags de SEO/redes sociales',
+						fr: 'Métadonnées SEO/réseaux sociaux',
 						sw: 'Hariri metatags ya SEO/vyombo vya habari vya kijamii',
 						th: 'แก้ไข SEO/โซเชียลมีเดียเมตาแท็ก',
 						zh: '编辑SEO/社交媒体元标签'
 					});
+				},
+				manually_generate: {
+					label: () => {
+						return t(locale, {
+							en: 'Manually edit HTML metatags?'
+						});
+					},
+					description: () => {
+						return t(locale, {
+							en: 'If manually editing is turned off, social media and SEO metatags will be automatically generated based on the content using AI.'
+						});
+					}
 				},
 				title: {
 					label: () => {
@@ -1518,6 +1537,60 @@ export default function (locale: SL) {
 						});
 					}
 				},
+				event_page_link: {
+					label: () => {
+						return t(locale, {
+							en: 'Event Page Link',
+							ja: 'イベントページリンク',
+							pt: 'Link da Página do Evento',
+							es: 'Enlace de la Página del Evento',
+							fr: "Lien de la Page de l'Événement",
+							sw: 'Kiungo cha Ukurasa wa Tukio',
+							th: 'ลิงก์หน้าเหตการณ์',
+							zh: '活动页面链接'
+						});
+					}
+				},
+				event_title: {
+					label: () => {
+						return t(locale, {
+							en: 'Event Title',
+							ja: 'イベントタイトル',
+							pt: 'Título do Evento',
+							es: 'Título del Evento',
+							fr: "Titre de l'Événement",
+							sw: 'Kichwa cha Tukio',
+							th: 'ชื่อเหตการณ์',
+							zh: '活动标题'
+						});
+					}
+				},
+				event_details: {
+					label: () => {
+						return t(locale, {
+							en: 'Event Details',
+							ja: 'イベントの詳細',
+							pt: 'Detalhes do Evento',
+							es: 'Detalles del Evento',
+							fr: 'Détails de l’Événement',
+							sw: 'Maelezo ya Tukio',
+							th: 'รายละเอียดเหตการณ์',
+							zh: '活动详情'
+						});
+					},
+					description: () => {
+						return t(locale, {
+							en: "Details about the event. This will be displayed on the event's page",
+							ja: 'イベントに関する詳細。これはイベントページに表示されます',
+							pt: 'Detalhes sobre o evento. Isso será exibido na página do evento',
+							es: 'Detalles sobre el evento. Esto se mostrará en la página del evento',
+							fr: "Détails sur l'événement. Cela sera affiché sur la page de l'événement",
+							sw: 'Maelezo kuhusu tukio. Hii itaonyeshwa kwenye ukurasa wa tukio',
+							th: 'รายละเอียดเกี่ยวกับเหตการณ์ นี่จะปรากฏบนหน้าเหตการณ์',
+							zh: '活动详情。这将显示在活动页面上'
+						});
+					}
+				},
 				online_url: {
 					label: () => {
 						return t(locale, {
@@ -1578,6 +1651,13 @@ export default function (locale: SL) {
 								ja: '報告を届ける？'
 							});
 						}
+					}
+				},
+				advanced_settings: {
+					label: () => {
+						return t(locale, {
+							en: 'Advanced settings'
+						});
 					}
 				},
 				user_information_settings: {
@@ -2088,6 +2168,32 @@ export default function (locale: SL) {
 				}
 			},
 			petitions: {
+				petition_title: {
+					label: () => {
+						return t(locale, {
+							en: 'Petition title'
+						});
+					}
+				},
+				petition_page_link: {
+					label: () => {
+						return t(locale, {
+							en: 'Petition page link'
+						});
+					}
+				},
+				petition_details: {
+					label: () => {
+						return t(locale, {
+							en: 'Petition Details'
+						});
+					},
+					description: () => {
+						return t(locale, {
+							en: "Details about the petition. This will be displayed on the petition's page"
+						});
+					}
+				},
 				petition_target: {
 					label: () => {
 						return t(locale, {
@@ -2137,6 +2243,15 @@ export default function (locale: SL) {
 							sw: 'Maandishi ya ombi',
 							th: 'ข้อความของการยื่นคำร้อง',
 							zh: '请愿文本'
+						});
+					}
+				}
+			},
+			website: {
+				page_link: {
+					label: () => {
+						return t(locale, {
+							en: 'Page link'
 						});
 					}
 				}
@@ -2400,6 +2515,16 @@ export default function (locale: SL) {
 					sw: 'Hariri jina',
 					th: 'แก้ไขชื่อ',
 					zh: '编辑名称'
+				});
+			},
+			advanced_settings: () => {
+				return t(locale, {
+					en: 'Advanced settings'
+				});
+			},
+			notification_settings: () => {
+				return t(locale, {
+					en: 'Notification settings'
 				});
 			},
 			view: () => {

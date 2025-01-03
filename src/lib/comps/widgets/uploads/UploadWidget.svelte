@@ -20,9 +20,14 @@
 	type Props = {
 		onselected?: (upload: Read | null) => void;
 		upload_id?: number | null;
+		label?: string;
 	};
 
-	let { onselected, upload_id = $bindable() }: Props = $props();
+	let {
+		onselected,
+		upload_id = $bindable(),
+		label = $page.data.t.forms.fields.generic.file_select_or_upload.label()
+	}: Props = $props();
 
 	let filter: string | null = $state(null);
 	let list: List = $state({ items: [], count: 0 });
@@ -66,7 +71,7 @@
 	</div>
 {:else}
 	<div>
-		<H3 class="mb-4">{$page.data.t.forms.fields.generic.file_select_or_upload.label()}</H3>
+		<H3 class="mb-4">{label}</H3>
 		<FileUpload
 			class="border-dashed bg-white"
 			on:uploaded={async (e) => {

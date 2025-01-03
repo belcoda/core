@@ -29,7 +29,8 @@ export async function PUT(event) {
 			instanceId: event.locals.instance.id,
 			petitionId: Number(event.params.petition_id),
 			body: body,
-			t: event.locals.t
+			t: event.locals.t,
+			queue: event.locals.queue
 		});
 		return json(response);
 	} catch (err) {

@@ -27,7 +27,8 @@ export async function POST(event) {
 			instanceId: event.locals.instance.id,
 			contentTypeId: Number(event.params.content_type_id),
 			body,
-			t: event.locals.t
+			t: event.locals.t,
+			queue: event.locals.queue
 		});
 		return json(createdTemplate);
 	} catch (err) {

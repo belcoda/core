@@ -1,7 +1,10 @@
 import { db, pool, redis, BelcodaError, filterQuery } from '$lib/server';
 import { parse, id } from '$lib/schema/valibot';
 import * as schema from '$lib/schema/website/content';
+import { type ContentHTMLMetaTags } from '$lib/schema/utils/openai';
+
 import { read as readContentType, exists } from '$lib/server/api/website/content_types';
+import { slugify } from '$lib/utils/text/string';
 
 function redisString(instanceId: number, contentTypeId: number, contentId: number | 'all') {
 	return `i:${instanceId}:content_types:${contentTypeId}:content:${contentId}`;
@@ -15,24 +18,60 @@ export async function create({
 	instanceId,
 	contentTypeId,
 	body,
-	t
+	t,
+	queue
 }: {
 	instanceId: number;
 	contentTypeId: number;
 	body: schema.Create;
 	t: App.Localization;
+	queue: App.Queue;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
 	const contentType = await readContentType({ instanceId, contentTypeId, t });
-	const result = await db
-		.insert('website.content', {
-			content_type_id: contentTypeId,
-			template_id: contentType.content_template_id,
-			...parsed
-		})
-		.run(pool);
+	// function to insert a guaranteed unique name and slug based on the heading
+	// after checking to ensure the name and slug are unique, it inserts the item
+
+	const result = await db.transaction(pool, db.IsolationLevel.Serializable, async (txnClient) => {
+		const baseName = parsed.name || parsed.heading;
+		const baseSlug = parsed.slug || slugify(parsed.heading);
+		let uniqueName = baseName;
+		let uniqueSlug = baseSlug;
+		let counter = 1;
+		while (true) {
+			const exists =
+				await db.sql`SELECT id FROM website.content WHERE content_type_id = ${db.param(contentTypeId)} AND (name = ${db.param(uniqueName)} OR slug = ${db.param(uniqueSlug)})`.run(
+					txnClient
+				);
+
+			if (exists.length === 0) {
+				// Both are unique
+				break;
+			}
+			// Increment counter and modify name and slug
+			uniqueName = `${baseName} (${counter})`;
+			uniqueSlug = `${baseSlug}_${counter}`;
+			counter += 1;
+		}
+		return await db
+			.insert('website.content', {
+				content_type_id: contentTypeId,
+				template_id: contentType.content_template_id,
+				...parsed,
+				name: parsed.name || uniqueName,
+				slug: parsed.slug || uniqueSlug
+			})
+			.run(txnClient);
+	});
 	await redis.del(redisString(instanceId, contentTypeId, 'all'));
-	return await read({ instanceId, contentTypeId, contentId: result.id, t });
+	const returned = await read({ instanceId, contentTypeId, contentId: result.id, t }); //this already sets the cache
+	const htmlMeta: ContentHTMLMetaTags = {
+		type: 'content',
+		contentId: returned.id,
+		contentTypeId: contentTypeId
+	};
+	await queue('/utils/openai/generate_html_meta', instanceId, htmlMeta);
+	return returned;
 }
 
 export async function read({
@@ -146,13 +185,17 @@ export async function update({
 	contentTypeId,
 	contentId,
 	body,
-	t
+	t,
+	queue,
+	skipMetaGeneration = false
 }: {
 	instanceId: number;
 	contentTypeId: number;
 	contentId: number;
 	t: App.Localization;
 	body: schema.Update;
+	queue: App.Queue;
+	skipMetaGeneration?: boolean;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const result = await db
@@ -163,5 +206,14 @@ export async function update({
 	}
 	await redis.del(redisString(instanceId, contentTypeId, contentId));
 	await redis.del(redisString(instanceId, contentTypeId, 'all'));
-	return await read({ instanceId, contentTypeId, contentId, t });
+	const returned = await read({ instanceId, contentTypeId, contentId, t }); //update the cache with the new updated object
+	const htmlMeta: ContentHTMLMetaTags = {
+		type: 'content',
+		contentId: returned.id,
+		contentTypeId: contentTypeId
+	};
+	if (skipMetaGeneration !== true) {
+		await queue('/utils/openai/generate_html_meta', instanceId, htmlMeta);
+	}
+	return returned;
 }

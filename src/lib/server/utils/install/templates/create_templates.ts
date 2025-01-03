@@ -1,4 +1,4 @@
-import { ROOT_DOMAIN } from '$env/static/private';
+import { PUBLIC_ROOT_DOMAIN } from '$env/static/public';
 
 import createWhatsAppTemplates from '$lib/server/utils/install/templates/whatsapp/whatsapp_templates';
 import PetitionTemplate from '$lib/server/utils/install/templates/petitions/petition_template.hbs?raw';
@@ -64,7 +64,7 @@ export default async function ({ instance, t }: { instance: ReadInstance; t: App
 			preview_text: '',
 			text: templates.email.defaultText,
 			html: templates.email.default,
-			reply_to: `${instance.slug}@${ROOT_DOMAIN}`,
+			reply_to: `${instance.slug}@${PUBLIC_ROOT_DOMAIN}`,
 			active: true
 		}
 	});
@@ -78,7 +78,7 @@ export default async function ({ instance, t }: { instance: ReadInstance; t: App
 			preview_text: 'Notification for upcoming event',
 			text: templates.email.eventText,
 			html: templates.email.event,
-			reply_to: `${instance.slug}@${ROOT_DOMAIN}`,
+			reply_to: `${instance.slug}@${PUBLIC_ROOT_DOMAIN}`,
 			active: true
 		}
 	});

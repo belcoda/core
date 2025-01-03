@@ -35,13 +35,13 @@
 					{...props}
 					scriptSrc="/vendor/tinymce/tinymce.min.js"
 					apiKey="no-api"
+					licenseKey="gpl"
 					conf={{
 						className: cn('focus-visible:ring-blue-600', className),
 						menubar: false,
 						promotion: false,
 						plugins: ['code', 'importcss'],
 						content_css: 'https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.4/utilities.css',
-						license_key: 'gpl',
 						toolbar:
 							'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | code'
 					}}

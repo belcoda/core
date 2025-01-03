@@ -99,6 +99,20 @@ export default function (locale: SL) {
 					});
 				}
 			}
+		},
+		alerts: {
+			start_time_before_end: () => {
+				return t(locale, {
+					en: 'Please make sure the event start time is before the end time.',
+					ja: 'イベントの開始時間が終了時間より前になっていることを確認してください。',
+					pt: 'Certifique-se de que a hora de início do evento é anterior à hora de término.',
+					es: 'Asegúrese de que la hora de inicio del evento sea anterior a la hora de finalización.',
+					fr: "Veuillez vous assurer que l'heure de début de l'événement est antérieure à l'heure de fin.",
+					sw: 'Tafadhali hakikisha wakati wa kuanza wa tukio uko kabla ya wakati wa mwisho.',
+					th: 'โปรดตรวจสอบให้แน่ใจว่าเวลาเริ่มต้นของกิจกรรมอยู่ก่อนเวลาสิ้นสุด',
+					zh: '请确保事件开始时间早于结束时间。'
+				});
+			}
 		}
 	};
 }

@@ -44,7 +44,7 @@ export const settings = v.object({
 	}),
 	website: v.object({
 		default_template_id: id,
-		custom_domain: v.nullable(shortString), //if custom domain is null, the the website will be https://${instance.slug}.{ROOT_DOMAIN}. Otherwise, it will be https://${customDomain}
+		custom_domain: v.nullable(shortString), //if custom domain is null, the the website will be https://${instance.slug}.{PUBLIC_ROOT_DOMAIN}. Otherwise, it will be https://${customDomain}
 		pages_content_type_id: id,
 		posts_content_type_id: id,
 		logo_url: url,

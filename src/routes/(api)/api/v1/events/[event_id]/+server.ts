@@ -24,6 +24,7 @@ export async function PUT(event) {
 			instanceId: event.locals.instance.id,
 			eventId: Number(event.params.event_id),
 			body: body,
+			queue: event.locals.queue,
 			t: event.locals.t
 		});
 		return json(response);

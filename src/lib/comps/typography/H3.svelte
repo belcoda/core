@@ -4,6 +4,6 @@
 	const { class: className = '', children }: { class?: string; children: Snippet } = $props();
 </script>
 
-<h1 class={cn('text-lg md:text-xl lg:text-xl xl:text-2xl font-bold', className)}>
+<h3 class={cn('text-lg md:text-xl lg:text-xl xl:text-2xl font-bold', className)}>
 	{@render children()}
-</h1>
+</h3>

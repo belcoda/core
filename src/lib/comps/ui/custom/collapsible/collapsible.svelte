@@ -16,7 +16,8 @@
 <Collapsible.Root class={cn('space-y-2', className)}>
 	<div class="flex items-center justify-between space-x-4">
 		<h4 class="text-sm font-semibold">{@render trigger()}</h4>
-		<Collapsible.Trigger class={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'w-9 p-0')}>
+
+		<Collapsible.Trigger class={cn(buttonVariants({ size: 'sm', variant: 'ghost' }), 'w-9 p-0')}>
 			<ChevronsUpDown class="h-4 w-4" />
 			<span class="sr-only">Toggle</span>
 		</Collapsible.Trigger>
