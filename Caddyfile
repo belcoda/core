@@ -1,8 +1,30 @@
 {$PUBLIC_ROOT_DOMAIN}, *.{$PUBLIC_ROOT_DOMAIN} {
   reverse_proxy app:5173  {
-    header_down Strict-Transport-Security max-age=31536000;
+    # HSTS: Enforce HTTPS and preload
+    header_down Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+    # Prevent the browser from attempting to guess the MIME type
+    header_down X-Content-Type-Options "nosniff"
+
+    # Protect against clickjacking
+    header_down X-Frame-Options "SAMEORIGIN"
+
+    # Content Security Policy (CSP) is implemented in svelte.config.js
+
+    # Prevent the browser from sending the Referer header when navigating to a different origin
+    header_down Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Enable XSS protection (not as necessary with modern browsers)
+    header_down X-XSS-Protection "1; mode=block"
+
+    # Permissions-Policy: Control features available in the browser
+    header_down Permissions-Policy "geolocation=(self), microphone=(), camera=(), fullscreen=(), payment=(self)"
+
+    # Remove the Server header for less information disclosure
+    header_down -Server
   }
-}
+
   tls {
     dns cloudflare {env.CLOUDFLARE_API_TOKEN}
   }
+}
