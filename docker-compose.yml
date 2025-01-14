@@ -36,9 +36,12 @@ services:
           - app
     # Run the caddy server        
     caddy:
-        image: caddy/caddy:2.7-alpine
+        image: iarekylew00t/caddy-cloudflare:2.9 # Community maintained precompiled image with cloudflare plugin added
         container_name: caddy
         restart: unless-stopped
+        environment: 
+          - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+          - PUBLIC_ROOT_DOMAIN=${PUBLIC_ROOT_DOMAIN}
         ports:
             - "80:80"
             - "443:443"

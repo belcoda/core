@@ -1,5 +1,8 @@
-dashboard.belcoda.com, belcoda-test.dashboard.belcoda.com, tayobeco.dashboard.belcoda.com, syah-seychelles.dashboard.belcoda.com, amazon-theatrix.dashboard.belcoda.com, pads4education.dashboard.belcoda.com, lyca.dashboard.belcoda.com, wave-hi.dashboard.belcoda.com, belcoda.dashboard.belcoda.com {
+{$PUBLIC_ROOT_DOMAIN}, *.{$PUBLIC_ROOT_DOMAIN} {
   reverse_proxy app:5173  {
     header_down Strict-Transport-Security max-age=31536000;
   }
 }
+  tls {
+    dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+  }
