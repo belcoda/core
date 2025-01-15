@@ -107,4 +107,7 @@ const belcodaHandler: Handle = async ({ event, resolve }) => {
 	return response;
 };
 
-export const handle = sequence(Sentry.sentryHandle(), belcodaHandler);
+export const handle = sequence(
+	Sentry.sentryHandle({ injectFetchProxyScript: false }), //Conflicts with CSP and no longer needed in SvelteKit 2, see here https://github.com/getsentry/sentry-javascript/pull/9969
+	belcodaHandler
+);

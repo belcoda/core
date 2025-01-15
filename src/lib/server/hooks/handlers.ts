@@ -5,7 +5,7 @@ const log = pino('$lib/server/hooks/handlers');
 import whatsappHandler from '$lib/server/hooks/whatsapp/ycloud';
 import whapiHandler from '$lib/server/hooks/whapi';
 import emailHandler from '$lib/server/hooks/email/postmark';
-const SUBDOMAIN_LIST = ['admin', 'app', 'dashboard', 'localhost', 'www', 'localhost:5173']; //list of subdomains that are not site subdomains
+import { PUBLIC_ROOT_DOMAIN } from '$env/static/public';
 import worker from '$lib/server/hooks/worker';
 import { default as handlePageRender } from '$lib/server/hooks/website/handler';
 type MaybePromise<T> = T | Promise<T>;
@@ -45,9 +45,8 @@ export default async function (event: RequestEvent, resolve: Resolve): Promise<H
 	if (!workerResponse.continue) return { continue: false, response: workerResponse.response };
 
 	if (event.url.host.split('.')[0]) {
-		const subdomain = event.url.host.split('.')[0];
-		if (!SUBDOMAIN_LIST.includes(subdomain)) {
-			//there is a subdomain, and it's not in the list of functinoal subdomains (eg: admin. app. dashboard. etc)... that means it's a site subdomain.
+		const subdomain = detectSubdomain(event.url.host, PUBLIC_ROOT_DOMAIN);
+		if (subdomain) {
 			log.info(`🎣 Request subdomain is ${subdomain}`);
 			const response = await handlePageRender(event, subdomain);
 			return { continue: false, response: response };
@@ -55,4 +54,24 @@ export default async function (event: RequestEvent, resolve: Resolve): Promise<H
 	}
 
 	return handleApiFaviconRequest(event);
+}
+import { DISALLOWED_NAMES_SET } from '$lib/utils/text/bad_names';
+export function detectSubdomain(host: string, rootDomain: string): string | false {
+	if (host === rootDomain) {
+		return false;
+	}
+
+	// this will break for domains like .com.au or .co.uk or .co.jp, but they should be handled by the root domain above
+	const parts = host.split('.');
+	if (parts.length < 3) {
+		return false;
+	}
+
+	if (DISALLOWED_NAMES_SET.has(parts[0])) {
+		// includes things like 'www', as well as 'dashboard', which was a previous hosted URL
+		return false;
+	}
+
+	const subdomain = parts[0];
+	return subdomain;
 }

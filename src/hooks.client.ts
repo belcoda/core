@@ -1,7 +1,8 @@
 import * as Sentry from '@sentry/sveltekit';
+import { PUBLIC_SENTRY_DSN } from '$env/static/public';
 import { dev } from '$app/environment';
 Sentry.init({
-	dsn: 'https://8b4cdb05d7907fe3f9b43aec4a060811@o4508220361342976.ingest.de.sentry.io/4508220380282960',
+	dsn: PUBLIC_SENTRY_DSN,
 
 	// We recommend adjusting this value in production, or using tracesSampler
 	// for finer control
