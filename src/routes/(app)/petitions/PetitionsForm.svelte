@@ -105,9 +105,9 @@
 		<div class="flex justify-end items-center gap-2">
 			<Link size={18} class="text-muted-foreground" />
 
-			<code class="text-sm text-primary-500 underline"
-				>{`http${dev ? '' : 's'}://${$page.data.instance.slug}.${PUBLIC_ROOT_DOMAIN}/events/`}</code
-			>
+			<code class="text-sm text-primary-500 underline">
+        {`http${dev ? '' : 's'}://${$page.data.instance.slug}.${PUBLIC_ROOT_DOMAIN}/petitions/`}
+      </code>
 			<Slug
 				{form}
 				name="slug"
