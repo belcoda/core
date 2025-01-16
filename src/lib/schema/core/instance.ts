@@ -8,7 +8,8 @@ import {
 	timestamp,
 	shortString,
 	email,
-	longStringNotEmpty
+	longStringNotEmpty,
+	domainName
 } from '$lib/schema/valibot';
 
 export const settings = v.object({
@@ -44,7 +45,7 @@ export const settings = v.object({
 	}),
 	website: v.object({
 		default_template_id: id,
-		custom_domain: v.nullable(shortString), //if custom domain is null, the the website will be https://${instance.slug}.{PUBLIC_ROOT_DOMAIN}. Otherwise, it will be https://${customDomain}
+		custom_domain: v.nullable(domainName), //if custom domain is null, the the website will be https://${instance.slug}.{PUBLIC_ROOT_DOMAIN}. Otherwise, it will be https://${customDomain}
 		pages_content_type_id: id,
 		posts_content_type_id: id,
 		logo_url: url,
@@ -103,7 +104,9 @@ export type List = v.InferOutput<typeof list>;
 export const create = v.omit(read, ['id', 'created_at', 'updated_at']);
 export type Create = v.InferOutput<typeof create>;
 
-export const update = v.partial(v.omit(base, ['id', 'created_at', 'updated_at']));
+export const update = v.partial(
+	v.omit(base, ['id', 'name', 'slug', 'country', 'installed', 'created_at', 'updated_at'])
+);
 export type Update = v.InferInput<typeof update>;
 
 export const updateSecrets = v.object({

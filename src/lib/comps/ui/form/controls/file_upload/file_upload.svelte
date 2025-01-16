@@ -10,7 +10,6 @@
 	import AlertTriangle from 'lucide-svelte/icons/triangle-alert';
 	const file_upload_widget_id = crypto.randomUUID();
 	import { createEventDispatcher } from 'svelte';
-	import { file } from 'valibot';
 	const dispatch = createEventDispatcher();
 
 	export let label: string | null = null;

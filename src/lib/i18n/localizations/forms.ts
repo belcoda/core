@@ -148,6 +148,20 @@ export default function (locale: SL) {
 						});
 					}
 				},
+				url: {
+					label: () => {
+						return t(locale, {
+							en: 'URL',
+							ja: 'URL',
+							pt: 'URL',
+							es: 'URL',
+							fr: 'URL',
+							sw: 'URL',
+							th: 'URL',
+							zh: 'URL'
+						});
+					}
+				},
 				title: {
 					label: () => {
 						return t(locale, {
@@ -1960,6 +1974,178 @@ export default function (locale: SL) {
 								sw: 'Chagua lugha',
 								th: 'เลือกภาษา',
 								zh: '选择语言'
+							});
+						}
+					}
+				},
+				website: {
+					custom_domain: {
+						label: () => {
+							return t(locale, {
+								en: 'Custom Domain',
+								ja: 'カスタムドメイン',
+								pt: 'Domínio Personalizado',
+								es: 'Dominio Personalizado',
+								fr: 'Domaine Personnalisé',
+								sw: 'Kikoa cha Kipekee',
+								th: 'โดเมนที่กำหนดเอง',
+								zh: '自定义域名'
+							});
+						},
+						description: () => {
+							return t(locale, {
+								en: 'Enter a custom subdomain that will be accessed by your users. For details on how to set up a custom domain, see our documentation.',
+								ja: 'ユーザーがアクセスするカスタムサブドメインを入力してください。カスタムドメインの設定方法の詳細については、ドキュメントを参照してください。',
+								pt: 'Digite um subdomínio personalizado que será acessado por seus usuários. Para obter detalhes sobre como configurar um domínio personalizado, consulte nossa documentação.',
+								es: 'Ingrese un subdominio personalizado al que accederán sus usuarios. Para obtener detalles sobre cómo configurar un dominio personalizado, consulte nuestra documentación.',
+								fr: 'Entrez un sous-domaine personnalisé qui sera accessible par vos utilisateurs. Pour plus de détails sur la configuration d’un domaine personnalisé, consultez notre documentation.',
+								sw: 'Ingiza kikoa cha kipekee ambacho kitatumika na watumiaji wako. Kwa maelezo kuhusu jinsi ya kuweka kikoa cha kipekee, angalia nyaraka zetu.',
+								th: 'ป้อนโดเมนย่อยที่กำหนดเองที่ผู้ใช้ของคุณจะเข้าถึง สำหรับรายละเอียดเกี่ยวกับวิธีตั้งค่าโดเมนที่กำหนดเอง ดูเอกสารของเรา',
+								zh: '输入用户将访问的自定义子域。有关如何设置自定义域的详细信息，请参阅我们的文档。'
+							});
+						}
+					},
+					logo: {
+						label: () => {
+							return t(locale, {
+								en: 'Logo',
+								ja: 'ロゴ',
+								pt: 'Logotipo',
+								es: 'Logotipo',
+								fr: 'Logo',
+								sw: 'Alama',
+								th: 'โลโก้',
+								zh: '商标'
+							});
+						},
+						description: () => {
+							return t(locale, {
+								en: 'The logo for your organization. Ideally, this should be at least 500px wide by 100px tall, and in PNG or SVG format. It will be displayed in the header of your website.',
+								ja: '組織のロゴです。理想的には、幅500px、高さ100px以上で、PNGまたはSVG形式であるべきです。ウェブサイトのヘッダーに表示されます。',
+								pt: 'O logotipo da sua organização. Idealmente, ele deve ter pelo menos 500px de largura por 100px de altura, e no formato PNG ou SVG. Ele será exibido no cabeçalho do seu site.',
+								es: 'El logotipo de su organización. Idealmente, debe tener al menos 500px de ancho por 100px de alto, y en formato PNG o SVG. Se mostrará en el encabezado de su sitio web.',
+								fr: 'Le logo de votre organisation. Idéalement, il devrait mesurer au moins 500px de large par 100px de haut, et être au format PNG ou SVG. Il sera affiché dans l’en-tête de votre site Web.',
+								sw: 'Alama ya shirika lako. Kwa kawaida, hii inapaswa kuwa angalau upana wa 500px kwa urefu wa 100px, na katika muundo wa PNG au SVG. Itaonyeshwa kwenye kichwa cha tovuti yako.',
+								th: 'โลโก้สำหรับองค์กรของคุณ อย่างไรก็ตาม ควรมีความกว้างอย่างน้อย 500px โดย 100px สูง และในรูปแบบ PNG หรือ SVG จะแสดงในส่วนหัวของเว็บไซต์ของคุณ',
+								zh: '您的组织标志。理想情况下，宽度至少为 500px，高度为 100px，并且为 PNG 或 SVG 格式。它将显示在您网站的页眉中。'
+							});
+						}
+					},
+					favicon: {
+						label: () => {
+							return t(locale, {
+								en: 'Favicon',
+								ja: 'ファビコン',
+								pt: 'Favicon',
+								es: 'Favicon',
+								fr: 'Favicon',
+								sw: 'Favicon',
+								th: 'ไอคอนเว็บ',
+								zh: '网站图标'
+							});
+						},
+						description: () => {
+							return t(locale, {
+								en: 'A small icon that represents your organization. It will be displayed in the browser tab when users visit your website.',
+								ja: '組織を表す小さなアイコンです。ユーザーがウェブサイトを訪れると、ブラウザのタブに表示されます。',
+								pt: 'Um pequeno ícone que representa sua organização. Ele será exibido na guia do navegador quando os usuários visitarem seu site.',
+								es: 'Un pequeño icono que representa a su organización. Se mostrará en la pestaña del navegador cuando los usuarios visiten su sitio web.',
+								fr: 'Une petite icône qui représente votre organisation. Il sera affiché dans l’onglet du navigateur lorsque les utilisateurs visitent votre site Web.',
+								sw: 'Alama ndogo inayowakilisha shirika lako. Itaonyeshwa kwenye kichupo cha kivinjari wakati watumiaji wanapozuru tovuti yako.',
+								th: 'ไอคอนขนาดเล็กที่แสดงถึงองค์กรของคุณ จะแสดงในแท็บของเบราว์เซอร์เมื่อผู้ใช้เข้าชมเว็บไซต์ของคุณ',
+								zh: '代表您的组织的小图标。当用户访问您的网站时，它将显示在浏览器选项卡中。'
+							});
+						}
+					},
+					header_links: {
+						title: () => {
+							return t(locale, {
+								en: 'Header Links',
+								ja: 'ヘッダーリンク',
+								pt: 'Links do Cabeçalho',
+								es: 'Enlaces del Encabezado',
+								fr: 'Liens de l’En-tête',
+								sw: 'Viungo vya Kichwa',
+								th: 'ลิงก์ด้านบน',
+								zh: '页眉链接'
+							});
+						},
+						description: () => {
+							return t(locale, {
+								en: 'Links that will be displayed in the header of your website.',
+								ja: 'ウェブサイトのヘッダーに表示されるリンクです。',
+								pt: 'Links que serão exibidos no cabeçalho do seu site.',
+								es: 'Enlaces que se mostrarán en el encabezado de su sitio web.',
+								fr: 'Liens qui seront affichés dans l’en-tête de votre site Web.',
+								sw: 'Viungo ambavyo vitaonyeshwa kwenye kichwa cha tovuti yako.',
+								th: 'ลิงก์ที่จะแสดงในส่วนหัวของเว็บไซต์ของคุณ',
+								zh: '将显示在您网站页眉中的链接。'
+							});
+						}
+					},
+					open_in_new_tab: {
+						label: () => {
+							return t(locale, {
+								en: 'Open in new tab',
+								ja: '新しいタブで開く',
+								pt: 'Abrir em nova aba',
+								es: 'Abrir en una nueva pestaña',
+								fr: 'Ouvrir dans un nouvel onglet',
+								sw: 'Fungua kwenye kichupo kipya',
+								th: 'เปิดในแท็บใหม่',
+								zh: '在新标签页中打开'
+							});
+						},
+						description: () => {
+							return t(locale, {
+								en: 'Should the link open in a new tab?',
+								ja: 'リンクは新しいタブで開きますか？',
+								pt: 'O link deve abrir em uma nova aba?',
+								es: '¿El enlace debe abrirse en una nueva pestaña?',
+								fr: 'Le lien doit-il s’ouvrir dans un nouvel onglet?',
+								sw: 'Je, kiungo kifunguliwe kwenye kichupo kipya?',
+								th: 'ควรเปิดลิงก์ในแท็บใหม่หรือไม่?',
+								zh: '链接是否应在新标签页中打开？'
+							});
+						}
+					},
+					add_link: {
+						label: () => {
+							return t(locale, {
+								en: 'Add a link',
+								ja: 'リンクを追加',
+								pt: 'Adicionar um link',
+								es: 'Agregar un enlace',
+								fr: 'Ajouter un lien',
+								sw: 'Ongeza kiungo',
+								th: 'เพิ่มลิงก์',
+								zh: '添加链接'
+							});
+						}
+					},
+					footer_links: {
+						title: () => {
+							return t(locale, {
+								en: 'Footer Links',
+								ja: 'フッターリンク',
+								pt: 'Links do Rodapé',
+								es: 'Enlaces del Pie de Página',
+								fr: 'Liens du Pied de Page',
+								sw: 'Viungo vya Chini',
+								th: 'ลิงก์ด้านล่าง',
+								zh: '页脚链接'
+							});
+						},
+						description: () => {
+							return t(locale, {
+								en: 'Links that will be displayed in the footer of your website.',
+								ja: 'ウェブサイトのフッターに表示されるリンクです。',
+								pt: 'Links que serão exibidos no rodapé do seu site.',
+								es: 'Enlaces que se mostrarán en el pie de página de su sitio web.',
+								fr: 'Liens qui seront affichés dans le pied de page de votre site Web.',
+								sw: 'Viungo ambavyo vitaonyeshwa kwenye chini ya tovuti yako.',
+								th: 'ลิงก์ที่จะแสดงในส่วนท้ายของเว็บไซต์ของคุณ',
+								zh: '将显示在您网站页脚中的链接。'
 							});
 						}
 					}

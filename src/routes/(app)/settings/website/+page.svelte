@@ -4,9 +4,12 @@
 	import * as Card from '$lib/comps/ui/card';
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import Grid from '$lib/comps/ui/custom/grid.svelte';
+	import WebsiteConfigForm from './WebsiteConfigForm.svelte';
+	const { data } = $props();
 </script>
 
 <PageHeader title={$page.data.t.pages.config.settings.website.index()} />
+<div class="mt-6"><WebsiteConfigForm superform={data.form} /></div>
 
 <Grid cols={1}>
 	<Card.Root class="mt-4">
