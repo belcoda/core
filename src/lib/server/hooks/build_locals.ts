@@ -12,11 +12,13 @@ export function buildLocalLanguage(event: RequestEvent): SL[number] {
 }
 
 const log = pino('$lib/server/hooks/build_locals');
+import logToAnalytics from '$lib/server/hooks/analytics/log';
 
 export async function buildAdminInstance({ event }: { event: RequestEvent }): Promise<{
 	authenticated: boolean;
 	event: RequestEvent;
-	jsonResponse: boolean;
+	//in this context, jsonResponse means building a Response in this function and returning it directly
+	jsonResponse: boolean; //only used for errors
 	response?: Response;
 }> {
 	if (event.url.pathname.startsWith('/api/v1')) {
@@ -25,6 +27,8 @@ export async function buildAdminInstance({ event }: { event: RequestEvent }): Pr
 			event.locals.admin = admin;
 			event.locals.instance = instance;
 			event.locals.language = instance.language;
+			//log the request to umami only on /api/v1 routes
+			await logToAnalytics(event);
 			return { authenticated: true, event, jsonResponse: false };
 		} catch (err) {
 			log.trace(err);
@@ -34,6 +38,8 @@ export async function buildAdminInstance({ event }: { event: RequestEvent }): Pr
 				event.locals.admin = admin;
 				event.locals.instance = instance;
 				event.locals.language = instance.language;
+				//log the request to umami only on /api/v1 routes
+				await logToAnalytics(event);
 				return { authenticated: true, event, jsonResponse: false };
 			} catch (err) {
 				log.error(err);

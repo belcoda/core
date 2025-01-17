@@ -20,27 +20,25 @@ export type HandlerResponse =
 	  };
 
 type Resolve = (event: RequestEvent, opts?: ResolveOptions | undefined) => MaybePromise<Response>;
-
 export default async function (event: RequestEvent, resolve: Resolve): Promise<HandlerResponse> {
-	if (event.url.pathname.startsWith('/api/v1')) {
-		log.info(`✨ ${event.request.method} ${event.url.href}`);
-	} else {
-		log.info(`🌎 ${event.request.method} ${event.url.href}`);
-	}
 	if (event.url.pathname.startsWith('/webhooks/email')) {
+		log.info(`🌎 ${event.request.method} ${event.url.href}`);
 		return await emailHandler(event, resolve);
 	}
 	if (event.url.pathname.startsWith('/favicon.ico')) {
 		return { continue: false, response: new Response(null, { status: 204 }) };
 	}
 	if (event.url.pathname.startsWith('/webhooks/whatsapp')) {
+		log.info(`🌎 ${event.request.method} ${event.url.href}`);
 		return await whatsappHandler(event, resolve);
 	}
 
 	if (event.url.pathname.startsWith('/webhooks/whapi')) {
+		log.info(`🌎 ${event.request.method} ${event.url.href}`);
 		return await whapiHandler(event, resolve);
 	}
 
+	//conditional on it being a worker request
 	const workerResponse = await worker(event, resolve);
 	if (!workerResponse.continue) return { continue: false, response: workerResponse.response };
 
@@ -49,6 +47,7 @@ export default async function (event: RequestEvent, resolve: Resolve): Promise<H
 		if (subdomain) {
 			log.info(`🎣 Request subdomain is ${subdomain}`);
 			const response = await handlePageRender(event, subdomain);
+			log.info(`🌎 ${event.request.method} ${event.url.href}`);
 			return { continue: false, response: response };
 		}
 	}
