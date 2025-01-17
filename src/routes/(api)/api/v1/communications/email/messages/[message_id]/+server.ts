@@ -21,12 +21,15 @@ export async function GET(event) {
 
 export async function PUT(event) {
 	try {
+		const generatePreview =
+			event.url.searchParams.get('generatePreview') === 'false' ? false : true;
 		const body = await event.request.json();
 		const updated = await api.update({
 			instanceId: event.locals.instance.id,
 			t: event.locals.t,
 			messageId: Number(event.params.message_id),
-			body
+			body,
+			queue: event.locals.queue
 		});
 		return json(updated);
 	} catch (err) {

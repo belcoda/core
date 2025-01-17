@@ -48,6 +48,13 @@
 	import { Input, HTML, Checkbox, Button, Textarea, Grid, Switch } from '$lib/comps/ui/forms';
 	import * as Select from '$lib/comps/ui/select';
 	import * as Card from '$lib/comps/ui/card';
+	import Label from '$lib/comps/ui/label/label.svelte';
+	import SwitchWidget from '$lib/comps/ui/switch/switch.svelte';
+	import * as Alert from '$lib/comps/ui/alert/index.js';
+	import TriangleAlert from 'lucide-svelte/icons/triangle-alert';
+	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
+	import * as Collapsible from '$lib/comps/ui/collapsible/index.js';
+	import { buttonVariants } from '$lib/comps/ui/button/index.js';
 
 	let editHTML = true;
 	$: templatesForSelect = templates.map((template) => ({
@@ -97,20 +104,7 @@
 			bind:value={$nameValue as string}
 		/>
 	{/if}
-	<Input
-		{disabled}
-		{form}
-		name={from}
-		label={$page.data.t.forms.fields.email.from.label()}
-		bind:value={$fromValue as string}
-	/>
-	<Input
-		{disabled}
-		{form}
-		name={replyTo}
-		label={$page.data.t.forms.fields.email.reply_to.label()}
-		bind:value={$replyToValue as string}
-	/>
+
 	<Input
 		{disabled}
 		{form}
@@ -119,24 +113,7 @@
 		bind:value={$subjectValue as string}
 	/>
 
-	<Textarea
-		{disabled}
-		{form}
-		name={previewText}
-		label={$page.data.t.forms.fields.email.preview_text.label()}
-		description={$page.data.t.forms.fields.email.preview_text.description()}
-		bind:value={$previewTextValue as string}
-	/>
-
-	<!-- Right now, we don't need this, and it will be confusing for users
-  <Checkbox
-		{form}
-		name={`${formKey}.useHtmlAsText`}
-		label={$page.data.t.forms.fields.email.useHtmlAsPlainText.label()}
-		description={$page.data.t.forms.fields.email.useHtmlAsPlainText.description()}
-		bind:checked={$formData[formKey].useHtmlAsText}
-	/> -->
-	<!-- {#if $useHtmlAsTextValue}
+	{#if !$useHtmlAsTextValue}
 		<div class="flex justify-end items-center gap-2">
 			<Label class="text-muted-foreground"
 				>{editHTML
@@ -145,9 +122,7 @@
 			>
 			<SwitchWidget disabled={$useHtmlAsTextValue} bind:checked={editHTML} />
 		</div>
-	{/if} -->
-	<Separator class="my-6" />
-	{@render templateChange()}
+	{/if}
 	{#if editHTML}
 		<div class="relative">
 			{#if disabled}<div class="bg-white opacity-70 absolute z-20 inset-0"></div>{/if}
@@ -161,10 +136,68 @@
 			rows={16}
 			label={null}
 			bind:value={$textValue as string}
-		/>
-	{/if}
+		/>{/if}
 </Grid>
 
+<!-- Advanced settings -->
+<Collapsible.Root class="w-full space-y-2">
+	<div class="flex items-center justify-between space-x-4 px-4">
+		<h4 class="text-sm font-semibold">{$page.data.t.forms.buttons.advanced_settings()}</h4>
+		<Collapsible.Trigger class={buttonVariants({ variant: 'ghost', size: 'sm', class: 'w-9 p-0' })}>
+			<ChevronsUpDown />
+			<span class="sr-only">{$page.data.t.forms.buttons.toggle()}</span>
+		</Collapsible.Trigger>
+	</div>
+	<Collapsible.Content class="space-y-2">
+		<Alert.Root>
+			<TriangleAlert class="size-4" />
+			<Alert.Title>{$page.data.t.common.alerts.heads_up()}</Alert.Title>
+			<Alert.Description class="text-muted-foreground mt-2">
+				{$page.data.t.forms.fields.email.advanced_settings.warning()}
+			</Alert.Description>
+		</Alert.Root>
+		<Grid cols={1}>
+			<Input
+				{disabled}
+				{form}
+				name={from}
+				label={$page.data.t.forms.fields.email.from.label()}
+				description={$page.data.t.forms.fields.email.from.description()}
+				bind:value={$fromValue as string}
+			/>
+
+			<Input
+				{disabled}
+				{form}
+				name={replyTo}
+				label={$page.data.t.forms.fields.email.reply_to.label()}
+				description={$page.data.t.forms.fields.email.reply_to.description()}
+				bind:value={$replyToValue as string}
+			/>
+
+			<Textarea
+				{disabled}
+				{form}
+				name={previewText}
+				label={$page.data.t.forms.fields.email.preview_text.label()}
+				description={$page.data.t.forms.fields.email.preview_text.description()}
+				bind:value={$previewTextValue as string}
+			/>
+
+			{@render templateSelector()}
+
+			<Checkbox
+				{form}
+				name={useHtmlAsText}
+				label={$page.data.t.forms.fields.email.useHtmlAsPlainText.label()}
+				description={$page.data.t.forms.fields.email.useHtmlAsPlainText.description()}
+				bind:checked={$useHtmlAsTextValue as boolean}
+			/>
+		</Grid>
+	</Collapsible.Content>
+</Collapsible.Root>
+
+<!-- Test email -->
 {#if allowTestEmail && !disabled}
 	<Separator class="my-6" />
 	<Card.Root class="mb-6">
@@ -185,9 +218,10 @@
 	</Card.Root>
 {/if}
 
-{#snippet templateChange()}
+{#snippet templateSelector()}
 	{#if templates.length > 0}
-		<div class="flex justify-end">
+		<div class="w-full mb-2">
+			<Label>{$page.data.t.forms.fields.email.template.label()}</Label>
 			<Select.Root
 				type="single"
 				onValueChange={(val) => {
@@ -195,7 +229,7 @@
 					$templateIdValue = id;
 				}}
 			>
-				<Select.Trigger class="w-[480px]">
+				<Select.Trigger class="w-full">
 					{templates.find((t) => t.id === $templateIdValue)?.name ||
 						$page.data.t.forms.fields.email.template.label()}
 				</Select.Trigger>
@@ -205,6 +239,9 @@
 					{/each}
 				</Select.Content>
 			</Select.Root>
+			<div class="text-muted-foreground text-sm mt-1.5">
+				{$page.data.t.forms.fields.email.template.description()}
+			</div>
 		</div>
 	{/if}
 {/snippet}

@@ -27,6 +27,7 @@ export async function POST(event) {
 			defaultTemplateId: event.locals.instance.settings.communications.email.default_template_id,
 			t: event.locals.t,
 			adminId: event.locals.admin.id,
+			queue: event.locals.queue,
 			body
 		});
 		return json(createdTemplate);

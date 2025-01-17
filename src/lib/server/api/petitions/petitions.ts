@@ -59,6 +59,7 @@ export async function create({
 	const instance = await readInstance({ instance_id: instanceId });
 	const emailMessage = await createPetitionEmail({
 		body: parsed,
+		queue,
 		instanceId,
 		adminId,
 		instance,
@@ -277,16 +278,19 @@ async function createPetitionEmail({
 	instanceId,
 	adminId,
 	instance,
-	defaultEmailTemplateId
+	defaultEmailTemplateId,
+	queue
 }: {
 	body: schema.Create;
 	instanceId: number;
 	adminId: number;
 	instance: ReadInstance;
 	defaultEmailTemplateId: number;
+	queue: App.Queue;
 }): Promise<number> {
 	const registrationEmail = await createEmailMessage({
 		instanceId,
+		queue,
 		body: {
 			name: randomUUID(),
 			point_person_id: adminId,
