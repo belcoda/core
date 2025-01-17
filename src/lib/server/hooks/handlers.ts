@@ -61,10 +61,15 @@ export function detectSubdomain(host: string, rootDomain: string): string | fals
 		return false;
 	}
 
-	// this will break for domains like .com.au or .co.uk or .co.jp, but they should be handled by the root domain above
 	const parts = host.split('.');
+	// if it's a single-part domain (eg: example.com), then domain.split('.').length === 2 means it's root
 	if (parts.length < 3) {
-		return false;
+		// note that this will false-negative for domains like .com.au or .co.uk or .co.jp, but they should all be covered by the root check domain above
+
+		if (parts[parts.length - 1].includes('localhost') === false) {
+			//subdomain.localhost:5173 is a valid subdomain but has less than 3 parts when split by '.'
+			return false;
+		}
 	}
 
 	if (DISALLOWED_NAMES_SET.has(parts[0])) {
