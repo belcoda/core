@@ -341,6 +341,18 @@ export default function (locale: SL) {
 			}
 		},
 		alerts: {
+			heads_up: () => {
+				return t(locale, {
+					en: 'Heads up',
+					ja: 'お知らせ',
+					pt: 'Atenção',
+					es: 'Atención',
+					fr: 'Attention',
+					sw: 'Kumbuka',
+					th: 'เตือน',
+					zh: '注意'
+				});
+			},
 			send_email: () => {
 				return t(locale, {
 					en: 'Are you sure? Pres OK to send the email.',

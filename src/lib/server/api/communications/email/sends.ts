@@ -14,13 +14,15 @@ export async function create({
 	body,
 	defaultTemplateId,
 	t,
-	adminId
+	adminId,
+	queue
 }: {
 	instanceId: number;
 	body: schema.Create;
 	defaultTemplateId: number;
 	adminId: number;
 	t: App.Localization;
+	queue: App.Queue;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
 	const template = await readTemplate({ instanceId, templateId: defaultTemplateId, t });
@@ -36,7 +38,13 @@ export async function create({
 		point_person_id: adminId,
 		use_html_for_plaintext: true
 	};
-	const message = await createMessage({ instanceId, defaultTemplateId, body: messageBody });
+	const message = await createMessage({
+		instanceId,
+		defaultTemplateId,
+		body: messageBody,
+		queue: queue,
+		t
+	});
 	const toInsert = {
 		instance_id: instanceId,
 		message_id: message.id,

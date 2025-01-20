@@ -10,7 +10,7 @@
 		breadcrumbs as breadcrumbsConstructor,
 		renderBreadcrumb
 	} from '$lib/comps/nav/breadcrumbs/breadcrumbs';
-
+	import { PUBLIC_UMAMI_WEBSITE_ID } from '$env/static/public';
 	import * as Sentry from '@sentry/sveltekit';
 	import { browser } from '$app/environment';
 	if (browser) {
@@ -54,9 +54,21 @@
 		}
 		flash.set(undefined);
 	});
+	if (browser) {
+		if ('umami' in window) {
+			//@ts-expect-error
+			window.umami.identify({ team: $page.data.instance.slug, id: $page.data.admin.id });
+		}
+	}
 </script>
 
 <svelte:head>
+	<script
+		defer
+		src="https://cloud.umami.is/script.js"
+		data-website-id={PUBLIC_UMAMI_WEBSITE_ID}
+		data-tag={$page.data.instance.slug}
+	></script>
 	{#key $page.url.pathname}
 		<title>{pageTitle} - Belcoda</title>
 	{/key}

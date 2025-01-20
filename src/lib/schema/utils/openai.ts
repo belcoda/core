@@ -1,4 +1,4 @@
-import { v, id } from '$lib/schema/valibot';
+import { v, id, longStringNotEmpty } from '$lib/schema/valibot';
 
 export const htmlMetatagsOptions = {
 	event: v.object({
@@ -15,6 +15,16 @@ export const htmlMetatagsOptions = {
 		contentTypeId: id
 	})
 };
+
+export const emailPreviewOptions = v.object({
+	emailMessageId: id
+});
+export type EmailPreviewOptions = v.InferOutput<typeof emailPreviewOptions>;
+export const emailPreview = v.object({
+	preview: longStringNotEmpty
+});
+export type EmailPreview = v.InferOutput<typeof emailPreview>;
+
 export type EventHTMLMetaTags = v.InferOutput<typeof htmlMetatagsOptions.event>;
 export type PetitionHTMLMetaTags = v.InferOutput<typeof htmlMetatagsOptions.petition>;
 export type ContentHTMLMetaTags = v.InferOutput<typeof htmlMetatagsOptions.content>;

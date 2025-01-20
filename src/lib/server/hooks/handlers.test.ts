@@ -21,6 +21,10 @@ describe('detectSubdomain', () => {
 		expect(detectSubdomain('sub.example.com', 'example.com')).toBe('sub');
 	});
 
+	it('should return the correct subdomain when the host is localhost', () => {
+		expect(detectSubdomain('sub.localhost:5173', 'localhost:5173')).toBe('sub');
+	});
+
 	it('should return the subdomain even if the root domain is a multi-part ccTLD/compound ccTLD', () => {
 		expect(detectSubdomain('sub.example.com.au', 'example.com.au')).toBe('sub');
 	});

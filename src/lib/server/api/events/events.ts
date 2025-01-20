@@ -69,7 +69,8 @@ export async function create({
 			instanceId,
 			defaultEmailTemplateId,
 			type: 'followup',
-			body: parsed
+			body: parsed,
+			queue
 		}),
 		registration_email: await createEventEmailNotification({
 			instance,
@@ -77,7 +78,8 @@ export async function create({
 			instanceId,
 			defaultEmailTemplateId,
 			type: 'registration',
-			body: parsed
+			body: parsed,
+			queue
 		}),
 		reminder_email: await createEventEmailNotification({
 			instance,
@@ -85,7 +87,8 @@ export async function create({
 			instanceId,
 			defaultEmailTemplateId,
 			type: 'reminder',
-			body: parsed
+			body: parsed,
+			queue
 		}),
 		cancellation_email: await createEventEmailNotification({
 			instance,
@@ -93,7 +96,8 @@ export async function create({
 			instanceId,
 			defaultEmailTemplateId,
 			type: 'cancellation',
-			body: parsed
+			body: parsed,
+			queue
 		}),
 		template_id: parsed.template_id || defaultTemplateId,
 		point_person_id: parsed.point_person_id || adminId,
@@ -381,7 +385,8 @@ async function createEventEmailNotification({
 	instanceId,
 	adminId,
 	instance,
-	defaultEmailTemplateId
+	defaultEmailTemplateId,
+	queue
 }: {
 	type: 'registration' | 'reminder' | 'cancellation' | 'followup';
 	body: schema.Create;
@@ -389,6 +394,7 @@ async function createEventEmailNotification({
 	adminId: number;
 	instance: ReadInstance;
 	defaultEmailTemplateId: number;
+	queue: App.Queue;
 }): Promise<number> {
 	const { htmlEmail, textEmail } = returnHtmlTextEmails(type);
 	const registrationEmail = await createEmailMessage({
@@ -405,6 +411,7 @@ async function createEventEmailNotification({
 			use_html_for_plaintext: true,
 			template_id: defaultEmailTemplateId
 		},
+		queue: queue,
 		defaultTemplateId: defaultEmailTemplateId
 	});
 	return registrationEmail.id;

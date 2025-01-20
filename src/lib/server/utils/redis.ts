@@ -16,7 +16,11 @@ client.on('error', (err) => log.error('Redis Client Error', err));
 client.on('connect', () => log.info(`Redis client connected at ${REDIS_URL}`));
 client.on('ready', () => log.info(`Redis client ready at ${REDIS_URL}`));
 
-if (!building && process.env.CI !== 'true') {
+if (
+	!building && //this causes build errors
+	process.env.CI !== 'true' && //this pollutes the logs with connection errors and can cause parse errors in our JUnit output
+	process.env.MODE !== 'test' //pollutes the logs with connection info and can cause issues
+) {
 	await client.connect();
 }
 function safe_stringify(value: any) {

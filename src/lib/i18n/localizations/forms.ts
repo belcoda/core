@@ -896,6 +896,32 @@ export default function (locale: SL) {
 							th: 'ตอบกลับไปที่',
 							zh: '回复'
 						});
+					},
+					description: () => {
+						return t(locale, {
+							en: `The address that replies to this email will be sent to. If you change it, you will not automatically receive replies inside Belcoda.`,
+							ja: `このメールに返信するアドレスが送信されます。変更すると、Belcoda内で自動的に返信を受け取ることはできません。`,
+							pt: `O endereço para o qual as respostas a este email serão enviadas. Se você alterá-lo, não receberá automaticamente respostas dentro do Belcoda.`,
+							es: `La dirección a la que se enviarán las respuestas a este correo electrónico. Si lo cambia, no recibirá automáticamente respuestas dentro de Belcoda.`,
+							fr: `L'adresse à laquelle les réponses à cet e-mail seront envoyées. Si vous la modifiez, vous ne recevrez pas automatiquement de réponses à l'intérieur de Belcoda.`,
+							sw: `Anwani ambayo majibu kwa barua pepe hii yatapelekwa. Ikiwa utaibadilisha, hutapokea majibu kiotomatiki ndani ya Belcoda.`,
+							th: `ที่อยู่ที่จะส่งกลับไปยังอีเมลนี้ หากคุณเปลี่ยนมันคุณจะไม่ได้รับการตอบกลับอัตโนมัติภายใน Belcoda`,
+							zh: `将回复此电子邮件的地址发送到。如果您更改它，您将无法在Belcoda内自动接收回复。`
+						});
+					}
+				},
+				advanced_settings: {
+					warning: () => {
+						return t(locale, {
+							en: `You might not need to change these settings. The default settings are correct for the majority of cases, and making changes can break automatic handling of email replies and other features. Please read the documentation fully before making changes.`,
+							ja: `これらの設定を変更する必要がない場合があります。デフォルト設定はほとんどの場合に適しており、変更すると電子メールの返信の自動処理やその他の機能が壊れる可能性があります。変更する前に文書を十分に読んでください。`,
+							pt: `Você pode não precisar alterar essas configurações. As configurações padrão são corretas para a maioria dos casos e fazer alterações pode quebrar o tratamento automático de respostas de e-mail e outras funcionalidades. Por favor, leia a documentação completamente antes de fazer alterações.`,
+							es: `Es posible que no necesite cambiar estas configuraciones. Las configuraciones predeterminadas son correctas para la mayoría de los casos y hacer cambios puede romper el manejo automático de respuestas de correo electrónico y otras funciones. Por favor, lea completamente la documentación antes de hacer cambios.`,
+							fr: `Vous pourriez ne pas avoir besoin de modifier ces paramètres. Les paramètres par défaut sont corrects pour la plupart des cas, et apporter des modifications peut rompre le traitement automatique des réponses aux e-mails et d'autres fonctionnalités. Veuillez lire la documentation entièrement avant de faire des modifications.`,
+							sw: `Huenda usihitaji kubadilisha mipangilio hii. Mipangilio ya msingi ni sahihi kwa kesi nyingi, na kufanya mabadiliko kunaweza kuvunja kushughulikia kiotomatiki cha majibu ya barua pepe na vipengele vingine. Tafadhali soma nyaraka kabisa kabla ya kufanya mabadiliko.`,
+							th: `คุณอาจจะไม่จำเป็นต้องเปลี่ยนการตั้งค่าเหล่านี้ การตั้งค่าเริ่มต้นถูกต้องสำหรับกรณีส่วนใหญ่และการเปลี่ยนแปลงอาจทำให้การจัดการอัตโนมัติของการตอบกลับอีเมลและคุณลักษณะอื่น ๆ เสีย โปรดอ่านเอกสารอย่างเต็มที่ก่อนที่จะทำการเปลี่ยนแปลง`,
+							zh: `您可能不需要更改这些设置。默认设置适用于大多数情况，进行更改可能会破坏电子邮件回复的自动处理和其他功能。请在进行更改之前完全阅读文档。`
+						});
 					}
 				},
 				preview_text: {
@@ -913,14 +939,14 @@ export default function (locale: SL) {
 					},
 					description: () => {
 						return t(locale, {
-							en: 'This is the text that appears in the email client preview',
-							ja: 'これはメールクライアントのプレビューに表示されるテキストです',
-							pt: 'Este é o texto que aparece na pré-visualização do cliente de email',
-							es: 'Este es el texto que aparece en la vista previa del cliente de correo electrónico',
-							fr: "C'est le texte qui apparaît dans l'aperçu du client de messagerie",
-							sw: 'Hii ndio maandishi yanayoonekana kwenye hakiki ya mteja wa barua pepe',
-							th: 'นี่คือข้อความที่ปรากฏในการตัวอย่างของไคลเอนต์อีเมล',
-							zh: '这是出现在电子邮件客户端预览中的文本'
+							en: `This is the text that appears in the email client preview. If you don't make changes to this text, a preview will be automatically generated based on the email subject and body.`,
+							ja: `これは電子メールクライアントのプレビューに表示されるテキストです。このテキストを変更しない場合、プレビューは電子メールの件名と本文に基づいて自動的に生成されます。`,
+							pt: `Este é o texto que aparece na pré-visualização do cliente de email. Se você não fizer alterações neste texto, uma pré-visualização será gerada automaticamente com base no assunto e no corpo do email.`,
+							es: `Este es el texto que aparece en la vista previa del cliente de correo electrónico. Si no realiza cambios en este texto, se generará automáticamente una vista previa basada en el asunto y el cuerpo del correo electrónico.`,
+							fr: `C'est le texte qui apparaît dans l'aperçu du client de messagerie. Si vous ne modifiez pas ce texte, un aperçu sera automatiquement généré en fonction de l'objet et du corps du message.`,
+							sw: `Hii ni maandishi yanayoonekana kwenye hakiki ya mteja wa barua pepe. Ikiwa hautafanya mabadiliko kwenye maandishi haya, hakiki itazalishwa kiotomatiki kulingana na somo la barua pepe na mwili.`,
+							th: `นี่คือข้อความที่ปรากฏในการตัวอย่างของไคลเอนต์อีเมล หากคุณไม่ทำการเปลี่ยนแปลงข้อความนี้ จะมีการสร้างการตัวอย่างโดยอัตโนมัติขึ้นจากเรื่องและเนื้อหาของอีเมล`,
+							zh: `这是出现在电子邮件客户端预览中的文本。如果您不对此文本进行更改，将根据电子邮件主题和正文自动生成预览。`
 						});
 					}
 				},
@@ -979,14 +1005,14 @@ export default function (locale: SL) {
 					},
 					description: () => {
 						return t(locale, {
-							en: 'Select a template to use for the email',
-							ja: 'メールに使用するテンプレートを選択',
-							pt: 'Selecione um modelo para usar no email',
-							es: 'Seleccione una plantilla para usar en el correo electrónico',
-							fr: "Sélectionnez un modèle à utiliser pour l'e-mail",
-							sw: 'Chagua kiolezo cha kutumia kwa barua pepe',
-							th: 'เลือกเทมเพลตที่จะใช้สำหรับอีเมล',
-							zh: '选择要用于电子邮件的模板'
+							en: 'Select a template to use for the email. Templates can be managed in the "Email Templates" section.',
+							ja: 'メールに使用するテンプレートを選択。 テンプレートは「メールテンプレート」セクションで管理できます。',
+							pt: 'Selecione um modelo para usar no email. Os modelos podem ser gerenciados na seção "Modelos de Email".',
+							es: 'Seleccione una plantilla para usar en el correo electrónico. Las plantillas se pueden gestionar en la sección "Plantillas de Correo Electrónico".',
+							fr: "Sélectionnez un modèle à utiliser pour l'e-mail. Les modèles peuvent être gérés dans la section «Modèles d'e-mail».",
+							sw: 'Chagua kiolezo cha kutumia kwa barua pepe. Violezo vinaweza kusimamiwa katika sehemu ya "Violezo vya Barua pepe".',
+							th: 'เลือกเทมเพลตที่จะใช้สำหรับอีเมล เทมเพลตสามารถจัดการได้ในส่วน "เทมเพลตอีเมล"',
+							zh: '选择要用于电子邮件的模板。 模板可以在“电子邮件模板”部分中管理。'
 						});
 					}
 				},
@@ -2443,6 +2469,18 @@ export default function (locale: SL) {
 			remove: () => {
 				return t(locale, {
 					en: 'Remove'
+				});
+			},
+			toggle: () => {
+				return t(locale, {
+					en: 'Toggle',
+					ja: 'トグル',
+					pt: 'Alternar',
+					es: 'Alternar',
+					fr: 'Basculer',
+					sw: 'Badilisha',
+					th: 'สลับ',
+					zh: '切换'
 				});
 			},
 			create: () => {

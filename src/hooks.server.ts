@@ -31,7 +31,6 @@ Sentry.init({
 export const handleError: HandleServerError = Sentry.handleErrorWithSentry();
 
 export async function handleFetch({ event, request, fetch }) {
-	log.info(`🍔 FETCH ${event.request.method} ${event.url.href}`);
 	return await fetch(request);
 }
 
@@ -78,7 +77,9 @@ const belcodaHandler: Handle = async ({ event, resolve }) => {
 		jsonResponse,
 		response: apiResponse
 	} = await buildAdminInstance({ event });
-	if (jsonResponse && apiResponse) return apiResponse;
+	if (jsonResponse && apiResponse) {
+		return apiResponse;
+	}
 	if (event.url.pathname.startsWith('/login')) {
 		if (authenticated) {
 			return new Response(null, {
@@ -102,7 +103,9 @@ const belcodaHandler: Handle = async ({ event, resolve }) => {
 			}
 		});
 	}
-
+	log.info(
+		`🔒 ${event.request.method}: (${event.url.href}) [${event.locals.instance.slug}/${event.locals.admin?.id}]`
+	);
 	const response = await resolve(returnEvent);
 	return response;
 };
