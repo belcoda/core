@@ -35,9 +35,12 @@ export function renameFile(file: File): File {
 	const uploadableName = `${uuidv4()}-${file.name}`; // Add a random UUID to the file name to avoid conflicts
 	return new File([file], uploadableName, { type: file.type });
 }
-export async function getSignedURL(file: File, t: App.Localization): Promise<string> {
-	const site_uploads_url: string = '/api/v1/website/uploads/link';
-	const push_file_request_response = await fetch(site_uploads_url, {
+export async function getSignedURL(
+	file: File,
+	siteUploadsUrl: string,
+	t: App.Localization
+): Promise<string> {
+	const push_file_request_response = await fetch(siteUploadsUrl, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
