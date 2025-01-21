@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { update, type Settings } from '$lib/schema/core/instance';
 	import { type SuperValidated } from 'sveltekit-superforms';
-	import ImageUpload from '$lib/comps/ui/form/controls/file_upload/simple_image_upload.svelte';
+	import ImageUpload from '$lib/comps/ui/form/controls/file_upload/simple_file_upload.svelte';
 	import {
 		Button,
 		Error,
