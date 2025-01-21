@@ -1,6 +1,7 @@
 <script lang="ts">
-	// This is a simple image upload component that bypasses the normal uploads system.
-	// It directly uploads an image to the designated S3 public bucket and returns the URL.
+	// This is a simple image upload component.
+	// It directly uploads an image to the designated S3 bucket and returns the URL.
+	// It cann be used as the basis for more complicated file upload components.
 	const DEFAULT_FILE_TYPES: string[] = [
 		'image/png',
 		'image/jpeg',
