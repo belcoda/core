@@ -20,7 +20,7 @@
 	import Textarea from '$lib/comps/ui/textarea/textarea.svelte';
 	import Input from '$lib/comps/ui/input/input.svelte';
 	import * as Select from '$lib/comps/ui/select';
-	import FileUpload from '$lib/comps/ui/form/controls/file_upload/file_upload.svelte';
+	import FileUpload from '$lib/comps/ui/form/controls/file_upload/simple_file_upload.svelte';
 	import X from 'lucide-svelte/icons/x';
 	import Reply from 'lucide-svelte/icons/reply';
 	import Forward from 'lucide-svelte/icons/forward';
@@ -160,14 +160,14 @@
 					{selected}
 					items={messagesToSelect}
 					onSelectedChange={async (val) => {
-			if (val && val.value) {
-				const action = {
-					type: 'send_whatsapp_message' as const,
-					message_id: val.value
-				}
-				await setAction(buttonId, action);
-			}
-		}}
+						if (val && val.value) {
+							const action = {
+								type: 'send_whatsapp_message' as const,
+								message_id: val.value
+							};
+							await setAction(buttonId, action);
+						}
+					}}
 				>
 					<Select.Trigger class="w-full flex-grow">
 						<Select.Value
@@ -230,10 +230,7 @@
 		<div class="grid grid-cols-1 gap-2">
 			{#if message.message.type === 'image' && message.message.image.link !== PLACEHOLDER_IMAGE_URL}<!--Nothing here, because we want the UNLESS case, to satisfy TS-->
 			{:else}
-				<FileUpload
-					label={null}
-					on:uploaded={(ev) => updateFile(ev.detail.url, ev.detail.fileName)}
-				/>
+				<FileUpload onUpload={(data) => updateFile(data.url, data.fileName)} />
 			{/if}
 			{#if message.message.type === 'text'}
 				<Textarea bind:value={message.message.text.body} oninput={debounce(update, 500)} />
