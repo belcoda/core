@@ -21,14 +21,30 @@
 		maxSize = MAXIMUM_FILE_SIZE,
 		label,
 		description,
-		value = $bindable()
+		value = $bindable(),
+		class: className,
+		bucketName = PUBLIC_AWS_S3_SITE_UPLOADS_BUCKET_NAME,
+		siteUploadsUrl = '/api/v1/website/uploads/link'
 	}: {
-		onUpload?: ({ url, type, size }: { url: string; type: string; size: number }) => void;
+		onUpload?: ({
+			url,
+			type,
+			size,
+			fileName
+		}: {
+			url: string;
+			type: string;
+			size: number;
+			fileName: string;
+		}) => void;
 		fileTypes?: string[];
 		maxSize?: number;
 		label?: string;
 		description?: string;
 		value?: string | null;
+		class?: string;
+		bucketName?: string;
+		siteUploadsUrl?: string;
 	} = $props();
 
 	import Loader from 'lucide-svelte/icons/loader';
@@ -47,7 +63,7 @@
 	} from '$lib/comps/ui/form/controls/file_upload/upload';
 	const file_upload_widget_id = uuidv4();
 
-	const bucket_url = `https://${PUBLIC_AWS_S3_SITE_UPLOADS_BUCKET_NAME}.s3.amazonaws.com`;
+	const bucket_url = `https://${bucketName}.s3.amazonaws.com`;
 
 	const acceptable_file_types = fileTypes.join(', ');
 
@@ -66,8 +82,6 @@
 			disabled = true;
 			loading = true;
 			const input = document.getElementById(file_upload_widget_id) as HTMLInputElement;
-			console.log('input');
-			console.log(input);
 			const file = getAndCheckFile({
 				fileInput: input,
 				t: $page.data.t,
@@ -76,7 +90,7 @@
 			});
 			const fileToUpload = await renameFile(file);
 
-			const signedURL = await getSignedURL(fileToUpload, $page.data.t);
+			const signedURL = await getSignedURL(fileToUpload, siteUploadsUrl, $page.data.t);
 
 			const awsPathName = await uploadToS3({
 				file: fileToUpload,
@@ -84,7 +98,8 @@
 				t: $page.data.t
 			});
 			const uploadedUrl = `${bucket_url}${awsPathName}`; //this is the URL to the uploaded file, no / needed
-			if (onUpload) onUpload({ url: uploadedUrl, type: file.type, size: file.size });
+			if (onUpload)
+				onUpload({ url: uploadedUrl, type: file.type, size: file.size, fileName: file.name });
 			value = uploadedUrl;
 			success = true;
 		} catch (err) {
@@ -132,6 +147,7 @@
 		{disabled}
 		accept={acceptable_file_types}
 		class={cn(
+			className,
 			'block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400'
 		)}
 		aria-describedby="file_input_help"
