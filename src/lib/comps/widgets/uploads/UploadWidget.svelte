@@ -5,7 +5,7 @@
 	const flash = getFlash(page);
 
 	import { type List, type Read } from '$lib/schema/website/uploads';
-	import FileUpload from '$lib/comps/ui/form/controls/file_upload/file_upload.svelte';
+	import FileUpload from '$lib/comps/ui/form/controls/file_upload/simple_file_upload.svelte';
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import RenderUpload from './RenderUpload.svelte';
 	import Input from '$lib/comps/ui/input/input.svelte';
@@ -74,9 +74,9 @@
 		<H3 class="mb-4">{label}</H3>
 		<FileUpload
 			class="border-dashed bg-white"
-			on:uploaded={async (e) => {
+			onUpload={async (file) => {
 				try {
-					const uploaded = await handleUpload(e.detail, $page.data.t);
+					const uploaded = await handleUpload(file, $page.data.t);
 					upload = uploaded;
 					upload_id = uploaded.id;
 					onselected && onselected(uploaded);
