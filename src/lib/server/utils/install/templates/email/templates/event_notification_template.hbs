@@ -261,9 +261,10 @@
                 <tr>
                   <td align="center" valign="middle"
                     style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666;">
-                    <span class="appleFooter" style="color:#666666;">{{instance.name}}</span><br><a
-                      href="{{unsubscribe_url}}" class="original-only" style="color: #666666; text-decoration: none;"
-                      target="_blank">Unsubscribe</a>
+                    <span class="appleFooter" style="color:#666666;">{{instance.name}}</span><br>
+                    <!-- For now we will use the built-in Postmark unsubscribe system so don't need to add aditional unsub links -->
+                    {{!-- <a href="{{unsubscribe_url}}" class="original-only"
+                      style="color: #666666; text-decoration: none;" target="_blank">Unsubscribe</a> --}}
                   </td>
                 </tr>
               </table>
