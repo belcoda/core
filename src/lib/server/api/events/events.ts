@@ -101,7 +101,7 @@ export async function create({
 		}),
 		template_id: parsed.template_id || defaultTemplateId,
 		point_person_id: parsed.point_person_id || adminId,
-		country: parsed.country || DEFAULT_COUNTRY,
+		country: parsed.country || instance.country || DEFAULT_COUNTRY,
 		...parsed
 	};
 
