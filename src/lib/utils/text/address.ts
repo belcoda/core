@@ -20,7 +20,8 @@ type AddressIncludingObject = {
 
 export function renderAddress(
 	object: AddressIncludingObject,
-	t: App.Localization
+	t: App.Localization,
+	instanceCountry: SupportedCountry = DEFAULT_COUNTRY
 ): { url: string; text: string } {
 	const text = [
 		object.address_line_1,
@@ -30,7 +31,7 @@ export function renderAddress(
 		object.locality,
 		object.state,
 		object.postcode,
-		t.countries[object.country]()
+		t.countries[object.country || instanceCountry]()
 	]
 		.filter(Boolean)
 		.join(', ');
