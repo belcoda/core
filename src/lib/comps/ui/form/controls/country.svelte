@@ -18,7 +18,6 @@
 	import * as Select from '$lib/comps/ui/select';
 	export let value: string;
 	export let placeholder: string = $page.data.t.forms.generic.country.placeholder();
-	export let onchange: (country: SupportedCountry) => void = () => {};
 	import { SUPPORTED_COUNTRIES, type SupportedCountry } from '$lib/i18n';
 
 	const options = SUPPORTED_COUNTRIES.map((country) => ({
