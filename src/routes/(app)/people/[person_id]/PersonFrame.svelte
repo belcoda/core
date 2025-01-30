@@ -40,13 +40,13 @@
 	{/if}
 	<Separator />
 	<div class="grid grid-cols-1 gap-4">
-		{#if renderAddress(person, $page.data.t).text.length > 0}
+		{#if renderAddress(person, $page.data.t, $page.data.instance.country).text.length > 0}
 			<div>
 				<div class="section-title">Address</div>
 				<a
 					class="font-medium text-foreground"
-					href={renderAddress(person, $page.data.t).url}
-					target="_blank">{renderAddress(person, $page.data.t).text}</a
+					href={renderAddress(person, $page.data.t, $page.data.instance.country).url}
+					target="_blank">{renderAddress(person, $page.data.t, $page.data.instance.country).text}</a
 				>
 			</div>
 		{/if}

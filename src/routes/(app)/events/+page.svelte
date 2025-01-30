@@ -32,10 +32,10 @@
 							<Link size={16} />
 							{item.online_url}
 						</div>
-					{:else if renderAddress(item, data.t).text !== ''}
+					{:else if renderAddress(item, data.t, data.instance.country).text !== ''}
 						<div class="text-muted-foreground text-sm flex items-center gap-1">
 							<MapPin size={16} />
-							{renderAddress(item, data.t).text}
+							{renderAddress(item, data.t, data.instance.country).text}
 						</div>
 					{/if}
 					<div class="text-muted-foreground flex items-center gap-1">

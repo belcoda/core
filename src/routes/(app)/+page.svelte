@@ -35,7 +35,7 @@
 	<div>
 		{@render head(data.t.pages.people.index(), data.t.forms.buttons.see_all(), '/people')}
 		<DataGrid items={data.people.items} count={data.people.count} options={dataGridOptions}>
-			{#snippet content(person: typeof data.people.items[0])}
+			{#snippet content(person: (typeof data.people.items)[0])}
 				<div class="flex justify-between items-center w-full">
 					<div><PersonBadge {person} /></div>
 					<div>
@@ -55,7 +55,7 @@
 			'/people/groups'
 		)}
 		<DataGrid items={data.groups.items} count={data.groups.count} options={dataGridOptions}>
-			{#snippet content(group: typeof data.groups.items[0])}
+			{#snippet content(group: (typeof data.groups.items)[0])}
 				<div class="flex justify-between items-center w-full">
 					<div>
 						<div class="font-medium">{group.name}</div>
@@ -76,9 +76,9 @@
 	</div>
 
 	<div>
-		{@render head(data.t.pages.events.index(), data.t.forms.buttons.see_all(), '/people')}
+		{@render head(data.t.pages.events.index(), data.t.forms.buttons.see_all(), '/events')}
 		<DataGrid items={data.events.items} count={data.events.count} options={dataGridOptions}>
-			{#snippet content(event: typeof data.events.items[0])}
+			{#snippet content(event: (typeof data.events.items)[0])}
 				{@render eventLine(event)}
 			{/snippet}
 		</DataGrid>
@@ -98,7 +98,7 @@
 			</div>
 			<Tabs.Content value="posts">
 				<DataGrid items={data.posts.items} count={data.posts.count} options={dataGridOptions}>
-					{#snippet content(post: typeof data.posts.items[0])}
+					{#snippet content(post: (typeof data.posts.items)[0])}
 						<div class="flex justify-between items-center w-full">
 							<div class="font-medium">{post.name}</div>
 
@@ -113,7 +113,7 @@
 			</Tabs.Content>
 			<Tabs.Content value="pages">
 				<DataGrid items={data.pages.items} count={data.pages.count} options={dataGridOptions}>
-					{#snippet content(page: typeof data.pages.items[0])}
+					{#snippet content(page: (typeof data.pages.items)[0])}
 						<div class="flex justify-between items-center w-full">
 							<div class="font-medium">{page.name}</div>
 
@@ -130,7 +130,7 @@
 	</div>
 </div>
 
-{#snippet eventLine(item: typeof data.events.items[0])}
+{#snippet eventLine(item: (typeof data.events.items)[0])}
 	<div class="items-center flex justify-between gap-4">
 		<div>
 			<a href="/events/{item.id}">
@@ -141,10 +141,10 @@
 						<Link size={16} />
 						{item.online_url}
 					</div>
-				{:else if renderAddress(item, data.t).text !== ''}
+				{:else if renderAddress(item, data.t, data.instance.country).text !== ''}
 					<div class="text-muted-foreground text-sm flex items-center gap-1">
 						<MapPin size={16} />
-						{renderAddress(item, data.t).text}
+						{renderAddress(item, data.t, data.instance.country).text}
 					</div>
 				{/if}
 				<div class="text-muted-foreground flex items-center gap-1 text-sm">
