@@ -3,7 +3,7 @@ import register_helpers from '$lib/server/hooks/website/register_helpers';
 import { form, input } from '$lib/server/hooks/website/partials';
 import { listAllForInstance } from '$lib/server/api/website/blocks';
 import { PUBLIC_HOST } from '$env/static/public';
-
+import { read as readInstance } from '$lib/server/api/core/instances';
 export default async function ({
 	template,
 	context,
@@ -16,8 +16,10 @@ export default async function ({
 	t: App.Localization;
 }): Promise<string> {
 	const blocks = await listAllForInstance({ instanceId: instanceId });
+	const instance = await readInstance({ instance_id: instanceId });
+
 	//load helpers
-	const hb = register_helpers(Handlebars, blocks, t);
+	const hb = register_helpers(Handlebars, blocks, t, instance);
 	//load partials
 	hb.registerHelper('input', function (value: unknown) {
 		return new Handlebars.SafeString(input(value, Handlebars.escapeExpression));

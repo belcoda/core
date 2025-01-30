@@ -6,10 +6,12 @@ import { type Read as EventRead } from '$lib/schema/events/events';
 
 import { formatDateOnly, formatDateTimeRange } from '$lib/utils/text/date';
 import { renderAddress } from '$lib/utils/text/address';
+import { type Read as ReadInstance } from '$lib/schema/core/instance';
 export default function (
 	hb: typeof Handlebars,
 	blocks: Read[],
-	t: App.Localization
+	t: App.Localization,
+	instance: ReadInstance
 ): typeof Handlebars {
 	hb.registerHelper('date', function (date: string | Date) {
 		if (typeof date === 'string') {
@@ -24,7 +26,7 @@ export default function (
 		return new Date(date).toLocaleTimeString();
 	});
 	hb.registerHelper('address', function (itemBody: EventRead) {
-		return renderAddress(itemBody, t).text;
+		return renderAddress(itemBody, t, instance.country).text;
 	});
 	hb.registerHelper('google_maps_url', function (itemBody: EventRead) {
 		return renderAddress(itemBody, t).url;
