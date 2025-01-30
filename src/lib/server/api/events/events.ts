@@ -70,7 +70,8 @@ export async function create({
 			defaultEmailTemplateId,
 			type: 'followup',
 			body: parsed,
-			queue
+			queue,
+			t
 		}),
 		registration_email: await createEventEmailNotification({
 			instance,
@@ -79,7 +80,8 @@ export async function create({
 			defaultEmailTemplateId,
 			type: 'registration',
 			body: parsed,
-			queue
+			queue,
+			t
 		}),
 		reminder_email: await createEventEmailNotification({
 			instance,
@@ -88,7 +90,8 @@ export async function create({
 			defaultEmailTemplateId,
 			type: 'reminder',
 			body: parsed,
-			queue
+			queue,
+			t
 		}),
 		cancellation_email: await createEventEmailNotification({
 			instance,
@@ -97,7 +100,8 @@ export async function create({
 			defaultEmailTemplateId,
 			type: 'cancellation',
 			body: parsed,
-			queue
+			queue,
+			t
 		}),
 		template_id: parsed.template_id || defaultTemplateId,
 		point_person_id: parsed.point_person_id || adminId,
@@ -365,7 +369,6 @@ import htmlEmailFollowup from '$lib/utils/templates/email/events/event_followup_
 import textEmailFollowup from '$lib/utils/templates/email/events/event_followup_email_text.handlebars?raw';
 import htmlEmailCancellation from '$lib/utils/templates/email/events/event_registration_cancelled_html.handlebars?raw';
 import textEmailCancellation from '$lib/utils/templates/email/events/event_registration_cancelled_text.handlebars?raw';
-import { DeleteBucketMetadataTableConfigurationCommand } from '@aws-sdk/client-s3';
 function returnHtmlTextEmails(type: 'registration' | 'reminder' | 'cancellation' | 'followup') {
 	switch (type) {
 		case 'registration':
@@ -386,7 +389,8 @@ async function createEventEmailNotification({
 	adminId,
 	instance,
 	defaultEmailTemplateId,
-	queue
+	queue,
+	t
 }: {
 	type: 'registration' | 'reminder' | 'cancellation' | 'followup';
 	body: schema.Create;
@@ -395,6 +399,7 @@ async function createEventEmailNotification({
 	instance: ReadInstance;
 	defaultEmailTemplateId: number;
 	queue: App.Queue;
+	t: App.Localization;
 }): Promise<number> {
 	const { htmlEmail, textEmail } = returnHtmlTextEmails(type);
 	const registrationEmail = await createEmailMessage({
@@ -404,13 +409,14 @@ async function createEventEmailNotification({
 			point_person_id: adminId,
 			from: `${instance.name} <${instance.slug}@belcoda.com>`,
 			reply_to: `${instance.slug}@belcoda.com`,
-			subject: `${type}: ${body.name}`,
+			subject: `${type}: ${body.heading}`,
 			html: htmlEmail,
 			text: textEmail,
 			preview_text: `${type} confirmation for {{event.name}}`,
 			use_html_for_plaintext: true,
 			template_id: defaultEmailTemplateId
 		},
+		t,
 		queue: queue,
 		defaultTemplateId: defaultEmailTemplateId
 	});
