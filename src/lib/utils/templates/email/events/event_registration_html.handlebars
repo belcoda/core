@@ -1,50 +1,65 @@
 <!-- COMPACT ARTICLE SECTION -->
 <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
-        <td  align="center" style="padding: 20px 15px 20px 15px;" class="section-padding">
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="500" style="padding:0 0 20px 0;" class="responsive-table">
+        <td align="center" style="padding: 20px 15px 20px 15px;" class="section-padding">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="500"
+                style="padding:0 0 20px 0;" class="responsive-table">
                 <!-- TITLE -->
-                 
+
                 <tr>
-                    <td align="left" style="padding: 0 0 10px 10px; font-size: 14px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; color: #aaaaaa;" class="padding-copy" colspan="2">REGISTRATION CONFIRMED</td>
+                    <td align="left"
+                        style="padding: 0 0 10px 10px; font-size: 14px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; color: #aaaaaa;"
+                        class="padding-copy" colspan="2">REGISTRATION CONFIRMED</td>
                 </tr>
-                <tr >
-                    <td align="left" style="padding: 0 0 10px 10px; font-size: 32px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; color: #333333;" class="padding-copy" colspan="2">{{event.heading}}</td>
+                <tr>
+                    <td align="left"
+                        style="padding: 0 0 10px 10px; font-size: 32px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; color: #333333;"
+                        class="padding-copy" colspan="2">{{event.heading}}</td>
                 </tr>
 
                 <tr>
-                    <td valign="top" style="padding: 40px 0 0 0;" class="mobile-hide"><img src="https://belcoda-static.s3.amazonaws.com/icon-cal.png" alt="Calendar" width="64" height="64" border="0" style="display: block; margin: 0 auto; font-family: Arial; color: #666666; font-size: 14px; width: 64px; height: 64px;"></td>
+                    <td valign="top" style="padding: 40px 0 0 0;" class="mobile-hide"><img
+                            src="https://belcoda-static.s3.amazonaws.com/icon-cal.png" alt="Calendar" width="64"
+                            height="64" border="0"
+                            style="display: block; margin: 0 auto; font-family: Arial; color: #666666; font-size: 14px; width: 64px; height: 64px;">
+                    </td>
                     <td style="padding: 40px 0 0 0;" class="no-padding">
                         <!-- ARTICLE -->
                         <table role="presentation" border="0" cellspacing="0" cellpadding="0" width="100%">
                             <tr>
-                                <td align="left" style="padding: 0 0 5px 25px; font-size: 11px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #aaaaaa;" class="padding-meta">WHEN:</td>
+                                <td align="left"
+                                    style="padding: 0 0 5px 25px; font-size: 11px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #aaaaaa;"
+                                    class="padding-meta">WHEN:</td>
                             </tr>
                             <tr>
-                                <td align="left" style="padding: 0 0 5px 25px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; color: #333333;" class="padding-copy">{{event.date}}</td>
+                                <td align="left"
+                                    style="padding: 0 0 5px 25px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; color: #333333;"
+                                    class="padding-copy">{{render_event_time event}}</td>
                             </tr>
-                            <tr>
-                                 <td align="left" style="padding: 5px 0 15px 25px; font-size: 16px; line-height: 24px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">{{event.starts_at}} - {{event.ends_at}}</td>
-                            </tr>
-                            
+
                         </table>
                     </td>
                 </tr>
-                
+
                 {{#unless event.online}}
                 <tr>
-                    <td valign="top" style="padding: 20px 0 0 0;" class="mobile-hide"><img src="https://belcoda-static.s3.amazonaws.com/icon-map-pin.png" alt="Map pin" width="64" height="64" border="0" style="display: block; margin: 0 auto; font-family: Arial; color: #666666; font-size: 14px; width: 64px; height: 64px;"></td>
+                    <td valign="top" style="padding: 20px 0 0 0;" class="mobile-hide"><img
+                            src="https://belcoda-static.s3.amazonaws.com/icon-map-pin.png" alt="Map pin" width="64"
+                            height="64" border="0"
+                            style="display: block; margin: 0 auto; font-family: Arial; color: #666666; font-size: 14px; width: 64px; height: 64px;">
+                    </td>
                     <td style="padding: 20px 0 0 0;" class="no-padding">
                         <!-- ARTICLE -->
                         <table role="presentation" border="0" cellspacing="0" cellpadding="0" width="100%">
                             <tr>
-                                <td align="left" style="padding: 0 0 5px 25px; font-size: 11px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #aaaaaa;" class="padding-meta">WHERE:</td>
+                                <td align="left"
+                                    style="padding: 0 0 5px 25px; font-size: 11px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #aaaaaa;"
+                                    class="padding-meta">WHERE:</td>
                             </tr>
                             <tr>
-                                <td align="left" style="padding: 0 0 5px 25px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; color: #333333;" class="padding-copy">{{event.address_line_1}}</td>
-                            </tr>
-                            <tr>
-                                 <td align="left" style="padding: 5px 0 15px 25px; font-size: 16px; line-height: 24px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy"><a href="{{event.address_google_maps_link}}" target="_blank" style="color: #666666; text-decoration: none;">{{event.rendered_address}}</a></td>
+                                <td align="left"
+                                    style="padding: 0 0 5px 25px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; color: #333333;"
+                                    class="padding-copy">{{address event}}</td>
                             </tr>
                         </table>
                     </td>
@@ -52,18 +67,23 @@
                 {{/unless}}
                 {{#if event.online}}
                 <tr>
-                    <td valign="top" style="padding: 20px 0 0 0;" class="mobile-hide"><img src="https://belcoda-static.s3.amazonaws.com/icon-link.png" alt="Hyperlink" width="64" height="64" border="0" style="display: block; margin: 0 auto; font-family: Arial; color: #666666; font-size: 14px; width: 64px; height: 64px;"></td>
+                    <td valign="top" style="padding: 20px 0 0 0;" class="mobile-hide"><img
+                            src="https://belcoda-static.s3.amazonaws.com/icon-link.png" alt="Hyperlink" width="64"
+                            height="64" border="0"
+                            style="display: block; margin: 0 auto; font-family: Arial; color: #666666; font-size: 14px; width: 64px; height: 64px;">
+                    </td>
                     <td style="padding: 20px 0 0 0;" class="no-padding">
                         <!-- ARTICLE -->
                         <table role="presentation" border="0" cellspacing="0" cellpadding="0" width="100%">
                             <tr>
-                                <td align="left" style="padding: 0 0 5px 25px; font-size: 11px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #aaaaaa;" class="padding-meta">ONLINE:</td>
+                                <td align="left"
+                                    style="padding: 0 0 5px 25px; font-size: 11px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #aaaaaa;"
+                                    class="padding-meta">ONLINE:</td>
                             </tr>
                             <tr>
-                                <td align="left" style="padding: 0 0 5px 25px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; color: #333333;" class="padding-copy">{{event.link}}</td>
-                            </tr>
-                            <tr>
-                                 <td align="left" style="padding: 5px 0 15px 25px; font-size: 16px; line-height: 24px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy"><a href="{{event.address_google_maps_link}}" target="_blank" style="color: #666666; text-decoration: none;">{{event.rendered_address}}</a></td>
+                                <td align="left"
+                                    style="padding: 0 0 5px 25px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; color: #333333;"
+                                    class="padding-copy">{{event.link}}</td>
                             </tr>
                         </table>
                     </td>

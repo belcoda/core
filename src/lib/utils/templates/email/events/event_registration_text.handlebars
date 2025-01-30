@@ -1,5 +1,6 @@
 {{event.heading}} - Registration confirmed
 
-WHEN: {{event.date}} {{event.starts_at}} - {{event.ends_at}}
-{{#unless event.online}}WHERE: {{event.rendered_address}}{{/unless}}
-{{#if event.online}}ONLINE LINK: {{event.online_url}} {{#if event.online_instructions}}({{event.online_instructions}}){{/if}}{{/if}}
+WHEN: {{render_event_time event}}
+{{#unless event.online}}WHERE: {{address event}}{{/unless}}
+{{#if event.online}}ONLINE LINK: {{event.online_url}} {{#if
+event.online_instructions}}({{event.online_instructions}}){{/if}}{{/if}}
