@@ -5,6 +5,7 @@ COPY ./tsconfig.json ./
 COPY ./svelte.config.js ./
 COPY ./vite.config.ts ./
 COPY ./.env.production ./.env
+COPY ./project.inlang ./project.inlang
 RUN npm install
 COPY . .
 ENV NODE_OPTIONS=--max_old_space_size=1800
