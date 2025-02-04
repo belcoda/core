@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite dev | npx pino-pretty",
-		"build": "paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide && vite build",
+		"build": "npx @inlang/paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide && vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -22,7 +22,7 @@
 		"knex:migrate": "npx knex migrate:latest --knexfile ./knexfile.cjs",
 		"knex:rollback": "npx knex migrate:rollback --knexfile ./knexfile.cjs",
 		"knex:migrate:production": "npx knex migrate:latest --env production --knexfile ./knexfile.cjs",
-		"postinstall": "paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide",
+		"postinstall": "npx @inlang/paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide",
 		"inlang:lint": "npx @inlang/cli lint --project ./project.inlang",
 		"inlang:translate": "npx @inlang/cli machine translate --project ./project.inlang --force"
 	},
