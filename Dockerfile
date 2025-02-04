@@ -16,6 +16,7 @@ COPY --from=build /app/build .
 COPY --from=build /app/package.json .
 COPY --from=build /app/package-lock.json .
 COPY --from=build /app/.env.production .env
+COPY --from=build /app/project.inlang ./project.inlang
 RUN npm ci --omit dev
 RUN npm i dotenv
 EXPOSE 3000
