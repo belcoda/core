@@ -166,7 +166,6 @@ export async function update({
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const resultSql = db.update('events.events', parsed, { instance_id: instanceId, id: eventId });
-	log.debug(resultSql.compile().text);
 	const result = await resultSql.run(pool);
 	if (result.length !== 1) {
 		throw new BelcodaError(404, 'DATA:EVENTS:UPDATE:01', t.errors.not_found());
