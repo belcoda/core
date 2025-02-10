@@ -33,7 +33,7 @@ export async function PUT(event) {
 	} catch (err) {
 		return error(
 			500,
-			'API:/communications/whatsapp/threads/[thread_id]/messages/[message_id]:PUT',
+			'API:/communications/whatsapp/messages/[message_id]:PUT',
 			event.locals.t.errors.http[500](),
 			err
 		);

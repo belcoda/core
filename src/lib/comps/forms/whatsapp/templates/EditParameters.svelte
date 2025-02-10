@@ -14,7 +14,9 @@
 	import Input from '$lib/comps/ui/input/input.svelte';
 	import FileUpload from '$lib/comps/ui/form/controls/file_upload/simple_file_upload.svelte';
 
-	const messagesToSelect = $derived(messages.map((m) => ({ value: m.id, label: `MSGID:${m.id}` })));
+	const messagesToSelect = $derived(
+		messages.map((m) => ({ value: m.id, label: `MSGID:${m.id}`, message: m }))
+	);
 	import type { ActionArray } from '$lib/schema/communications/actions/actions';
 
 	function setAction(actionId: string, action: ActionArray[number]) {
@@ -65,13 +67,14 @@
 	<div class="mt-1 text-muted-foreground flex items-center gap-2">
 		<div class="flex-grow">
 			<Select.Root
+				type="single"
 				{selected}
 				items={messagesToSelect}
-				onSelectedChange={async (val) => {
-					if (val && val.value) {
+				onValueChange={async (val) => {
+					if (val) {
 						const action = {
 							type: 'send_whatsapp_message' as const,
-							message_id: val.value
+							message_id: val
 						};
 						await setAction(buttonId, action);
 					}
@@ -79,12 +82,17 @@
 			>
 				<Select.Trigger class="w-full flex-grow">
 					<Select.Value
+						value={selectedMessage}
 						placeholder={$page.data.t.forms.fields.communications.whatsapp.send_message.placeholder()}
 					/>
 				</Select.Trigger>
 				<Select.Content>
 					{#each messagesToSelect as m}
-						<Select.Item value={m.value} label={m.label}>{m.label}</Select.Item>
+						<Select.Item value={m.value}
+							>{m.message.message.interactive
+								? m.message.message.interactive.body.text
+								: m.message.message.text.body}</Select.Item
+						>
 					{/each}
 				</Select.Content>
 				<Select.Input />

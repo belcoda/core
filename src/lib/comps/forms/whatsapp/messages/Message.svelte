@@ -60,7 +60,7 @@
 
 	const messagesToSelect = $derived.by(() => {
 		const currentMessageRemoved = messages.filter((m) => m.id !== message.id);
-		return currentMessageRemoved.map((m) => ({ value: m.id, label: `MSGID:${m.id}` }));
+		return currentMessageRemoved.map((m) => ({ value: m.id, label: `MSGID:${m.id}`, message: m }));
 	});
 
 	import type { ActionArray } from '$lib/schema/communications/actions/actions';
@@ -176,7 +176,9 @@
 					</Select.Trigger>
 					<Select.Content>
 						{#each messagesToSelect as m}
-							<Select.Item value={m.value} label={m.label}>{m.label}</Select.Item>
+							<Select.Item value={m.value} label={m.label}
+								>{m.message.message.text.body}</Select.Item
+							>
 						{/each}
 					</Select.Content>
 					<Select.Input />
