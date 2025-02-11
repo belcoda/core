@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	type T = Record<string, unknown>;
 </script>
 
@@ -53,34 +53,6 @@
 	});
 </script>
 
-{#if WESTERN_FORM_TYPES.includes(country)}
-	<Grid cols={1}>
-		<Grid cols={2}>
-			<Input
-				{form}
-				oninput={() => {
-					//@ts-expect-error
-					$fullName = generatedFullName;
-				}}
-				name={given_name}
-				label={$page.data.t.forms.fields.people.given_name.label()}
-				bind:value={$givenName as string}
-			/>
-			<Input
-				{form}
-				name={family_name}
-				oninput={() => {
-					//@ts-expect-error
-					$fullName = generatedFullName;
-				}}
-				label={$page.data.t.forms.fields.people.family_name.label()}
-				bind:value={$familyName as string}
-			/>
-		</Grid>
-		<input hidden name={full_name} value={generatedFullName} />
-	</Grid>
-{/if}
-
 {#if JP_FORM_TYPES.includes(country)}
 	<Grid cols={1} class="mt-6">
 		<Grid cols={2}>
@@ -118,5 +90,31 @@
 			/>
 		</Grid>
 		<Input type="hidden" {form} name={full_name} label={null} value={generatedFullName} />
+	</Grid>
+{:else}
+	<Grid cols={1}>
+		<Grid cols={2}>
+			<Input
+				{form}
+				oninput={() => {
+					//@ts-expect-error
+					$fullName = generatedFullName;
+				}}
+				name={given_name}
+				label={$page.data.t.forms.fields.people.given_name.label()}
+				bind:value={$givenName as string}
+			/>
+			<Input
+				{form}
+				name={family_name}
+				oninput={() => {
+					//@ts-expect-error
+					$fullName = generatedFullName;
+				}}
+				label={$page.data.t.forms.fields.people.family_name.label()}
+				bind:value={$familyName as string}
+			/>
+		</Grid>
+		<input hidden name={full_name} value={generatedFullName} />
 	</Grid>
 {/if}
