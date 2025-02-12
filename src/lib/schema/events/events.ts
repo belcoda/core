@@ -187,6 +187,7 @@ export const eventSignup = v.object({
 	opt_in: v.optional(v.boolean(), false)
 });
 export type EventSignup = v.InferOutput<typeof eventSignup>;
+export type SignupQueueMessage = v.InferOutput<typeof signUpQueueMessage>;
 
 export const signUpQueueMessage = v.object({
 	event_id: id,
