@@ -12,7 +12,7 @@
 		'cancelled',
 		'noshow'
 	];
-	let status = $state(eventIsPast ? attendanceStatus[1] : attendanceStatus[0]);
+	let status = $state(attendanceStatus[0]);
 	const label = $derived($page.data.t.events.status[status]?.title() || 'Select status');
 	let sendNotifications: boolean = $state(true);
 </script>
