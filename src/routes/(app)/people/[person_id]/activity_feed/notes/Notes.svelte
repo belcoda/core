@@ -11,6 +11,8 @@
 	type Props = {
 		interaction: List['items'][number];
 		person: ReadPerson;
+		activityMessage?: string;
+		children?: any;
 	};
 	let { interaction, person }: Props = $props();
 	let edit: boolean = $state(false);
