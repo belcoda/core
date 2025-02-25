@@ -108,6 +108,9 @@
 	}
 </script>
 
+<div
+	class={`border rounded-sm shadow-sm p-3 ${selected === 'notes' ? 'bg-yellow-100' : selected === 'outbound_whatsapp' ? 'bg-blue-100' : 'bg-white'} relative`}
+>
 	{#if isPosting}
 		<div
 			class="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center z-10 rounded-sm"
