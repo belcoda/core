@@ -1,0 +1,110 @@
+import type { Read as Event } from '$lib/schema/events/events';
+
+const mockEventEmail = {
+	id: 1,
+	name: 'Registration',
+	subject: 'Registration',
+	html: '',
+	text: '',
+	point_person_id: 1,
+	created_at: new Date('2024-03-19T10:00:00Z'),
+	updated_at: new Date('2024-03-19T10:00:00Z'),
+	template_id: 1,
+	from: 'test@example.com',
+	reply_to: 'test@example.com',
+	preview_text: '',
+	use_html_for_plaintext: false
+};
+
+const html_metatags = {
+	isManuallySet: false,
+	title: null,
+	description: null,
+	subject: null,
+	keywords: null,
+	openGraph: {
+		title: null,
+		description: '',
+		image: '',
+		image_alt: ''
+	},
+	twitter: {
+		title: null,
+		description: '',
+		image: '',
+		image_alt: '',
+		card: null
+	}
+};
+
+export const mockEvent: Event = {
+	id: 1,
+	name: 'Test Event',
+	slug: 'test-event',
+	heading: 'Test Event Heading',
+	html: '<p>Test content</p>',
+	starts_at: new Date('2024-03-20T10:00:00Z'),
+	ends_at: new Date('2024-03-20T12:00:00Z'),
+	online: false,
+	online_url: null,
+	online_instructions: null,
+	max_attendees: null,
+	ask_email: true,
+	ask_phone_number: true,
+	ask_postcode: true,
+	ask_address: true,
+	require_email: true,
+	require_phone_number: false,
+	require_postcode: false,
+	require_address: false,
+	send_registration_email: true,
+	send_reminder_email: true,
+	send_cancellation_email: true,
+	send_followup_email: false,
+	reminder_sent_at: null,
+	followup_sent_at: null,
+	send_reminder_hours_before_start: 24,
+	send_followup_hours_after_end: 24,
+	feature_image_upload_id: null,
+	feature_image: null,
+	active: true,
+	created_at: new Date('2024-03-19T10:00:00Z'),
+	updated_at: new Date('2024-03-19T10:00:00Z'),
+	published_at: new Date('2024-03-19T10:00:00Z'),
+	point_person: {
+		id: 1,
+		email: 'admin@test.com',
+		full_name: 'Test Admin',
+		active: true,
+		created_at: new Date('2024-03-19T10:00:00Z'),
+		updated_at: new Date('2024-03-19T10:00:00Z'),
+		profile_picture_url: null,
+		permissions: ['all'],
+		has_signed_in: false
+	},
+	registered: 0,
+	attended: 0,
+	cancelled: 0,
+	noshow: 0,
+	address_line_1: '123 Test St',
+	address_line_2: null,
+	address_line_3: null,
+	address_line_4: null,
+	locality: 'Test City',
+	state: 'Test State',
+	postcode: '12345',
+	country: 'us',
+	latlng: null,
+	registration_email: mockEventEmail,
+	reminder_email: mockEventEmail,
+	cancellation_email: mockEventEmail,
+	followup_email: mockEventEmail,
+	custom_code: {
+		custom_html_head: null,
+		custom_html_body: null,
+		custom_css: null,
+		custom_js: null
+	},
+	html_metatags,
+	template_id: 1
+};

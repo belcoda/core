@@ -486,6 +486,43 @@ export async function _getPersonByWhatsappId({
 	return await read({ instance_id: instanceId, person_id: person[0].id, t });
 }
 
+export async function _createPersonByWhatsappId({
+	instanceId,
+	whatsappId,
+	name,
+	queue,
+	t
+}: {
+	instanceId: number;
+	whatsappId: string;
+	name: string;
+	queue: App.Queue;
+	t: App.Localization;
+}) {
+	return await create({
+		instance_id: instanceId,
+		body: {
+			full_name: name,
+			phone_number: {
+				phone_number: whatsappId,
+				whatsapp_id: whatsappId,
+				country: DEFAULT_COUNTRY, // TODO: Get country from phone number country code
+				contactable: true,
+				subscribed: true,
+				textable: true,
+				strict: false,
+				validated: false,
+				whapi_id: null,
+				whatsapp: true
+			},
+			country: DEFAULT_COUNTRY // TODO: Get country from phone number country code
+		},
+		method: 'event_registration',
+		queue,
+		t
+	});
+}
+
 export async function _getInstanceIdByPersonId({
 	personId
 }: {

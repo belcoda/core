@@ -16,6 +16,8 @@
 	import EditRegistrationForm from './EditRegistrationForm.svelte';
 	import Tags from '$lib/comps/widgets/tags/Tags.svelte';
 	import PointPerson from '$lib/comps/widgets/point_person/PointPerson.svelte';
+	import Whatsapp from '$lib/comps/icons/whatsapp.svelte';
+	import { renderRegistrationLink } from '$lib/utils/text/whatsapp';
 
 	const attendanceStatus: ['registered', 'attended', 'cancelled', 'noshow'] = [
 		'registered',
@@ -60,6 +62,12 @@
 	<div class="flex items-center gap-1.5">
 		<CalendarClock size={16} />
 		{formatDateTimeRange(data.event.starts_at, data.event.ends_at)}
+	</div>
+	<div class="flex items-center gap-1.5">
+		<Whatsapp />
+		<a href={renderRegistrationLink(data.instance, data.event).url} target="_blank"
+			>{renderRegistrationLink(data.instance, data.event).text}</a
+		>
 	</div>
 	{#if data.event.online}
 		<div class="flex items-center gap-1.5">

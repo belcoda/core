@@ -39,16 +39,30 @@ export default async function ({
 	country: Country;
 }): Promise<Read> {
 	const signupInfo = signup;
-	const emailInfo = parse(update.entries.email, {
-		email: signupInfo.email,
-		subscribed: signupInfo.opt_in
-	});
+
+	// Only parse email if it's not null. We dont have emails when a
+	// person is added from a whatsapp interaction.
+	let emailInfo = undefined;
+	if (signupInfo.email !== null) {
+		emailInfo = parse(update.entries.email, {
+			email: signupInfo.email,
+			subscribed: signupInfo.opt_in
+		});
+	}
+
 	const phoneInfo = parse(update.entries.phone_number, {
 		phone_number: signupInfo.phone_number,
 		country: country,
 		subscribed: signupInfo.opt_in
 	});
-	const personInfo = parse(update, { ...signupInfo, email: emailInfo, phone_number: phoneInfo });
+
+	// Only include email in personInfo if emailInfo is defined
+	const personInfo = parse(update, {
+		...signupInfo,
+		...(emailInfo && { email: emailInfo }),
+		phone_number: phoneInfo
+	});
+
 	const getPersonIds = await getIdsFromEmailPhoneNumber({
 		instanceId,
 		email: signupInfo.email,

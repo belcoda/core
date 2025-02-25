@@ -24,6 +24,7 @@ export type AllowableTypes = v.InferOutput<typeof allowableTypes>;
 export const messageBase = v.object({
 	type: type,
 	to: v.string(),
+	from: v.string(),
 	biz_opaque_callback_data: uuid,
 	messaging_product: v.optional(v.literal('whatsapp'), 'whatsapp'),
 	recipient_type: v.optional(v.literal('individual'), 'individual'),

@@ -22,7 +22,7 @@
 		>
 	{/snippet}
 
-	{#snippet content(send: typeof data.sends.items[0], i: number | undefined)}
+	{#snippet content(send: (typeof data.sends.items)[0], i: number | undefined)}
 		<div class="flex items-center justify-between gap-2">
 			<div class="flex items-center justify-start gap-2">
 				<div>
