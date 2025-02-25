@@ -10,6 +10,7 @@
 		| 'outbound_whatsapp';
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import sendWhatsappMessage from '$lib/comps/widgets/interactions/sendWhatsappMessage.js';
+	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 
 	const types: { value: InteractionType; label: string }[] = [
 		{ value: 'notes', label: $page.data.t.people.interactions.create_types.notes() },
@@ -27,6 +28,7 @@
 	import { getFlash } from 'sveltekit-flash-message';
 	let flash = getFlash(page);
 	let notes: string | undefined = $state(undefined);
+	let isPosting: boolean = $state(false);
 
 	let activeConversation: boolean = $state(false);
 	let activeConversationLoading: boolean = $state(false);
@@ -68,6 +70,8 @@
 	async function logInteraction(e?: SubmitEvent) {
 		try {
 			if (e) e.preventDefault();
+			isPosting = true;
+
 			if (selected === 'outbound_whatsapp' && notes) {
 				await sendWhatsappMessage(notes, personId, $page.data.admin.id);
 				onLogged();
@@ -99,12 +103,20 @@
 				$flash = { type: 'error', message: $page.data.t.errors.generic() };
 			}
 		} finally {
-			notes = undefined;
+			isPosting = false;
 		}
 	}
 </script>
 
-<div class="bg-white border rounded-sm shadow-sm p-3">
+	{#if isPosting}
+		<div
+			class="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center z-10 rounded-sm"
+		>
+			<div class="animate-spin text-primary">
+				<LoaderCircle size={24} />
+			</div>
+		</div>
+	{/if}
 	<form onsubmit={logInteraction}>
 		<div class="grid items-baseline gap-3 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
 			{@render selectType()}
@@ -137,8 +149,21 @@
 
 		<div class="sm:flex sm:justify-end mt-3">
 			{#if selected !== 'outbound_whatsapp' || activeConversation}
-				<Button class="w-full sm:w-auto" type="submit" variant="default" size="sm">
-					{$page.data.t.forms.buttons.post()}
+				<Button
+					class="w-full sm:w-auto"
+					type="submit"
+					variant="default"
+					size="sm"
+					disabled={isPosting}
+				>
+					{#if isPosting}
+						<div class="flex items-center gap-2">
+							<span class="animate-spin"><LoaderCircle size={16} /></span>
+							<span>{$page.data.t.common.status.loading()}</span>
+						</div>
+					{:else}
+						{$page.data.t.forms.buttons.post()}
+					{/if}
 				</Button>
 			{/if}
 		</div>
