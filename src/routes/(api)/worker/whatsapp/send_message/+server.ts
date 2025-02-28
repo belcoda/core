@@ -4,31 +4,62 @@ import { randomUUID } from 'crypto';
 import {
 	successfulYCloudResponse,
 	sendMessage,
-	type MessageWithBase
+	type MessageWithBase,
+	type Message
 } from '$lib/schema/communications/whatsapp/elements/message';
 import { read as readMessage } from '$lib/server/api/communications/whatsapp/messages';
 import { parse } from '$lib/schema/valibot';
 import { _readSecretsUnsafe } from '$lib/server/api/core/instances';
-import { _updateWhatsappId, read } from '$lib/server/api/people/people';
+import { read } from '$lib/server/api/people/people';
 
 import type { AfterSend } from '$lib/schema/communications/whatsapp/worker/sending.js';
 const log = pino('/worker/whatsapp/send_message');
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
-		const parsedMessage = parse(sendMessage, body);
+
+		// Handle both formats: one with message_id and one with direct message object
+		let messageId: string;
+		let personId: number;
+		let fromAdminId: number;
+		let messageObj: { message: Message };
+
+		// Check if we have a direct message object or a message_id
+		if (body.message) {
+			personId = body.person_id;
+			fromAdminId = event.locals.admin.id;
+			messageId = '-1';
+			messageObj = { message: body.message };
+		} else {
+			// For messages that are already in the database
+			try {
+				const parsedMessage = parse(sendMessage, body);
+				personId = parsedMessage.person_id;
+				messageId = parsedMessage.message_id;
+				fromAdminId = parsedMessage.from_admin_id;
+
+				messageObj = await readMessage({
+					instanceId: event.locals.instance.id,
+					messageId: messageId,
+					t: event.locals.t
+				});
+			} catch (err) {
+				throw new BelcodaError(
+					400,
+					'DATA:/whatsapp/send_message/+server.ts:02',
+					event.locals.t.errors.generic(),
+					err
+				);
+			}
+		}
+
 		const { WHATSAPP_ACCESS_KEY } = await _readSecretsUnsafe({
 			instanceId: event.locals.instance.id
 		});
 		const PHONE_NUMBER_ID = event.locals.instance.settings.communications.whatsapp.phone_number_id;
 		const person = await read({
 			instance_id: event.locals.instance.id,
-			person_id: parsedMessage.person_id,
-			t: event.locals.t
-		});
-		const message = await readMessage({
-			instanceId: event.locals.instance.id,
-			messageId: parsedMessage.message_id,
+			person_id: personId,
 			t: event.locals.t
 		});
 
@@ -70,10 +101,10 @@ export async function POST(event) {
 		const messageBody: MessageWithBase = {
 			to: parsedPhoneNumberTo.number.e164.replace('+', ''), //whatsapp only accepts without the +
 			from: parsedPhoneNumberFrom.number.e164.replace('+', ''),
-			biz_opaque_callback_data: parsedMessage.message_id,
+			biz_opaque_callback_data: messageId,
 			messaging_product: 'whatsapp',
 			recipient_type: 'individual',
-			...message.message
+			...messageObj.message
 		};
 		//using the ycloud api
 		const externalId = randomUUID();
@@ -85,7 +116,6 @@ export async function POST(event) {
 				'X-API-Key': WHATSAPP_ACCESS_KEY
 			},
 			body: JSON.stringify({
-				from: event.locals.instance.settings.communications.whatsapp.phone_number_id,
 				externalId,
 				...messageBody
 			})
@@ -100,15 +130,15 @@ export async function POST(event) {
 			method: 'POST'
 		}); */
 		if (response.ok) {
-			const body = await response.json();
-			log.debug(body);
-			const parsed = parse(successfulYCloudResponse, body);
+			const responseBody = await response.json();
+			log.debug(responseBody);
+			const parsed = parse(successfulYCloudResponse, responseBody);
 
 			const afterSendBody: AfterSend = {
-				message_id: parsedMessage.message_id,
-				sent_by_id: parsedMessage.from_admin_id,
-				person_id: parsedMessage.person_id,
-				message: message.message,
+				message_id: messageId,
+				sent_by_id: fromAdminId,
+				person_id: personId,
+				message: messageObj.message,
 				uniqueId: externalId,
 				whatsapp_response: parsed
 			};
