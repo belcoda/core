@@ -3,6 +3,7 @@ import { parse } from '$lib/schema/valibot';
 
 import * as schema from '$lib/schema/communications/whatsapp/messages';
 import { type ActionArray, actionArray } from '$lib/schema/communications/actions/actions';
+import type { Message } from '$lib/schema/communications/whatsapp/elements/message';
 
 function redisString(instanceId: number, threadId: number) {
 	return `i:${instanceId}:wa_thread:${threadId}:msgs`;
@@ -163,4 +164,40 @@ WHERE actions ? ${db.param(action)}`.run(pool);
 	}
 	const parsed = parse(actionArray, result[0].action);
 	return { messageId: result[0].id, actions: parsed };
+}
+
+export function constructWhatsappNotification({
+	eventType,
+	action,
+	activityTitle,
+	t
+}: {
+	eventType: string;
+	action: string;
+	activityTitle: string;
+	t: App.Localization;
+}): Message {
+	let baseText;
+	switch (action) {
+		case 'register':
+			baseText = `You have ${eventType === 'event' ? 'been registered for ' : 'signed the petition: '} ${activityTitle}`;
+			break;
+		case 'cancel':
+			baseText = `You have cancelled your ${eventType === 'event' ? 'registration for ' : 'signature for '} ${activityTitle}`;
+			break;
+		default:
+			throw new BelcodaError(
+				500,
+				'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:GET_BY_EVENT_TYPE_AND_ACTION:01',
+				t.errors.generic()
+			);
+	}
+	const message: Message = {
+		text: {
+			body: baseText,
+			preview_url: true
+		},
+		type: 'text'
+	};
+	return message;
 }
