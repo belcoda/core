@@ -6,6 +6,7 @@ import updatePerson from '$lib/server/hooks/website/utils/update_person';
 import { create } from '$lib/server/api/events/attendees.js';
 import { read as readEvent } from '$lib/server/api/events/events';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
+import { eventNotification } from '$lib/schema/utils/notification.js';
 const log = pino('/worker/events/registration');
 export async function POST(event) {
 	try {
@@ -62,17 +63,37 @@ export async function POST(event) {
 			queue: event.locals.queue
 		});
 
-		const sendToQueue = {
-			event_id: parsed.event_id,
-			person_id: person.id
-		};
-		const parsedSendToQueue = parse(triggerEventMessage, sendToQueue);
-		await event.locals.queue(
-			'utils/email/events/send_registration_email',
-			event.locals.instance.id,
-			parsedSendToQueue,
-			event.locals.admin.id
-		);
+		// Send notification via email or whatsapp
+		// Check whether person has email. Send whatsapp notification if email does not exist
+
+		if (person.email) {
+			const sendToQueue = {
+				event_id: parsed.event_id,
+				person_id: person.id
+			};
+			const parsedSendToQueue = parse(triggerEventMessage, sendToQueue);
+			await event.locals.queue(
+				'utils/email/events/send_registration_email',
+				event.locals.instance.id,
+				parsedSendToQueue,
+				event.locals.admin.id
+			);
+		} else {
+			// Send whatsapp notification
+			const payload = {
+				activity_id: parsed.event_id,
+				person_id: person.id,
+				event_type: 'event',
+				action: 'register'
+			};
+			const parsedPayload = parse(eventNotification, payload);
+			await event.locals.queue(
+				'utils/communications/notifications/send_notification',
+				event.locals.instance.id,
+				parsedPayload,
+				event.locals.admin.id
+			);
+		}
 
 		return json({ success: true });
 	} catch (err) {
