@@ -38,7 +38,8 @@ export const create = v.object({
 	person_id: base.entries.person_id,
 	status: v.optional(base.entries.status, 'registered'),
 	notes: v.optional(base.entries.notes),
-	send_notifications: v.optional(base.entries.send_notifications, true)
+	send_notifications: v.optional(base.entries.send_notifications, true),
+	response_channel: v.optional(v.union([v.literal('email'), v.literal('whatsapp')]), 'email')
 });
 export type Create = v.InferOutput<typeof create>;
 

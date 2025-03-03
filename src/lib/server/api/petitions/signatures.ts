@@ -32,10 +32,20 @@ export async function create({
 	await redis.set(redisString(instanceId, petitionId, result.person_id), readResult);
 
 	if (parsed.send_autoresponse) {
-		await queue('utils/email/send_petition_autoresponse', instanceId, {
-			petition_id: petitionId,
-			person_id: result.person_id
-		});
+		if (parsed.response_channel === 'whatsapp') {
+			await queue('utils/notifications/send_notification', instanceId, {
+				activity_id: petitionId,
+				person_id: result.person_id,
+				event_type: 'petition',
+				action: 'sign'
+			});
+		} else {
+			// Default to email
+			await queue('utils/email/petitions/send_autoresponse', instanceId, {
+				petition_id: petitionId,
+				person_id: result.person_id
+			});
+		}
 	}
 
 	return readResult;

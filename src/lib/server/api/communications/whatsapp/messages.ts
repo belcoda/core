@@ -180,6 +180,7 @@ export function constructWhatsappNotification({
 	let baseText;
 	switch (action) {
 		case 'register':
+		case 'sign':
 			baseText = `You have ${eventType === 'event' ? 'been registered for ' : 'signed the petition: '} ${activityTitle}`;
 			break;
 		case 'cancel':

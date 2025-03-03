@@ -30,10 +30,20 @@ export async function create({
 	await redis.set(redisString(instanceId, eventId, result.person_id), readResult);
 
 	if (parsed.send_notifications) {
-		await queue('utils/email/events/send_registration_email', instanceId, {
-			event_id: eventId,
-			person_id: result.person_id
-		});
+		if (parsed.response_channel === 'whatsapp') {
+			await queue('utils/notifications/send_notification', instanceId, {
+				activity_id: eventId,
+				person_id: result.person_id,
+				event_type: 'event',
+				action: 'register'
+			});
+		} else {
+			// Default to email
+			await queue('utils/email/events/send_registration_email', instanceId, {
+				event_id: eventId,
+				person_id: result.person_id
+			});
+		}
 	}
 
 	return readResult;

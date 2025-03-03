@@ -1,12 +1,10 @@
 import { pino, BelcodaError, json, error } from '$lib/server';
 import { signUpQueueMessage } from '$lib/schema/events/events';
-import { triggerEventMessage } from '$lib/schema/utils/email';
 import { parse } from '$lib/schema/valibot';
 import updatePerson from '$lib/server/hooks/website/utils/update_person';
 import { create } from '$lib/server/api/events/attendees.js';
 import { read as readEvent } from '$lib/server/api/events/events';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
-import { eventNotification } from '$lib/schema/utils/notification.js';
 const log = pino('/worker/events/registration');
 export async function POST(event) {
 	try {
@@ -45,7 +43,8 @@ export async function POST(event) {
 			body: {
 				person_id: person.id,
 				send_notifications: true,
-				status: 'registered'
+				status: 'registered',
+				response_channel: person.email ? 'email' : 'whatsapp' //TODO: use a criteria to determine what channel to send to
 			},
 			t: event.locals.t
 		});
