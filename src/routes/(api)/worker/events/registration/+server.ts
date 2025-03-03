@@ -62,38 +62,6 @@ export async function POST(event) {
 			queue: event.locals.queue
 		});
 
-		// Send notification via email or whatsapp
-		// Check whether person has email. Send whatsapp notification if email does not exist
-
-		if (person.email) {
-			const sendToQueue = {
-				event_id: parsed.event_id,
-				person_id: person.id
-			};
-			const parsedSendToQueue = parse(triggerEventMessage, sendToQueue);
-			await event.locals.queue(
-				'utils/email/events/send_registration_email',
-				event.locals.instance.id,
-				parsedSendToQueue,
-				event.locals.admin.id
-			);
-		} else {
-			// Send whatsapp notification
-			const payload = {
-				activity_id: parsed.event_id,
-				person_id: person.id,
-				event_type: 'event',
-				action: 'register'
-			};
-			const parsedPayload = parse(eventNotification, payload);
-			await event.locals.queue(
-				'utils/communications/notifications/send_notification',
-				event.locals.instance.id,
-				parsedPayload,
-				event.locals.admin.id
-			);
-		}
-
 		return json({ success: true });
 	} catch (err) {
 		return error(500, 'WORKER:/events/registration:02', event.locals.t.errors.generic(), err);
