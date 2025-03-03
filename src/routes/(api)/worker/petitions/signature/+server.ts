@@ -7,7 +7,7 @@ import { create } from '$lib/server/api/petitions/signatures';
 import { read as readPetition } from '$lib/server/api/petitions/petitions';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
 
-const log = pino('/worker/events/registration');
+const log = pino('/worker/petitions/signature');
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
@@ -32,7 +32,7 @@ export async function POST(event) {
 		}).catch((err) => {
 			throw new BelcodaError(
 				400,
-				'WORKER:/events/registration:01',
+				'WORKER:/petitions/signature:01',
 				event.locals.t.errors.generic(),
 				err
 			);
@@ -63,6 +63,6 @@ export async function POST(event) {
 
 		return json({ success: true });
 	} catch (err) {
-		return error(500, 'WORKER:/events/registration:02', event.locals.t.errors.generic(), err);
+		return error(500, 'WORKER:/petitions/signature:02', event.locals.t.errors.generic(), err);
 	}
 }

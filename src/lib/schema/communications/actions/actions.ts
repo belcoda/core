@@ -1,3 +1,4 @@
+import { eventSignup } from '$lib/schema/events/events';
 import { id, uuid, mediumString, v } from '$lib/schema/valibot';
 
 export const keyword_triggers = v.record(v.pipe(v.string(), v.maxLength(20)), uuid);
@@ -56,5 +57,6 @@ export const triggerAction = v.object({
 	type: actionTriggerType,
 	received_whatsapp_message_id: uuid,
 	person_id: id,
-	action_id: uuid
+	action_id: uuid,
+	data: v.optional(eventSignup)
 });

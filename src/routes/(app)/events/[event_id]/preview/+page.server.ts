@@ -22,7 +22,6 @@ export async function load(event) {
 	if (!response.ok) return loadError(response);
 	const eventBody = await response.json();
 	const parsedEvent = parse(read, eventBody);
-
 	const attendeesResponse = await event.fetch(`/api/v1/events/${event.params.event_id}/attendees`);
 	if (!attendeesResponse.ok) return loadError(attendeesResponse);
 	const attendeesBody = await attendeesResponse.json();

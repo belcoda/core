@@ -2,7 +2,6 @@ import { json, pino, error } from '$lib/server';
 import { triggerAction } from '$lib/schema/communications/actions/actions';
 import { parse } from '$lib/schema/valibot';
 import { _getActions, _getByAction } from '$lib/server/api/communications/whatsapp/messages.js';
-import { sendMessage } from '$lib/schema/communications/whatsapp/elements/message';
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
@@ -24,6 +23,34 @@ export async function POST(event) {
 						'/whatsapp/send_message',
 						event.locals.instance.id,
 						messageToSend,
+						event.locals.admin.id
+					);
+					break;
+				}
+				case 'register_for_event': {
+					const eventToRegisterFor = {
+						event_id: action.event_id,
+						person_id: parsed.person_id,
+						from_admin_id: event.locals.admin.id,
+						signup: parsed.data
+					};
+					await event.locals.queue(
+						'/events/registration',
+						event.locals.instance.id,
+						eventToRegisterFor,
+						event.locals.admin.id
+					);
+					break;
+				}
+				case 'sign_petition': {
+					const petitionToSign = {
+						petition_id: action.petition_id,
+						signup: parsed.data
+					};
+					await event.locals.queue(
+						'/petitions/signature',
+						event.locals.instance.id,
+						petitionToSign,
 						event.locals.admin.id
 					);
 					break;

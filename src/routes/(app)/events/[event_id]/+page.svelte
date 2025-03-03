@@ -9,6 +9,8 @@
 	import MapPin from 'lucide-svelte/icons/map-pin';
 	import CalendarClock from 'lucide-svelte/icons/calendar-clock';
 	import Link from 'lucide-svelte/icons/link';
+	import Copy from 'lucide-svelte/icons/copy';
+	import Check from 'lucide-svelte/icons/check';
 	import { PUBLIC_HOST } from '$env/static/public';
 	import { page } from '$app/stores';
 	const url = new URL(PUBLIC_HOST);
@@ -16,7 +18,12 @@
 	import EditRegistrationForm from './EditRegistrationForm.svelte';
 	import Tags from '$lib/comps/widgets/tags/Tags.svelte';
 	import PointPerson from '$lib/comps/widgets/point_person/PointPerson.svelte';
+	import Whatsapp from '$lib/comps/icons/whatsapp.svelte';
+	import { renderRegistrationLink } from '$lib/utils/text/whatsapp';
+	import { getFlash } from 'sveltekit-flash-message';
 
+	const flash = getFlash(page);
+	let copied = $state(false);
 	const attendanceStatus: ['registered', 'attended', 'cancelled', 'noshow'] = [
 		'registered',
 		'attended',
@@ -35,6 +42,16 @@
 			value: status,
 			label: data.t.events.status[status].title()
 		};
+	}
+
+	function copyRegistrationLink() {
+		const registrationLink = renderRegistrationLink(data.instance, data.event).url;
+		navigator.clipboard.writeText(registrationLink);
+		$flash = { type: 'success', message: $page.data.t.forms.actions.copied_to_clipboard() };
+		copied = true;
+		setTimeout(() => {
+			copied = false;
+		}, 2000);
 	}
 </script>
 
@@ -60,6 +77,28 @@
 	<div class="flex items-center gap-1.5">
 		<CalendarClock size={16} />
 		{formatDateTimeRange(data.event.starts_at, data.event.ends_at)}
+	</div>
+	<div class="flex items-center gap-1.5">
+		<Whatsapp />
+		<div class="flex items-center gap-2">
+			<a
+				href={renderRegistrationLink(data.instance, data.event).url}
+				target="_blank"
+				class="hover:underline cursor-pointer"
+				>{renderRegistrationLink(data.instance, data.event).text}</a
+			>
+			<button
+				class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-8 w-8 p-0"
+				onclick={copyRegistrationLink}
+				aria-label="Copy registration link to clipboard"
+			>
+				{#if copied}
+					<Check size={16} class="text-green-500" />
+				{:else}
+					<Copy size={16} />
+				{/if}
+			</button>
+		</div>
 	</div>
 	{#if data.event.online}
 		<div class="flex items-center gap-1.5">

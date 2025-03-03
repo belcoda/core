@@ -1,6 +1,6 @@
-import { filter, valibot, superValidate, loadError, formAction, redirect } from '$lib/server';
+import { filter, loadError } from '$lib/server';
 import { read } from '$lib/schema/communications/whatsapp/threads';
-import { list, create } from '$lib/schema/communications/whatsapp/sends';
+import { list } from '$lib/schema/communications/whatsapp/sends';
 import { parse } from '$lib/schema/valibot';
 export async function load(event) {
 	const result = await event.fetch(
