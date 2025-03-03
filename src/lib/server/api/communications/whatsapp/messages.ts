@@ -181,10 +181,13 @@ export function constructWhatsappNotification({
 	switch (action) {
 		case 'register':
 		case 'sign':
-			baseText = `You have ${eventType === 'event' ? 'been registered for ' : 'signed the petition: '} ${activityTitle}`;
+			baseText = `You have ${eventType === 'event' ? 'been registered for' : 'signed the petition:'} ${activityTitle}`;
 			break;
 		case 'cancel':
-			baseText = `You have cancelled your ${eventType === 'event' ? 'registration for ' : 'signature for '} ${activityTitle}`;
+			baseText = `You have cancelled your ${eventType === 'event' ? 'registration for' : 'signature for'} ${activityTitle}`;
+			break;
+		case 'duplicate':
+			baseText = `You have already ${eventType === 'event' ? 'registered for' : 'signed the petition:'} ${activityTitle}`;
 			break;
 		default:
 			throw new BelcodaError(
