@@ -116,9 +116,10 @@ export async function unsafeListAllForEvent({
 	eventId: number;
 }) {
 	const result = await db
-		.select('events.attendees', { event_id: eventId }) //no pagination
+		.select('events.event_attendees_view', { event_id: eventId }) //no pagination
 		.run(pool);
-	return result;
+	const parsedResult = parse(schema.list.entries.items, result);
+	return parsedResult;
 }
 
 export async function listForEvent({

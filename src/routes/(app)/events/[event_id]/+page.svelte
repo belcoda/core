@@ -1,5 +1,6 @@
 <script lang="ts">
 	const { data } = $props();
+	import * as m from '$lib/paraglide/messages';
 	import PageHeader from '$lib/comps/layout/PageHeader.svelte';
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import DataGrid from '$lib/comps/ui/custom/table/DataGrid.svelte';
@@ -103,9 +104,14 @@
 			</div>
 		{/snippet}
 		{#snippet headerButton()}
-			<Button href="/events/{data.event.id}/register"
-				>{data.t.events.attendees.register.title()}</Button
-			>
+			<div class="flex items-center gap-1">
+				<Button variant="outline" target="_blank" href="/events/{data.event.id}/print"
+					>{m.orange_mad_deer_value()}</Button
+				>
+				<Button href="/events/{data.event.id}/register"
+					>{data.t.events.attendees.register.title()}</Button
+				>
+			</div>
 		{/snippet}
 	</DataGrid>
 </div>
