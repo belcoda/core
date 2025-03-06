@@ -31,6 +31,12 @@
 
 	type Props = {
 		value: Date | string | undefined | null;
+		/**
+		 * Controls the granularity of minute selection.
+		 * Lower values provide more precise minute selection.
+		 * Examples: 1 = every minute, 5 = every 5 minutes, 15 = quarter hours
+		 * Must be a divisor of 60 (1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60)
+		 */
 		minuteSteps?: number;
 		form: SuperForm<T>;
 		name: FormPath<T>;
@@ -57,6 +63,15 @@
 		dateFormat = 'yyyy-MM-dd'
 	}: Props = $props();
 
+	// Validate minuteSteps to ensure it's a valid divisor of 60
+	$effect(() => {
+		const validSteps = [1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60];
+		if (!validSteps.includes(minuteSteps)) {
+			console.warn(`Invalid minuteSteps value: ${minuteSteps}. Using default of 5 instead.`);
+			minuteSteps = 5;
+		}
+	});
+
 	function isValidDate(value: Date | string | undefined | null): value is Date {
 		if (!value) return false;
 		const date = new Date(value);
@@ -73,11 +88,12 @@
 	// For time selection
 	let minuteValue: number = $state(isValidDate(value) ? new Date(value).getMinutes() : 0);
 	let hourValue: number = $state(isValidDate(value) ? new Date(value).getHours() : 12);
-	let amPm: string = $state(hourValue >= 12 ? 'PM' : 'AM');
+	// Initialize displayHourValue without referencing other state variables
+	let displayHourValue: number = $state(0); // Will be set in the effect below
+	let amPm: string = $state(
+		isValidDate(value) ? (new Date(value).getHours() >= 12 ? 'PM' : 'AM') : 'AM'
+	);
 
-	// For direct input
-	let dateInputValue: string = $state('');
-	let timeInputValue: string = $state('');
 	let isPopoverOpen: boolean = $state(false);
 
 	// Generate minute options based on minuteSteps
@@ -105,7 +121,31 @@
 
 			// Update hour and minute values for selects
 			hourValue = jsDate.getHours();
-			minuteValue = jsDate.getMinutes();
+			displayHourValue = use24HourTime ? hourValue : hourValue % 12 === 0 ? 12 : hourValue % 12;
+
+			// Get the actual minutes from the date
+			const actualMinutes = jsDate.getMinutes();
+
+			// Round to the nearest step if not exactly on a step
+			if (actualMinutes % minuteSteps !== 0) {
+				// Find the closest minute step
+				const roundedMinutes = Math.round(actualMinutes / minuteSteps) * minuteSteps;
+				// Handle case where rounding goes to 60
+				minuteValue = roundedMinutes === 60 ? 0 : roundedMinutes;
+
+				// If we're displaying a rounded value, update the actual date
+				if (minuteValue !== actualMinutes) {
+					const newDate = new Date(jsDate);
+					newDate.setMinutes(minuteValue);
+					// Only update if this is an initial load, not user interaction
+					if (!isPopoverOpen) {
+						value = newDate;
+					}
+				}
+			} else {
+				minuteValue = actualMinutes;
+			}
+
 			amPm = hourValue >= 12 ? 'PM' : 'AM';
 		}
 	});
@@ -137,17 +177,12 @@
 		if (!inputValue) return;
 
 		try {
-			// Create a new date from the input
 			const [year, month, day] = inputValue.split('-').map(Number);
-
-			// Update the zonedValue with the new date components
 			const newValue = zonedValue.set({
 				year,
 				month: month,
 				day
 			});
-
-			// Update the value
 			value = newValue.toDate();
 		} catch (error) {
 			console.error('Invalid date input:', error);
@@ -162,7 +197,6 @@
 		if (!inputValue) return;
 
 		try {
-			// Parse hours and minutes from the input
 			const [hoursStr, minutesStr] = inputValue.split(':');
 			let hours = parseInt(hoursStr, 10);
 			const minutes = parseInt(minutesStr, 10);
@@ -174,21 +208,17 @@
 				hours = 0;
 			}
 
-			// Update the zonedValue with the new time components
 			const newValue = zonedValue.set({
 				hour: hours,
 				minute: minutes,
 				second: 0
 			});
-
-			// Update the value
 			value = newValue.toDate();
 		} catch (error) {
 			console.error('Invalid time input:', error);
 		}
 	}
 
-	// Handle AM/PM toggle
 	function handleAmPmChange(newAmPm: string) {
 		amPm = newAmPm;
 
@@ -200,19 +230,15 @@
 			hours -= 12;
 		}
 
-		// Create a new Date object with the updated hour
 		const jsDate = new Date(value || new Date());
 		jsDate.setHours(hours);
 		value = jsDate;
 	}
 
-	// Format the display value for the button
 	function getDisplayValue(): string {
 		if (!value) {
 			return placeholder || $page.data.t.forms.generic.date.placeholder();
 		}
-
-		// Use a JavaScript Date object for formatting
 		const jsDate = new Date(value);
 
 		if (dateOnly) {
@@ -222,49 +248,45 @@
 		return `${tf.format(jsDate)} ${df.format(jsDate)}`;
 	}
 
-	// Handle hour select change
 	function handleHourChange(event: Event) {
 		if (!event.target) return;
 		const target = event.target as HTMLSelectElement;
 		const v = target.value;
 		if (!v) return;
 
-		let newHour = parseInt(v);
+		let selectedHour = parseInt(v);
+		let newHour = selectedHour;
 
-		// Convert to 24-hour format if using 12-hour time
 		if (!use24HourTime) {
-			if (amPm === 'PM' && newHour < 12) {
-				newHour += 12;
-			} else if (amPm === 'AM' && newHour === 12) {
+			if (amPm === 'PM' && selectedHour < 12) {
+				newHour = selectedHour + 12;
+			} else if (amPm === 'AM' && selectedHour === 12) {
 				newHour = 0;
 			}
 		}
+		hourValue = newHour;
+		displayHourValue = selectedHour;
 
-		// Create a new Date object with the updated hour
 		const jsDate = new Date(value || new Date());
 		jsDate.setHours(newHour);
 		value = jsDate;
 	}
 
-	// Handle minute select change
 	function handleMinuteChange(event: Event) {
 		if (!event.target) return;
 		const target = event.target as HTMLSelectElement;
 		const v = target.value;
 		if (!v) return;
 
-		// Create a new Date object with the updated minute
 		const jsDate = new Date(value || new Date());
 		jsDate.setMinutes(parseInt(v));
 		value = jsDate;
 	}
 
-	// Handle outside click for popover
 	function handlePopoverClose() {
 		isPopoverOpen = false;
 	}
 
-	// Handle focus events
 	function handleFocus() {
 		// This is a placeholder for focus handling
 	}
@@ -306,29 +328,30 @@
 								<ClockIcon class="h-4 w-4 text-muted-foreground" />
 								<div class="flex items-center gap-1">
 									<select
-										bind:value={hourValue}
+										bind:value={displayHourValue}
 										class="flex h-9 w-16 items-center justify-between rounded-md border border-input bg-background px-2 py-1 text-sm ring-offset-background focus:outline-none focus:ring-1 focus:border-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
-										on:change={handleHourChange}
+										onchange={handleHourChange}
 									>
 										{#each hourOptions as item}
-											<option
-												value={item.value}
-												selected={use24HourTime
-													? hourValue === item.value
-													: hourValue % 12 === item.value % 12}>{item.label}</option
-											>
+											<option value={item.value}>{item.label}</option>
 										{/each}
 									</select>
 									<span class="text-sm">:</span>
+									<!-- 
+										Minute dropdown with configurable steps.
+										To change the granularity, set the minuteSteps prop:
+										- minuteSteps={1} for every minute
+										- minuteSteps={5} for 5-minute intervals (default)
+										- minuteSteps={15} for quarter hours
+										- etc.
+									-->
 									<select
 										bind:value={minuteValue}
 										class="flex h-9 w-16 items-center justify-between rounded-md border border-input bg-background px-2 py-1 text-sm ring-offset-background focus:outline-none focus:ring-1 focus:border-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
-										on:change={handleMinuteChange}
+										onchange={handleMinuteChange}
 									>
 										{#each minuteOptions as item}
-											<option value={item.value} selected={minuteValue === item.value}
-												>{item.label}</option
-											>
+											<option value={item.value}>{item.label}</option>
 										{/each}
 									</select>
 									{#if !use24HourTime}
@@ -339,7 +362,7 @@
 													buttonVariants({ variant: 'outline', size: 'sm' }),
 													amPm === 'AM' ? 'bg-primary text-primary-foreground' : ''
 												)}
-												on:click={() => handleAmPmChange('AM')}
+												onclick={() => handleAmPmChange('AM')}
 											>
 												AM
 											</button>
@@ -349,7 +372,7 @@
 													buttonVariants({ variant: 'outline', size: 'sm' }),
 													amPm === 'PM' ? 'bg-primary text-primary-foreground' : ''
 												)}
-												on:click={() => handleAmPmChange('PM')}
+												onclick={() => handleAmPmChange('PM')}
 											>
 												PM
 											</button>

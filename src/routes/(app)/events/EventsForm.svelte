@@ -82,8 +82,20 @@
 				>{$page.data.t.events.alerts.start_time_before_end()}</Alert
 			>
 		{/if}
-		<DateTime {form} name="starts_at" label="Starts at" bind:value={$formData.starts_at} />
-		<DateTime {form} name="ends_at" label="Ends at" bind:value={$formData.ends_at} />
+		<DateTime
+			{form}
+			name="starts_at"
+			label="Starts at"
+			minuteSteps={1}
+			bind:value={$formData.starts_at}
+		/>
+		<DateTime
+			{form}
+			name="ends_at"
+			label="Ends at"
+			minuteSteps={1}
+			bind:value={$formData.ends_at}
+		/>
 	</Grid>
 {/snippet}
 
