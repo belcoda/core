@@ -18,7 +18,12 @@
 	import EditRegistrationForm from './EditRegistrationForm.svelte';
 	import Tags from '$lib/comps/widgets/tags/Tags.svelte';
 	import PointPerson from '$lib/comps/widgets/point_person/PointPerson.svelte';
+	import Whatsapp from '$lib/comps/icons/whatsapp.svelte';
+	import { renderRegistrationLink } from '$lib/utils/text/whatsapp';
+	import { getFlash } from 'sveltekit-flash-message';
 
+	const flash = getFlash(page);
+	let copied = $state(false);
 	const attendanceStatus: ['registered', 'attended', 'cancelled', 'noshow'] = [
 		'registered',
 		'attended',
@@ -31,6 +36,7 @@
 	}));
 
 	const attendees = $state(data.attendees.items);
+	const registrationLink = renderRegistrationLink(data.instance, data.event).url;
 
 	function makeStatusOptions(status: (typeof attendanceStatus)[number]) {
 		return {
@@ -69,6 +75,18 @@
 			<span class="text-foreground">{previewUrl}</span>
 		</span>
 		<CopyButton textToCopy={previewUrl} />
+	</div>
+	<div class="flex items-center gap-1.5">
+		<Whatsapp />
+		<div class="flex items-center gap-2">
+			<a
+				href={renderRegistrationLink(data.instance, data.event).url}
+				target="_blank"
+				class="hover:underline cursor-pointer"
+				>{renderRegistrationLink(data.instance, data.event).text}</a
+			>
+			<CopyButton textToCopy={registrationLink} />
+		</div>
 	</div>
 	{#if data.event.online}
 		<div class="flex items-center gap-1.5">

@@ -27,7 +27,7 @@ export const communications = {
 	},
 	whatsapp: {
 		default_template_id: 4,
-		phone_number_id: null,
+		phone_number_id: '+1234567890',
 		business_account_id: null
 	}
 };

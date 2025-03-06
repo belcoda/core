@@ -39,10 +39,28 @@ export async function POST(event) {
 				event.locals.t.errors.generic()
 			);
 		}
-		const parsedPhoneNumber = parsePhoneNumber(person.phone_number.phone_number, {
+		const parsedPhoneNumberTo = parsePhoneNumber(person.phone_number.phone_number, {
 			regionCode: person.phone_number.country
 		});
-		if (!parsedPhoneNumber.valid) {
+		if (!parsedPhoneNumberTo.valid) {
+			throw new BelcodaError(
+				400,
+				'DATA:/whatsapp/send_message/+server.ts:01',
+				event.locals.t.errors.generic()
+			);
+		}
+
+		if (!PHONE_NUMBER_ID) {
+			throw new BelcodaError(
+				400,
+				'DATA:/whatsapp/send_message/+server.ts:01',
+				event.locals.t.errors.generic()
+			);
+		}
+		const parsedPhoneNumberFrom = parsePhoneNumber(PHONE_NUMBER_ID, {
+			regionCode: person.phone_number.country
+		});
+		if (!parsedPhoneNumberFrom.valid) {
 			throw new BelcodaError(
 				400,
 				'DATA:/whatsapp/send_message/+server.ts:01',
@@ -50,7 +68,8 @@ export async function POST(event) {
 			);
 		}
 		const messageBody: MessageWithBase = {
-			to: parsedPhoneNumber.number.e164.replace('+', ''), //whatsapp only accepts without the +
+			to: parsedPhoneNumberTo.number.e164.replace('+', ''), //whatsapp only accepts without the +
+			from: parsedPhoneNumberFrom.number.e164.replace('+', ''),
 			biz_opaque_callback_data: parsedMessage.message_id,
 			messaging_product: 'whatsapp',
 			recipient_type: 'individual',
