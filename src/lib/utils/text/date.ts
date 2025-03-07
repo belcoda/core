@@ -1,4 +1,7 @@
 import { DateFormatter } from '@internationalized/date';
+
+import { getLocale } from '$lib/paraglide/runtime';
+
 const df = new DateFormatter('en-US', {
 	dateStyle: 'long'
 });
@@ -15,7 +18,12 @@ export function formatDateOnly(date: Date): string {
 }
 
 export function formatDateTimeRange(startDate: Date, endDate: Date): string {
-	return `${tf.format(startDate)} - ${tf.format(endDate)}, ${df.format(startDate)} `;
+	const locale = getLocale();
+	const formatted = new Intl.DateTimeFormat(locale, {
+		timeZoneName: 'long'
+	}).formatToParts(startDate);
+	const timeZone = formatted.find((part) => part.type === 'timeZoneName')?.value;
+	return `${tf.format(startDate)} - ${tf.format(endDate)}, ${df.format(startDate)} (${timeZone}) `;
 }
 
 export function isToday(date: Date): boolean {
