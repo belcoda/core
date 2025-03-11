@@ -496,3 +496,14 @@ export async function _getInstanceIdByPersonId({
 		.run(pool);
 	return response.instance_id;
 }
+
+export async function deletePerson({
+	instanceId,
+	personId
+}: {
+	instanceId: number;
+	personId: number;
+}): Promise<true> {
+	await db.deletes('people.people', { instance_id: instanceId, id: personId }).run(pool);
+	return true;
+}
