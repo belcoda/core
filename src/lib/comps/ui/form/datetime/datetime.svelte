@@ -95,6 +95,8 @@
 	);
 
 	let isPopoverOpen: boolean = $state(false);
+	let inputValue: string = $state(getDisplayValue());
+	let dateInput = $state<HTMLElement>(null!);
 
 	// Generate minute options based on minuteSteps
 	const minuteOptions = Array.from({ length: 60 / minuteSteps }, (_, i) => ({
@@ -147,6 +149,17 @@
 			}
 
 			amPm = hourValue >= 12 ? 'PM' : 'AM';
+
+			// Update input value when the date changes
+			inputValue = getDisplayValue();
+		}
+	});
+
+	// Watch for input value changes
+	$effect(() => {
+		const parsedDate = new Date(inputValue);
+		if (!isNaN(parsedDate.getTime())) {
+			value = parsedDate;
 		}
 	});
 
@@ -288,7 +301,7 @@
 	}
 
 	function handleFocus() {
-		// This is a placeholder for focus handling
+		isPopoverOpen = true;
 	}
 
 	function handleBlur() {
@@ -311,17 +324,35 @@
 			<div class="flex flex-col gap-2">
 				{#if label}<Form.Label>{label}</Form.Label>{/if}
 				<Popover.Root bind:open={isPopoverOpen}>
-					<Popover.Trigger
-						class={cn(
-							buttonVariants({ variant: 'outline' }),
-							'w-full bg-background justify-start text-left font-normal',
-							!value && 'text-muted-foreground'
-						)}
+					<div class="relative w-full">
+						<CalendarIcon
+							class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+						/>
+						<input
+							bind:this={dateInput}
+							bind:value={inputValue}
+							type="text"
+							class={cn(
+								'w-full pl-9 pr-3 py-2 rounded-md border border-input bg-background text-sm ring-offset-background focus:outline-none focus:ring-1 focus:border-blue-600',
+								!value && 'text-muted-foreground'
+							)}
+							{placeholder}
+							onfocus={handleFocus}
+						/>
+						<!-- <Popover.Trigger
+							class="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 flex items-center justify-center text-muted-foreground hover:text-foreground focus:outline-none"
+						>
+							<CalendarIcon class="h-4 w-4" />
+						</Popover.Trigger> -->
+					</div>
+					<Popover.Content
+						onOpenAutoFocus={(e) => {
+							e.preventDefault();
+							dateInput?.focus();
+						}}
+						customAnchor={dateInput}
+						class="flex w-auto flex-col space-y-4 p-3 md:min-w-[350px]"
 					>
-						<CalendarIcon class="mr-2 h-4 w-4" />
-						{getDisplayValue()}
-					</Popover.Trigger>
-					<Popover.Content class="flex w-auto flex-col space-y-4 p-3 md:min-w-[350px]">
 						<!-- Time selector with dropdowns -->
 						{#if !dateOnly}
 							<div class="flex items-center gap-2">
