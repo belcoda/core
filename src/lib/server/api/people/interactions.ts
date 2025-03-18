@@ -36,12 +36,12 @@ export async function list({
 	type?: 'communications' | 'activity' | null;
 }): Promise<List> {
 	const { filtered, where, options } = filterQuery(url);
-	if (!filtered) {
-		const cached = await redis.get(redisString(instanceId, personId, type));
-		if (cached) {
-			return parse(listSchema, cached);
-		}
-	}
+	// if (!filtered) {
+	// 	const cached = await redis.get(redisString(instanceId, personId, type));
+	// 	if (cached) {
+	// 		return parse(listSchema, cached);
+	// 	}
+	// }
 	//either it's activity, or conditions or simply just not null...
 	const typeConditions = filterInteractions(url);
 	const interactions = await db
