@@ -65,18 +65,6 @@ export async function POST(event) {
 			queue: event.locals.queue
 		});
 
-		const sendToQueue = {
-			event_id: parsed.event_id,
-			person_id: person.id
-		};
-		const parsedSendToQueue = parse(triggerEventMessage, sendToQueue);
-		await event.locals.queue(
-			'utils/email/events/send_registration_email',
-			event.locals.instance.id,
-			parsedSendToQueue,
-			event.locals.admin.id
-		);
-
 		return json({ success: true });
 	} catch (err) {
 		return error(500, 'WORKER:/events/registration:02', event.locals.t.errors.generic(), err);

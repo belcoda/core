@@ -2,8 +2,18 @@ import { db, pool, redis, pino, BelcodaError, filterQuery } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 import * as schema from '$lib/schema/events/attendees';
 import { exists } from '$lib/server/api/events/events';
-import { exists as personExists } from '$lib/server/api/people/people';
+
+import {
+	getPersonOrCreatePersonByWhatsappId,
+	exists as personExists
+} from '$lib/server/api/people/people';
+import type { WhatsappInboundMessage } from '$lib/schema/communications/whatsapp/webhooks/ycloud';
+// import type { RequestEvent } from './$types.js';
+import { _getInstanceIdByEventId } from '../core/instances';
+import { signUpQueueMessage } from '$lib/schema/events/events.js';
+
 const log = pino(import.meta.url);
+
 function redisString(instanceId: number, eventId: number, personId: number | 'all') {
 	return `i:${instanceId}:events:${eventId}:attendees:${personId}`;
 }
@@ -175,4 +185,36 @@ export async function listForPerson({
 		.run(pool);
 	const parsedResult = parse(schema.list, { count: count, items: result });
 	return parsedResult;
+}
+
+export async function registerPersonForEventFromWhatsApp(
+	eventId: string,
+	message: WhatsappInboundMessage,
+	adminId: number,
+	t: App.Localization,
+	queue: App.Queue
+) {
+	const instance = await _getInstanceIdByEventId(eventId);
+	const person = await getPersonOrCreatePersonByWhatsappId(
+		instance.id,
+		message.from,
+		message,
+		t,
+		queue
+	);
+
+	if (person) {
+		// Send to events/registration queue
+		const parsed = parse(signUpQueueMessage, {
+			event_id: Number(eventId),
+			signup: {
+				full_name: message.customerProfile?.name,
+				phone_number: message.from,
+				country: instance.country,
+				email: null,
+				opt_in: true
+			}
+		});
+		await queue('/events/registration', instance.id, parsed, adminId);
+	}
 }
