@@ -18,18 +18,17 @@
 					</span>
 					<ul class="flex flex-col gap-0 pl-6 mt-2">
 						{#each menuItems[itemKey].children as child}
-							<li>
-								<a
-									href={child.href({ ...$page.params })}
-									onclick={() => (open = false)}
-									class={cn(
-										buttonVariants({ variant: 'ghost', size: 'sm' }),
-										$page.url.pathname === child.href({ ...$page.params })
-											? 'bg-muted hover:bg-muted'
-											: 'hover:bg-muted',
-										'justify-start w-full flex gap-2 items-center'
-									)}
-								>
+							<a
+								href={child.href({ ...$page.params })}
+								onclick={() => (open = false)}
+								class={cn(
+									buttonVariants({ variant: 'ghost', size: 'sm' }),
+									$page.url.pathname === child.href({ ...$page.params })
+										? 'bg-muted hover:bg-muted'
+										: 'hover:bg-muted'
+								)}
+							>
+								<li class="justify-start w-full flex gap-2 items-center">
 									<div>
 										<svelte:component
 											this={child.icon}
@@ -39,8 +38,8 @@
 										/>
 									</div>
 									{child.title()}
-								</a>
-							</li>
+								</li>
+							</a>
 						{/each}
 					</ul>
 				</li>
