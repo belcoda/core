@@ -80,7 +80,7 @@ function menus(t: Localization): { [key: string]: MenuItem } {
 					icon: CalendarSearch
 				},
 				{
-					title: () =>  m.sea_that_raven_trim(),
+					title: () => m.sea_that_raven_trim(),
 					href: () => '/petitions',
 					icon: FilePen
 				}
@@ -135,7 +135,6 @@ function menus(t: Localization): { [key: string]: MenuItem } {
 			href: () => '/website',
 			icon: Globe,
 			children: [
-
 				{
 					title: () => m.ideal_upper_wren_favor(),
 					href: () => '/website/pages',
@@ -159,11 +158,10 @@ function menus(t: Localization): { [key: string]: MenuItem } {
 			icon: CalendarSearch,
 			children: [
 				{
-					title: () => m.bald_extra_chipmunk_fulfill()
+					title: () => m.bald_extra_chipmunk_fulfill(),
 					href: () => '/events',
 					icon: CalendarSearch
 				}
-				
 			]
 		},
 		actions: {
@@ -171,13 +169,11 @@ function menus(t: Localization): { [key: string]: MenuItem } {
 			href: () => '/actions',
 			icon: Dashboard,
 			children: [
-				
 				{
 					title: () => m.sea_that_raven_trim(),
 					href: () => '/petitions',
 					icon: FilePen
 				}
-				
 			]
 		},
 		settings: {
