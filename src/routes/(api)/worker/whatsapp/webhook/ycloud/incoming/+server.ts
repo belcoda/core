@@ -8,7 +8,7 @@ import { create as createInteraction } from '$lib/server/api/people/interactions
 import { create as createInteractionSchema } from '$lib/schema/people/interactions';
 import { getPersonOrCreatePersonByWhatsappId } from '$lib/server/api/people/people';
 import { triggerAction } from '$lib/schema/communications/actions/actions';
-import { registerPersonForEvent } from '$lib/server/api/events/signups.js';
+import { registerPersonForEventFromWhatsApp } from '$lib/server/api/events/attendees';
 import { signPetition } from '$lib/server/api/petitions/signatures.js';
 
 export async function POST(event) {
@@ -114,7 +114,7 @@ export async function POST(event) {
 				const id = identifier[2]; // The numeric ID
 				switch (action) {
 					case 'SIGNUP':
-						registerPersonForEvent(
+						registerPersonForEventFromWhatsApp(
 							id,
 							message,
 							event.locals.admin.id,
