@@ -32,6 +32,7 @@ export type List = v.InferOutput<typeof list>;
 
 export const create = v.object({
 	...v.omit(base, ['created_at', 'petition_id']).entries,
-	send_autoresponse: v.optional(v.boolean(), true)
+	send_autoresponse: v.optional(v.boolean(), true),
+	response_channel: v.optional(v.union([v.literal('email'), v.literal('whatsapp')]), 'email')
 });
 export type Create = v.InferOutput<typeof create>;

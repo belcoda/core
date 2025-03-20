@@ -1,6 +1,5 @@
 import { BelcodaError, json, error, pino } from '$lib/server';
 import { signUpQueueMessage } from '$lib/schema/events/events';
-import { triggerEventMessage } from '$lib/schema/utils/email';
 import { parse } from '$lib/schema/valibot';
 import updatePerson from '$lib/server/hooks/website/utils/update_person';
 import { create } from '$lib/server/api/events/attendees.js';
@@ -47,7 +46,8 @@ export async function POST(event) {
 			body: {
 				person_id: person.id,
 				send_notifications: true,
-				status: 'registered'
+				status: 'registered',
+				response_channel: person.email ? 'email' : 'whatsapp' //TODO: use a criteria to determine what channel to send to
 			},
 			t: event.locals.t
 		});
@@ -64,18 +64,6 @@ export async function POST(event) {
 			},
 			queue: event.locals.queue
 		});
-
-		const sendToQueue = {
-			event_id: parsed.event_id,
-			person_id: person.id
-		};
-		const parsedSendToQueue = parse(triggerEventMessage, sendToQueue);
-		await event.locals.queue(
-			'utils/email/events/send_registration_email',
-			event.locals.instance.id,
-			parsedSendToQueue,
-			event.locals.admin.id
-		);
 
 		return json({ success: true });
 	} catch (err) {
