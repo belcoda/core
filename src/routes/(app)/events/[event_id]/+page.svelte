@@ -1,5 +1,6 @@
 <script lang="ts">
 	const { data } = $props();
+	import * as m from '$lib/paraglide/messages';
 	import PageHeader from '$lib/comps/layout/PageHeader.svelte';
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import DataGrid from '$lib/comps/ui/custom/table/DataGrid.svelte';
@@ -9,8 +10,10 @@
 	import MapPin from 'lucide-svelte/icons/map-pin';
 	import CalendarClock from 'lucide-svelte/icons/calendar-clock';
 	import Link from 'lucide-svelte/icons/link';
+	import CopyButton from '$lib/comps/ui/copy-button/copy-button.svelte';
 	import { PUBLIC_HOST } from '$env/static/public';
 	import { page } from '$app/stores';
+
 	const url = new URL(PUBLIC_HOST);
 	const previewUrl = `${url.protocol}//${$page.data.instance.slug}.${url.host}/events/${data.event.slug}`;
 	import EditRegistrationForm from './EditRegistrationForm.svelte';
@@ -18,7 +21,10 @@
 	import PointPerson from '$lib/comps/widgets/point_person/PointPerson.svelte';
 	import Whatsapp from '$lib/comps/icons/whatsapp.svelte';
 	import { renderRegistrationLink } from '$lib/utils/text/whatsapp';
+	import { getFlash } from 'sveltekit-flash-message';
 
+	const flash = getFlash(page);
+	let copied = $state(false);
 	const attendanceStatus: ['registered', 'attended', 'cancelled', 'noshow'] = [
 		'registered',
 		'attended',
@@ -31,6 +37,7 @@
 	}));
 
 	const attendees = $state(data.attendees.items);
+	const registrationLink = renderRegistrationLink(data.instance, data.event).url;
 
 	function makeStatusOptions(status: (typeof attendanceStatus)[number]) {
 		return {
@@ -64,10 +71,23 @@
 		{formatDateTimeRange(data.event.starts_at, data.event.ends_at)}
 	</div>
 	<div class="flex items-center gap-1.5">
+		<Link size={16} />
+		<span class="text-muted-foreground text-sm">
+			<span class="text-foreground">{previewUrl}</span>
+		</span>
+		<CopyButton textToCopy={previewUrl} />
+	</div>
+	<div class="flex items-center gap-1.5">
 		<Whatsapp />
-		<a href={renderRegistrationLink(data.instance, data.event).url} target="_blank"
-			>{renderRegistrationLink(data.instance, data.event).text}</a
-		>
+		<div class="flex items-center gap-2">
+			<a
+				href={renderRegistrationLink(data.instance, data.event).url}
+				target="_blank"
+				class="hover:underline cursor-pointer"
+				>{renderRegistrationLink(data.instance, data.event).text}</a
+			>
+			<CopyButton textToCopy={registrationLink} />
+		</div>
 	</div>
 	{#if data.event.online}
 		<div class="flex items-center gap-1.5">
@@ -102,9 +122,14 @@
 			</div>
 		{/snippet}
 		{#snippet headerButton()}
-			<Button href="/events/{data.event.id}/register"
-				>{data.t.events.attendees.register.title()}</Button
-			>
+			<div class="flex items-center gap-1">
+				<Button variant="outline" target="_blank" href="/events/{data.event.id}/print"
+					>{m.orange_mad_deer_value()}</Button
+				>
+				<Button href="/events/{data.event.id}/register"
+					>{data.t.events.attendees.register.title()}</Button
+				>
+			</div>
 		{/snippet}
 	</DataGrid>
 </div>

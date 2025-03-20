@@ -5,7 +5,7 @@ import {
 	type SendEmailMessage,
 	sendEmailToListSchema
 } from '$lib/schema/utils/email';
-const log = pino('/worker/utils/email/send_email');
+const log = pino(import.meta.url);
 import { getAllPersonIds } from '$lib/server/api/people/lists';
 import { markAsStarted } from '$lib/server/api/communications/email/sends';
 import { randomUUID } from 'crypto';

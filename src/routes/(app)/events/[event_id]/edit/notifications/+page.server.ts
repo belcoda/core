@@ -14,7 +14,7 @@ import {
 import { read, update } from '$lib/schema/events/events';
 import { update as updateEmailMessage } from '$lib/schema/communications/email/messages';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/events/new/+page.server.ts');
+const log = pino(import.meta.url);
 
 export async function load(event) {
 	const response = await event.fetch(`/api/v1/events/${event.params.event_id}`);

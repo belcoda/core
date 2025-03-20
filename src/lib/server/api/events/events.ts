@@ -9,7 +9,7 @@ import { type EventHTMLMetaTags } from '$lib/schema/utils/openai';
 import { read as readInstance } from '$lib/server/api/core/instances';
 import { create as createEmailMessage } from '$lib/server/api/communications/email/messages';
 
-const log = pino('DATA:/events/events');
+const log = pino(import.meta.url);
 
 export function redisString(instanceId: number, eventId: number | 'all') {
 	return `i:${instanceId}:events:${eventId}`;
@@ -45,7 +45,6 @@ export async function create({
 	instanceId,
 	body,
 	t,
-	defaultTemplateId,
 	defaultEmailTemplateId,
 	adminId,
 	queue
@@ -53,7 +52,6 @@ export async function create({
 	instanceId: number;
 	body: schema.Create;
 	t: App.Localization;
-	defaultTemplateId: number;
 	defaultEmailTemplateId: number;
 	adminId: number;
 	queue: App.Queue;
@@ -103,7 +101,6 @@ export async function create({
 			queue,
 			t
 		}),
-		template_id: parsed.template_id || defaultTemplateId,
 		point_person_id: parsed.point_person_id || adminId,
 		country: parsed.country || instance.country || DEFAULT_COUNTRY,
 		...parsed

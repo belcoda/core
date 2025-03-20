@@ -4,7 +4,7 @@ import * as schema from '$lib/schema/core/admin';
 import { parse } from '$lib/schema/valibot';
 import * as api from '$lib/server/api/core/admins';
 
-const log = pino('$lib/server/api/v1/admins');
+const log = pino(import.meta.url);
 
 export async function POST(event) {
 	try {

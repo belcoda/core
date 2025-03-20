@@ -3,7 +3,7 @@ import { triggerEventMessage, sendEventEmailMessage } from '$lib/schema/utils/em
 import { read as readPerson } from '$lib/server/api/people/people';
 import { read as readEvent } from '$lib/server/api/events/events';
 import { read as readMessage } from '$lib/server/api/communications/email/messages';
-const log = pino('/worker/utils/email/events/send_registration_email');
+const log = pino(import.meta.url);
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
 import { parse } from '$lib/schema/valibot';
 

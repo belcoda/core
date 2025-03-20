@@ -5,7 +5,7 @@ import { parse } from '$lib/schema/valibot';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
 import { read as readEvent } from '$lib/server/api/events/events';
 
-const log = pino('API:/api/v1/events/+server.ts');
+const log = pino(import.meta.url);
 
 export async function GET(event) {
 	try {

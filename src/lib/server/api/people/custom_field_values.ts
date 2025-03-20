@@ -1,5 +1,5 @@
 import { db, pool, pino, redis, error, BelcodaError } from '$lib/server';
-const log = pino('$lib/server/api/people/custom_field_values');
+const log = pino(import.meta.url);
 import { read as readCustomField } from '$lib/server/api/people/custom_fields';
 import { readFieldValue } from '$lib/schema/people/custom_field_values';
 import { redisString } from '$lib/server/api/people/people';

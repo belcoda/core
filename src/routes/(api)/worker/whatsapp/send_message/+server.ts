@@ -13,7 +13,7 @@ import { _readSecretsUnsafe } from '$lib/server/api/core/instances';
 import { read } from '$lib/server/api/people/people';
 
 import type { AfterSend } from '$lib/schema/communications/whatsapp/worker/sending.js';
-const log = pino('/worker/whatsapp/send_message');
+const log = pino(import.meta.url);
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
@@ -76,7 +76,7 @@ export async function POST(event) {
 		if (!parsedPhoneNumberTo.valid) {
 			throw new BelcodaError(
 				400,
-				'DATA:/whatsapp/send_message/+server.ts:01',
+				'DATA:/whatsapp/send_message/+server.ts:02',
 				event.locals.t.errors.generic()
 			);
 		}
@@ -84,28 +84,20 @@ export async function POST(event) {
 		if (!PHONE_NUMBER_ID) {
 			throw new BelcodaError(
 				400,
-				'DATA:/whatsapp/send_message/+server.ts:01',
+				'DATA:/whatsapp/send_message/+server.ts:03',
 				event.locals.t.errors.generic()
 			);
 		}
-		const parsedPhoneNumberFrom = parsePhoneNumber(PHONE_NUMBER_ID, {
-			regionCode: person.phone_number.country
-		});
-		if (!parsedPhoneNumberFrom.valid) {
-			throw new BelcodaError(
-				400,
-				'DATA:/whatsapp/send_message/+server.ts:01',
-				event.locals.t.errors.generic()
-			);
-		}
+
 		const messageBody: MessageWithBase = {
 			to: parsedPhoneNumberTo.number.e164.replace('+', ''), //whatsapp only accepts without the +
-			from: parsedPhoneNumberFrom.number.e164.replace('+', ''),
-			biz_opaque_callback_data: messageId,
+			from: PHONE_NUMBER_ID, //we don't need to do any parsing of the instance phone number. It should be set correctly in the settings.
+			biz_opaque_callback_data: parsedMessage.message_id,
 			messaging_product: 'whatsapp',
 			recipient_type: 'individual',
 			...messageObj.message
 		};
+
 		//using the ycloud api
 		const externalId = randomUUID();
 		const response = await fetch(`https://api.ycloud.com/v2/whatsapp/messages`, {
@@ -120,15 +112,8 @@ export async function POST(event) {
 				...messageBody
 			})
 		});
-		//using the graph api directly...
-		/* const response = await fetch(`https://graph.facebook.com/v20.0/${PHONE_NUMBER_ID}/messages`, {
-			body: JSON.stringify(messageBody),
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${WHATSAPP_ACCESS_KEY}`
-			},
-			method: 'POST'
-		}); */
+		log.debug(messageBody, 'the messge we send to the api');
+
 		if (response.ok) {
 			const responseBody = await response.json();
 			log.debug(responseBody);
@@ -149,15 +134,16 @@ export async function POST(event) {
 				event.locals.admin.id
 			);
 		} else {
-			console.log('Whatsapp responded with an error');
-			console.log(response.status);
-			console.log(await response.json());
+			log.error('Whatsapp responded with an error');
+			log.error(await response.json());
+			log.error(response.status);
+			log.error('End whatsapp error');
 		}
 		return json({ success: true });
 	} catch (err) {
 		return error(
 			500,
-			'WORKER:/whatsapp/send_message/+server.ts',
+			'WORKER:/whatsapp/send_message/+server.ts:05',
 			event.locals.t.errors.http[500](),
 			err
 		);

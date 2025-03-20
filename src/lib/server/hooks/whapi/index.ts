@@ -6,7 +6,7 @@ import { parse } from '$lib/schema/valibot';
 import { _getInstanceIdByWhatsappGroupChatId } from '$lib/server/api/people/groups';
 import { read } from '$lib/server/api/core/instances';
 import { pino } from '$lib/server';
-const log = pino('$lib/server/hooks/whapi/...');
+const log = pino(import.meta.url);
 
 export default async function (event: RequestEvent, resolve: Resolve): Promise<HandlerResponse> {
 	try {

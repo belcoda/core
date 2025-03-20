@@ -1,7 +1,7 @@
 import { json, error, pino, BelcodaError } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 import { yCloudWebhook } from '$lib/schema/communications/whatsapp/webhooks/ycloud';
-const log = pino('WORKER:/webhooks/whatsapp/+server.ts');
+const log = pino(import.meta.url);
 
 import { create as createReceivedMessage } from '$lib/server/api/communications/whatsapp/received_messages';
 import { create as createInteraction } from '$lib/server/api/people/interactions';

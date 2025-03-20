@@ -1,6 +1,9 @@
 import type { RequestEvent } from '@sveltejs/kit';
 
-import { read as readTemplate } from '$lib/server/api/website/templates';
+import eventPageTemplate from '$lib/server/templates/website/events/default.hbs?raw';
+import eventPageCopy from '$lib/server/templates/website/events/default.copy';
+import utilsCopy from '$lib/server/templates/website/blocks/utils/utils.copy';
+
 import renderHandlebarsTemplate from '$lib/server/utils/handlebars/render';
 import {
 	render,
@@ -10,7 +13,7 @@ import {
 } from '$lib/server/hooks/website/render';
 
 import { pino } from '$lib/server';
-const log = pino('/lib/server/hooks/website/handlers/event');
+const log = pino(import.meta.url);
 const error404 = {
 	title: 'Error',
 	error_code: 'Error 404',
@@ -48,14 +51,6 @@ export default async function ({
 		log.error(err);
 		throw error404;
 	});
-	const event_template = await readTemplate({
-		instanceId: instance.id,
-		templateId: eventObject.template_id,
-		t: t
-	}).catch((err) => {
-		log.debug('Error reading petition template', err);
-		throw error404;
-	});
 
 	if (method === 'POST') {
 		try {
@@ -91,18 +86,31 @@ export default async function ({
 	};
 
 	const output = await renderHandlebarsTemplate({
-		template: event_template.html,
+		template: eventPageTemplate,
 		instanceId: instance.id,
-		context: { event: eventObject, status, instance, globals },
+		context: {
+			event: eventObject,
+			status,
+			instance,
+			globals,
+			copy: { event: eventPageCopy(), utils: utilsCopy() }
+		},
 		t
 	});
 
-	const custom_code = compile_custom_code(eventObject, event_template);
+	//this is needed to avoid the error: "Cannot read property 'custom_css' of undefined"
+	const DEFAULT_CUSTOM_TEMPLATE_CODE = {
+		custom_html_head: '',
+		custom_html_body: '',
+		custom_css: '',
+		custom_js: ''
+	};
+
+	const custom_code = compile_custom_code(eventObject, DEFAULT_CUSTOM_TEMPLATE_CODE);
 	const final = render({
-		context: { event: eventObject, status },
+		context: { event: eventObject, status, instance },
 		renderedContent: output,
 		customCode: custom_code,
-		template: event_template,
 		metatags: eventObject.html_metatags
 	});
 

@@ -8,7 +8,7 @@ function redisString(instanceId: number, personId: number) {
 	return `i:${instanceId}:person:${personId}:sent_whatsapp_messages`;
 }
 
-const log = pino('data:/communications/whatsapp/sent_messages');
+const log = pino(import.meta.url);
 export async function create({
 	instanceId,
 	body,

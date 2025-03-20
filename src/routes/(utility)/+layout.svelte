@@ -1,5 +1,4 @@
 <script lang="ts">
-	import '../../app.css';
 	import { PUBLIC_UMAMI_WEBSITE_ID } from '$env/static/public';
 </script>
 

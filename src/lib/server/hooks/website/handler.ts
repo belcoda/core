@@ -9,7 +9,7 @@ import { default as handle_petition } from '$lib/server/hooks/website/handlers/p
 import { default as handle_content } from '$lib/server/hooks/website/handlers/content';
 
 import { pino } from '$lib/server';
-const log = pino('/lib/server/website_render/handler');
+const log = pino(import.meta.url);
 
 import { COOKIE_SESSION_NAME } from '$env/static/private';
 

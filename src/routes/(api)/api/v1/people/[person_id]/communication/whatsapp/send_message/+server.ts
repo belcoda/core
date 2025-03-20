@@ -4,7 +4,7 @@ import { getActiveForPerson } from '$lib/server/api/communications/whatsapp/conv
 import { create } from '$lib/server/api/communications/whatsapp/messages';
 import { type Create } from '$lib/schema/communications/whatsapp/messages';
 
-const log = pino('/api/v1/people/[person_id]/communications/whatsapp/send_message/+server.ts');
+const log = pino(import.meta.url);
 
 export async function POST(event) {
 	try {

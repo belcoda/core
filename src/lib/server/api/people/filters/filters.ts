@@ -8,7 +8,7 @@ import {
 import { list as listPeople, type List as ListPeople } from '$lib/schema/people/people';
 import { db, pool, filterQuery, pino } from '$lib/server';
 import { id, parse } from '$lib/schema/valibot';
-const log = pino('DATA:/server/api/people/filters/filters.ts');
+const log = pino(import.meta.url);
 
 export function generateSqlFromFilterArray(instanceId: number, filter: FilterType): string {
 	let sql = format(`SELECT id FROM people.people WHERE instance_id = %L AND id IN `, instanceId);

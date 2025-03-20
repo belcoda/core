@@ -7,7 +7,7 @@ import {
 	redisString as personRedisString
 } from '$lib/server/api/people/people';
 import { type Read } from '$lib/schema/people/people';
-const log = pino('$lib/server/api/communications/email/sent_emails');
+const log = pino(import.meta.url);
 function redisString(instanceId: number, personId: number) {
 	return `i:${instanceId}:sent_emails:${personId}`;
 }

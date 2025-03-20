@@ -6,7 +6,7 @@ import { read as readEvent } from '$lib/schema/events/events';
 import { randomUUID } from 'crypto';
 import { parse } from '$lib/schema/valibot';
 
-const log = pino('(preview)/preview/email/[email_id]/+page.server.ts');
+const log = pino(import.meta.url);
 export const load = async (event) => {
 	const messageResponse = await event.fetch(
 		`/api/v1/communications/email/messages/${event.params.email_id}`

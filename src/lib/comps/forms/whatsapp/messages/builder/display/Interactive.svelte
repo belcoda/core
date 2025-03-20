@@ -16,7 +16,7 @@
 				class="flex items-center gap-1 border-t justify-center py-1"
 			>
 				<Reply size={16} />
-				<div>{button.title}</div>
+				<div>{button.reply.title}</div>
 			</div>
 		{/each}
 	{/if}

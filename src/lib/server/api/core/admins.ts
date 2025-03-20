@@ -9,7 +9,7 @@ import type { Read as ReadInstance } from '$lib/schema/core/instance';
 import { create as createSession } from '$lib/server/api/core/sessions';
 import { read as readInstance } from '$lib/server/api/core/instances';
 
-const log = pino('$lib/server/api/core/admins');
+const log = pino(import.meta.url);
 
 const redisString = (instance_id: number, admin_id: number | 'all') =>
 	`i:${instance_id}:admin:${admin_id}`;

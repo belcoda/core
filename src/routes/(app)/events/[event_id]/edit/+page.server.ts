@@ -12,7 +12,7 @@ import {
 
 import { update, read } from '$lib/schema/events/events';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/events/new/+page.server.ts');
+const log = pino(import.meta.url);
 export async function load(event) {
 	const response = await event.fetch(`/api/v1/events/${event.params.event_id}`);
 	if (!response.ok) return loadError(response);

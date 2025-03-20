@@ -15,7 +15,7 @@ import { PUBLIC_HOST } from '$env/static/public';
 import { update, read } from '$lib/schema/petitions/petitions';
 import { list as listForEvent } from '$lib/schema/petitions/signatures';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/events/preview/+page.server.ts');
+const log = pino(import.meta.url);
 
 export async function load(event) {
 	const response = await event.fetch(`/api/v1/petitions/${event.params.petition_id}`);

@@ -1,6 +1,6 @@
 import { redis, db, pool, t, error, type SL, pino } from '$lib/server';
 
-const log = pino('$lib/server/api/core/sessions');
+const log = pino(import.meta.url);
 
 import * as schemaSession from '$lib/schema/core/session';
 import * as schemaAdmin from '$lib/schema/core/admin';

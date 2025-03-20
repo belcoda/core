@@ -16,7 +16,6 @@ export const settings = v.object({
 	default_admin_id: id,
 	home_page_url: v.nullable(url),
 	events: v.object({
-		default_template_id: id,
 		default_email_template_id: id,
 		default_event_info_settings: v.object({
 			ask_email: v.optional(v.boolean(), true),
@@ -40,11 +39,8 @@ export const settings = v.object({
 			business_account_id: v.nullable(shortString)
 		})
 	}),
-	petitions: v.object({
-		default_template_id: id
-	}),
+	petitions: v.object({}),
 	website: v.object({
-		default_template_id: id,
 		custom_domain: v.nullable(domainName), //if custom domain is null, the the website will be https://${instance.slug}.{PUBLIC_ROOT_DOMAIN}. Otherwise, it will be https://${customDomain}
 		pages_content_type_id: id,
 		posts_content_type_id: id,

@@ -5,7 +5,7 @@ import { pino } from '$lib/server';
 import { incomingWebhook } from '$lib/schema/communications/email/received_emails';
 import { extract } from 'letterparser';
 import { Buffer } from 'buffer';
-const log = pino('$lib/server/hooks/email');
+const log = pino(import.meta.url);
 import { parse } from '$lib/schema/valibot';
 import { readBySubdomain } from '$lib/server/api/core/instances';
 export default async function (event: RequestEvent, resolve: Resolve): Promise<HandlerResponse> {

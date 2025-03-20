@@ -1,7 +1,7 @@
 import { json, error, pino } from '$lib/server';
 import { setFieldValue } from '$lib/schema/people/custom_field_values';
 import { setCustomFieldValue } from '$lib/server/api/people/custom_field_values';
-const log = pino('/worker/core/people/custom_fields/set_custom_field');
+const log = pino(import.meta.url);
 
 import { parse } from '$lib/schema/valibot';
 

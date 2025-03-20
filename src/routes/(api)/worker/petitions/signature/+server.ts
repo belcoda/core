@@ -1,13 +1,12 @@
-import { pino, BelcodaError, json, error } from '$lib/server';
+import { BelcodaError, json, error, pino } from '$lib/server';
 import { signatureQueueMessage } from '$lib/schema/petitions/petitions';
-import { triggerEventMessage } from '$lib/schema/utils/email';
 import { parse } from '$lib/schema/valibot';
 import updatePerson from '$lib/server/hooks/website/utils/update_person';
 import { create } from '$lib/server/api/petitions/signatures';
 import { read as readPetition } from '$lib/server/api/petitions/petitions';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
 
-const log = pino('/worker/petitions/signature');
+const log = pino(import.meta.url);
 export async function POST(event) {
 	try {
 		const body = await event.request.json();

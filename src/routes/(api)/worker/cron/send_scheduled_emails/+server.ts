@@ -6,7 +6,7 @@ import {
 	update as updateEvent
 } from '$lib/server/api/events/events';
 import { unsafeListAllForEvent } from '$lib/server/api/events/attendees';
-const log = pino('/worker/utils/email/events/send_followup_email');
+const log = pino(import.meta.url);
 
 export async function POST(event) {
 	try {

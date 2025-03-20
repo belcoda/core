@@ -2,7 +2,7 @@ import { json, error, pino } from '$lib/server';
 import * as api from '$lib/server/api/petitions/petitions';
 import * as schema from '$lib/schema/petitions/petitions';
 import { parse } from '$lib/schema/valibot';
-const log = pino('API:/api/v1/petitions/[petition_id]/+server.ts');
+const log = pino(import.meta.url);
 
 export async function GET(event) {
 	try {

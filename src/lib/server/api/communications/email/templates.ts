@@ -1,7 +1,7 @@
 import { db, pool, redis, filterQuery, BelcodaError, pino } from '$lib/server';
 import * as schema from '$lib/schema/communications/email/templates';
 import { parse } from '$lib/schema/valibot';
-const log = pino('$lib/server/api/communications/email/templates');
+const log = pino(import.meta.url);
 
 function redisString(instanceId: number, templateId: number | 'all') {
 	return `i:${instanceId}:email_templates:${templateId}`;

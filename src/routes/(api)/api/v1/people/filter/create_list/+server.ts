@@ -2,7 +2,7 @@ import { json, error, pino } from '$lib/server';
 import { filterGroup } from '$lib/schema/people/filters/filters';
 import { parse } from '$lib/schema/valibot';
 import { create } from '$lib/server/api/people/lists';
-const log = pino('API:/api/v1/people/[person_id]/filters/+server.ts');
+const log = pino(import.meta.url);
 import { generateUniqueString } from '$lib/utils/text/random';
 export async function PUT(event) {
 	try {

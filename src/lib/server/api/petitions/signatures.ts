@@ -2,8 +2,14 @@ import { db, pool, redis, pino, BelcodaError, filterQuery } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 import * as schema from '$lib/schema/petitions/signatures';
 import { exists } from '$lib/server/api/petitions/petitions';
-import { exists as personExists } from '$lib/server/api/people/people';
-const log = pino('API:/api/v1/petitions/signatures/+server.ts');
+import {
+	getPersonOrCreatePersonByWhatsappId,
+	exists as personExists
+} from '$lib/server/api/people/people';
+import type { WhatsappInboundMessage } from '$lib/schema/communications/whatsapp/webhooks/ycloud';
+import { _getInstanceIdByPetitionId } from '../core/instances';
+import { signatureQueueMessage } from '$lib/schema/petitions/petitions';
+const log = pino(import.meta.url);
 function redisString(instanceId: number, petitionId: number, personId: number | 'all') {
 	return `i:${instanceId}:petitions:${petitionId}:signatures:${personId}`;
 }
@@ -189,4 +195,38 @@ export async function listForPerson({
 		.run(pool);
 	const parsedResult = parse(schema.list, { count: count, items: result });
 	return parsedResult;
+}
+
+export async function signPetition(
+	petitionId: string,
+	message: WhatsappInboundMessage,
+	adminId: number,
+	t: App.Localization,
+	queue: App.Queue
+) {
+	const instance = await _getInstanceIdByPetitionId(petitionId);
+	const person = await getPersonOrCreatePersonByWhatsappId(
+		instance.id,
+		message.from,
+		message,
+		t,
+		queue
+	);
+
+	if (person) {
+		const parsed = parse(signatureQueueMessage, {
+			petition_id: Number(petitionId),
+			signup: {
+				full_name: message.customerProfile?.name,
+				phone_number: message.from,
+				country: instance.country,
+				whatsapp_id: message.from,
+				whatsapp_message_id: message.id,
+				message: message,
+				opt_in: true,
+				email: null
+			}
+		});
+		await queue('/petitions/signature', instance.id, parsed, adminId);
+	}
 }

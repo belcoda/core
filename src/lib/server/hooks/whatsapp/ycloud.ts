@@ -14,7 +14,7 @@ import {
 import { _getSentWhatsappMessageById } from '$lib/server/api/communications/whatsapp/sent_messages';
 import { _getInstanceIdByPersonId } from '$lib/server/api/people/people';
 
-const log = pino('$lib/server/hooks/whatsapp/ycloud');
+const log = pino(import.meta.url);
 export default async function (event: RequestEvent, resolve: Resolve): Promise<HandlerResponse> {
 	log.info(`📞 ${event.request.method} ${event.url.pathname}`);
 	if (event.url.searchParams.get('verify') !== YCLOUD_VERIFY_TOKEN) {

@@ -2,7 +2,7 @@ import { superValidate, valibot, formAction, redirect, pino, loadError } from '$
 
 import { update, read } from '$lib/schema/petitions/petitions';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/petitions/[petition_id]/petition/+page.server.ts');
+const log = pino(import.meta.url);
 export async function load(event) {
 	const response = await event.fetch(`/api/v1/petitions/${event.params.petition_id}`);
 	if (!response.ok) return loadError(response);

@@ -6,7 +6,7 @@ import {
 } from '$lib/schema/utils/email';
 import renderEmail from '$lib/server/utils/handlebars/render_email';
 import { read } from '$lib/server/api/communications/email/templates';
-const log = pino('/worker/utils/email/send_event_email');
+const log = pino(import.meta.url);
 import { randomUUID } from 'crypto';
 import { parse } from '$lib/schema/valibot';
 

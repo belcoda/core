@@ -1,7 +1,7 @@
 import { handleApiFaviconRequest } from '$lib/server/hooks/simple_handlers';
 import type { RequestEvent, ResolveOptions } from '@sveltejs/kit';
 import { pino } from '$lib/server';
-const log = pino('$lib/server/hooks/handlers');
+const log = pino(import.meta.url);
 import whatsappHandler from '$lib/server/hooks/whatsapp/ycloud';
 import whapiHandler from '$lib/server/hooks/whapi';
 import emailHandler from '$lib/server/hooks/email/postmark';

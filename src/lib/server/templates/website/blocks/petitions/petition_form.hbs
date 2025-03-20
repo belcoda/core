@@ -1,0 +1,45 @@
+<form class="space-y-4 mt-6" method="post">
+  <div>
+    <div class="mb-1 text-xs uppercase tracking-wider">Name</div>
+    <div>
+      <input class="block w-full placeholder-gray-500 px-2 py-1 text-md border-2 border-white text-gray-700 rounded"
+        required="{{#if petition.require_name}}true{{/if}}" name="full_name" type="text">
+    </div>
+  </div>
+
+  {{#if petition.ask_email}}
+  <div>
+    <div class="mb-1 text-xs uppercase tracking-wider">Email</div>
+    <div><input class="block w-full placeholder-gray-500 px-2 py-1 text-md border-2 border-white text-gray-700 rounded"
+        name="email" required="{{#if petition.require_email}}true{{/if}}" type="email"></div>
+  </div>
+  {{/if}}
+  {{#if petition.ask_phone_number}}
+  <div>
+    <div class="mb-1 text-xs uppercase tracking-wider">Phone number</div>
+    <div><input class="block w-full placeholder-gray-500 px-2 py-1 text-md border-2 border-white text-gray-700 rounded"
+        name="phone_number" required="{{#if petition.requre_phone_number}}true{{/if}}" type="text"></div>
+  </div>
+  {{/if}}
+  {{#if petition.ask_postcode}}
+  <div>
+    <div class="mb-1 text-xs uppercase tracking-wider">Postcode</div>
+    <div><input class="block w-full placeholder-gray-500 px-2 py-1 text-md border-2 border-white text-gray-700 rounded"
+        name="postcode" required="{{#if petition.require_postcode}}true{{/if}}" type="text"></div>
+  </div>
+  {{/if}}
+  {{#if petition.ask_address}}
+  <div>
+    <div class="mb-1 text-xs uppercase tracking-wider">Address</div>
+    <div><input class="block w-full placeholder-gray-500 px-2 py-1 text-md border-2 border-white text-gray-700 rounded"
+        name="address" required="{{#if petition.require_address}}true{{/if}}" type="text"></div>
+  </div>
+  {{/if}}
+
+  <div class="col-span-9 mt-4"><label class="flex items-center"> <input
+        class="form-checkbox w-5 h-5 rounded text-red-500" checked="checked" name="opt_in" required="" type="checkbox">
+      <span class="ml-2 text-lg">Receive updates on this and other campaigns?</span> </label>
+  </div>
+  <button class="bg-red-500 block hover:bg-red-600 text-white font-bold text-lg rounded py-2 px-4 text-center"
+    role="submit">Sign now!</button>
+</form>

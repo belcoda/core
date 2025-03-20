@@ -1,6 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
 
-import { read as readTemplate } from '$lib/server/api/website/templates';
 import renderHandlebarsTemplate from '$lib/server/utils/handlebars/render';
 import {
 	render,
@@ -9,12 +8,16 @@ import {
 	type RenderStatus
 } from '$lib/server/hooks/website/render';
 import { pino } from '$lib/server';
-const log = pino('/lib/server/hooks/website/handlers/event');
+const log = pino(import.meta.url);
 const error404 = {
 	title: 'Error',
 	error_code: 'Error 404',
 	error_message: 'Page not found'
 };
+
+import petitionsPageTemplate from '$lib/server/templates/website/petitions/default.hbs?raw';
+import petitionsPageCopy from '$lib/server/templates/website/petitions/default.copy';
+import utilsCopy from '$lib/server/templates/website/blocks/utils/utils.copy';
 
 import { readBySlug as readPetitionBySlug } from '$lib/server/api/petitions/petitions';
 
@@ -45,14 +48,6 @@ export default async function ({
 	}).catch((err) => {
 		log.error('Error reading petition');
 		log.error(err);
-		throw error404;
-	});
-	const petitionTemplate = await readTemplate({
-		instanceId: instance.id,
-		templateId: petitionObject.template_id,
-		t: t
-	}).catch((err) => {
-		log.debug('Error reading petition template', err);
 		throw error404;
 	});
 
@@ -93,23 +88,31 @@ export default async function ({
 	};
 
 	const output = await renderHandlebarsTemplate({
-		template: petitionTemplate.html,
+		template: petitionsPageTemplate,
 		instanceId: instance.id,
 		context: {
 			petition: petitionObject,
 			status,
 			instance,
-			globals
+			globals,
+			copy: { event: petitionsPageCopy(), utils: utilsCopy() }
 		},
 		t
 	});
 
-	const custom_code = compile_custom_code(petitionObject, petitionTemplate);
+	//this is needed to avoid the error: "Cannot read property 'custom_css' of undefined"
+	const DEFAULT_CUSTOM_TEMPLATE_CODE = {
+		custom_html_head: '',
+		custom_html_body: '',
+		custom_css: '',
+		custom_js: ''
+	};
+
+	const custom_code = compile_custom_code(petitionObject, DEFAULT_CUSTOM_TEMPLATE_CODE);
 	const final = render({
-		context: { petition: petitionObject, status },
+		context: { petition: petitionObject, status, instance },
 		renderedContent: output,
 		customCode: custom_code,
-		template: petitionTemplate,
 		metatags: petitionObject.html_metatags
 	});
 

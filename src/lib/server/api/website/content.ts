@@ -56,7 +56,6 @@ export async function create({
 		return await db
 			.insert('website.content', {
 				content_type_id: contentTypeId,
-				template_id: contentType.content_template_id,
 				...parsed,
 				name: parsed.name || uniqueName,
 				slug: parsed.slug || uniqueSlug

@@ -4,7 +4,7 @@ import { read as readPerson } from '$lib/server/api/people/people';
 import { read as readEvent } from '$lib/server/api/events/events';
 import { read as readMessage } from '$lib/server/api/communications/email/messages';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
-const log = pino('/worker/utils/email/events/send_followup_email');
+const log = pino(import.meta.url);
 import { parse } from '$lib/schema/valibot';
 
 export async function POST(event) {

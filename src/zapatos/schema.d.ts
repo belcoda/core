@@ -4115,7 +4115,7 @@ declare module 'zapatos/schema' {
         * - `int8` in database
         * - Nullable, no default
         */
-        count?: (number | db.Int8String) | db.Parameter<(number | db.Int8String)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (number | db.Int8String) | db.Parameter<(number | db.Int8String)> | db.SQLFragment | db.ParentColumn>;
+        count?: (number | db.Int8String | bigint) | db.Parameter<(number | db.Int8String | bigint)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (number | db.Int8String | bigint) | db.Parameter<(number | db.Int8String | bigint)> | db.SQLFragment | db.ParentColumn>;
         /**
         * **people.list_view.created_at**
         * - `timestamptz` in database
@@ -6861,12 +6861,6 @@ declare module 'zapatos/schema' {
         */
         slug: string;
         /**
-        * **website.content.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id: number;
-        /**
         * **website.content.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -6946,12 +6940,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         slug: string;
-        /**
-        * **website.content.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id: number;
         /**
         * **website.content.updated_at**
         * - `timestamptz` in database
@@ -7033,12 +7021,6 @@ declare module 'zapatos/schema' {
         */
         slug?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
-        * **website.content.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
-        /**
         * **website.content.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -7118,12 +7100,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         slug: string | db.Parameter<string> | db.SQLFragment;
-        /**
-        * **website.content.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id: number | db.Parameter<number> | db.SQLFragment;
         /**
         * **website.content.updated_at**
         * - `timestamptz` in database
@@ -7205,12 +7181,6 @@ declare module 'zapatos/schema' {
         */
         slug?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
         /**
-        * **website.content.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
-        /**
         * **website.content.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -7237,18 +7207,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `true`
         */
         active: boolean;
-        /**
-        * **website.content_types.collection_template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        collection_template_id: number;
-        /**
-        * **website.content_types.content_template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        content_template_id: number;
         /**
         * **website.content_types.created_at**
         * - `timestamptz` in database
@@ -7294,18 +7252,6 @@ declare module 'zapatos/schema' {
         */
         active: boolean;
         /**
-        * **website.content_types.collection_template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        collection_template_id: number;
-        /**
-        * **website.content_types.content_template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        content_template_id: number;
-        /**
         * **website.content_types.created_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -7349,18 +7295,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `true`
         */
         active?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **website.content_types.collection_template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        collection_template_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **website.content_types.content_template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        content_template_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
         /**
         * **website.content_types.created_at**
         * - `timestamptz` in database
@@ -7406,18 +7340,6 @@ declare module 'zapatos/schema' {
         */
         active?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
         /**
-        * **website.content_types.collection_template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        collection_template_id: number | db.Parameter<number> | db.SQLFragment;
-        /**
-        * **website.content_types.content_template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        content_template_id: number | db.Parameter<number> | db.SQLFragment;
-        /**
         * **website.content_types.created_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -7461,18 +7383,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `true`
         */
         active?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
-        /**
-        * **website.content_types.collection_template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        collection_template_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
-        /**
-        * **website.content_types.content_template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        content_template_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
         /**
         * **website.content_types.created_at**
         * - `timestamptz` in database
@@ -7894,329 +7804,6 @@ declare module 'zapatos/schema' {
     }
   
     /**
-     * **website.templates**
-     * - Table in database
-     */
-    export namespace templates {
-      export type Table = 'website.templates';
-      export interface Selectable {
-        /**
-        * **website.templates.active**
-        * - `bool` in database
-        * - `NOT NULL`, default: `true`
-        */
-        active: boolean;
-        /**
-        * **website.templates.created_at**
-        * - `timestamptz` in database
-        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-        */
-        created_at: Date;
-        /**
-        * **website.templates.custom_code**
-        * - `custom_code` (base type: `jsonb`) in database
-        * - `NOT NULL`, default: `'{"custom_js": null, "custom_css": null, "custom_html_body": null, "custom_html_head": null}'::jsonb`
-        */
-        custom_code: c.PgCustom_code;
-        /**
-        * **website.templates.description**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        description: string | null;
-        /**
-        * **website.templates.html**
-        * - `text` in database
-        * - `NOT NULL`, default: `''::text`
-        */
-        html: string;
-        /**
-        * **website.templates.html_metatags**
-        * - `html_metatags` (base type: `jsonb`) in database
-        * - `NOT NULL`, default: `'{"title": null, "subject": null, "twitter": {"card": "summary", "image": null, "title": null, "image_alt": null, "description": null}, "keywords": null, "openGraph": {"image": null, "title": null, "image_alt": null, "description": null}, "description": null}'::jsonb`
-        */
-        html_metatags: c.PgHtml_metatags;
-        /**
-        * **website.templates.id**
-        * - `int4` in database
-        * - `NOT NULL`, default: `nextval('website.templates_id_seq'::regclass)`
-        */
-        id: number;
-        /**
-        * **website.templates.instance_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        instance_id: number;
-        /**
-        * **website.templates.name**
-        * - `text` in database
-        * - `NOT NULL`, no default
-        */
-        name: string;
-        /**
-        * **website.templates.updated_at**
-        * - `timestamptz` in database
-        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-        */
-        updated_at: Date;
-      }
-      export interface JSONSelectable {
-        /**
-        * **website.templates.active**
-        * - `bool` in database
-        * - `NOT NULL`, default: `true`
-        */
-        active: boolean;
-        /**
-        * **website.templates.created_at**
-        * - `timestamptz` in database
-        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-        */
-        created_at: db.TimestampTzString;
-        /**
-        * **website.templates.custom_code**
-        * - `custom_code` (base type: `jsonb`) in database
-        * - `NOT NULL`, default: `'{"custom_js": null, "custom_css": null, "custom_html_body": null, "custom_html_head": null}'::jsonb`
-        */
-        custom_code: c.PgCustom_code;
-        /**
-        * **website.templates.description**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        description: string | null;
-        /**
-        * **website.templates.html**
-        * - `text` in database
-        * - `NOT NULL`, default: `''::text`
-        */
-        html: string;
-        /**
-        * **website.templates.html_metatags**
-        * - `html_metatags` (base type: `jsonb`) in database
-        * - `NOT NULL`, default: `'{"title": null, "subject": null, "twitter": {"card": "summary", "image": null, "title": null, "image_alt": null, "description": null}, "keywords": null, "openGraph": {"image": null, "title": null, "image_alt": null, "description": null}, "description": null}'::jsonb`
-        */
-        html_metatags: c.PgHtml_metatags;
-        /**
-        * **website.templates.id**
-        * - `int4` in database
-        * - `NOT NULL`, default: `nextval('website.templates_id_seq'::regclass)`
-        */
-        id: number;
-        /**
-        * **website.templates.instance_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        instance_id: number;
-        /**
-        * **website.templates.name**
-        * - `text` in database
-        * - `NOT NULL`, no default
-        */
-        name: string;
-        /**
-        * **website.templates.updated_at**
-        * - `timestamptz` in database
-        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-        */
-        updated_at: db.TimestampTzString;
-      }
-      export interface Whereable {
-        /**
-        * **website.templates.active**
-        * - `bool` in database
-        * - `NOT NULL`, default: `true`
-        */
-        active?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **website.templates.created_at**
-        * - `timestamptz` in database
-        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-        */
-        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **website.templates.custom_code**
-        * - `custom_code` (base type: `jsonb`) in database
-        * - `NOT NULL`, default: `'{"custom_js": null, "custom_css": null, "custom_html_body": null, "custom_html_head": null}'::jsonb`
-        */
-        custom_code?: c.PgCustom_code | db.Parameter<c.PgCustom_code> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, c.PgCustom_code | db.Parameter<c.PgCustom_code> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **website.templates.description**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        description?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **website.templates.html**
-        * - `text` in database
-        * - `NOT NULL`, default: `''::text`
-        */
-        html?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **website.templates.html_metatags**
-        * - `html_metatags` (base type: `jsonb`) in database
-        * - `NOT NULL`, default: `'{"title": null, "subject": null, "twitter": {"card": "summary", "image": null, "title": null, "image_alt": null, "description": null}, "keywords": null, "openGraph": {"image": null, "title": null, "image_alt": null, "description": null}, "description": null}'::jsonb`
-        */
-        html_metatags?: c.PgHtml_metatags | db.Parameter<c.PgHtml_metatags> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, c.PgHtml_metatags | db.Parameter<c.PgHtml_metatags> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **website.templates.id**
-        * - `int4` in database
-        * - `NOT NULL`, default: `nextval('website.templates_id_seq'::regclass)`
-        */
-        id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **website.templates.instance_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        instance_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **website.templates.name**
-        * - `text` in database
-        * - `NOT NULL`, no default
-        */
-        name?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **website.templates.updated_at**
-        * - `timestamptz` in database
-        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-        */
-        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
-      }
-      export interface Insertable {
-        /**
-        * **website.templates.active**
-        * - `bool` in database
-        * - `NOT NULL`, default: `true`
-        */
-        active?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
-        /**
-        * **website.templates.created_at**
-        * - `timestamptz` in database
-        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-        */
-        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
-        /**
-        * **website.templates.custom_code**
-        * - `custom_code` (base type: `jsonb`) in database
-        * - `NOT NULL`, default: `'{"custom_js": null, "custom_css": null, "custom_html_body": null, "custom_html_head": null}'::jsonb`
-        */
-        custom_code?: c.PgCustom_code | db.Parameter<c.PgCustom_code> | db.DefaultType | db.SQLFragment;
-        /**
-        * **website.templates.description**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        description?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
-        /**
-        * **website.templates.html**
-        * - `text` in database
-        * - `NOT NULL`, default: `''::text`
-        */
-        html?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment;
-        /**
-        * **website.templates.html_metatags**
-        * - `html_metatags` (base type: `jsonb`) in database
-        * - `NOT NULL`, default: `'{"title": null, "subject": null, "twitter": {"card": "summary", "image": null, "title": null, "image_alt": null, "description": null}, "keywords": null, "openGraph": {"image": null, "title": null, "image_alt": null, "description": null}, "description": null}'::jsonb`
-        */
-        html_metatags?: c.PgHtml_metatags | db.Parameter<c.PgHtml_metatags> | db.DefaultType | db.SQLFragment;
-        /**
-        * **website.templates.id**
-        * - `int4` in database
-        * - `NOT NULL`, default: `nextval('website.templates_id_seq'::regclass)`
-        */
-        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
-        /**
-        * **website.templates.instance_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        instance_id: number | db.Parameter<number> | db.SQLFragment;
-        /**
-        * **website.templates.name**
-        * - `text` in database
-        * - `NOT NULL`, no default
-        */
-        name: string | db.Parameter<string> | db.SQLFragment;
-        /**
-        * **website.templates.updated_at**
-        * - `timestamptz` in database
-        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-        */
-        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
-      }
-      export interface Updatable {
-        /**
-        * **website.templates.active**
-        * - `bool` in database
-        * - `NOT NULL`, default: `true`
-        */
-        active?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
-        /**
-        * **website.templates.created_at**
-        * - `timestamptz` in database
-        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-        */
-        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
-        /**
-        * **website.templates.custom_code**
-        * - `custom_code` (base type: `jsonb`) in database
-        * - `NOT NULL`, default: `'{"custom_js": null, "custom_css": null, "custom_html_body": null, "custom_html_head": null}'::jsonb`
-        */
-        custom_code?: c.PgCustom_code | db.Parameter<c.PgCustom_code> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, c.PgCustom_code | db.Parameter<c.PgCustom_code> | db.DefaultType | db.SQLFragment>;
-        /**
-        * **website.templates.description**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        description?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
-        /**
-        * **website.templates.html**
-        * - `text` in database
-        * - `NOT NULL`, default: `''::text`
-        */
-        html?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.DefaultType | db.SQLFragment>;
-        /**
-        * **website.templates.html_metatags**
-        * - `html_metatags` (base type: `jsonb`) in database
-        * - `NOT NULL`, default: `'{"title": null, "subject": null, "twitter": {"card": "summary", "image": null, "title": null, "image_alt": null, "description": null}, "keywords": null, "openGraph": {"image": null, "title": null, "image_alt": null, "description": null}, "description": null}'::jsonb`
-        */
-        html_metatags?: c.PgHtml_metatags | db.Parameter<c.PgHtml_metatags> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, c.PgHtml_metatags | db.Parameter<c.PgHtml_metatags> | db.DefaultType | db.SQLFragment>;
-        /**
-        * **website.templates.id**
-        * - `int4` in database
-        * - `NOT NULL`, default: `nextval('website.templates_id_seq'::regclass)`
-        */
-        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
-        /**
-        * **website.templates.instance_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        instance_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
-        /**
-        * **website.templates.name**
-        * - `text` in database
-        * - `NOT NULL`, no default
-        */
-        name?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
-        /**
-        * **website.templates.updated_at**
-        * - `timestamptz` in database
-        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-        */
-        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
-      }
-      export type UniqueIndex = 'templates_pkey';
-      export type Column = keyof Selectable;
-      export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
-      export type SQLExpression = Table | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Whereable | Column | db.ParentColumn | db.GenericSQLExpression;
-      export type SQL = SQLExpression | SQLExpression[];
-    }
-  
-    /**
      * **website.uploads**
      * - Table in database
      */
@@ -8451,20 +8038,20 @@ declare module 'zapatos/schema' {
   
     /* --- aggregate types --- */
   
-    export type Table = blocks.Table | content.Table | content_types.Table | redirects.Table | taggings.Table | templates.Table | uploads.Table;
-    export type Selectable = blocks.Selectable | content.Selectable | content_types.Selectable | redirects.Selectable | taggings.Selectable | templates.Selectable | uploads.Selectable;
-    export type JSONSelectable = blocks.JSONSelectable | content.JSONSelectable | content_types.JSONSelectable | redirects.JSONSelectable | taggings.JSONSelectable | templates.JSONSelectable | uploads.JSONSelectable;
-    export type Whereable = blocks.Whereable | content.Whereable | content_types.Whereable | redirects.Whereable | taggings.Whereable | templates.Whereable | uploads.Whereable;
-    export type Insertable = blocks.Insertable | content.Insertable | content_types.Insertable | redirects.Insertable | taggings.Insertable | templates.Insertable | uploads.Insertable;
-    export type Updatable = blocks.Updatable | content.Updatable | content_types.Updatable | redirects.Updatable | taggings.Updatable | templates.Updatable | uploads.Updatable;
-    export type UniqueIndex = blocks.UniqueIndex | content.UniqueIndex | content_types.UniqueIndex | redirects.UniqueIndex | taggings.UniqueIndex | templates.UniqueIndex | uploads.UniqueIndex;
-    export type Column = blocks.Column | content.Column | content_types.Column | redirects.Column | taggings.Column | templates.Column | uploads.Column;
+    export type Table = blocks.Table | content.Table | content_types.Table | redirects.Table | taggings.Table | uploads.Table;
+    export type Selectable = blocks.Selectable | content.Selectable | content_types.Selectable | redirects.Selectable | taggings.Selectable | uploads.Selectable;
+    export type JSONSelectable = blocks.JSONSelectable | content.JSONSelectable | content_types.JSONSelectable | redirects.JSONSelectable | taggings.JSONSelectable | uploads.JSONSelectable;
+    export type Whereable = blocks.Whereable | content.Whereable | content_types.Whereable | redirects.Whereable | taggings.Whereable | uploads.Whereable;
+    export type Insertable = blocks.Insertable | content.Insertable | content_types.Insertable | redirects.Insertable | taggings.Insertable | uploads.Insertable;
+    export type Updatable = blocks.Updatable | content.Updatable | content_types.Updatable | redirects.Updatable | taggings.Updatable | uploads.Updatable;
+    export type UniqueIndex = blocks.UniqueIndex | content.UniqueIndex | content_types.UniqueIndex | redirects.UniqueIndex | taggings.UniqueIndex | uploads.UniqueIndex;
+    export type Column = blocks.Column | content.Column | content_types.Column | redirects.Column | taggings.Column | uploads.Column;
   
-    export type AllBaseTables = [blocks.Table, content.Table, content_types.Table, redirects.Table, taggings.Table, templates.Table, uploads.Table];
+    export type AllBaseTables = [blocks.Table, content.Table, content_types.Table, redirects.Table, taggings.Table, uploads.Table];
     export type AllForeignTables = [];
     export type AllViews = [];
     export type AllMaterializedViews = [];
-    export type AllTablesAndViews = [blocks.Table, content.Table, content_types.Table, redirects.Table, taggings.Table, templates.Table, uploads.Table];
+    export type AllTablesAndViews = [blocks.Table, content.Table, content_types.Table, redirects.Table, taggings.Table, uploads.Table];
   }
 
 
@@ -14756,12 +14343,6 @@ declare module 'zapatos/schema' {
         */
         state: string | null;
         /**
-        * **events.events.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id: number;
-        /**
         * **events.events.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -15057,12 +14638,6 @@ declare module 'zapatos/schema' {
         * - Nullable, no default
         */
         state: string | null;
-        /**
-        * **events.events.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id: number;
         /**
         * **events.events.updated_at**
         * - `timestamptz` in database
@@ -15360,12 +14935,6 @@ declare module 'zapatos/schema' {
         */
         state?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
-        * **events.events.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
-        /**
         * **events.events.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -15662,12 +15231,6 @@ declare module 'zapatos/schema' {
         */
         state?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
         /**
-        * **events.events.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id: number | db.Parameter<number> | db.SQLFragment;
-        /**
         * **events.events.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -15963,12 +15526,6 @@ declare module 'zapatos/schema' {
         * - Nullable, no default
         */
         state?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
-        /**
-        * **events.events.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
         /**
         * **events.events.updated_at**
         * - `timestamptz` in database
@@ -16577,12 +16134,6 @@ declare module 'zapatos/schema' {
         */
         slug: string;
         /**
-        * **petitions.petitions.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id: number;
-        /**
         * **petitions.petitions.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -16740,12 +16291,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         slug: string;
-        /**
-        * **petitions.petitions.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id: number;
         /**
         * **petitions.petitions.updated_at**
         * - `timestamptz` in database
@@ -16905,12 +16450,6 @@ declare module 'zapatos/schema' {
         */
         slug?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
-        * **petitions.petitions.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
-        /**
         * **petitions.petitions.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -17069,12 +16608,6 @@ declare module 'zapatos/schema' {
         */
         slug: string | db.Parameter<string> | db.SQLFragment;
         /**
-        * **petitions.petitions.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id: number | db.Parameter<number> | db.SQLFragment;
-        /**
         * **petitions.petitions.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -17232,12 +16765,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         slug?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
-        /**
-        * **petitions.petitions.template_id**
-        * - `int4` in database
-        * - `NOT NULL`, no default
-        */
-        template_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
         /**
         * **petitions.petitions.updated_at**
         * - `timestamptz` in database
@@ -17576,7 +17103,6 @@ declare module 'zapatos/schema' {
     "website.content_types": website.content_types.Selectable;
     "website.redirects": website.redirects.Selectable;
     "website.taggings": website.taggings.Selectable;
-    "website.templates": website.templates.Selectable;
     "website.uploads": website.uploads.Selectable;
     "communications.email_messages": communications.email_messages.Selectable;
     "communications.email_sends": communications.email_sends.Selectable;
@@ -17636,7 +17162,6 @@ declare module 'zapatos/schema' {
     "website.content_types": website.content_types.JSONSelectable;
     "website.redirects": website.redirects.JSONSelectable;
     "website.taggings": website.taggings.JSONSelectable;
-    "website.templates": website.templates.JSONSelectable;
     "website.uploads": website.uploads.JSONSelectable;
     "communications.email_messages": communications.email_messages.JSONSelectable;
     "communications.email_sends": communications.email_sends.JSONSelectable;
@@ -17696,7 +17221,6 @@ declare module 'zapatos/schema' {
     "website.content_types": website.content_types.Whereable;
     "website.redirects": website.redirects.Whereable;
     "website.taggings": website.taggings.Whereable;
-    "website.templates": website.templates.Whereable;
     "website.uploads": website.uploads.Whereable;
     "communications.email_messages": communications.email_messages.Whereable;
     "communications.email_sends": communications.email_sends.Whereable;
@@ -17756,7 +17280,6 @@ declare module 'zapatos/schema' {
     "website.content_types": website.content_types.Insertable;
     "website.redirects": website.redirects.Insertable;
     "website.taggings": website.taggings.Insertable;
-    "website.templates": website.templates.Insertable;
     "website.uploads": website.uploads.Insertable;
     "communications.email_messages": communications.email_messages.Insertable;
     "communications.email_sends": communications.email_sends.Insertable;
@@ -17816,7 +17339,6 @@ declare module 'zapatos/schema' {
     "website.content_types": website.content_types.Updatable;
     "website.redirects": website.redirects.Updatable;
     "website.taggings": website.taggings.Updatable;
-    "website.templates": website.templates.Updatable;
     "website.uploads": website.uploads.Updatable;
     "communications.email_messages": communications.email_messages.Updatable;
     "communications.email_sends": communications.email_sends.Updatable;
@@ -17876,7 +17398,6 @@ declare module 'zapatos/schema' {
     "website.content_types": website.content_types.UniqueIndex;
     "website.redirects": website.redirects.UniqueIndex;
     "website.taggings": website.taggings.UniqueIndex;
-    "website.templates": website.templates.UniqueIndex;
     "website.uploads": website.uploads.UniqueIndex;
     "communications.email_messages": communications.email_messages.UniqueIndex;
     "communications.email_sends": communications.email_sends.UniqueIndex;
@@ -17936,7 +17457,6 @@ declare module 'zapatos/schema' {
     "website.content_types": website.content_types.Column;
     "website.redirects": website.redirects.Column;
     "website.taggings": website.taggings.Column;
-    "website.templates": website.templates.Column;
     "website.uploads": website.uploads.Column;
     "communications.email_messages": communications.email_messages.Column;
     "communications.email_sends": communications.email_sends.Column;
@@ -17996,7 +17516,6 @@ declare module 'zapatos/schema' {
     "website.content_types": website.content_types.SQL;
     "website.redirects": website.redirects.SQL;
     "website.taggings": website.taggings.SQL;
-    "website.templates": website.templates.SQL;
     "website.uploads": website.uploads.SQL;
     "communications.email_messages": communications.email_messages.SQL;
     "communications.email_sends": communications.email_sends.SQL;

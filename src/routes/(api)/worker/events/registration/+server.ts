@@ -1,15 +1,18 @@
-import { pino, BelcodaError, json, error } from '$lib/server';
+import { BelcodaError, json, error, pino } from '$lib/server';
 import { signUpQueueMessage } from '$lib/schema/events/events';
 import { parse } from '$lib/schema/valibot';
 import updatePerson from '$lib/server/hooks/website/utils/update_person';
 import { create } from '$lib/server/api/events/attendees.js';
 import { read as readEvent } from '$lib/server/api/events/events';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
-const log = pino('/worker/events/registration');
+const log = pino(import.meta.url);
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
-		const parsed = parse(signUpQueueMessage, body);
+		const parsed = parse(signUpQueueMessage, {
+			event_id: body.event_id,
+			signup: body.signup
+		});
 		const eventObject = await readEvent({
 			instanceId: event.locals.instance.id,
 			eventId: parsed.event_id,

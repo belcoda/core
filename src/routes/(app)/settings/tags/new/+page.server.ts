@@ -2,7 +2,7 @@ import { superValidate, valibot, redirect, pino, formAction } from '$lib/server'
 
 import { create, read } from '$lib/schema/core/tags';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/settings/tags/new/+page.server.ts');
+const log = pino(import.meta.url);
 export async function load(event) {
 	const form = await superValidate(valibot(create));
 	return { form };

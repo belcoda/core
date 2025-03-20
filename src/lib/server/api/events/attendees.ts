@@ -3,7 +3,7 @@ import { parse } from '$lib/schema/valibot';
 import * as schema from '$lib/schema/events/attendees';
 import { exists } from '$lib/server/api/events/events';
 import { exists as personExists } from '$lib/server/api/people/people';
-const log = pino('API:/api/v1/events/attendees/+server.ts');
+const log = pino(import.meta.url);
 function redisString(instanceId: number, eventId: number, personId: number | 'all') {
 	return `i:${instanceId}:events:${eventId}:attendees:${personId}`;
 }
@@ -151,9 +151,10 @@ export async function unsafeListAllForEvent({
 	eventId: number;
 }) {
 	const result = await db
-		.select('events.attendees', { event_id: eventId }) //no pagination
+		.select('events.event_attendees_view', { event_id: eventId }) //no pagination
 		.run(pool);
-	return result;
+	const parsedResult = parse(schema.list.entries.items, result);
+	return parsedResult;
 }
 
 export async function listForEvent({

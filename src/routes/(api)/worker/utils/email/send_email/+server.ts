@@ -2,7 +2,7 @@ import { json, error, pino, BelcodaError } from '$lib/server';
 import { sendEmailMessage as sendEmailSchema } from '$lib/schema/utils/email';
 import sendEmail from '$lib/server/utils/email/send_email_postmark';
 import { markAsComplete } from '$lib/server/api/communications/email/sends.js';
-const log = pino('/worker/utils/email/send_email');
+const log = pino(import.meta.url);
 import { read } from '$lib/server/api/people/people';
 import { create as createSentEmail } from '$lib/server/api/communications/email/sent_emails';
 

@@ -7,7 +7,7 @@ import { create as createPerson } from '$lib/server/api/people/people';
 import { create as createSchema } from '$lib/schema/people/people';
 import { renderName } from '$lib/utils/text/names';
 import { v, parse } from '$lib/schema/valibot';
-const log = pino('/worker/imports/people');
+const log = pino(import.meta.url);
 
 export async function POST(event) {
 	try {

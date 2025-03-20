@@ -1,6 +1,6 @@
 import { json, pino, error } from '$lib/server';
 import { create as createInteraction } from '$lib/server/api/people/interactions';
-const log = pino('WORKER:/utils/people/record_interaction');
+const log = pino(import.meta.url);
 export async function POST(event) {
 	try {
 		const body = await event.request.json();

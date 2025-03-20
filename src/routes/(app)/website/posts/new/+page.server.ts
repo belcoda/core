@@ -11,7 +11,7 @@ import {
 
 import { create, read } from '$lib/schema/website/content';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/website/pages/new/+page.server.ts');
+const log = pino(import.meta.url);
 export async function load(event) {
 	const form = await superValidate(valibot(create));
 	return { form };

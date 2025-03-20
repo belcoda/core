@@ -51,11 +51,11 @@
 	async function saveThread() {
 		try {
 			loading = true;
-			if (template) {
+			if (template && templateMessage.type === 'template') {
 				await threadActions.updateThread({
 					templateMessage,
 					actions,
-					templateName: template.name,
+					templateName: templateMessage.template.name, //template
 					components,
 					messageId: data.thread.template_message_id
 				});

@@ -60,7 +60,7 @@
 
 	const minuteOptions = Array.from({ length: 60 / minuteSteps }, (_, i) => ({
 		value: i * minuteSteps,
-		label: (i * minuteSteps).toString()
+		label: (i * minuteSteps).toString().padStart(2, '0')
 	}));
 
 	const hourOptions = Array.from({ length: 24 }, (_, i) => ({

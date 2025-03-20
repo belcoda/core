@@ -2,7 +2,7 @@ import { WHAPI_API_URL, WHAPI_API_TOKEN } from '$env/static/private';
 import { BelcodaError } from '$lib/server';
 import type { NumericRange } from '@sveltejs/kit';
 import { pino } from '$lib/server';
-const log = pino('/server/utils/whapi/apiClient');
+const log = pino(import.meta.url);
 export async function apiClient({
 	method,
 	endpoint,

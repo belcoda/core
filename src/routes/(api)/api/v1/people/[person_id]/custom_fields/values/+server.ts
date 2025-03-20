@@ -4,7 +4,7 @@ import { setCustomFieldValue } from '$lib/server/api/people/custom_field_values'
 import { setFieldValueFromApi } from '$lib/schema/people/custom_field_values';
 import { parse } from '$lib/schema/valibot';
 
-const log = pino('/api/v1/people/custom_fields/values/:person_id/custom_fields/values');
+const log = pino(import.meta.url);
 
 export async function PUT(event) {
 	try {

@@ -31,7 +31,11 @@ import {
 	create as createInstanceSchema
 } from '$lib/schema/core/instance';
 
-import { create as createInstance, update as updateInstance } from '$lib/server/api/core/instances';
+import {
+	create as createInstance,
+	_updateSetInstalled as _updateInstanceSetInstalled,
+	update as updateInstance
+} from '$lib/server/api/core/instances';
 import { create as createAdmin } from '$lib/server/api/core/admins';
 
 import createTemplates from '$lib/server/utils/install/templates/create_templates';
@@ -39,7 +43,7 @@ import createInstanceSettings from '$lib/server/utils/install/default_instance_s
 
 import createTestData from '$lib/server/utils/install/data/test/testData';
 
-const log = pino('utils:install');
+const log = pino(import.meta.url);
 
 export default async function install(
 	options: InstallOptions,
@@ -70,9 +74,12 @@ export default async function install(
 	// because we're not including an admin ID above, we can use this admin ID to do the sanctions check now we've created the admin
 	await queue('utils/people/match_sanction', instance.id, { adminId: admin.id }, admin.id);
 	log.debug(`sanctions check queued for admin ${admin.id}`);
+
+	// ➡️ Removed user-generated templates from the app. See: https://github.com/belcoda/core/tree/feature/improved_templates
 	const templates = await createTemplates({ instance, t });
 	log.debug(`templates created`);
 	log.debug(templates);
+
 	const newSettings = createInstanceSettings(options, t, templates, admin.id);
 	log.debug(`new settings created`);
 	log.debug(newSettings);
@@ -89,10 +96,8 @@ export default async function install(
 		await createTestData({ instance: updatedInstance, admin, t, queue });
 	}
 	log.debug('updating instance to set installed to true');
-	await updateInstance({
-		instanceId: instance.id,
-		body: { installed: true },
-		t: t
+	await _updateInstanceSetInstalled({
+		instanceId: instance.id
 	});
 	log.debug(`install script complete`);
 

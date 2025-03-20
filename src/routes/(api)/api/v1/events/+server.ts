@@ -2,7 +2,7 @@ import { json, BelcodaError, pino, error } from '$lib/server';
 import * as api from '$lib/server/api/events/events';
 import * as schema from '$lib/schema/events/events';
 import { parse } from '$lib/schema/valibot';
-const log = pino('API:/api/v1/events/+server.ts');
+const log = pino(import.meta.url);
 export async function GET(event) {
 	try {
 		const response = await api.list({
@@ -26,7 +26,6 @@ export async function POST(event) {
 			body: parsed,
 			t: event.locals.t,
 			adminId: event.locals.admin.id,
-			defaultTemplateId: event.locals.instance.settings.events.default_template_id,
 			defaultEmailTemplateId: event.locals.instance.settings.events.default_email_template_id,
 			queue: event.locals.queue
 		});

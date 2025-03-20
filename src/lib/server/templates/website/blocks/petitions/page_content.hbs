@@ -1,0 +1,8 @@
+<div class="prose mb-6 lg:prose-lg xl:prose-xl">
+  <h1>{{petition.heading}}</h1>
+</div>
+{{#if petition.feature_image}}
+<div class="flex justify-center"><img src="{{petition.feature_image.url}}" alt="Petition feature" class="w-auto" />
+</div>
+{{/if}}
+<div class="prose lg:prose-lg xl:prose-xl mt-4">{{{petition.html}}}</div>

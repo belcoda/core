@@ -1,7 +1,7 @@
 import { db, pool, redis, error, BelcodaError, pino, filterQuery } from '$lib/server';
 //import * as schema from '$lib/schema/people/custom_fields';
 import { redisString } from '$lib/server/api/people/people';
-const log = pino('$lib/server/api/people/custom_fields');
+const log = pino(import.meta.url);
 
 import * as schema from '$lib/schema/people/custom_fields';
 import { parse } from '$lib/schema/valibot';

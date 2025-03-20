@@ -1,13 +1,14 @@
 export { db, pool, type s } from '$lib/server/utils/db/index';
 export { pino } from '$lib/server/utils/logs/pino';
 export * as redis from '$lib/server/utils/redis';
-export * as t from '$lib/i18n/localizations';
 export type { SL } from '$lib/i18n/index';
 export { json } from '@sveltejs/kit';
 export { filterQuery } from '$lib/server/utils/filters/filter';
 
+import * as m from '$lib/paraglide/messages';
+
 import { pino } from '$lib/server';
-const log = pino('$lib/server/errors');
+const log = pino(import.meta.url);
 import { error as returnError, type NumericRange } from '@sveltejs/kit';
 import { randomUUID } from 'crypto';
 import { renderValiError } from '$lib/schema/valibot';
@@ -31,9 +32,19 @@ export class BelcodaError extends Error {
 export function error(code: NumericRange<400, 599>, name: string, message: string, err?: unknown) {
 	const id = randomUUID();
 	if (err) {
-		// we want to log eg: database errors
+		const valiErrorOutput = renderValiError(err);
+		if (valiErrorOutput.isValiError) {
+			log.error(`❌ Validation Error 400 [${name}] ${valiErrorOutput.message}} [${id}]`);
+			return returnError(400, {
+				error: true,
+				name: name,
+				message: `${m.cozy_shy_jackal_revive()} ${valiErrorOutput.message}`,
+				id: id
+			});
+		}
 		if (err instanceof BelcodaError) {
-			log.error(`❌ ERROR ${err.code} (${err.name}) ${err.message} [${id}] ❌`);
+			// therefore not a validation Error
+			log.error(`❌ BelcodaError ${err.code} (${err.name}) ${err.message} [${id}] ❌`);
 			if (err.error) log.error(err.error);
 			return returnError(err.code, {
 				error: true,
@@ -41,29 +52,25 @@ export function error(code: NumericRange<400, 599>, name: string, message: strin
 				message: err.message,
 				id: id
 			});
-		} else {
-			const valiErrorOutput = renderValiError(err);
-			if (valiErrorOutput.isValiError) {
-				log.error(
-					`❌ ERROR 400 (ValibotValidationError(${valiErrorOutput.issues.length}): ${valiErrorOutput.name}) ${valiErrorOutput.errorMessage} [${id}] ❌`
-				);
-				valiErrorOutput.issues.forEach((issue) => {
-					log.error(`📝 ${issue}`);
-				});
-				return returnError(400, {
-					error: true,
-					name: name,
-					message: valiErrorOutput.message,
-					id: id
-				});
-			}
-
-			if (err instanceof Error) {
-				log.error(`❌ ERROR (${err.name}) ${err.message} [${id}] ❌`);
-			}
 		}
-		//either way, we're logging the error to capture the stack trace...
-		log.error(err);
+		if (err instanceof Error) {
+			log.error(`❌ Error (${err.name}) ${err.message} [${id}] ❌`);
+			log.error(err);
+			return returnError(code, {
+				error: true,
+				name: err.name,
+				message: err.message,
+				id: id
+			});
+		}
+	} else {
+		log.error(`❌ Error ${code} (${name}) ${message} [${id}] ❌`);
+		return returnError(code, {
+			error: true,
+			name: name,
+			message: message,
+			id: id
+		});
 	}
 
 	log.error(`❌ ERROR ${code} (${name}) ${message} [${id}] ❌`);
@@ -173,7 +180,7 @@ export async function formAction({
 				error: true,
 				output: formMessage(
 					form,
-					new BelcodaError(400, 'VALIDATION', event.locals.t.errors.validation()),
+					new BelcodaError(400, 'VALIDATION', m.sharp_less_shrimp_greet()),
 					{ status: 400 }
 				)
 			};

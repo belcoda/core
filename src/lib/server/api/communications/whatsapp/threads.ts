@@ -8,7 +8,7 @@ import { create as createMessage } from '$lib/server/api/communications/whatsapp
 function redisString(instanceId: number, templateId: number | 'all') {
 	return `i:${instanceId}:whatsapp_threads:${templateId}`;
 }
-const log = pino('api:communications:whatsapp:threads');
+const log = pino(import.meta.url);
 
 export async function exists({
 	instanceId,

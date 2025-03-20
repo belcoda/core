@@ -1,5 +1,4 @@
 <script lang="ts">
-	import '../../app.css';
 	import MainNav from '$lib/comps/nav/menu-bar.svelte';
 	import BottomNav from '$lib/comps/nav/mobile/bottom-nav.svelte';
 	import Sidebar from '$lib/comps/nav/desktop/sidebar.svelte';

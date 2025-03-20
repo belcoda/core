@@ -14,22 +14,6 @@
 <Grid cols={1}>
 	<Card.Root class="mt-4">
 		<Card.Header>
-			<Card.Title>{$page.data.t.pages.config.settings.website.templates.index()}</Card.Title>
-		</Card.Header>
-		<Card.Content>
-			<Grid>
-				<Button variant="outline" href="/settings/website/templates"
-					>{$page.data.t.pages.config.settings.website.templates.index()}</Button
-				>
-				<Button variant="outline" href="/settings/website/templates/new"
-					>{$page.data.t.pages.config.settings.website.templates.new()}</Button
-				>
-			</Grid>
-		</Card.Content>
-	</Card.Root>
-
-	<Card.Root class="mt-4">
-		<Card.Header>
 			<Card.Title>{$page.data.t.pages.config.settings.website.blocks.index()}</Card.Title>
 		</Card.Header>
 		<Card.Content>

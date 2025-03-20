@@ -32,7 +32,6 @@ export function filterInteractions(url?: URL) {
 	if (url?.searchParams.get('display') === 'communications') type = 'communications';
 	if (url?.searchParams.get('display') === 'activity') type = 'activity';
 	//either it's activity, or conditions or simply just not null...
-	console.log(type);
 	const typeConditions =
 		type === 'activity'
 			? db.conditions.isIn(ACTIVITY_INTERACTION_TYPES)

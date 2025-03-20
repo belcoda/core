@@ -6,7 +6,7 @@ import { read as readAdmin } from '$lib/server/api/core/admins';
 const exportSchema = v.object({
 	adminId: id
 });
-const log = pino('worker:utils/people/match_sanction');
+const log = pino(import.meta.url);
 import {
 	OFAC_API_KEY,
 	OFAC_DATA_SOURCES_ARRAY,

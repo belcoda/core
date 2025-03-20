@@ -4,7 +4,7 @@ import * as schema from '$lib/schema/petitions/signatures';
 import { parse } from '$lib/schema/valibot';
 import { read as readPetition } from '$lib/server/api/petitions/petitions';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
-const log = pino('API:/api/v1/events/+server.ts');
+const log = pino(import.meta.url);
 export async function GET(event) {
 	try {
 		const response = await api.listForPetition({

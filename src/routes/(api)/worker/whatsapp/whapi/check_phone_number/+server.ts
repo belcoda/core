@@ -3,7 +3,7 @@ import { whatsappNumberForVerification } from '$lib/schema/people/channels/chann
 import { parse } from '$lib/schema/valibot';
 import { checkContact } from '$lib/server/utils/whapi/contacts';
 import { read, update } from '$lib/server/api/people/people';
-const log = pino('worker:/whatsapp/whapi/check_phone_number');
+const log = pino(import.meta.url);
 export async function POST(event) {
 	try {
 		const body = await event.request.json();

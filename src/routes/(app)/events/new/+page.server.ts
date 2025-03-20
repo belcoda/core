@@ -11,7 +11,7 @@ import {
 
 import { create, read } from '$lib/schema/events/events';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/events/new/+page.server.ts');
+const log = pino(import.meta.url);
 export async function load(event) {
 	const form = await superValidate(
 		{ ...event.locals.instance.settings.events.default_event_info_settings },

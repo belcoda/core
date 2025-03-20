@@ -1,6 +1,6 @@
 import type { MaybePromise, RequestEvent, ResolveOptions } from '@sveltejs/kit';
 import { pino } from '$lib/server';
-const log = pino('$lib/server/hooks/handlers');
+const log = pino(import.meta.url);
 import { buildAdminInstance } from '$lib/server/hooks/build_locals';
 
 import { buildLocalLanguage } from '$lib/server/hooks/build_locals';

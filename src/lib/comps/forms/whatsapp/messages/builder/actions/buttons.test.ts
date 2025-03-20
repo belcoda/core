@@ -24,7 +24,7 @@ describe('addButton', () => {
 			interactive: {
 				...message.interactive,
 				action: {
-					buttons: [{ type: 'reply', id: mockedUUID, title: '[Button title]' }]
+					buttons: [{ type: 'reply', reply: { id: mockedUUID, title: '[Button title]' } }]
 				}
 			}
 		});
@@ -38,7 +38,7 @@ describe('addButton', () => {
 			interactive: {
 				body: { text: 'Hello' },
 				type: 'button',
-				action: { buttons: [{ type: 'reply', id: mockedUUID, title: '[Button title]' }] }
+				action: { buttons: [{ type: 'reply', reply: { id: mockedUUID, title: '[Button title]' } }] }
 			}
 		});
 	});
@@ -55,7 +55,7 @@ describe('addButton', () => {
 				body: { text: 'Look!' },
 				header: { type: 'image', image: { link: 'https://example.com/image.jpg' } },
 				type: 'button',
-				action: { buttons: [{ type: 'reply', id: mockedUUID, title: '[Button title]' }] }
+				action: { buttons: [{ type: 'reply', reply: { id: mockedUUID, title: '[Button title]' } }] }
 			}
 		});
 	});
@@ -75,8 +75,8 @@ describe('removeButton', () => {
 				body: { text: 'Hello' },
 				action: {
 					buttons: [
-						{ type: 'reply' as 'reply', id: mockedUUID, title: 'Button 1' },
-						{ type: 'reply' as 'reply', id: mockedUUID, title: 'Button 2' }
+						{ type: 'reply' as 'reply', reply: { id: mockedUUID, title: 'Button 1' } },
+						{ type: 'reply' as 'reply', reply: { id: mockedUUID, title: 'Button 2' } }
 					]
 				}
 			}
@@ -87,7 +87,7 @@ describe('removeButton', () => {
 			interactive: {
 				...message.interactive,
 				action: {
-					buttons: [{ type: 'reply', id: mockedUUID, title: 'Button 2' }]
+					buttons: [{ type: 'reply', reply: { id: mockedUUID, title: 'Button 2' } }]
 				}
 			}
 		});
@@ -99,7 +99,9 @@ describe('removeButton', () => {
 			interactive: {
 				type: 'button' as 'button',
 				body: { text: 'Hello' },
-				action: { buttons: [{ type: 'reply' as 'reply', id: mockedUUID, title: 'Button 1' }] }
+				action: {
+					buttons: [{ type: 'reply' as 'reply', reply: { id: mockedUUID, title: 'Button 1' } }]
+				}
 			}
 		};
 
@@ -116,7 +118,7 @@ describe('removeButton', () => {
 				type: 'button' as 'button',
 				body: { text: 'Hello' },
 				header: { type: 'image' as 'image', image: { link: 'https://example.com/image.jpg' } },
-				action: { buttons: [{ type: 'reply' as 'reply', id: '1', title: 'Button 1' }] }
+				action: { buttons: [{ type: 'reply' as 'reply', reply: { id: '1', title: 'Button 1' } }] }
 			}
 		};
 

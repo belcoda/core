@@ -1,36 +1,29 @@
-import { json, error, pino, BelcodaError } from '$lib/server';
+import { json, error, pino } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
-import {
-	yCloudWebhook,
-	type WhatsappInboundMessage
-} from '$lib/schema/communications/whatsapp/webhooks/ycloud';
-const log = pino('WORKER:/webhooks/whatsapp/+server.ts');
+import { yCloudWebhook } from '$lib/schema/communications/whatsapp/webhooks/ycloud';
+const log = pino(import.meta.url);
 
 import { create as createReceivedMessage } from '$lib/server/api/communications/whatsapp/received_messages';
 import { create as createInteraction } from '$lib/server/api/people/interactions';
 import { create as createInteractionSchema } from '$lib/schema/people/interactions';
-import { _createPersonByWhatsappId, _getPersonByWhatsappId } from '$lib/server/api/people/people';
+import { getPersonOrCreatePersonByWhatsappId } from '$lib/server/api/people/people';
 import { triggerAction } from '$lib/schema/communications/actions/actions';
-import {
-	_getInstanceIdByEventId,
-	_getInstanceIdByPetitionId
-} from '$lib/server/api/core/instances.js';
-import type { RequestEvent } from './$types.js';
-import { signatureQueueMessage } from '$lib/schema/petitions/petitions.js';
-import type { Read as Instance } from '$lib/schema/core/instance.js';
-import { signUpQueueMessage, type SignupQueueMessage } from '$lib/schema/events/events.js';
+import { registerPersonForEvent } from '$lib/server/api/events/signups.js';
+import { signPetition } from '$lib/server/api/petitions/signatures.js';
 
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
 		const parsed = parse(yCloudWebhook, body);
 		if (parsed.type === 'whatsapp.inbound_message.received') {
-			//const contact = value.contacts[index];
-			const person = await getPerson(
+			// We need to create the person if we cannot find them by whatsapp ID. A person
+			// is required for event and petition signups
+			const person = await getPersonOrCreatePersonByWhatsappId(
 				event.locals.instance.id,
 				parsed.whatsappInboundMessage.from,
 				parsed.whatsappInboundMessage,
-				event
+				event.locals.t,
+				event.locals.queue
 			);
 			const receivedMessageToCreate = {
 				person_id: person.id,
@@ -71,8 +64,31 @@ export async function POST(event) {
 							person_id: person.id,
 							received_whatsapp_message_id: receivedMessage.id,
 							action_id: payload,
-							queueMessage: getSignupQueueMessage(payload, message, event.locals.instance)
+							data: message
 						});
+						await event.locals.queue(
+							'/utils/communications/actions',
+							event.locals.instance.id,
+							actionParsed,
+							event.locals.admin.id
+						);
+					}
+				} catch (err) {
+					log.error(err);
+				}
+			} else if (message.type === 'interactive') {
+				try {
+					if (message.interactive && message.interactive.button_reply) {
+						const payload = message.interactive.button_reply.id; //this is the uuid of the action...
+
+						const actionParsed = parse(triggerAction, {
+							type: 'whatsapp_message',
+							person_id: person.id,
+							received_whatsapp_message_id: receivedMessage.id,
+							action_id: payload,
+							data: message
+						});
+						log.debug(actionParsed, 'handling incoming interactive message');
 						await event.locals.queue(
 							'/utils/communications/actions',
 							event.locals.instance.id,
@@ -98,10 +114,16 @@ export async function POST(event) {
 				const id = identifier[2]; // The numeric ID
 				switch (action) {
 					case 'SIGNUP':
-						registerPersonForEvent(id, message, event);
+						registerPersonForEvent(
+							id,
+							message,
+							event.locals.admin.id,
+							event.locals.t,
+							event.locals.queue
+						);
 						break;
 					case 'PETITION':
-						signPetition(id, message, event);
+						signPetition(id, message, event.locals.admin.id, event.locals.t, event.locals.queue);
 						break;
 					default:
 						return error(400, 'WORKER:/webhooks/whatsapp/+server.ts', 'Unknown action');
@@ -117,100 +139,4 @@ export async function POST(event) {
 			err
 		);
 	}
-}
-
-async function registerPersonForEvent(
-	eventId: string,
-	message: WhatsappInboundMessage,
-	event: RequestEvent
-) {
-	const instance = await _getInstanceIdByEventId(eventId);
-	const person = await getPerson(instance.id, message.from, message, event);
-
-	if (person) {
-		// Send to events/registration queue
-		const parsed = parse(signUpQueueMessage, {
-			event_id: Number(eventId),
-			signup: {
-				full_name: message.customerProfile?.name,
-				phone_number: message.from,
-				country: instance.country,
-				message: message,
-				email: null,
-				opt_in: true
-			}
-		});
-		await event.locals.queue('/events/registration', instance.id, parsed, event.locals.admin.id);
-	}
-}
-
-async function getPerson(
-	instanceId: number,
-	whatsappId: string,
-	message: WhatsappInboundMessage,
-	event: RequestEvent
-) {
-	try {
-		return await _getPersonByWhatsappId({
-			instanceId,
-			whatsappId,
-			t: event.locals.t
-		});
-	} catch (err) {
-		if (err instanceof BelcodaError && err.code === 404) {
-			log.debug('Person not found by whatsappId. Creating person');
-			return await _createPersonByWhatsappId({
-				instanceId,
-				whatsappId,
-				name: message.customerProfile?.name,
-				t: event.locals.t,
-				queue: event.locals.queue
-			});
-		} else {
-			throw err;
-		}
-	}
-}
-
-async function signPetition(
-	petitionId: string,
-	message: WhatsappInboundMessage,
-	event: RequestEvent
-) {
-	const instance = await _getInstanceIdByPetitionId(petitionId);
-	const person = await getPerson(instance.id, message.from, message, event);
-
-	if (person) {
-		const parsed = parse(signatureQueueMessage, {
-			petition_id: Number(petitionId),
-			signup: {
-				full_name: message.customerProfile?.name,
-				phone_number: message.from,
-				country: instance.country,
-				whatsapp_id: message.from,
-				whatsapp_message_id: message.id,
-				message: message,
-				opt_in: true,
-				email: null
-			}
-		});
-		await event.locals.queue('/petitions/signature', instance.id, parsed, event.locals.admin.id);
-	}
-}
-
-function getSignupQueueMessage(
-	eventId: string,
-	message: WhatsappInboundMessage,
-	instance: Instance
-): SignupQueueMessage {
-	return {
-		event_id: Number(eventId),
-		signup: {
-			full_name: message.customerProfile?.name,
-			phone_number: message.from,
-			country: instance.country,
-			opt_in: true,
-			email: null
-		}
-	};
 }

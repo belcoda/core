@@ -11,7 +11,7 @@ import convertWebhookMessage from './convertMessages';
 import { create } from '$lib/server/api/communications/whatsapp/received_whatsapp_group_messages';
 import { type Create } from '$lib/schema/communications/whatsapp/received_whatsapp_group_messages';
 
-const log = pino('worker:whatsapp/whapi/webhook');
+const log = pino(import.meta.url);
 
 export async function POST(event) {
 	try {

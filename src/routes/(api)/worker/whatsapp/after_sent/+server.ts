@@ -12,7 +12,7 @@ import { read as readTemplate } from '$lib/server/api/communications/whatsapp/te
 import { type Create } from '$lib/schema/communications/whatsapp/sent_whatsapp_messages';
 import type { InteractionTypeOutboundWhatsapp } from '$lib/schema/people/interactions';
 
-const log = pino('WORKER:/whatsapp/after_sent/+server.ts');
+const log = pino(import.meta.url);
 export async function POST(event) {
 	try {
 		const body = await event.request.json();

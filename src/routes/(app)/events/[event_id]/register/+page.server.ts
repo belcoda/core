@@ -17,7 +17,7 @@ import { parse } from '$lib/schema/valibot';
 
 import { read } from '$lib/schema/events/events';
 
-const log = pino('(app)/events/[event_id]/register/+page.server.ts');
+const log = pino(import.meta.url);
 export async function load(event) {
 	//event.url.searchParams.append('isRegisteredForEvent', event.params.event_id);
 	const url = new URL(event.url);
