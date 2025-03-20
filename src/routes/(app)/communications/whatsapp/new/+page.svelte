@@ -8,20 +8,21 @@
 	});
 	const { form: formData, enhance, message } = form;
 	import PageHeader from '$lib/comps/layout/PageHeader.svelte';
+	import * as m from '$lib/paraglide/messages';
 </script>
 
-<PageHeader title={data.t.pages.communications.whatsapp.new()} />
+<PageHeader title={m.aware_many_camel_zip()} />
 
 <form method="post" use:enhance>
 	<Grid cols={1} class="mt-6">
 		<Error error={$message} />
 		<Input
-			label={data.t.forms.fields.generic.name.label()}
+			label={m.extra_wild_earthworm_commend()}
 			{form}
 			name="name"
 			bind:value={$formData.name}
 		/>
-		<Button type="submit">{data.t.forms.buttons.save()}</Button>
+		<Button type="submit">{m.empty_warm_squirrel_chop()}</Button>
 		<Debug data={$formData} />
 	</Grid>
 </form>

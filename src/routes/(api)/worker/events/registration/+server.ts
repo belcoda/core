@@ -6,6 +6,7 @@ import updatePerson from '$lib/server/hooks/website/utils/update_person';
 import { create } from '$lib/server/api/events/attendees.js';
 import { read as readEvent } from '$lib/server/api/events/events';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
+import * as m from '$lib/paraglide/messages';
 const log = pino(import.meta.url);
 export async function POST(event) {
 	try {
@@ -35,7 +36,7 @@ export async function POST(event) {
 			throw new BelcodaError(
 				400,
 				'WORKER:/events/registration:01',
-				event.locals.t.errors.generic(),
+				m.teary_dizzy_earthworm_urge(),
 				err
 			);
 		});
@@ -79,6 +80,6 @@ export async function POST(event) {
 
 		return json({ success: true });
 	} catch (err) {
-		return error(500, 'WORKER:/events/registration:02', event.locals.t.errors.generic(), err);
+		return error(500, 'WORKER:/events/registration:02', m.teary_dizzy_earthworm_urge(), err);
 	}
 }

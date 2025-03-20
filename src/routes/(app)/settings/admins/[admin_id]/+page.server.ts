@@ -7,7 +7,7 @@ import {
 	BelcodaError,
 	type Infer
 } from '$lib/server';
-
+import * as m from '$lib/paraglide/messages';
 import { update, read } from '$lib/schema/core/admin';
 import { parse } from '$lib/schema/valibot';
 
@@ -27,11 +27,9 @@ export const actions = {
 			valibot(update)
 		);
 		if (!form.valid) {
-			return message(
-				form,
-				new BelcodaError(400, 'VALIDATION', event.locals.t.errors.validation()),
-				{ status: 400 }
-			);
+			return message(form, new BelcodaError(400, 'VALIDATION', m.spare_mushy_dachshund_quell()), {
+				status: 400
+			});
 		}
 		const content = await event
 			.fetch(`/api/v1/admins/${event.params.admin_id}`, {
@@ -44,7 +42,7 @@ export const actions = {
 			.then((res) => res.json());
 		return redirect(event, {
 			location: `/settings/admins`,
-			message: event.locals.t.forms.actions.updated()
+			message: m.white_acidic_koala_pop()
 		});
 	}
 };

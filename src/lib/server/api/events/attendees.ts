@@ -1,5 +1,8 @@
 import { db, pool, redis, pino, BelcodaError, filterQuery } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
+
+import * as m from '$lib/paraglide/messages';
+
 import * as schema from '$lib/schema/events/attendees';
 import { exists } from '$lib/server/api/events/events';
 import { exists as personExists } from '$lib/server/api/people/people';
@@ -59,7 +62,7 @@ export async function read({
 		.selectExactlyOne('events.event_attendees_view', { event_id: eventId, person_id: personId })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:EVENTS:ATTENDEES:READ:01', t.errors.not_found(), err);
+			throw new BelcodaError(404, 'DATA:EVENTS:ATTENDEES:READ:01', m.pretty_tired_fly_lead(), err);
 		});
 	const parsedResult = parse(schema.read, result);
 	await redis.set(redisString(instanceId, eventId, personId), parsedResult);

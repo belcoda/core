@@ -2,7 +2,7 @@ import { json, error, BelcodaError } from '$lib/server';
 
 import { incomingWebhook } from '$lib/schema/communications/whatsapp/whapi/incoming';
 import { parse } from '$lib/schema/valibot';
-
+import * as m from '$lib/paraglide/messages';
 import { pino } from '$lib/server';
 import { _getGroupByWhatsappId } from '$lib/server/api/people/groups';
 import { _getPersonByWhatsappId } from '$lib/server/api/people/people';
@@ -71,7 +71,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'WORKER:/worker/whatsapp/whapi/webhook:POST:01',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

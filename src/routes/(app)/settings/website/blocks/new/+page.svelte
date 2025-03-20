@@ -22,65 +22,66 @@
 		dataType: 'json'
 	});
 	const { form: formData, enhance, message } = form;
+	import * as m from '$lib/paraglide/messages';
 </script>
 
 <form method="post" use:enhance>
 	<Grid cols={1}>
-		<H1>{data.t.pages.config.settings.website.blocks.new()}</H1>
+		<H1>{m.empty_pretty_falcon_amuse()}</H1>
 		<Error error={$message} />
 
 		<Input
 			{form}
 			name="name"
-			label={data.t.forms.fields.generic.name.label()}
+			label={m.extra_wild_earthworm_commend()}
 			bind:value={$formData.name as string}
 		/>
 
 		<Input
 			{form}
 			name="slug"
-			label={data.t.forms.fields.generic.slug.label()}
-			description={data.t.forms.fields.generic.slug.description()}
+			label={m.cool_heavy_lion_promise()}
+			description={m.legal_dull_okapi_taste()}
 			bind:value={$formData.slug as string}
 		/>
 
 		<Textarea
 			{form}
 			name="description"
-			label={data.t.forms.fields.generic.description.label()}
+			label={m.livid_spicy_felix_dance()}
 			bind:value={$formData.description as string}
 		/>
 		<HTML
 			{form}
 			name="html"
-			label={data.t.forms.fields.generic.html.label()}
+			label={m.whole_sweet_slug_attend()}
 			description={null}
 			bind:value={$formData.html as string}
 		/>
 
 		<Collapsible class="mb-4">
 			{#snippet trigger()}
-				{data.t.forms.fields.custom_code.header()}
+				{'Custom code'}
 			{/snippet}
 			<Grid cols={1}>
 				<Code
 					{form}
 					name="custom_css"
-					label={data.t.forms.fields.custom_code.custom_css.label()}
-					options={{language: 'css', lineNumbers: true, value: $formData.custom_css as string}}
+					label={m.teary_sharp_starfish_honor()}
+					options={{ language: 'css', lineNumbers: true, value: $formData.custom_css as string }}
 					bind:value={$formData.custom_css as string}
 				/>
 				<Code
 					{form}
 					name="custom_js"
-					label={data.t.forms.fields.custom_code.custom_js.label()}
-					options={{language: 'js', lineNumbers: true, value: $formData.custom_js as string}}
+					label={m.plain_real_clownfish_flow()}
+					options={{ language: 'js', lineNumbers: true, value: $formData.custom_js as string }}
 					bind:value={$formData.custom_js as string}
 				/>
 			</Grid>
 		</Collapsible>
 
-		<Button type="submit">{data.t.forms.buttons.save()}</Button>
+		<Button type="submit">{m.empty_warm_squirrel_chop()}</Button>
 		<Debug data={$formData} />
 	</Grid>
 </form>

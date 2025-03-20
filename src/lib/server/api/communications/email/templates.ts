@@ -1,6 +1,7 @@
 import { db, pool, redis, filterQuery, BelcodaError, pino } from '$lib/server';
 import * as schema from '$lib/schema/communications/email/templates';
 import { parse } from '$lib/schema/valibot';
+import * as m from '$lib/paraglide/messages';
 const log = pino(import.meta.url);
 
 function redisString(instanceId: number, templateId: number | 'all') {
@@ -46,7 +47,7 @@ export async function read({
 			throw new BelcodaError(
 				404,
 				'DATA:COMMUNICATIONS:EMAIL:TEMPLATES:READ:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});
@@ -104,7 +105,7 @@ export async function update({
 		throw new BelcodaError(
 			404,
 			'DATA:COMMUNICATIONS:EMAIL:TEMPLATES:UPDATE:01',
-			t.errors.not_found()
+			m.pretty_tired_fly_lead()
 		);
 	}
 	const parsedUpdated = parse(schema.read, updated[0]);

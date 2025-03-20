@@ -23,52 +23,51 @@
 	const { form: formData, enhance, message } = form;
 	let editHTML = true;
 	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 </script>
 
 <form method="post" use:enhance>
 	<Grid cols={1}>
-		<H1>{$page.data.t.pages.config.settings.communications.email.templates.new()}</H1>
+		<H1>{m.fancy_factual_samuel_surge()}</H1>
 		<Error error={$message} />
 		<Input
 			{form}
 			name="name"
-			label={data.t.forms.fields.generic.name.label()}
+			label={m.extra_wild_earthworm_commend()}
 			bind:value={$formData.name as string}
 		/>
 		<Grid>
 			<Input
 				{form}
 				name="from"
-				label={data.t.forms.fields.email.from.label()}
+				label={m.gross_chunky_leopard_glow()}
 				bind:value={$formData.from as string}
 			/>
 			<Input
 				{form}
 				name="reply_to"
-				label={data.t.forms.fields.email.reply_to.label()}
+				label={m.dark_real_jay_fear()}
 				bind:value={$formData.reply_to as string}
 			/>
 		</Grid>
 		<Input
 			{form}
 			name="subject"
-			label={data.t.forms.fields.email.subject.label()}
+			label={m.sweet_busy_gull_lock()}
 			bind:value={$formData.subject as string}
 		/>
 		<Textarea
 			{form}
 			name="preview_text"
-			label={data.t.forms.fields.email.preview_text.label()}
+			label={m.bad_tired_buzzard_skip()}
 			bind:value={$formData.preview_text as string}
 		/>
 		<div>
 			<div class="flex justify-between items-baseline mb-2">
-				<Label>{data.t.forms.fields.email.body.label()}</Label>
+				<Label>{m.these_sharp_felix_jump()}</Label>
 				<div class="flex gap-2 items-center">
 					<Label class="text-muted-foreground"
-						>{editHTML
-							? data.t.forms.fields.generic.html.label()
-							: data.t.forms.fields.generic.plain_text.label()}</Label
+						>{editHTML ? m.whole_sweet_slug_attend() : m.green_broad_porpoise_advise()}</Label
 					>
 					<Switch bind:checked={editHTML} />
 				</div>
@@ -87,10 +86,10 @@
 		<Checkbox
 			{form}
 			name="active"
-			label={data.t.forms.fields.generic.active.label()}
+			label={m.extra_upper_badger_zip()}
 			bind:checked={$formData.active as boolean}
 		/>
-		<Button type="submit">{data.t.forms.buttons.save()}</Button>
+		<Button type="submit">{m.empty_warm_squirrel_chop()}</Button>
 		<Debug data={$formData} />
 	</Grid>
 </form>

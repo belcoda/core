@@ -2,6 +2,7 @@ import { error, json } from '$lib/server';
 import { sendTestEmail } from '$lib/schema/communications/email/messages';
 import { parse } from '$lib/schema/valibot';
 import { read } from '$lib/server/api/communications/email/messages';
+import * as m from '$lib/paraglide/messages';
 export async function PUT(event) {
 	try {
 		const body = await event.request.json();
@@ -22,7 +23,7 @@ export async function PUT(event) {
 		return error(
 			500,
 			'API:/api/v1/communications/emails/messages/[message_id]:PUT01',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

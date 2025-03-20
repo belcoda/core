@@ -5,6 +5,7 @@
 	import Breadcrumb from '$lib/comps/nav/breadcrumbs/breadcrumbs.svelte';
 	import Footer from '$lib/comps/nav/footer/footer.svelte';
 	import { page } from '$app/state';
+	import * as m from '$lib/paraglide/messages';
 	import {
 		breadcrumbs as breadcrumbsConstructor,
 		renderBreadcrumb
@@ -35,7 +36,7 @@
 				page.data.pageTitle
 			);
 		} catch (err) {
-			return page.data.t.pages.home.index();
+			return m.smart_super_peacock_explore();
 		}
 	});
 	const { children } = $props();

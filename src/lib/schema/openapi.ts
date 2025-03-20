@@ -1,7 +1,7 @@
 /* import { API_KEY_HEADER } from '$env/static/private';
 import { Localization, DEFAULT_LANGUAGE } from '$lib/i18n';
 const t = new Localization(DEFAULT_LANGUAGE);
-
+import * as m from '$lib/paraglide/messages';
 type SchemaType = 'string' | 'integer';
 type StatusCode =
 	| '200'
@@ -191,7 +191,7 @@ function generateResponses(success: SuccessResponse, errors: ErrorResponse[], ha
 		description: 'Internal Server Error',
 		content: {
 			'application/json': {
-				schema: generateError('Internal Server Error', t.errors.http[500]())
+				schema: generateError('Internal Server Error', m.spry_ago_baboon_cure())
 			}
 		}
 	};
@@ -199,7 +199,7 @@ function generateResponses(success: SuccessResponse, errors: ErrorResponse[], ha
 		description: 'Forbidden',
 		content: {
 			'application/json': {
-				schema: generateError('Forbidden', t.errors.http[403]())
+				schema: generateError('Forbidden', m.full_grand_pelican_assure())
 			}
 		}
 	}),
@@ -207,7 +207,7 @@ function generateResponses(success: SuccessResponse, errors: ErrorResponse[], ha
 			description: 'Unauthorized',
 			content: {
 				'application/json': {
-					schema: generateError('Unauthorized', t.errors.http[401]())
+					schema: generateError('Unauthorized', m.due_swift_lizard_list())
 				}
 			}
 		});
@@ -216,7 +216,7 @@ function generateResponses(success: SuccessResponse, errors: ErrorResponse[], ha
 			description: 'Not Found',
 			content: {
 				'application/json': {
-					schema: generateError('Not Found', t.errors.http[404]())
+					schema: generateError('Not Found', m.that_tasty_dove_pop())
 				}
 			}
 		};

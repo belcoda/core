@@ -8,19 +8,22 @@
 		validators: valibotClient(create)
 	});
 	const { form: formData, enhance, message } = form;
+	import * as m from '$lib/paraglide/messages';
 </script>
 
-<PageHeader title={data.t.pages.config.settings.tags.new()} />
+<PageHeader title={m.gray_low_blackbird_spark()} />
 <form use:enhance method="POST" class="mt-6">
 	<Grid cols={1}>
 		<Error error={$message} />
 		<Input
 			{form}
-			label={data.t.forms.fields.generic.name.label()}
+			label={m.extra_wild_earthworm_commend()}
 			bind:value={$formData.name}
 			name="name"
 		/>
-		<div class="flex justify-end"><Button type="submit">{data.t.forms.buttons.save()}</Button></div>
+		<div class="flex justify-end">
+			<Button type="submit">{m.empty_warm_squirrel_chop()}</Button>
+		</div>
 		<Debug data={$formData} />
 	</Grid>
 </form>

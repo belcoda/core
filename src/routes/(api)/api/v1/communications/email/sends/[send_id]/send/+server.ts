@@ -2,6 +2,7 @@ import { json, error, BelcodaError } from '$lib/server';
 import { update } from '$lib/server/api/communications/email/sends';
 import { sendToList } from '$lib/schema/communications/email/sends';
 import { parse } from '$lib/schema/valibot';
+import * as m from '$lib/paraglide/messages';
 export async function PUT(event) {
 	try {
 		const body = await event.request.json();
@@ -16,7 +17,7 @@ export async function PUT(event) {
 			throw new BelcodaError(
 				400,
 				'API:/communications/email/sends/[send_id]/send:02',
-				event.locals.t.errors.generic()
+				m.teary_dizzy_earthworm_urge()
 			);
 		await event.locals.queue(
 			'/utils/email/send_to_list',
@@ -29,7 +30,7 @@ export async function PUT(event) {
 		return error(
 			500,
 			'API:/communications/email/sends/[send_id]/send:01',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

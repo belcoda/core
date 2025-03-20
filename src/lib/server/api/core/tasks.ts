@@ -2,6 +2,8 @@ import { BelcodaError, db, redis, pool, pino, filterQuery } from '$lib/server';
 import * as schema from '$lib/schema/core/tasks';
 import { parse } from '$lib/schema/valibot';
 
+import * as m from '$lib/paraglide/messages';
+
 export function redisString(instanceId: number, adminId: number, completed: boolean): string {
 	return `i:${instanceId}:tasks:${adminId}:${completed ? 'c' : 'nc'}`;
 }
@@ -19,7 +21,7 @@ export async function exists({
 		.selectExactlyOne('tasks', { instance_id: instanceId, id: taskId })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:TASKS:EXISTS:01', t.errors.not_found(), err);
+			throw new BelcodaError(404, 'DATA:TASKS:EXISTS:01', m.pretty_tired_fly_lead(), err);
 		});
 }
 
@@ -50,7 +52,7 @@ export async function create({
 		)
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:TASKS:UPDATE:02', t.errors.not_found(), err);
+			throw new BelcodaError(404, 'DATA:TASKS:UPDATE:02', m.pretty_tired_fly_lead(), err);
 		});
 	const parsedInserted = parse(schema.read, selected);
 	await redis.del(redisString(instanceId, adminId, false));
@@ -75,7 +77,7 @@ export async function update({
 		.update('tasks', parsed, { instance_id: instanceId, id: taskId })
 		.run(pool);
 	if (updated.length !== 1) {
-		throw new BelcodaError(404, 'DATA:TASKS:UPDATE:01', t.errors.not_found());
+		throw new BelcodaError(404, 'DATA:TASKS:UPDATE:01', m.pretty_tired_fly_lead());
 	}
 	await redis.del(redisString(instanceId, adminId, false));
 	await redis.del(redisString(instanceId, adminId, true));
@@ -91,7 +93,7 @@ export async function update({
 		)
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:TASKS:UPDATE:02', t.errors.not_found(), err);
+			throw new BelcodaError(404, 'DATA:TASKS:UPDATE:02', m.pretty_tired_fly_lead(), err);
 		});
 	const parsedUpdated = parse(schema.read, selected);
 	return parsedUpdated;

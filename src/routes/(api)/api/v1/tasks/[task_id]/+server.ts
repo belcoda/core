@@ -1,6 +1,6 @@
 import { error, json } from '$lib/server';
 import * as api from '$lib/server/api/core/tasks';
-
+import * as m from '$lib/paraglide/messages';
 export async function PUT(event) {
 	try {
 		const body = await event.request.json();
@@ -13,6 +13,6 @@ export async function PUT(event) {
 		});
 		return json(task);
 	} catch (err) {
-		return error(500, 'API:/tasks/[task_id]:PUT:01', event.locals.t.errors.http[500](), err);
+		return error(500, 'API:/tasks/[task_id]:PUT:01', m.spry_ago_baboon_cure(), err);
 	}
 }

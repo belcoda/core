@@ -1,4 +1,5 @@
 import { db, pool, redis, type s, BelcodaError, filterQuery, pino } from '$lib/server';
+import * as m from '$lib/paraglide/messages';
 import { parse } from '$lib/schema/valibot';
 import * as schema from '$lib/schema/petitions/petitions';
 import type { Read as ReadInstance } from '$lib/schema/core/instance';
@@ -37,7 +38,12 @@ export async function exists({
 		.selectExactlyOne('petitions.petitions', { instance_id: instanceId, id: petitionId })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:PETITIONS:PETITIONS:EXISTS:01', t.errors.not_found(), err);
+			throw new BelcodaError(
+				404,
+				'DATA:PETITIONS:PETITIONS:EXISTS:01',
+				m.pretty_tired_fly_lead(),
+				err
+			);
 		});
 	return true;
 }
@@ -131,10 +137,15 @@ export async function update({
 		.update('petitions.petitions', parsed, { instance_id: instanceId, id: petitionId })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:PETITIONS:PETITIONS:UPDATE:01', t.errors.not_found(), err);
+			throw new BelcodaError(
+				404,
+				'DATA:PETITIONS:PETITIONS:UPDATE:01',
+				m.pretty_tired_fly_lead(),
+				err
+			);
 		});
 	if (updated.length !== 1)
-		throw new BelcodaError(404, 'DATA:PETITIONS:PETITIONS:UPDATE:02', t.errors.not_found());
+		throw new BelcodaError(404, 'DATA:PETITIONS:PETITIONS:UPDATE:02', m.pretty_tired_fly_lead());
 	await redis.del(redisString(instanceId, 'all'));
 	await redis.del(redisString(instanceId, petitionId));
 	const returned = await read({ instanceId, petitionId: petitionId, t: t });
@@ -180,7 +191,7 @@ export async function read({
 		)
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:EVENTS:READ:01', t.errors.not_found(), err);
+			throw new BelcodaError(404, 'DATA:EVENTS:READ:01', m.pretty_tired_fly_lead(), err);
 		});
 	const parsedResult = parse(schema.read, result);
 	await redis.set(redisString(instanceId, petitionId), parsedResult);

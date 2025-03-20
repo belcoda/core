@@ -8,6 +8,7 @@ import {
 	type RenderStatus
 } from '$lib/server/hooks/website/render';
 import { pino } from '$lib/server';
+import * as m from '$lib/paraglide/messages';
 const log = pino(import.meta.url);
 const error404 = {
 	title: 'Error',
@@ -75,7 +76,7 @@ export default async function ({
 			if (err instanceof Error) {
 				status.error = err.message;
 			} else {
-				status.error = event.locals.t.errors.generic();
+				status.error = m.teary_dizzy_earthworm_urge();
 			}
 		}
 	}

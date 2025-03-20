@@ -1,7 +1,7 @@
 import type { InstallOptions } from '$lib/server/utils/install/index';
 import { type SettingsInput } from '$lib/schema/core/instance';
 import { PUBLIC_HOST, PUBLIC_ROOT_DOMAIN } from '$env/static/public';
-
+import * as m from '$lib/paraglide/messages';
 // ➡️ Removed user-generated templates from the app. See: https://github.com/belcoda/core/tree/feature/improved_templates
 
 import createTemplates from '$lib/server/utils/install/templates/create_templates';
@@ -44,24 +44,24 @@ export default function (
 			favicon: options.faviconUrl || `${PUBLIC_HOST}/logos/favicon.svg`,
 			header_links: [
 				{
-					text: t.communications.website.menus.default.items.home.title(),
+					text: m.agent_lime_puma_trip(),
 					url: homePageUrl,
 					new_tab: false
 				},
 				{
-					text: t.communications.website.menus.default.items.events.title(),
+					text: m.wise_cozy_warbler_grow(),
 					url: `${homePageUrl}/events`,
 					new_tab: false
 				}
 			],
 			footer_links: [
 				{
-					text: t.communications.website.menus.default.items.home.title(),
+					text: m.agent_lime_puma_trip(),
 					url: homePageUrl,
 					new_tab: false
 				},
 				{
-					text: t.communications.website.menus.default.items.events.title(),
+					text: m.agent_lime_puma_trip(),
 					url: `${homePageUrl}/events`,
 					new_tab: false
 				}

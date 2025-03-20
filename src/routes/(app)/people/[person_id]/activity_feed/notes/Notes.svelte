@@ -6,6 +6,7 @@
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import TextArea from '$lib/comps/ui/textarea/textarea.svelte';
 	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 	import EditHistory from './EditHistory.svelte';
 	let showEditHistory: boolean = $state(false);
 	type Props = {
@@ -26,9 +27,7 @@
 	<ActivityItem
 		{interaction}
 		{person}
-		activityMessage={$page.data.t.people.interactions.interactionMessage.notes(
-			interaction.admin.full_name
-		)}
+		activityMessage={m.cool_cozy_pigeon_buy({ adminName: interaction.admin.full_name })}
 		class="bg-yellow-100"
 	>
 		{#if edit}
@@ -44,7 +43,7 @@
 							});
 							interaction = newInteraction;
 							edit = false;
-						}}>{$page.data.t.forms.buttons.save()}</Button
+						}}>{m.empty_warm_squirrel_chop()}</Button
 					>
 				</div>
 			</div>
@@ -69,7 +68,7 @@
 		{#snippet button()}
 			<div>
 				<Button variant="outline" size="xs" onclick={() => (edit = !edit)}
-					>{$page.data.t.forms.buttons.edit()}</Button
+					>{m.giant_misty_shrimp_stop()}</Button
 				>
 			</div>
 		{/snippet}

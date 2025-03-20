@@ -2,6 +2,7 @@ import { db, pool, redis, BelcodaError, filterQuery } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 import * as schema from '$lib/schema/events/signups';
 import { exists } from '$lib/server/api/events/events';
+import * as m from '$lib/paraglide/messages';
 import {
 	getPersonOrCreatePersonByWhatsappId,
 	exists as personExists
@@ -47,7 +48,7 @@ export async function update({
 		.update('events.signups', parsed, { event_id: eventId, person_id: personId })
 		.run(pool);
 	if (result.length !== 1)
-		throw new BelcodaError(404, 'DATA:EVENTS:SIGNUPS:UPDATE:01', t.errors.not_found());
+		throw new BelcodaError(404, 'DATA:EVENTS:SIGNUPS:UPDATE:01', m.pretty_tired_fly_lead());
 	const parsedResult = parse(schema.read, result);
 	return parsedResult;
 }
