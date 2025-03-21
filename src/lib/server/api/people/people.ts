@@ -258,22 +258,27 @@ export async function read({
 	instance_id,
 	person_id,
 	t,
-	url
+	url,
+	includeDeleted
 }: {
 	instance_id: number;
 	person_id: number;
 	t: App.Localization;
 	url?: URL;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instance_id, person_id));
 	if (cached) {
-		return v.parse(schema.read, cached);
+		const parsed = v.parse(schema.read, cached);
+		if (!includeDeleted && parsed.deleted_at) {
+			return error(404, 'DATA:PEOPLE:PEOPLE:READ:01', t.errors.not_found());
+		}
+		return parsed;
 	}
-	const interactionsCondition = filterInteractions(url);
 	const person = await db
 		.selectExactlyOne(
 			'people.people',
-			{ instance_id, id: person_id },
+			{ instance_id, id: person_id, ...(!includeDeleted && { deleted_at: db.sql`NULL` }) },
 			{
 				lateral: {
 					custom_fields: db.select(
@@ -314,15 +319,17 @@ export async function read({
 export async function getIdsFromEmailPhoneNumber({
 	instanceId,
 	email,
-	phoneNumber
+	phoneNumber,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	email?: string | null;
 	phoneNumber?: string | null;
+	includeDeleted?: boolean;
 }): Promise<number[]> {
 	log.debug('getIdsFromEmailPhoneNumber');
 	const peopleIds = await db.sql<s.people.people.SQL, s.people.people.Selectable[]>`
-	SELECT id FROM ${'people.people'} WHERE (email->>'email' = ${db.param(email)} OR phone_number->>'phone_number' = ${db.param(phoneNumber)}) AND ${'instance_id'} = ${db.param(instanceId)}`.run(
+	SELECT id FROM ${'people.people'} WHERE (email->>'email' = ${db.param(email)} OR phone_number->>'phone_number' = ${db.param(phoneNumber)}) AND ${'instance_id'} = ${db.param(instanceId)} ${includeDeleted ? db.sql`` : db.sql`AND deleted_at IS NULL`}`.run(
 		pool
 	);
 	const ids = peopleIds.map((f) => f.id);
@@ -334,19 +341,33 @@ export async function list({
 	instance_id,
 	url,
 	t,
-	notPaged
+	notPaged,
+	includeDeleted = false
 }: {
 	instance_id: number;
 	url: URL;
 	t: App.Localization;
 	notPaged?: boolean;
+	includeDeleted?: boolean;
 }): Promise<schema.List | schema._ListWithSearch> {
 	const query = filterQuery(url, {
 		search_key: 'search',
 		notPaged
 	});
-	if (query.filtered === false) {
+
+	// Add deleted_at condition if not including deleted records
+	if (!includeDeleted) {
+		console.log('includeDeleted', includeDeleted);
+		query.where = { ...query.where, deleted_at: db.conditions.isNull };
+	}
+
+	if (query.filtered === false && !includeDeleted) {
+		console.log('!includeDeleted', !includeDeleted);
+		console.log('query.filtered', query.filtered);
+		console.log('Checking cache');
+		// Deleted records are not included in the cache
 		const cached = await redis.get(redisString(instance_id, 'all'));
+		console.log('cached', cached);
 		if (cached) {
 			return v.parse(schema.list, cached);
 		}
@@ -368,6 +389,7 @@ export async function list({
 		}
 	}
 	const checkTags = tagIds.length > 0 ? { id: db.conditions.isIn(personIds) } : {}; //can't be personIds length, because then it won't apply the condition when there are zero results
+	console.log('where ', { instance_id: instance_id, ...checkTags, ...query.where });
 	const selected = await db
 		.select(
 			'people.people_search',
@@ -544,6 +566,45 @@ export async function _getInstanceIdByPersonId({
 		.selectExactlyOne('people.people', { id: personId }, { columns: ['instance_id'] })
 		.run(pool);
 	return response.instance_id;
+}
+
+export async function deletePerson({
+	instance_id,
+	person_id,
+	t
+}: {
+	instance_id: number;
+	person_id: number;
+	t: App.Localization;
+}): Promise<true> {
+	// Check if person exists and is not already deleted
+	await read({ instance_id, person_id, t });
+
+	const updated = await db
+		.update(
+			'people.people',
+			{ deleted_at: new Date() },
+			{
+				instance_id,
+				id: person_id
+			}
+		)
+		.run(pool)
+		.catch((err) => {
+			throw new BelcodaError(404, 'DATA:PEOPLE:PEOPLE:DELETE:01', t.errors.not_found(), err);
+		});
+
+	if (updated.length !== 1) {
+		throw new BelcodaError(404, 'DATA:PEOPLE:PEOPLE:DELETE:01', t.errors.http[404]());
+	}
+
+	// Clear cache
+	await redis.del(redisString(instance_id, person_id));
+	await redis.del(redisString(instance_id, 'all'));
+
+	// Queue interaction for deletion ?
+
+	return true;
 }
 
 export async function getPersonOrCreatePersonByWhatsappId(

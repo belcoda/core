@@ -40,3 +40,16 @@ export async function PUT(event) {
 		return error(500, 'API:/people/:person_id:PUT:01', event.locals.t.errors.http[500](), err);
 	}
 }
+
+export async function DELETE(event) {
+	try {
+		const deletedPerson = await api.deletePerson({
+			instance_id: event.locals.instance.id,
+			person_id: Number(event.params.person_id),
+			t: event.locals.t
+		});
+		return json(deletedPerson);
+	} catch (err) {
+		return error(500, 'API:/people/:person_id:DELETE:01', event.locals.t.errors.http[500](), err);
+	}
+}
