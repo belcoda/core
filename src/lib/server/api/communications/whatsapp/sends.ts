@@ -1,5 +1,6 @@
 import { db, pool, redis, filterQuery, BelcodaError } from '$lib/server';
 import * as schema from '$lib/schema/communications/whatsapp/sends';
+import * as m from '$lib/paraglide/messages';
 import { parse } from '$lib/schema/valibot';
 import { exists, read as readThread } from '$lib/server/api/communications/whatsapp/threads';
 function redisString(instanceId: number, threadId: number, sendId: number | 'all') {
@@ -74,7 +75,7 @@ export async function read({
 			throw new BelcodaError(
 				404,
 				'DATA:COMMUNICATIONS:WHATSAPP:SENDS:READ:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});
@@ -104,7 +105,7 @@ export async function update({
 		throw new BelcodaError(
 			404,
 			'DATA:COMMUNICATIONS:WHATSAPP:SENDS:UPDATE:01',
-			t.errors.not_found()
+			m.pretty_tired_fly_lead()
 		);
 	}
 	await redis.del(redisString(instanceId, threadId, 'all'));

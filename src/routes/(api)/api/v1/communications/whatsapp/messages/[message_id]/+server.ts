@@ -1,6 +1,6 @@
 import { error, json } from '$lib/server';
 import * as api from '$lib/server/api/communications/whatsapp/messages';
-
+import * as m from '$lib/paraglide/messages';
 export async function GET(event) {
 	try {
 		const result = await api.read({
@@ -13,7 +13,7 @@ export async function GET(event) {
 		return error(
 			500,
 			'API:/communications/whatsapp/threads/[thread_id]/messages/[message_id]:GET',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}
@@ -34,7 +34,7 @@ export async function PUT(event) {
 		return error(
 			500,
 			'API:/communications/whatsapp/messages/[message_id]:PUT',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

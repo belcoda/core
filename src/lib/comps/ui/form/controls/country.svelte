@@ -12,22 +12,25 @@
 	export let description: string | null = null;
 	import { cn } from '$lib/utils';
 	let className = '';
+	import { renderLocalizedCountryName, renderFlags } from '$lib/i18n/countries';
 	export { className as class };
 	// Everything above this can be copied
 
+	import * as m from '$lib/paraglide/messages';
+
 	import * as Select from '$lib/comps/ui/select';
 	export let value: string;
-	export let placeholder: string = $page.data.t.forms.generic.country.placeholder();
+	export let placeholder: string = m.gross_royal_nuthatch_rise();
 	import { SUPPORTED_COUNTRIES, type SupportedCountry } from '$lib/i18n';
 
 	const options = SUPPORTED_COUNTRIES.map((country) => ({
 		value: country,
-		label: $page.data.t.countries[country]()
+		label: renderLocalizedCountryName(country)
 	}));
 
 	$: selectedItem = SUPPORTED_COUNTRIES.includes(value as (typeof SUPPORTED_COUNTRIES)[number])
 		? {
-				label: $page.data.t.countries[value as (typeof SUPPORTED_COUNTRIES)[number]](), //this is fine, because we're already checking...
+				label: renderLocalizedCountryName(value as (typeof SUPPORTED_COUNTRIES)[number]), //this is fine, because we're already checking...
 				value: value
 			}
 		: undefined;
@@ -43,7 +46,7 @@
 					<Select.Trigger {...props} class={cn('focus-visible:border-2 ', className)}>
 						{#if selectedItem}
 							<div class="flex items-center gap-2 justify-start">
-								{$page.data.t.flags[value as (typeof SUPPORTED_COUNTRIES)[number]]()}
+								{renderFlags(value as (typeof SUPPORTED_COUNTRIES)[number])}
 								{selectedItem.label}
 							</div>
 						{:else}
@@ -58,7 +61,7 @@
 								class="flex items-center gap-1"
 							>
 								<div>
-									{$page.data.t.flags[option.value as (typeof SUPPORTED_COUNTRIES)[number]]()}
+									{renderFlags(option.value as (typeof SUPPORTED_COUNTRIES)[number])}
 								</div>
 								<div>{option.label}</div>
 							</Select.Item>

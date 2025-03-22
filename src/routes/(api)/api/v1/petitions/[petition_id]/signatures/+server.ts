@@ -4,6 +4,7 @@ import * as schema from '$lib/schema/petitions/signatures';
 import { parse } from '$lib/schema/valibot';
 import { read as readPetition } from '$lib/server/api/petitions/petitions';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
+import * as m from '$lib/paraglide/messages';
 const log = pino(import.meta.url);
 export async function GET(event) {
 	try {
@@ -18,7 +19,7 @@ export async function GET(event) {
 		return error(
 			500,
 			'API:/api/v1/petitions/[petition_id]/signatures:GET',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}
@@ -57,7 +58,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'API:/api/v1/petitions/[petition_id]/signatures:POST',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

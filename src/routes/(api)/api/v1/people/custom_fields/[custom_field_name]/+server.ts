@@ -2,7 +2,7 @@ import { update } from '$lib/schema/people/custom_fields';
 import * as api from '$lib/server/api/people/custom_fields';
 import { error, json } from '$lib/server';
 import { v } from '$lib/schema/valibot';
-
+import * as m from '$lib/paraglide/messages';
 export async function GET(event) {
 	try {
 		const customFields = await api.read({
@@ -15,7 +15,7 @@ export async function GET(event) {
 		return error(
 			500,
 			'API:/people/custom_fields/[custom_field_id]:GET:01',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}
@@ -36,7 +36,7 @@ export async function PUT(event) {
 		return error(
 			500,
 			'API:/people/custom_fields/[custom_field_id]:PUT:01',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

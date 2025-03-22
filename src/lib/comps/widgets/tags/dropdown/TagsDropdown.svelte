@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from '$lib/paraglide/messages';
 	import { page } from '$app/stores';
 	import { type List } from '$lib/schema/core/tags';
 	import { cn, debounce } from '$lib/utils';
@@ -71,21 +72,21 @@
 				{@render children()}
 			{:else}
 				<Plus size={14} />
-				<div class="text-sm">{$page.data.t.forms.buttons.search()}</div>
+				<div class="text-sm">{m.low_hour_pig_talk()}</div>
 			{/if}
 		</Popover.Trigger>
 		<Popover.Content class="p-0" align="start" side="right">
 			<Command.Root>
 				<Command.Input
-					placeholder={$page.data.t.common.actions.search()}
+					placeholder={m.these_royal_polecat_tickle()}
 					bind:value={searchString}
 					oninput={debounce(search, 500)}
 				/>
 				<Command.List>
 					{#if loading}
-						<Command.Loading>{$page.data.t.common.status.loading()}</Command.Loading>
+						<Command.Loading>{m.loud_bland_lionfish_pray()}</Command.Loading>
 					{:else}
-						<Command.Empty>{$page.data.t.common.data.no_items()}</Command.Empty>
+						<Command.Empty>{m.deft_agent_parakeet_peek()}</Command.Empty>
 						{#each items as object, i}
 							<Command.Item
 								value={`${object.id}:::${object.name}`}

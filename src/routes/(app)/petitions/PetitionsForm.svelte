@@ -5,6 +5,7 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
 	import { page } from '$app/stores';
 	import Separator from '$lib/comps/ui/separator/separator.svelte';
+	import * as m from '$lib/paraglide/messages';
 	import {
 		Input,
 		Button,
@@ -43,20 +44,20 @@
 		<Input
 			{form}
 			name="heading"
-			label={$page.data.t.forms.fields.petitions.petition_title.label()}
+			label={m.careful_major_sparrow_explore()}
 			bind:value={$formData.heading}
 		/>
 		{@render slug()}
 		<HTML
 			{form}
 			name="html"
-			label={$page.data.t.forms.fields.petitions.petition_details.label()}
-			description={$page.data.t.forms.fields.petitions.petition_details.description()}
+			label={m.plain_wise_walrus_pout()}
+			description={m.sour_few_seahorse_flop()}
 			bind:value={$formData.html}
 		/>
 		<Separator class="my-6" />
 		<UploadWidget
-			label={$page.data.t.forms.fields.feature_image.label()}
+			label={m.still_zany_warbler_savor()}
 			upload_id={$formData.feature_image_upload_id}
 			onselected={(upload) => {
 				if (upload?.id) $formData.feature_image_upload_id = upload.id;
@@ -67,15 +68,15 @@
 		<Input
 			{form}
 			name="petition_target"
-			label={$page.data.t.forms.fields.petitions.petition_target.label()}
-			description={$page.data.t.forms.fields.petitions.petition_target.description()}
+			label={m.clear_minor_gecko_buy()}
+			description={m.sour_game_javelina_emerge()}
 			bind:value={$formData.petition_target}
 		/>
 		<Textarea
 			{form}
 			name="petition_text"
-			label={$page.data.t.forms.fields.petitions.petition_text.label()}
-			description={$page.data.t.forms.fields.petitions.petition_text.description()}
+			label={m.awful_grand_wombat_imagine()}
+			description={m.sunny_major_florian_bend()}
 			bind:value={$formData.petition_text}
 		/>
 
@@ -88,7 +89,7 @@
 		<div class="flex justify-end items-center gap-2">
 			<Link size={18} class="text-muted-foreground" />
 			<div class="text-sm text-muted-foreground">
-				{$page.data.t.forms.fields.petitions.petition_page_link.label()}
+				{m.clean_salty_haddock_drop()}
 			</div>
 			<button
 				onclick={() => {
@@ -106,8 +107,8 @@
 			<Link size={18} class="text-muted-foreground" />
 
 			<code class="text-sm text-primary-500 underline">
-        {`http${dev ? '' : 's'}://${$page.data.instance.slug}.${PUBLIC_ROOT_DOMAIN}/petitions/`}
-      </code>
+				{`http${dev ? '' : 's'}://${$page.data.instance.slug}.${PUBLIC_ROOT_DOMAIN}/petitions/`}
+			</code>
 			<Slug
 				{form}
 				name="slug"
@@ -116,7 +117,7 @@
 				bind:value={$formData.slug as string}
 			/>
 			<Button onclick={() => (editSlug = false)} size="sm" variant="ghost"
-				>{$page.data.t.forms.buttons.save()}</Button
+				>{m.empty_warm_squirrel_chop()}</Button
 			>
 		</div>
 	{/if}

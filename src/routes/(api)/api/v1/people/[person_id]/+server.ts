@@ -1,6 +1,7 @@
 import { error, json } from '$lib/server/';
 import * as api from '$lib/server/api/people/people';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
+import * as m from '$lib/paraglide/messages';
 export async function GET(event) {
 	try {
 		const person = await api.read({
@@ -11,7 +12,7 @@ export async function GET(event) {
 		});
 		return json(person);
 	} catch (err) {
-		return error(500, 'API:/people/:person_id:GET:01', event.locals.t.errors.http[500](), err);
+		return error(500, 'API:/people/:person_id:GET:01', m.spry_ago_baboon_cure(), err);
 	}
 }
 
@@ -37,6 +38,6 @@ export async function PUT(event) {
 		});
 		return json(updatedPerson);
 	} catch (err) {
-		return error(500, 'API:/people/:person_id:PUT:01', event.locals.t.errors.http[500](), err);
+		return error(500, 'API:/people/:person_id:PUT:01', m.spry_ago_baboon_cure(), err);
 	}
 }

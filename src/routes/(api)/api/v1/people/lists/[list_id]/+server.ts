@@ -3,6 +3,7 @@ import * as schema from '$lib/schema/people/lists';
 import { parse } from '$lib/schema/valibot';
 import { list as readListPeople } from '$lib/server/api/people/filters/in_list';
 import { json, error } from '$lib/server';
+import * as m from '$lib/paraglide/messages';
 export async function GET(event) {
 	try {
 		const listId = Number(event.params.list_id);
@@ -21,7 +22,7 @@ export async function GET(event) {
 		return error(
 			500,
 			'API:/api/v1/people/[person_id]/lists/[list_id]:GET',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}
@@ -41,11 +42,6 @@ export async function PUT(event) {
 		});
 		return json(list);
 	} catch (err) {
-		return error(
-			500,
-			'API:/api/v1/people/lists/[list_id]:PUT',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'API:/api/v1/people/lists/[list_id]:PUT', m.spry_ago_baboon_cure(), err);
 	}
 }

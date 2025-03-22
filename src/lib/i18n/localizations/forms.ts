@@ -247,7 +247,7 @@ export default function (locale: SL) {
 					},
 					description: () => {
 						return t(locale, {
-							en: 'Please use only alphanumeric characters and dashes. No spaces or special characters.',
+							en: 'Please use only lowercase alphanumeric characters and underscores. No spaces or special characters.',
 							ja: '英数字とダッシュのみを使用してください。スペースや特殊文字は使用しないでください。',
 							pt: 'Por favor, use apenas caracteres alfanuméricos e traços. Sem espaços ou caracteres especiais.',
 							es: 'Por favor, use solo caracteres alfanuméricos y guiones. No use espacios ni caracteres especiales.',
@@ -1922,7 +1922,7 @@ export default function (locale: SL) {
 						},
 						description: () => {
 							return t(locale, {
-								en: 'Do you want to send an automatic email notification to the user if they cancel their registration?',
+								en: 'Do you want to send an automatic email notification to the user if they cancel their registration? This is separate to the cancellation notification sent if the event itself is cancelled.',
 								ja: 'ユーザーが登録をキャンセルした場合、自動的にメール通知を送信しますか？',
 								pt: 'Você deseja enviar uma notificação por e-mail automática para o usuário se ele cancelar o registro?',
 								es: '¿Desea enviar una notificación por correo electrónico automática al usuario si cancela su registro?',
@@ -2072,7 +2072,7 @@ export default function (locale: SL) {
 						},
 						description: () => {
 							return t(locale, {
-								en: 'A small icon that represents your organization. It will be displayed in the browser tab when users visit your website.',
+								en: 'A small icon or logo that represents your organization. It will be displayed in the browser tab when users visit your website. Should be square and at least 50x50 pixels',
 								ja: '組織を表す小さなアイコンです。ユーザーがウェブサイトを訪れると、ブラウザのタブに表示されます。',
 								pt: 'Um pequeno ícone que representa sua organização. Ele será exibido na guia do navegador quando os usuários visitarem seu site.',
 								es: 'Un pequeño icono que representa a su organización. Se mostrará en la pestaña del navegador cuando los usuarios visiten su sitio web.',

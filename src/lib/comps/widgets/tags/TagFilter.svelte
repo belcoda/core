@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { type ListOfTags } from '$lib/schema/core/tags';
 	import Plus from 'lucide-svelte/icons/plus';
-
+	import * as m from '$lib/paraglide/messages';
 	type Props = {
 		selectedTags?: ListOfTags;
 		tags?: ListOfTags;
@@ -16,7 +16,7 @@
 		tags = $bindable([]),
 		onAddTag,
 		onRemoveTag,
-		buttonText = $page.data.t.forms.fields.tags.add_a_tag.label(),
+		buttonText = m.least_crazy_gull_drum(),
 		ButtonIcon = Plus
 	}: Props = $props();
 	let loading = $state(false);
@@ -83,7 +83,7 @@
 			class="justify-start gap-x-1 py-0 rounded-md animated animate-pulse text-muted-foreground"
 			variant="secondary"
 		>
-			{$page.data.t.common.status.loading()}
+			{m.loud_bland_lionfish_pray()}
 			<LoaderCircle class="animated animate-spin" size={12} />
 		</Badge>
 	{/if}
@@ -102,9 +102,9 @@
 		</Popover.Trigger>
 		<Popover.Content class="p-0" align="start" side="right">
 			<Command.Root>
-				<Command.Input placeholder={$page.data.t.forms.fields.tags.filter_tags.label()} />
+				<Command.Input placeholder={m.small_equal_shad_walk()} />
 				<Command.List>
-					<Command.Empty>{$page.data.t.common.data.no_items()}</Command.Empty>
+					<Command.Empty>{m.deft_agent_parakeet_peek()}</Command.Empty>
 					<Command.Group>
 						{#each selectableTags as tag}
 							<Command.Item

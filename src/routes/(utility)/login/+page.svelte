@@ -2,12 +2,12 @@
 	import { PUBLIC_HOST, PUBLIC_GOOGLE_AUTH_CLIENT_ID } from '$env/static/public';
 	import H2 from '$lib/comps/typography/H2.svelte';
 	import { page } from '$app/stores';
-
-    // Update the login_uri to include the continue parameter if it exists
-    $: continueUrl = $page.url.searchParams.get('continue');
-    $: loginUri = continueUrl 
-        ? `${PUBLIC_HOST}/auth/google?continue=${continueUrl}` 
-        : `${PUBLIC_HOST}/auth/google`;
+	import * as m from '$lib/paraglide/messages';
+	// Update the login_uri to include the continue parameter if it exists
+	$: continueUrl = $page.url.searchParams.get('continue');
+	$: loginUri = continueUrl
+		? `${PUBLIC_HOST}/auth/google?continue=${continueUrl}`
+		: `${PUBLIC_HOST}/auth/google`;
 </script>
 
 <svelte:head>
@@ -21,8 +21,8 @@
 				<div class="flex justify-center my-2">
 					<img src="/logos/logomark.svg" alt="Belcoda icon" />
 				</div>
-				<H2>Login</H2>
-				<p class="text-muted-foreground mt-2 mb-4">Login with Google</p>
+				<H2>{m.top_dark_turkey_push()}</H2>
+				<p class="text-muted-foreground mt-2 mb-4">{m.weak_curly_beaver_belong()}</p>
 			</div>
 
 			<div class="flex justify-center">

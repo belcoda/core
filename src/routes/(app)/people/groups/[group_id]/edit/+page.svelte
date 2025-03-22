@@ -1,5 +1,6 @@
 <script lang="ts">
 	let { data } = $props();
+	import * as m from '$lib/paraglide/messages';
 	import { update } from '$lib/schema/people/groups';
 	import { default as PlainInput } from '$lib/comps/ui/input/input.svelte';
 	import { Debug, Input, Button, superForm, Grid, valibotClient, Error } from '$lib/comps/ui/forms';
@@ -23,12 +24,12 @@
 				loading = true;
 				const group = await linkWhatsappGroup(data.group.id, whatsappGroupInvite);
 				data.group = group;
-				flash.set({ type: 'success', message: data.t.forms.actions.success() });
+				flash.set({ type: 'success', message: m.cozy_strong_platypus_catch() });
 			} catch (error) {
-				if (error instanceof Error) {
+				if (error instanceof Error && 'message' in error) {
 					flash.set({ type: 'error', message: error.message });
 				} else {
-					flash.set({ type: 'error', message: data.t.errors.generic() });
+					flash.set({ type: 'error', message: m.teary_dizzy_earthworm_urge() });
 				}
 			} finally {
 				loading = false;
@@ -39,7 +40,7 @@
 	import Whatsapp from '$lib/comps/icons/whatsapp.svelte';
 </script>
 
-<PageHeader title={data.t.pages.people.groups.edit()} />
+<PageHeader title={m.mushy_ago_goldfish_borrow()} />
 
 {#if !data.group.whatsapp_id}
 	<Alert.Root class="mt-6">
@@ -68,12 +69,12 @@
 	<Grid cols={1} class="mt-6">
 		<Error error={$message} />
 		<Input
-			label={data.t.forms.fields.generic.name.label()}
+			label={m.extra_wild_earthworm_commend()}
 			{form}
 			name="name"
 			bind:value={$formData.name as string}
 		/>
-		<Button type="submit">{data.t.forms.buttons.save()}</Button>
+		<Button type="submit">{m.empty_warm_squirrel_chop()}</Button>
 		<Debug data={formData} />
 	</Grid>
 </form>

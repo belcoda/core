@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let data;
+	import * as m from '$lib/paraglide/messages';
 	import DataGrid from '$lib/comps/ui/custom/table/DataGrid.svelte';
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import type { List } from '$lib/schema/petitions/petitions';
@@ -7,14 +8,14 @@
 </script>
 
 <DataGrid
-	title={data.t.pages.actions.petitions.index()}
+	title={m.elegant_active_giraffe_nurture()}
 	items={data.petitions.items}
 	count={data.petitions.count}
 	newItemHref="/petitions/new"
-	options={{ nothingFoundMessage: data.t.common.data.not_found_types.petitions() }}
+	options={{ nothingFoundMessage: m.patchy_tough_racoon_mop() }}
 >
 	{#snippet headerButton()}
-		<Button href="/petitions/new">{data.t.pages.actions.petitions.new()}</Button>
+		<Button href="/petitions/new">{m.noisy_fancy_gecko_conquer()}</Button>
 	{/snippet}
 	{#snippet content(item: List['items'][0])}
 		<div class="items-center flex justify-between gap-4">
@@ -27,7 +28,7 @@
 				<div class="flex gap-4 items-center justify-end">
 					<AdminBadge admin={item.point_person} />
 					<Button href="/petitions/{item.id}" variant="outline"
-						>{data.t.forms.buttons.view()}</Button
+						>{m.dull_fluffy_jannes_hike()}</Button
 					>
 				</div>
 			</div>

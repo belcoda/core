@@ -1,4 +1,5 @@
 import { db, pool, redis, pino, BelcodaError, error, filterQuery, type s } from '$lib/server';
+import * as m from '$lib/paraglide/messages';
 import { filterInteractions } from '$lib/server/utils/filters/filter';
 import { format } from 'node-pg-format';
 import * as schema from '$lib/schema/people/people';
@@ -215,11 +216,16 @@ export async function update({
 			)
 			.run(pool)
 			.catch((err) => {
-				throw new BelcodaError(404, 'DATA:PEOPLE:PEOPLE:UPDATE:01', t.errors.updating_data(), err);
+				throw new BelcodaError(
+					404,
+					'DATA:PEOPLE:PEOPLE:UPDATE:01',
+					m.basic_slimy_reindeer_treat(),
+					err
+				);
 			});
 
 		if (updated.length !== 1)
-			throw new BelcodaError(404, 'DATA:PEOPLE:PEOPLE:UPDATE:01', t.errors.http[404]());
+			throw new BelcodaError(404, 'DATA:PEOPLE:PEOPLE:UPDATE:01', m.that_tasty_dove_pop());
 
 		if (options?.skipCustomFieldsQueue !== true) {
 			await queueCustomFieldSet({
@@ -304,7 +310,7 @@ export async function read({
 		)
 		.run(pool)
 		.catch((err) => {
-			return error(404, 'DATA:PEOPLE:PEOPLE:READ:01', t.errors.not_found(), err);
+			return error(404, 'DATA:PEOPLE:PEOPLE:READ:01', m.pretty_tired_fly_lead(), err);
 		});
 	const parsed = v.parse(schema.read, person);
 	await redis.set(redisString(instance_id, person_id), parsed);
@@ -434,7 +440,7 @@ export async function exists({
 			throw new BelcodaError(
 				404,
 				'DATA:PEOPLE:PEOPLE:EXISTS:01',
-				t.errors.not_found_variants.person(),
+				m.every_formal_jellyfish_stop(),
 				err
 			);
 		});
@@ -491,7 +497,7 @@ export async function _getPersonByWhatsappId({
 		throw new BelcodaError(
 			404,
 			'DATA:PEOPLE:PEOPLE:GET_PERSON_BY_WHATSAPP_ID:01',
-			t.errors.not_found_variants.person()
+			m.every_formal_jellyfish_stop()
 		);
 	}
 	log.debug('_getPersonByWhatsappId done: ', person);

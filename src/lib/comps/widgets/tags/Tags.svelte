@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 	import { type ListOfTags } from '$lib/schema/core/tags';
 	type Props = {
 		type: 'people' | 'events';
@@ -89,7 +90,7 @@
 			class="justify-start gap-x-1 py-0 rounded-md animated animate-pulse text-muted-foreground"
 			variant="secondary"
 		>
-			{$page.data.t.common.status.loading()}
+			{m.loud_bland_lionfish_pray()}
 			<LoaderCircle class="animated animate-spin" size={12} />
 		</Badge>
 	{/if}
@@ -104,13 +105,13 @@
 			)}
 		>
 			<Plus size={14} />
-			<div class="text-sm">{$page.data.t.forms.fields.tags.add_a_tag.label()}</div>
+			<div class="text-sm">{m.minor_extra_skate_drum()}</div>
 		</Popover.Trigger>
 		<Popover.Content class="p-0" align="start" side="right">
 			<Command.Root>
-				<Command.Input placeholder={$page.data.t.forms.fields.tags.filter_tags.label()} />
+				<Command.Input placeholder={m.few_frail_otter_snap()} />
 				<Command.List>
-					<Command.Empty>{$page.data.t.common.data.no_items()}</Command.Empty>
+					<Command.Empty>{m.loud_bland_lionfish_pray()}</Command.Empty>
 					<Command.Group>
 						{#each selectableTags as tag}
 							<Command.Item

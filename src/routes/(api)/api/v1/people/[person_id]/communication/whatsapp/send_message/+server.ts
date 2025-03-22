@@ -1,5 +1,5 @@
 import { pino, json, error } from '$lib/server';
-
+import * as m from '$lib/paraglide/messages';
 import { getActiveForPerson } from '$lib/server/api/communications/whatsapp/conversations';
 import { create } from '$lib/server/api/communications/whatsapp/messages';
 import { type Create } from '$lib/schema/communications/whatsapp/messages';
@@ -15,7 +15,7 @@ export async function POST(event) {
 			return error(
 				400,
 				'DATA:/api/v1/people/[person_id]/communications/whatsapp/send_message/+server.ts:02',
-				event.locals.t.errors.creating_data()
+				m.zippy_weird_hound_expand()
 			);
 		}
 		const personId = Number(event.params.person_id);
@@ -30,7 +30,7 @@ export async function POST(event) {
 			return error(
 				400,
 				'DATA:/api/v1/people/[person_id]/communications/whatsapp/send_message/+server.ts:03',
-				event.locals.t.errors.communications.whatsapp.no_active_conversation()
+				m.main_strong_octopus_roam()
 			);
 		}
 
@@ -67,7 +67,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'DATA:/api/v1/people/[person_id]/communications/whatsapp/send_message/+server.ts:01',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

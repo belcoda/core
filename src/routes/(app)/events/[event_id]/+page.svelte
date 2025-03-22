@@ -31,9 +31,17 @@
 		'cancelled',
 		'noshow'
 	];
+
+	const attendanceStatusValues = {
+		registered: m.curly_safe_kangaroo_launch(),
+		attended: m.gaudy_brave_boar_spark(),
+		cancelled: m.heroic_swift_skate_splash(),
+		noshow: m.minor_major_antelope_feast()
+	};
+
 	const statusOptions = attendanceStatus.map((status) => ({
 		value: status,
-		label: data.t.events.status[status].title()
+		label: attendanceStatusValues[status]
 	}));
 
 	const attendees = $state(data.attendees.items);
@@ -42,7 +50,7 @@
 	function makeStatusOptions(status: (typeof attendanceStatus)[number]) {
 		return {
 			value: status,
-			label: data.t.events.status[status].title()
+			label: attendanceStatusValues[status]
 		};
 	}
 </script>
@@ -51,9 +59,9 @@
 	{#snippet button()}
 		<div class="flex items-center gap-1">
 			<Button variant="outline" target="_blank" href={previewUrl}
-				>{data.t.forms.buttons.preview()}</Button
+				>{m.alive_silly_antelope_build()}</Button
 			>
-			<Button href="/events/{data.event.id}/edit">{data.t.forms.buttons.edit()}</Button>
+			<Button href="/events/{data.event.id}/edit">{m.giant_misty_shrimp_stop()}</Button>
 		</div>
 	{/snippet}
 </PageHeader>
@@ -110,7 +118,7 @@
 	</div>
 </div>
 <div class="mt-12">
-	<DataGrid title={data.t.pages.events.attendees()} items={attendees} count={data.attendees.count}>
+	<DataGrid title={m.petty_vexed_jurgen_nurture()} items={attendees} count={data.attendees.count}>
 		{#snippet content(attendee: (typeof data.attendees.items)[0], index: number)}
 			<div class="flex items-center justify-between gap-4">
 				<PersonBadge person={attendee} />
@@ -126,9 +134,7 @@
 				<Button variant="outline" target="_blank" href="/events/{data.event.id}/print"
 					>{m.orange_mad_deer_value()}</Button
 				>
-				<Button href="/events/{data.event.id}/register"
-					>{data.t.events.attendees.register.title()}</Button
-				>
+				<Button href="/events/{data.event.id}/register">{m.ideal_active_ray_offer()}</Button>
 			</div>
 		{/snippet}
 	</DataGrid>

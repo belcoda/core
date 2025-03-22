@@ -1,5 +1,6 @@
 import { PUBLIC_HOST } from '$env/static/public';
 import render from '$lib/server/utils/handlebars/render';
+import * as m from '$lib/paraglide/messages';
 export default async function ({
 	messageTemplate,
 	templateTemplate,
@@ -47,7 +48,7 @@ export default async function ({
 
 function buildLocalizedGenericEmailInfo(t: App.Localization) {
 	return {
-		unsubscribe: t.email.unsubscribe(),
-		unsubscribe_description: t.email.unsubscribe_description()
+		unsubscribe: m.aloof_least_weasel_propel(),
+		unsubscribe_description: m.super_muddy_finch_mix()
 	};
 }

@@ -2,6 +2,7 @@ import { json, BelcodaError, pino, error } from '$lib/server';
 import * as api from '$lib/server/api/events/events';
 import * as schema from '$lib/schema/events/events';
 import { parse } from '$lib/schema/valibot';
+import * as m from '$lib/paraglide/messages';
 const log = pino(import.meta.url);
 export async function GET(event) {
 	try {
@@ -12,7 +13,7 @@ export async function GET(event) {
 		});
 		return json(response);
 	} catch (err) {
-		return error(500, 'API:/api/v1/events:GET', event.locals.t.errors.http[500](), err);
+		return error(500, 'API:/api/v1/events:GET', m.spry_ago_baboon_cure(), err);
 	}
 }
 
@@ -31,6 +32,6 @@ export async function POST(event) {
 		});
 		return json(response);
 	} catch (err) {
-		return error(500, 'API:/api/v1/events:POST', event.locals.t.errors.http[500](), err);
+		return error(500, 'API:/api/v1/events:POST', m.spry_ago_baboon_cure(), err);
 	}
 }

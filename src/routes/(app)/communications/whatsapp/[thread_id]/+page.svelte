@@ -72,6 +72,7 @@
 			loading = false;
 		}
 	}
+	import * as m from '$lib/paraglide/messages';
 </script>
 
 <PageHeader title={'Edit thread'}>
@@ -80,7 +81,7 @@
 			<Button variant="secondary" href="/communications/whatsapp/{data.thread.id}/sends">
 				Send
 			</Button>
-			<Button onclick={saveThread}>{data.t.forms.buttons.save()}</Button>
+			<Button onclick={saveThread}>{m.empty_warm_squirrel_chop()}</Button>
 		</div>
 	{/snippet}
 </PageHeader>

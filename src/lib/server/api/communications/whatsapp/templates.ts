@@ -1,6 +1,6 @@
 import { db, pool, redis, filterQuery, BelcodaError } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
-
+import * as m from '$lib/paraglide/messages';
 import * as schema from '$lib/schema/communications/whatsapp/template';
 
 function redisString(instanceId: number, templateId: number | 'all') {
@@ -47,7 +47,7 @@ export async function read({
 			throw new BelcodaError(
 				404,
 				'DATA:COMMUNICATIONS:WHATSAPP:TEMPLATES:READ:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});
@@ -103,7 +103,7 @@ export async function update({
 		throw new BelcodaError(
 			404,
 			'DATA:COMMUNICATIONS:WHATSAPP:TEMPLATES:UPDATE:01',
-			t.errors.not_found()
+			m.pretty_tired_fly_lead()
 		);
 	}
 	const parsedResult = parse(schema.read, result);

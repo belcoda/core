@@ -1,7 +1,7 @@
 import { valibot, superValidate, formAction, redirect } from '$lib/server';
 import { create, read } from '$lib/schema/people/imports';
 import { parse } from '$lib/schema/valibot';
-
+import * as m from '$lib/paraglide/messages';
 export async function load(event) {
 	const form = await superValidate(valibot(create));
 	return { form };
@@ -19,7 +19,7 @@ export const actions = {
 		//const parsed = parse(read, output.output);
 		return redirect(event, {
 			location: '/settings/people/imports',
-			message: event.locals.t.forms.actions.success()
+			message: m.east_happy_vole_value()
 		});
 	}
 };

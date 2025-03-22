@@ -11,6 +11,7 @@
 	import { Switch } from '$lib/comps/ui/switch';
 	import { Label } from '$lib/comps/ui/label';
 	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 	const flash = getFlash(page);
 	const loadingIds: Writable<number[]> = writable([]);
 
@@ -71,7 +72,7 @@
 
 	{#snippet headerButton()}
 		<div class="flex items-center justify-end w-full lg:w-auto gap-4">
-			<Button href="/people/groups/{data.group.id}">{data.t.forms.buttons.back()}</Button>
+			<Button href="/people/groups/{data.group.id}">{m.super_broad_gopher_hurl()}</Button>
 			{@render addPersonButton()}
 		</div>
 	{/snippet}
@@ -89,16 +90,16 @@
 				body: JSON.stringify({ person_id: person.id, status: 'member' })
 			});
 			if (!result.ok) {
-				$flash = { type: 'error', message: data.t.errors.updating_data() };
+				$flash = { type: 'error', message: m.basic_slimy_reindeer_treat() };
 			}
-			$flash = { type: 'success', message: data.t.forms.actions.created() };
+			$flash = { type: 'success', message: m.flat_sleek_millipede_agree() };
 			await invalidateAll();
 			const loadingIdIndex = $loadingIds.findIndex((id) => id === person.id);
 			$loadingIds = $loadingIds.toSpliced(loadingIdIndex, 1);
 		}}
 	>
 		<Plus size={14} />
-		{$page.data.t.people.actions.search_and_add()}
+		{m.yummy_extra_trout_pride()}
 	</PersonDropdown>
 {/snippet}
 
@@ -106,22 +107,22 @@
 	<Button
 		variant="destructive"
 		onclick={async () => {
-			if (window.confirm($page.data.t.common.alerts.confirmation())) {
+			if (window.confirm(m.warm_cool_turkey_lead())) {
 				$loadingIds = [...$loadingIds, person.id];
 				const result = await fetch(`/api/v1/people/groups/${data.group.id}/members/${person.id}`, {
 					method: 'DELETE'
 				});
 				if (!result.ok) {
-					$flash = { type: 'error', message: data.t.errors.updating_data() };
+					$flash = { type: 'error', message: m.basic_slimy_reindeer_treat() };
 				}
-				$flash = { type: 'success', message: data.t.forms.actions.removed() };
+				$flash = { type: 'success', message: m.level_aqua_clownfish_bask() };
 				const personIndex = data.group.members.findIndex((p) => p.id === person.id);
 				data.group.members = data.group.members.toSpliced(personIndex, 1);
 				await invalidateAll();
 				const loadingIdIndex = $loadingIds.findIndex((id) => id === person.id);
 				$loadingIds = $loadingIds.toSpliced(loadingIdIndex, 1);
 			}
-		}}>{data.t.forms.buttons.remove()}</Button
+		}}>{m.cool_weary_albatross_enchant()}</Button
 	>
 {/snippet}
 
@@ -131,7 +132,7 @@
 		type="single"
 		value={person.status}
 		onValueChange={async (val) => {
-			if (window.confirm($page.data.t.common.alerts.confirmation())) {
+			if (window.confirm(m.honest_arable_rook_hurl())) {
 				if (!val) return;
 				const status = val;
 				$loadingIds = [...$loadingIds, person.id];
@@ -140,9 +141,9 @@
 					body: JSON.stringify({ status })
 				});
 				if (!result.ok) {
-					$flash = { type: 'error', message: data.t.errors.updating_data() };
+					$flash = { type: 'error', message: m.basic_slimy_reindeer_treat() };
 				}
-				$flash = { type: 'success', message: data.t.forms.actions.updated() };
+				$flash = { type: 'success', message: m.curly_civil_loris_hack() };
 				await invalidateAll();
 				const loadingIdIndex = $loadingIds.findIndex((id) => id === person.id);
 				$loadingIds = $loadingIds.toSpliced(loadingIdIndex, 1);
@@ -163,6 +164,6 @@
 {#snippet toggleBanned()}
 	<div class="flex items-center justify-end space-x-2 mt-4">
 		<Switch id="show-banned" onCheckedChange={handleBannedChange} />
-		<Label for="show-banned">{$page.data.t.people.groups.show_banned()}</Label>
+		<Label for="show-banned">{m.bald_keen_dolphin_arise()}</Label>
 	</div>
 {/snippet}

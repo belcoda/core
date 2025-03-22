@@ -16,25 +16,28 @@
 		validators: valibotClient(update)
 	});
 	const { form: formData, enhance, message } = form;
+	import * as m from '$lib/paraglide/messages';
 </script>
 
-<PageHeader title={data.t.pages.config.settings.tags.new()} />
+<PageHeader title={m.smug_agent_clownfish_ripple()} />
 <form use:enhance method="POST" class="mt-6">
 	<Grid cols={1}>
 		<Error error={$message} />
 		<Input
 			{form}
-			label={data.t.forms.fields.generic.name.label()}
+			label={m.extra_wild_earthworm_commend()}
 			bind:value={$formData.name as string}
 			name="name"
 		/>
 		<Checkbox
 			{form}
-			label={data.t.forms.fields.generic.active.label()}
+			label={m.crisp_short_cod_hope()}
 			bind:checked={$formData.active as boolean}
 			name="active"
 		/>
-		<div class="flex justify-end"><Button type="submit">{data.t.forms.buttons.save()}</Button></div>
+		<div class="flex justify-end">
+			<Button type="submit">{m.empty_warm_squirrel_chop()}</Button>
+		</div>
 		<Debug data={$formData} />
 	</Grid>
 </form>

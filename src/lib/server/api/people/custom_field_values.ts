@@ -4,7 +4,7 @@ import { read as readCustomField } from '$lib/server/api/people/custom_fields';
 import { readFieldValue } from '$lib/schema/people/custom_field_values';
 import { redisString } from '$lib/server/api/people/people';
 import { parse } from '$lib/schema/valibot';
-
+import * as m from '$lib/paraglide/messages';
 export async function setCustomFieldValue({
 	instance_id,
 	person_id,
@@ -35,7 +35,7 @@ export async function setCustomFieldValue({
 			throw new BelcodaError(
 				404,
 				'DATA:PEOPLE:CUSTOM_FIELD_VALUES:SET:01',
-				t.errors.updating_data(),
+				m.basic_slimy_reindeer_treat(),
 				err
 			);
 		});

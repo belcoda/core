@@ -8,7 +8,7 @@ import {
 	BelcodaError,
 	returnMessage
 } from '$lib/server';
-
+import * as m from '$lib/paraglide/messages';
 import { create, read } from '$lib/schema/events/events';
 import { parse } from '$lib/schema/valibot';
 const log = pino(import.meta.url);
@@ -28,11 +28,9 @@ export const actions = {
 			valibot(create)
 		);
 		if (!form.valid) {
-			return message(
-				form,
-				new BelcodaError(400, 'VALIDATION', event.locals.t.errors.validation()),
-				{ status: 400 }
-			);
+			return message(form, new BelcodaError(400, 'VALIDATION', m.spare_mushy_dachshund_quell()), {
+				status: 400
+			});
 		}
 		log.debug(form.data);
 		const response = await event.fetch(`/api/v1/events`, {
@@ -49,7 +47,7 @@ export const actions = {
 		const parsed = parse(read, body);
 		return redirect(event, {
 			location: `/events/${parsed.id}`,
-			message: event.locals.t.forms.actions.created()
+			message: m.flat_sleek_millipede_agree()
 		});
 	}
 };

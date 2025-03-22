@@ -4,6 +4,7 @@
 
 <script lang="ts" generics="T extends Record<string, unknown>">
 	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 	import {
 		formFieldProxy,
 		type SuperForm,
@@ -55,14 +56,14 @@
 			{form}
 			name={address_line_1}
 			bind:value={$addressLine1Value as string}
-			label={$page.data.t.forms.fields.address.address_line_1.label()}
+			label={m.lower_fluffy_rook_chop()}
 		/>
 		<Input
 			type="text"
 			{form}
 			name={address_line_2}
 			bind:value={$addressLine2Value as string}
-			label={$page.data.t.forms.fields.address.address_line_2.label()}
+			label={m.wild_fancy_hornet_earn()}
 		/>
 	</Grid>
 	<Grid cols={4}>
@@ -71,25 +72,25 @@
 			{form}
 			name={locality}
 			bind:value={$localityValue as string}
-			label={$page.data.t.forms.fields.address.locality.label()}
+			label={m.dull_giant_husky_tear()}
 		/>
 		<Input
 			type="text"
 			{form}
 			name={state}
 			bind:value={$stateValue as string}
-			label={$page.data.t.forms.fields.address.state.label()}
+			label={m.heavy_formal_hamster_intend()}
 		/>
 		<Input
 			type="text"
 			{form}
 			name={postcode}
 			bind:value={$postcodeValue as string}
-			label={$page.data.t.forms.fields.address.postcode.label()}
+			label={m.maroon_less_canary_roar()}
 		/>
 		<Country
 			onchange={onCountryChange}
-			label={$page.data.t.forms.fields.address.country.label()}
+			label={m.fluffy_fair_gecko_arrive()}
 			{form}
 			name={country}
 			bind:value={$countryValue as SupportedCountry}

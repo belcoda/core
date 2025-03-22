@@ -2,27 +2,28 @@
 	export let data;
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import DataGrid from '$lib/comps/ui/custom/table/DataGrid.svelte';
+	import * as m from '$lib/paraglide/messages';
 </script>
 
 <DataGrid
-	title={data.t.pages.people.groups.index()}
+	title={m.livid_few_duck_embrace()}
 	filterKey="name"
 	items={data.groups.items}
 	count={data.groups.count}
 	newItemHref="/people/groups/new"
-	options={{ nothingFoundMessage: data.t.common.data.not_found_types.groups() }}
+	options={{ nothingFoundMessage: m.stock_many_fish_breathe() }}
 >
-	{#snippet content(group: typeof data.groups.items[0])}
+	{#snippet content(group: (typeof data.groups.items)[0])}
 		<div class="flex items-center gap-2 justify-between">
 			<div class="font-medium">{group.name}</div>
 			<Button href={`/people/groups/${group.id}`} variant="outline" size="sm">
-				{data.t.forms.buttons.view()}
+				{m.dull_fluffy_jannes_hike()}
 			</Button>
 		</div>
 	{/snippet}
 	{#snippet headerButton()}
 		<Button href="/people/groups/new" variant="default" size="sm">
-			{data.t.pages.people.groups.new()}
+			{m.house_muddy_panda_drum()}
 		</Button>
 	{/snippet}
 </DataGrid>

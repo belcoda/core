@@ -11,13 +11,14 @@
 		dataType: 'json'
 	});
 	let { form: formData, enhance, message, allErrors } = form;
+	import * as m from '$lib/paraglide/messages';
 </script>
 
-<PageHeader title={data.t.pages.actions.petitions.edit()}>
+<PageHeader title={m.aloof_whole_beetle_value()}>
 	{#snippet button()}
 		<div class="flex items-center gap-2">
 			<Button href="/petitions/{$page.params.petition_id}/edit"
-				>{data.t.forms.buttons.back()}</Button
+				>{m.super_broad_gopher_hurl()}</Button
 			>
 		</div>
 	{/snippet}
@@ -27,14 +28,14 @@
 	{#if visible}
 		<div class="flex items-center gap-2">
 			<Button href="/communications/email/messages/{messageId}" target="_blank">
-				{data.t.forms.buttons.edit()}
+				{m.giant_misty_shrimp_stop()}
 			</Button>
 			<Button
 				variant="outline"
 				href="/preview/email/{messageId}?petition_id={$page.params.petition_id}"
 				target="_blank"
 			>
-				{data.t.forms.buttons.preview()}
+				{m.alive_silly_antelope_build()}
 			</Button>
 		</div>
 	{/if}
@@ -48,16 +49,19 @@
 				class="border-none p-0"
 				{form}
 				name="send_autoresponse_email"
-				label={data.t.forms.fields.events.email_notification_settings.send_registration_email.label()}
-				description={data.t.forms.fields.events.email_notification_settings.send_registration_email.description()}
+				label={'Send autoresponse email?'}
+				description={m.moving_bold_turtle_bend()}
 				bind:checked={$formData.send_autoresponse_email as boolean}
 			/>
 
-			{@render editPreviewButtons(data.petition.autoresponse_email.id, $formData.send_autoresponse_email as boolean)}
+			{@render editPreviewButtons(
+				data.petition.autoresponse_email.id,
+				$formData.send_autoresponse_email as boolean
+			)}
 		</Grid>
 
 		<div class="flex justify-end">
-			<Button type="submit">{data.t.forms.buttons.submit()}</Button>
+			<Button type="submit">{m.just_away_horse_urge()}</Button>
 		</div>
 		<Debug data={$formData} />
 	</Grid>

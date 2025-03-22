@@ -3,13 +3,14 @@
 	import AdvancedContentAuthoring from '$lib/comps/forms/AdvancedContentAuthoring.svelte';
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import PageHeader from '$lib/comps/layout/PageHeader.svelte';
+	import * as m from '$lib/paraglide/messages';
 </script>
 
 <PageHeader title={data.content.name} separator={false}>
 	{#snippet button()}
 		<div class="flex items-center gap-1">
 			<Button href={`/website/pages/${data.content.id}`} variant="outline"
-				>{data.t.forms.buttons.back()}</Button
+				>{m.super_broad_gopher_hurl()}</Button
 			>
 		</div>
 	{/snippet}

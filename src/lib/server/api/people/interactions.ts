@@ -7,7 +7,7 @@ import {
 	list as listSchema,
 	read as readSchema
 } from '$lib/schema/people/interactions';
-
+import * as m from '$lib/paraglide/messages';
 import { filterInteractions } from '$lib/server/utils/filters/filter';
 import { parse } from '$lib/schema/valibot';
 import {
@@ -201,7 +201,7 @@ export function moveNoteToEditHistory({
 		throw new BelcodaError(
 			400,
 			'API:/people/interactions/moveNoteToEditHistory:01',
-			t.errors.updating_data()
+			m.basic_slimy_reindeer_treat()
 		);
 	}
 	const newNoteDetils: Read['details'] = {

@@ -4,13 +4,14 @@
 	import Button from '$lib/comps/ui/button/button.svelte';
 	export let data;
 	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 </script>
 
-<PageHeader title={data.t.pages.events.edit_event()}>
+<PageHeader title={m.yummy_frail_dove_pick()}>
 	{#snippet button()}
 		<div class="flex items-center gap-2">
 			<Button variant="outline" href={`/events/${$page.params.event_id}/edit/advanced`}
-				>{$page.data.t.forms.fields.events.advanced_settings.label()}</Button
+				>{m.warm_jumpy_poodle_find()}</Button
 			>
 			<Button href="/events/{$page.params.event_id}/edit/notifications" variant="outline"
 				>Manage notifications</Button

@@ -1,6 +1,8 @@
 import { db, pool, redis, filterQuery, BelcodaError } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 
+import * as m from '$lib/paraglide/messages';
+
 import * as schema from '$lib/schema/communications/whatsapp/messages';
 import { type ActionArray, actionArray } from '$lib/schema/communications/actions/actions';
 
@@ -53,7 +55,7 @@ export async function read({
 			throw new BelcodaError(
 				404,
 				'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:READ:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});
@@ -113,7 +115,7 @@ export async function update({
 		throw new BelcodaError(
 			404,
 			'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:UPDATE:01',
-			t.errors.not_found()
+			m.pretty_tired_fly_lead()
 		);
 	}
 	const parsedResult = parse(schema.read, result[0]);
@@ -137,7 +139,7 @@ export async function _getActions({
 		throw new BelcodaError(
 			404,
 			'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:GET_ACTIONS:01',
-			t.errors.not_found()
+			m.pretty_tired_fly_lead()
 		);
 	}
 	const parsed = parse(actionArray, actions[0].action);
@@ -158,7 +160,7 @@ WHERE actions ? ${db.param(action)}`.run(pool);
 		throw new BelcodaError(
 			404,
 			'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:GET_BY_ACTION:01',
-			t.errors.not_found()
+			m.pretty_tired_fly_lead()
 		);
 	}
 	const parsed = parse(actionArray, result[0].action);

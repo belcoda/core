@@ -1,5 +1,6 @@
 import { BelcodaError, db, pool, redis } from '$lib/server';
 import * as schema from '$lib/schema/core/task_tagging';
+import * as m from '$lib/paraglide/messages';
 import { parse } from '$lib/schema/valibot';
 import { exists, redisString } from '$lib/server/api/core/tasks';
 
@@ -22,7 +23,7 @@ export async function create({
 		.run(pool)
 		.catch(async (err) => {
 			if (err.code !== '23505') {
-				throw new BelcodaError(500, 'DATA:TASKS:TAGGINGS:CREATE:01', t.errors.http[500](), err);
+				throw new BelcodaError(500, 'DATA:TASKS:TAGGINGS:CREATE:01', m.spry_ago_baboon_cure(), err);
 			} else {
 				return await _unsafeRead({ tagId, taskId, t });
 			}
@@ -45,7 +46,12 @@ export async function _unsafeRead({
 		.selectExactlyOne('task_taggings', { task_id: taskId, tag_id: tagId })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:TASKS:TAGGINGS:UNSAFEREAD:01', t.errors.http[404](), err);
+			throw new BelcodaError(
+				404,
+				'DATA:TASKS:TAGGINGS:UNSAFEREAD:01',
+				m.that_tasty_dove_pop(),
+				err
+			);
 		});
 	return parse(schema.read, fetched);
 }

@@ -3,6 +3,8 @@ import { db, pool, redis, error, BelcodaError, pino, filterQuery } from '$lib/se
 import { redisString } from '$lib/server/api/people/people';
 const log = pino(import.meta.url);
 
+import * as m from '$lib/paraglide/messages';
+
 import * as schema from '$lib/schema/people/custom_fields';
 import { parse } from '$lib/schema/valibot';
 export async function read({
@@ -18,7 +20,12 @@ export async function read({
 		.selectExactlyOne('people.custom_fields', { instance_id, name: custom_field_name })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:PEOPLE:CUSTOM_FIELDS:READ:01', t.errors.not_found(), err);
+			throw new BelcodaError(
+				404,
+				'DATA:PEOPLE:CUSTOM_FIELDS:READ:01',
+				m.pretty_tired_fly_lead(),
+				err
+			);
 		});
 	const parsed = parse(schema.read, customField);
 	return parsed;
@@ -46,7 +53,7 @@ export async function create({
 			throw new BelcodaError(
 				500,
 				'DATA:PEOPLE:CUSTOM_FIELDS:CREATE:01',
-				t.errors.creating_data(),
+				m.cute_large_toucan_arise(),
 				err
 			);
 		});
@@ -91,12 +98,12 @@ export async function update({
 			throw new BelcodaError(
 				500,
 				'DATA:PEOPLE:CUSTOM_FIELDS:UPDATE:01',
-				t.errors.updating_data(),
+				m.heroic_stout_buzzard_believe(),
 				err
 			);
 		});
 	if (updated.length !== 1) {
-		throw new BelcodaError(404, 'DATA:PEOPLE:CUSTOM_FIELDS:UPDATE:02', t.errors.http[404]());
+		throw new BelcodaError(404, 'DATA:PEOPLE:CUSTOM_FIELDS:UPDATE:02', m.that_tasty_dove_pop());
 	}
 	const updatedParsed = parse(schema.read, updated[0]);
 	return updatedParsed;

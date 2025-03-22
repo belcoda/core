@@ -5,6 +5,7 @@ import {
 	DEFAULT_COUNTRY,
 	DEFAULT_LANGUAGE
 } from '$lib/i18n';
+import { renderLocalizedCountryName } from '$lib/i18n/countries';
 type AddressIncludingObject = {
 	address_line_1: Address['address_line_1'];
 	address_line_2: Address['address_line_2'];
@@ -31,7 +32,7 @@ export function renderAddress(
 		object.locality,
 		object.state,
 		object.postcode,
-		t.countries[object.country || instanceCountry]()
+		renderLocalizedCountryName(object.country || instanceCountry)
 	]
 		.filter(Boolean)
 		.join(', ');

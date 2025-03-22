@@ -1,5 +1,6 @@
 <script lang="ts">
 	const { data } = $props();
+	import * as m from '$lib/paraglide/messages';
 	import PageHeader from '$lib/comps/layout/PageHeader.svelte';
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import DataGrid from '$lib/comps/ui/custom/table/DataGrid.svelte';
@@ -33,16 +34,16 @@
 				body: JSON.stringify({ person_id: person.id })
 			});
 			if (res.ok) {
-				$flash = { type: 'success', message: data.t.forms.actions.success() };
+				$flash = { type: 'success', message: m.zesty_patient_butterfly_blink() };
 				await invalidateAll();
 			} else {
-				$flash = { type: 'error', message: data.t.errors.generic() };
+				$flash = { type: 'error', message: m.teary_dizzy_earthworm_urge() };
 			}
 		} catch (err) {
 			if (err instanceof Error) {
 				$flash = { type: 'error', message: err.message };
 			} else {
-				$flash = { type: 'error', message: data.t.errors.generic() };
+				$flash = { type: 'error', message: m.teary_dizzy_earthworm_urge() };
 			}
 		}
 	}
@@ -53,9 +54,9 @@
 	{#snippet button()}
 		<div class="flex items-center gap-1">
 			<Button variant="outline" target="_blank" href="/petitions/{data.petition.id}/preview"
-				>{data.t.forms.buttons.preview()}</Button
+				>{m.alive_silly_antelope_build()}</Button
 			>
-			<Button href="/petitions/{data.petition.id}/edit">{data.t.forms.buttons.edit()}</Button>
+			<Button href="/petitions/{data.petition.id}/edit">{m.giant_misty_shrimp_stop()}</Button>
 		</div>
 	{/snippet}
 </PageHeader>
@@ -76,7 +77,7 @@
 </div>
 <div class="mt-12">
 	<DataGrid
-		title={data.t.pages.actions.petitions.signatures()}
+		title={m.safe_true_goat_strive()}
 		items={data.signatures.items}
 		count={data.signatures.count}
 		options={{ showFilter: false }}
@@ -84,7 +85,7 @@
 		{#snippet headerButton()}
 			<PersonDropdown selectedPersonIds={signatureIds} onAddPerson={addPerson}>
 				<Plus size={14} />
-				{$page.data.t.people.actions.search_and_add()}
+				{m.broad_proud_anteater_dig()}
 			</PersonDropdown>
 		{/snippet}
 		{#snippet content(signature: (typeof data.signatures.items)[0])}

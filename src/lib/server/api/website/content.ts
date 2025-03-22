@@ -1,6 +1,7 @@
 import { db, pool, redis, BelcodaError, filterQuery } from '$lib/server';
 import { parse, id } from '$lib/schema/valibot';
 import * as schema from '$lib/schema/website/content';
+import * as m from '$lib/paraglide/messages';
 import { type ContentHTMLMetaTags } from '$lib/schema/utils/openai';
 
 import { read as readContentType, exists } from '$lib/server/api/website/content_types';
@@ -103,7 +104,7 @@ export async function read({
 		)
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:WEBSITE:CONTENT:READ:01', t.errors.not_found(), err);
+			throw new BelcodaError(404, 'DATA:WEBSITE:CONTENT:READ:01', m.pretty_tired_fly_lead(), err);
 		});
 	const parsedResult = parse(schema.read, result);
 	await redis.set(redisString(instanceId, contentTypeId, contentId), parsedResult);
@@ -141,7 +142,12 @@ export async function readBySlug({
 		)
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:WEBSITE:CONTENT:READBYSLUG:01', t.errors.not_found(), err);
+			throw new BelcodaError(
+				404,
+				'DATA:WEBSITE:CONTENT:READBYSLUG:01',
+				m.pretty_tired_fly_lead(),
+				err
+			);
 		});
 	const contentId = parse(id, result.id);
 	await redis.set(redisStringSlug(instanceId, contentTypeId, slug), contentId);
@@ -201,7 +207,7 @@ export async function update({
 		.update('website.content', parsed, { id: contentId, content_type_id: contentTypeId })
 		.run(pool);
 	if (result.length !== 1) {
-		throw new BelcodaError(404, 'DATA:WEBSITE:CONTENT:UPDATE:01', t.errors.not_found());
+		throw new BelcodaError(404, 'DATA:WEBSITE:CONTENT:UPDATE:01', m.pretty_tired_fly_lead());
 	}
 	await redis.del(redisString(instanceId, contentTypeId, contentId));
 	await redis.del(redisString(instanceId, contentTypeId, 'all'));

@@ -16,26 +16,27 @@
 		validators: valibotClient(create)
 	});
 	const { form: formData, enhance, message } = form;
+	import * as m from '$lib/paraglide/messages';
 </script>
 
-<PageHeader title={data.t.pages.people.groups.new()} />
+<PageHeader title={m.empty_neat_chipmunk_zip()} />
 
 <form use:enhance method="post">
 	<Grid cols={1} class="mt-6">
 		<Error error={$message} />
 		<Input
-			label={data.t.forms.fields.generic.name.label()}
+			label={m.extra_wild_earthworm_commend()}
 			{form}
 			name="name"
 			bind:value={$formData.name}
 		/>
 		<Textarea
-			label={data.t.forms.fields.generic.description.label()}
+			label={m.livid_spicy_felix_dance()}
 			{form}
 			name="description"
 			bind:value={$formData.description as string}
 		/>
-		<Button type="submit">{data.t.forms.buttons.submit()}</Button>
+		<Button type="submit">{m.just_away_horse_urge()}</Button>
 		<Debug data={formData} />
 	</Grid>
 </form>

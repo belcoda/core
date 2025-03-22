@@ -1,6 +1,6 @@
 import { json, error, pino } from '$lib/server';
 import { setCustomFieldValue } from '$lib/server/api/people/custom_field_values';
-
+import * as m from '$lib/paraglide/messages';
 import { setFieldValueFromApi } from '$lib/schema/people/custom_field_values';
 import { parse } from '$lib/schema/valibot';
 
@@ -22,7 +22,7 @@ export async function PUT(event) {
 		return error(
 			500,
 			'API:/people/custom_fields/values/:person_id/:field:PUT:01',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

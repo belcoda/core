@@ -15,12 +15,13 @@
 		validators: valibotClient(sendToList)
 	});
 	const { form: formData, enhance, message } = form;
+	import * as m from '$lib/paraglide/messages';
 </script>
 
-<PageHeader title={data.t.pages.communications.email.send()}>
+<PageHeader title={m.acidic_shy_ray_win()}>
 	{#snippet button()}
 		<Button variant="default" size="sm">
-			{data.t.forms.buttons.send()}
+			{m.that_safe_lark_peek()}
 		</Button>
 	{/snippet}
 </PageHeader>
@@ -29,13 +30,13 @@
 	<Grid cols={1} class="mt-6">
 		<Error error={$message} />
 		<SelectList
-			buttonLabel={data.t.forms.fields.communications.generic.select_list.label()}
+			buttonLabel={m.quick_that_finch_bless()}
 			label={null}
 			{form}
 			name="list_id"
 			bind:value={$formData.list_id as number}
 		/>
-		<Button type="submit">{data.t.forms.buttons.send()}</Button>
+		<Button type="submit">{m.true_minor_toad_hike()}</Button>
 		<Debug data={formData} />
 	</Grid>
 </form>

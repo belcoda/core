@@ -2,6 +2,7 @@ import { json, error } from '$lib/server';
 import * as api from '$lib/server/api/people/taggings';
 import { read as readTag } from '$lib/server/api/core/tags';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
+import * as m from '$lib/paraglide/messages';
 export async function POST(event) {
 	try {
 		const tagId = Number(event.params.tag_id);
@@ -29,7 +30,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'API:/api/v1/people/[person_id]/tags/[tag_id]:POST',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}
@@ -62,7 +63,7 @@ export async function DELETE(event) {
 		return error(
 			500,
 			'API:/api/v1/people/[person_id]/tags/[tag_id]:DELETE',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

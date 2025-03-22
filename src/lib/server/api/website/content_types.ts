@@ -1,6 +1,7 @@
 import { db, pool, redis, BelcodaError, filterQuery } from '$lib/server';
 import { parse, id } from '$lib/schema/valibot';
 import * as schema from '$lib/schema/website/content_types';
+import * as m from '$lib/paraglide/messages';
 
 function redisString(instanceId: number, blockId: number | 'all') {
 	return `i:${instanceId}:content_types:${blockId}`;
@@ -27,7 +28,12 @@ export async function exists({
 		.selectExactlyOne('website.content_types', { instance_id: instanceId, id: contentTypeId })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:WEBSITE:CONTENT_TYPES:READ:01', t.errors.not_found(), err);
+			throw new BelcodaError(
+				404,
+				'DATA:WEBSITE:CONTENT_TYPES:READ:01',
+				m.pretty_tired_fly_lead(),
+				err
+			);
 		});
 
 	return true;
@@ -85,7 +91,12 @@ export async function read({
 		.selectExactlyOne('website.content_types', { instance_id: instanceId, id: contentTypeId })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:WEBSITE:CONTENT_TYPES:READ:01', t.errors.not_found(), err);
+			throw new BelcodaError(
+				404,
+				'DATA:WEBSITE:CONTENT_TYPES:READ:01',
+				m.pretty_tired_fly_lead(),
+				err
+			);
 		});
 	const parsedResult = parse(schema.read, result);
 	await redis.set(redisString(instanceId, contentTypeId), parsedResult);
@@ -117,7 +128,7 @@ export async function readBySlug({
 			throw new BelcodaError(
 				404,
 				'DATA:WEBSITE:CONTENT_TYPES:READBYSLUG:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});

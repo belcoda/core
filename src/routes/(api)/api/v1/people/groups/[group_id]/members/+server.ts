@@ -2,6 +2,7 @@ import { json, error } from '$lib/server';
 import * as api from '$lib/server/api/people/groups';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
 import { read as readGroup } from '$lib/server/api/people/groups';
+import * as m from '$lib/paraglide/messages';
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
@@ -30,6 +31,6 @@ export async function POST(event) {
 		});
 		return json(groupMember);
 	} catch (err) {
-		return error(500, 'API:/people/groups:GET:01', event.locals.t.errors.http[500](), err);
+		return error(500, 'API:/people/groups:GET:01', m.spry_ago_baboon_cure(), err);
 	}
 }

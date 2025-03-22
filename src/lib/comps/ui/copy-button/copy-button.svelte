@@ -13,7 +13,7 @@
 		size?: number;
 		className?: string;
 	}>();
-
+	import * as m from '$lib/paraglide/messages';
 	import { page } from '$app/stores';
 
 	let isCopied = $state(false);
@@ -29,9 +29,7 @@
 	class="ml-1 p-1 hover:bg-muted rounded-sm transition-colors duration-200 {isCopied
 		? 'text-green-600'
 		: ''} {className}"
-	title={isCopied
-		? $page.data.t.forms.actions.copied_to_clipboard()
-		: $page.data.t.forms.buttons.copy_url_to_clipboard()}
+	title={isCopied ? m.lower_dark_tern_spur() : m.honest_novel_llama_smile()}
 	onclick={copyToClipboard}
 >
 	{#if isCopied}

@@ -5,26 +5,23 @@
 	import Input from '$lib/comps/ui/input/input.svelte';
 	import Label from '$lib/comps/ui/label/label.svelte';
 	import Checkbox from '$lib/comps/ui/checkbox/checkbox.svelte';
+	import * as m from '$lib/paraglide/messages';
 </script>
 
 <div class="flex gap-4 items-center">
 	<div class="flex-grow">
-		<Input
-			type="text"
-			bind:value={item.phone_number}
-			placeholder={$page.data.t.forms.fields.people.phone_number.label()}
-		/>
+		<Input type="text" bind:value={item.phone_number} placeholder={m.quick_less_alpaca_buzz()} />
 	</div>
 	<div class="flex items-center gap-4">
 		<Checkbox bind:checked={item.mustBeSubscribed} />
-		<Label>{$page.data.t.forms.fields.filters.must_be_subscribed.label()}</Label>
+		<Label>{m.true_smug_starfish_value()}</Label>
 	</div>
 	<div class="flex items-center gap-4">
 		<Checkbox bind:checked={item.mustBeWhatsapp} />
-		<Label>{$page.data.t.forms.fields.filters.must_have_whatsapp.label()}</Label>
+		<Label>{m.north_plane_dolphin_earn()}</Label>
 	</div>
 	<div class="flex items-center gap-4">
 		<Checkbox bind:checked={item.partial} />
-		<Label>{$page.data.t.forms.fields.filters.allow_partial_match.label()}</Label>
+		<Label>{m.seemly_level_deer_fry()}</Label>
 	</div>
 </div>

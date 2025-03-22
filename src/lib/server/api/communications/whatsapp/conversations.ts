@@ -1,6 +1,8 @@
 import { db, pool, redis, filterQuery, BelcodaError } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 
+import * as m from '$lib/paraglide/messages';
+
 import * as schema from '$lib/schema/communications/whatsapp/conversations';
 
 import { exists as threadExists } from '$lib/server/api/communications/whatsapp/threads';
@@ -50,7 +52,7 @@ export async function read({
 			throw new BelcodaError(
 				404,
 				'DATA:COMMUNICATIONS:WHATSAPP:CONVERSATIONS:READ:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});
@@ -151,7 +153,7 @@ export async function update({
 		throw new BelcodaError(
 			403,
 			'DATA:COMMUNICATIONS:WHATSAPP:CONVERSATIONS:UPDATE:01',
-			t.errors.authorization()
+			m.royal_aware_jay_build()
 		);
 	if (threadId) await threadExists({ instanceId, threadId, t: t });
 	if (personId) await personExists({ instanceId, personId, t: t });
@@ -162,7 +164,7 @@ export async function update({
 		throw new BelcodaError(
 			404,
 			'DATA:COMMUNICATIONS:WHATSAPP:CONVERSATIONS:UPDATE:02',
-			t.errors.not_found()
+			m.pretty_tired_fly_lead()
 		);
 	}
 	const parsedResult = parse(schema.read, result[0]);
@@ -207,7 +209,7 @@ export async function getActiveForPerson({
 			throw new BelcodaError(
 				404,
 				'DATA:COMMUNICATIONS:WHATSAPP:CONVERSATIONS:READ:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});

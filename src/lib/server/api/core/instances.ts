@@ -1,7 +1,7 @@
 import * as schema from '$lib/schema/core/instance';
 import { v } from '$lib/schema/valibot';
 import { db, redis, pool, BelcodaError } from '$lib/server';
-
+import * as m from '$lib/paraglide/messages';
 export const read = async ({ instance_id }: { instance_id: number }): Promise<schema.Read> => {
 	const cached = await redis.get(`i:${instance_id}`);
 	if (cached) return v.parse(schema.read, cached);
@@ -38,7 +38,7 @@ export const update = async ({
 	const parsed = v.parse(schema.update, body);
 	const response = await db.update('instances', parsed, { id: instanceId }).run(pool);
 	if (response.length !== 1)
-		throw new BelcodaError(404, 'DATA:INSTANCES:UPDATE:01', t.errors.not_found());
+		throw new BelcodaError(404, 'DATA:INSTANCES:UPDATE:01', m.pretty_tired_fly_lead());
 	const parsedUpdate = v.parse(schema.read, response[0]);
 	await redis.set(`i:${instanceId}`, parsedUpdate);
 	return parsedUpdate;

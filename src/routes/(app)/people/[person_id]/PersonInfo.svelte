@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 	import type { Read } from '$lib/schema/people/people';
 	const { person }: { person: Read } = $props();
 	import { renderAddress } from '$lib/utils/text/address';
@@ -30,7 +31,7 @@
 			<Mail size={18} />
 			<div>{person.email.email}</div>
 			{#if person.email.subscribed}<Badge class="gap-1 bg-success-600 hover:bg-success-600"
-					><Check size={12} />{$page.data.t.common.status.subscribed()}</Badge
+					><Check size={12} />{m.quick_plain_warthog_heart()}</Badge
 				>{/if}
 		</div>
 	{/if}
@@ -41,7 +42,7 @@
 			<div>{person.phone_number.phone_number}</div>
 			{#if person.phone_number.subscribed}
 				<Badge class="gap-1 bg-success-600 hover:bg-success-600"
-					><Check size={12} />{$page.data.t.common.status.subscribed()}</Badge
+					><Check size={12} />{m.quick_plain_warthog_heart()}</Badge
 				>
 			{/if}
 		</div>

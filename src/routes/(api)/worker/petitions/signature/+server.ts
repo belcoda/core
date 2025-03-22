@@ -5,6 +5,7 @@ import updatePerson from '$lib/server/hooks/website/utils/update_person';
 import { create } from '$lib/server/api/petitions/signatures';
 import { read as readPetition } from '$lib/server/api/petitions/petitions';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
+import * as m from '$lib/paraglide/messages';
 
 const log = pino(import.meta.url);
 export async function POST(event) {
@@ -32,7 +33,7 @@ export async function POST(event) {
 			throw new BelcodaError(
 				400,
 				'WORKER:/petitions/signature:01',
-				event.locals.t.errors.generic(),
+				m.teary_dizzy_earthworm_urge(),
 				err
 			);
 		});
@@ -62,6 +63,6 @@ export async function POST(event) {
 
 		return json({ success: true });
 	} catch (err) {
-		return error(500, 'WORKER:/petitions/signature:02', event.locals.t.errors.generic(), err);
+		return error(500, 'WORKER:/petitions/signature:02', m.teary_dizzy_earthworm_urge(), err);
 	}
 }

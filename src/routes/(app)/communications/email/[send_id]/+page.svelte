@@ -1,6 +1,7 @@
 <script lang="ts">
 	export let data;
 	import { update } from '$lib/schema/communications/email/messages';
+	import * as m from '$lib/paraglide/messages';
 	import { Debug, Button, superForm, Grid, valibotClient, Error } from '$lib/comps/ui/forms';
 	import PageHeader from '$lib/comps/layout/PageHeader.svelte';
 	import EditMessageForm from '$lib/comps/forms/EditEmailMessageForm.svelte';
@@ -30,29 +31,31 @@
 			{#if data.send.started_at && data.send.completed_at}
 				<Badge class="flex items-center gap-2" variant="success" size="lg">
 					<Check size={16} />
-					{data.t.common.status.completed()}
+					{m.candid_grand_platypus_praise()}
 				</Badge>
 			{:else if data.send.started_at}
 				<Badge variant="warning" class="flex items-center gap-2" size="lg">
 					<LoaderCircle class="animated animate-spin" size={16} />
-					{data.t.common.status.sending()}
+					{m.gaudy_gray_gadfly_reap()}
 				</Badge>
 			{/if}
 		</div>
 		{#if data.send.completed_at}<div class="mt-2 text-muted-foreground text-lg">
-				{data.t.common.status.completed_at(data.timeAgo.format(data.send.completed_at))}
+				{m.grassy_odd_elephant_evoke({
+					localizedTimeAgo: data.timeAgo.format(data.send.completed_at)
+				})}
 			</div>{/if}
 	{/snippet}
 	{#snippet button()}
 		<div class="flex items-center gap-2">
 			{#if !data.send.started_at}
 				<Button href="/communications/email/{data.send.id}/send" variant="outline" size="sm">
-					{data.t.forms.fields.communications.generic.select_recipients_and_send()}
+					{m.factual_nimble_snail_tend()}
 				</Button>
 			{/if}
 			{#if !disabled}
 				<Button href="/communications/email/{data.send.id}/edit" variant="default" size="sm">
-					{data.t.forms.buttons.edit_name()}
+					{m.alert_bright_panda_care()}
 				</Button>
 			{/if}
 		</div>
@@ -77,7 +80,7 @@
 			html="html"
 			text="text"
 		/>
-		<Button {disabled} type="submit">{data.t.forms.buttons.save()}</Button>
+		<Button {disabled} type="submit">{m.empty_warm_squirrel_chop()}</Button>
 		<Debug data={formData} />
 	</Grid>
 </form>

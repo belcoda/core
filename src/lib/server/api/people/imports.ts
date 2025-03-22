@@ -1,6 +1,7 @@
 import * as schema from '$lib/schema/people/imports';
 import { parse } from '$lib/schema/valibot';
 import { db, pool, redis, filterQuery, BelcodaError } from '$lib/server';
+import * as m from '$lib/paraglide/messages';
 
 export function redisString(instanceId: number) {
 	return `i:${instanceId}:people:imports:all`;
@@ -92,7 +93,7 @@ export async function update({
 		.update('people.imports', toUpdate, { instance_id: instanceId, id: importId })
 		.run(pool);
 	if (result.length !== 1)
-		throw new BelcodaError(400, 'DATA:people/import:UPDATE:01', t.errors.not_found());
+		throw new BelcodaError(400, 'DATA:people/import:UPDATE:01', m.pretty_tired_fly_lead());
 	await redis.del(redisString(instanceId));
 	return parse(schema.read, result[0]);
 }

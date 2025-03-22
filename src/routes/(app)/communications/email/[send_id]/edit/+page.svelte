@@ -16,12 +16,12 @@
 		validators: valibotClient(update)
 	});
 	const { form: formData, enhance, message } = form;
-
+	import * as m from '$lib/paraglide/messages';
 	import { page } from '$app/stores';
 	//superseeded by the send function at /communications/email/[send_id]/send/+page.svelte
 	/* async function send() {
 		try {
-			if (confirm($page.data.t.common.alerts.send_email()) === false) return;
+			if (confirm("Actually send email?") === false) return;
 			const response = await fetch(
 				`/api/v1/communications/email/sends/${$page.params.send_id}/send`,
 				{
@@ -33,24 +33,24 @@
 				}
 			);
 			if (!response.ok) {
-				$flash = { type: 'error', message: data.t.errors.generic() };
+				$flash = { type: 'error', message: m.teary_dizzy_earthworm_urge() };
 			}
-			$flash = { type: 'success', message: data.t.forms.actions.success() };
+			$flash = { type: 'success', message: "Success" };
 			await goto(`/communications/email/${$page.params.send_id}`);
 		} catch (err) {
 			if (err instanceof Error) {
 				$flash = { type: 'error', message: err };
 			} else {
-				$flash = { type: 'error', message: data.t.errors.generic() };
+				$flash = { type: 'error', message: m.teary_dizzy_earthworm_urge() };
 			}
 		}
 	} */
 </script>
 
-<PageHeader title={data.t.pages.communications.email.edit()}>
+<PageHeader title={m.dirty_broad_penguin_pave()}>
 	{#snippet button()}
 		<Button href={`/communications/email/${$page.params.send_id}`} variant="default" size="sm">
-			{data.t.forms.buttons.back()}
+			{m.super_broad_gopher_hurl()}
 		</Button>
 	{/snippet}
 </PageHeader>
@@ -59,12 +59,12 @@
 	<Grid cols={1} class="mt-6">
 		<Error error={$message} />
 		<Input
-			label={data.t.forms.fields.generic.name.label()}
+			label={m.extra_wild_earthworm_commend()}
 			{form}
 			name="name"
 			bind:value={$formData.name as string}
 		/>
-		<Button type="submit">{data.t.forms.buttons.save()}</Button>
+		<Button type="submit">{m.empty_warm_squirrel_chop()}</Button>
 		<Debug data={formData} />
 	</Grid>
 </form>

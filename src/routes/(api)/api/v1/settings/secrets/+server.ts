@@ -2,6 +2,7 @@ import { update as updateSecrets, _readSecretsUnsafe } from '$lib/server/api/cor
 import { secrets as secretSchema } from '$lib/schema/core/instance';
 import { parse } from '$lib/schema/valibot';
 import { json, error } from '$lib/server';
+import * as m from '$lib/paraglide/messages';
 
 export async function PUT(event) {
 	try {
@@ -16,7 +17,7 @@ export async function PUT(event) {
 		const secrets = await _readSecretsUnsafe({ instanceId });
 		return json(secrets);
 	} catch (e) {
-		return error(500, 'API:/settings/secrets:PUT:01', event.locals.t.errors.http[500](), e);
+		return error(500, 'API:/settings/secrets:PUT:01', m.spry_ago_baboon_cure(), e);
 	}
 }
 
@@ -26,6 +27,6 @@ export async function GET(event) {
 		const secrets = await _readSecretsUnsafe({ instanceId });
 		return json(secrets);
 	} catch (err) {
-		return error(500, 'API:/settings/secrets:GET:01', event.locals.t.errors.http[500](), err);
+		return error(500, 'API:/settings/secrets:GET:01', m.spry_ago_baboon_cure(), err);
 	}
 }

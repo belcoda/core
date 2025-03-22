@@ -1,6 +1,7 @@
 import { db, pool, redis, BelcodaError, filterQuery } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 import * as schema from '$lib/schema/website/blocks';
+import * as m from '$lib/paraglide/messages';
 
 function redisString(instanceId: number, blockId: number | 'all') {
 	return `i:${instanceId}:blocks:${blockId}`;
@@ -39,7 +40,7 @@ export async function read({
 		.selectExactlyOne('website.blocks', { instance_id: instanceId, id: blockId })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:WEBSITE:BLOCKS:READ:01', t.errors.not_found(), err);
+			throw new BelcodaError(404, 'DATA:WEBSITE:BLOCKS:READ:01', m.pretty_tired_fly_lead(), err);
 		});
 	const parsedResult = parse(schema.read, result);
 	await redis.set(redisString(instanceId, blockId), parsedResult);
@@ -101,7 +102,7 @@ export async function update({
 		.update('website.blocks', parsed, { instance_id: instanceId, id: blockId })
 		.run(pool);
 	if (result.length !== 1)
-		throw new BelcodaError(404, 'DATA:WEBSITE:BLOCKS:UPDATE:01', t.errors.not_found());
+		throw new BelcodaError(404, 'DATA:WEBSITE:BLOCKS:UPDATE:01', m.pretty_tired_fly_lead());
 	const parsedResult = parse(schema.read, result[0]);
 	await redis.del(redisString(instanceId, blockId));
 	await redis.del(redisString(instanceId, 'all'));

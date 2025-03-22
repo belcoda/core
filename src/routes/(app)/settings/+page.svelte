@@ -6,14 +6,15 @@
 	import Grid from '$lib/comps/ui/custom/grid.svelte';
 	export let data;
 	import LanguageSelect from './LanguageSelect.svelte';
+	import * as m from '$lib/paraglide/messages';
 </script>
 
-<PageHeader title={$page.data.t.pages.config.settings.index()} />
+<PageHeader title={m.acidic_east_jan_taste()} />
 
 <Grid cols={1}>
 	<Card.Root class="mt-4">
 		<Card.Header>
-			<Card.Title>{$page.data.t.pages.config.settings.index()}</Card.Title>
+			<Card.Title>{m.silly_born_porpoise_gasp()}</Card.Title>
 		</Card.Header>
 		<Card.Content>
 			<LanguageSelect superform={data.form} />
@@ -24,47 +25,39 @@
 <Grid cols={1}>
 	<Card.Root class="mt-4">
 		<Card.Header>
-			<Card.Title>{$page.data.t.pages.config.settings.admins.index()}</Card.Title>
+			<Card.Title>{m.small_last_walrus_flop()}</Card.Title>
 		</Card.Header>
 		<Card.Content>
 			<Grid>
-				<Button variant="outline" href="/settings/admins"
-					>{$page.data.t.pages.config.settings.admins.index()}</Button
-				>
-				<Button variant="outline" href="/settings/admins/new"
-					>{$page.data.t.pages.config.settings.admins.new()}</Button
-				>
+				<Button variant="outline" href="/settings/admins">{m.empty_plain_cat_pray()}</Button>
+				<Button variant="outline" href="/settings/admins/new">{m.few_clean_wallaby_dust()}</Button>
 			</Grid>
 		</Card.Content>
 	</Card.Root>
 
 	<Card.Root class="mt-4">
 		<Card.Header>
-			<Card.Title>{$page.data.t.pages.config.settings.tags.index()}</Card.Title>
+			<Card.Title>{m.civil_zany_gorilla_clap()}</Card.Title>
 		</Card.Header>
 		<Card.Content>
 			<Grid>
-				<Button variant="outline" href="/settings/tags"
-					>{$page.data.t.pages.config.settings.tags.index()}</Button
-				>
-				<Button variant="outline" href="/settings/tags/new"
-					>{$page.data.t.pages.config.settings.tags.new()}</Button
-				>
+				<Button variant="outline" href="/settings/tags">{m.mealy_stock_lynx_jump()}</Button>
+				<Button variant="outline" href="/settings/tags/new">{m.good_just_weasel_twirl()}</Button>
 			</Grid>
 		</Card.Content>
 	</Card.Root>
 
 	<Card.Root class="mt-4">
 		<Card.Header>
-			<Card.Title>{$page.data.t.pages.config.settings.communications.index()}</Card.Title>
+			<Card.Title>{m.pretty_ideal_earthworm_spin()}</Card.Title>
 		</Card.Header>
 		<Card.Content>
 			<Grid>
 				<Button variant="outline" href="/settings/communications/email/templates"
-					>{$page.data.t.pages.config.settings.communications.email.templates.index()}</Button
+					>{m.raw_fit_mare_scold()}</Button
 				>
 				<Button variant="outline" href="/settings/communications/email/templates/new"
-					>{$page.data.t.pages.config.settings.communications.email.templates.new()}</Button
+					>{m.good_awful_warbler_attend()}</Button
 				>
 			</Grid>
 		</Card.Content>
@@ -72,15 +65,14 @@
 
 	<Card.Root class="mt-4">
 		<Card.Header>
-			<Card.Title>{$page.data.t.pages.config.settings.website.index()}</Card.Title>
+			<Card.Title>{m.teary_fair_gazelle_create()}</Card.Title>
 		</Card.Header>
 		<Card.Content>
 			<Grid>
-				<Button variant="outline" href="/settings/website"
-					>{$page.data.t.pages.config.settings.website.index()}</Button
+				<Button variant="outline" href="/settings/website">{m.actual_proud_stingray_renew()}</Button
 				>
 				<Button variant="outline" href="/settings/website/blocks"
-					>{$page.data.t.pages.config.settings.website.blocks.index()}</Button
+					>{m.raw_noisy_halibut_heal()}</Button
 				>
 			</Grid>
 		</Card.Content>
@@ -88,15 +80,15 @@
 
 	<Card.Root class="mt-4">
 		<Card.Header>
-			<Card.Title>{$page.data.t.pages.config.settings.people.index()}</Card.Title>
+			<Card.Title>{m.simple_home_squid_offer()}</Card.Title>
 		</Card.Header>
 		<Card.Content>
 			<Grid>
 				<Button variant="outline" href="/settings/people/imports"
-					>{$page.data.t.pages.config.settings.people.imports.index()}</Button
+					>{m.slow_tired_bumblebee_dream()}</Button
 				>
 				<Button variant="outline" href="/settings/people/imports/new"
-					>{$page.data.t.pages.config.settings.people.imports.new()}</Button
+					>{m.top_maroon_grizzly_edit()}</Button
 				>
 			</Grid>
 		</Card.Content>

@@ -1,7 +1,7 @@
 import { db, pool, redis, filterQuery, BelcodaError } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 import * as schema from '$lib/schema/communications/sms/numbers';
-
+import * as m from '$lib/paraglide/messages';
 function redisString(instanceId: number, numberId: number | 'all') {
 	return `i:${instanceId}:sms_numbers:${numberId}`;
 }
@@ -43,7 +43,7 @@ export async function read({
 			throw new BelcodaError(
 				404,
 				'DATA:COMMUNICATIONS:SMS:NUMBERS:READ:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});
@@ -94,7 +94,11 @@ export async function update({
 		.update('communications.sms_numbers', { instance_id: instanceId, id: numberId }, parsed)
 		.run(pool);
 	if (result.length !== 1) {
-		throw new BelcodaError(404, 'DATA:COMMUNICATIONS:SMS:NUMBERS:UPDATE:01', t.errors.not_found());
+		throw new BelcodaError(
+			404,
+			'DATA:COMMUNICATIONS:SMS:NUMBERS:UPDATE:01',
+			m.pretty_tired_fly_lead()
+		);
 	}
 	const parsedResult = parse(schema.read, result);
 	await redis.del(redisString(instanceId, 'all'));

@@ -2,6 +2,7 @@ import { json, error } from '$lib/server';
 import * as api from '$lib/server/api/people/groups';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
 import { read as readGroup } from '$lib/server/api/people/groups';
+import * as m from '$lib/paraglide/messages';
 export async function PUT(event) {
 	try {
 		const body = await event.request.json();
@@ -17,7 +18,7 @@ export async function PUT(event) {
 		return error(
 			500,
 			'API:/people/groups/members/[person_id]:PUT:01',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}
@@ -53,7 +54,7 @@ export async function DELETE(event) {
 		return error(
 			500,
 			'API:/people/groups/members/[person_id]:DELETE:01',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

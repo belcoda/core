@@ -3,6 +3,7 @@ import { error, pino, json as returnJson } from '$lib/server';
 import sendEmailPostmark from '$lib/server/utils/email/send_email_postmark';
 import { v, parse, id } from '$lib/schema/valibot';
 import { read as readAdmin } from '$lib/server/api/core/admins';
+import * as m from '$lib/paraglide/messages';
 const exportSchema = v.object({
 	adminId: id
 });
@@ -78,11 +79,6 @@ export async function POST(event) {
 		}
 		return returnJson({ success: true });
 	} catch (err) {
-		return error(
-			500,
-			'worker:utils/people/match_saction:POST:01',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'worker:utils/people/match_saction:POST:01', m.spry_ago_baboon_cure(), err);
 	}
 }

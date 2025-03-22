@@ -24,7 +24,7 @@
 		"knex:migrate:production": "npx knex migrate:latest --env production --knexfile ./knexfile.cjs",
 		"postinstall": "npx @inlang/paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide",
 		"inlang:lint": "npx @inlang/cli lint --project ./project.inlang",
-		"inlang:translate": "npx @inlang/cli machine translate --project ./project.inlang --force"
+		"inlang:translate": "npx @inlang/cli machine translate --project ./project.inlang"
 	},
 	"devDependencies": {
 		"@inlang/paraglide-js": "^2.0.0-beta.11",

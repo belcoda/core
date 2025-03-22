@@ -5,6 +5,8 @@
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import * as Tabs from '$lib/comps/ui/tabs/index.js';
 
+	import * as m from '$lib/paraglide/messages';
+
 	import PersonBadge from '$lib/comps/widgets/PersonBadge.svelte';
 	import User from 'lucide-svelte/icons/user';
 	import Link from 'lucide-svelte/icons/link';
@@ -33,14 +35,14 @@
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 	<div>
-		{@render head(data.t.pages.people.index(), data.t.forms.buttons.see_all(), '/people')}
+		{@render head(m.same_fluffy_yak_urge(), m.lime_round_barbel_cheer(), '/people')}
 		<DataGrid items={data.people.items} count={data.people.count} options={dataGridOptions}>
 			{#snippet content(person: (typeof data.people.items)[0])}
 				<div class="flex justify-between items-center w-full">
 					<div><PersonBadge {person} /></div>
 					<div>
 						<Button variant="outline" href="/people/{person.id}"
-							>{data.t.forms.buttons.view()}</Button
+							>{m.dull_fluffy_jannes_hike()}</Button
 						>
 					</div>
 				</div>
@@ -49,11 +51,7 @@
 	</div>
 
 	<div>
-		{@render head(
-			data.t.pages.people.groups.index(),
-			data.t.forms.buttons.see_all(),
-			'/people/groups'
-		)}
+		{@render head(m.proud_full_sawfish_belong(), m.lime_round_barbel_cheer(), '/people/groups')}
 		<DataGrid items={data.groups.items} count={data.groups.count} options={dataGridOptions}>
 			{#snippet content(group: (typeof data.groups.items)[0])}
 				<div class="flex justify-between items-center w-full">
@@ -67,7 +65,7 @@
 
 					<div>
 						<Button variant="outline" href="/people/groups/{group.id}"
-							>{data.t.forms.buttons.view()}</Button
+							>{m.dull_fluffy_jannes_hike()}</Button
 						>
 					</div>
 				</div>
@@ -76,7 +74,7 @@
 	</div>
 
 	<div>
-		{@render head(data.t.pages.events.index(), data.t.forms.buttons.see_all(), '/events')}
+		{@render head(m.hour_quick_ostrich_climb(), m.lime_round_barbel_cheer(), '/events')}
 		<DataGrid items={data.events.items} count={data.events.count} options={dataGridOptions}>
 			{#snippet content(event: (typeof data.events.items)[0])}
 				{@render eventLine(event)}
@@ -87,13 +85,16 @@
 	<div>
 		<Tabs.Root class="w-full" bind:value={contentType}>
 			<div class="flex justify-between items-center w-full">
-				<div><H2>{data.t.pages.website[contentType].index()}</H2></div>
+				<div>
+					<H2>{contentType === 'pages' ? m.glad_least_samuel_fall() : m.trite_fun_falcon_tend()}</H2
+					>
+				</div>
 				<div class="flex items-center gap-2">
 					<Tabs.List class="">
-						<Tabs.Trigger value="posts">{data.t.pages.website.posts.index()}</Tabs.Trigger>
-						<Tabs.Trigger value="pages">{data.t.pages.website.pages.index()}</Tabs.Trigger>
+						<Tabs.Trigger value="posts">{m.trite_fun_falcon_tend()}</Tabs.Trigger>
+						<Tabs.Trigger value="pages">{m.glad_least_samuel_fall()}</Tabs.Trigger>
 					</Tabs.List>
-					<Button href="/website/{contentType}">{data.t.forms.buttons.see_all()}</Button>
+					<Button href="/website/{contentType}">{m.lime_round_barbel_cheer()}</Button>
 				</div>
 			</div>
 			<Tabs.Content value="posts">
@@ -104,7 +105,7 @@
 
 							<div>
 								<Button variant="outline" href="/website/posts/{post.id}"
-									>{data.t.forms.buttons.view()}</Button
+									>{m.dull_fluffy_jannes_hike()}</Button
 								>
 							</div>
 						</div>
@@ -119,7 +120,7 @@
 
 							<div>
 								<Button variant="outline" href="/website/pages/{page.id}"
-									>{data.t.forms.buttons.view()}</Button
+									>{m.dull_fluffy_jannes_hike()}</Button
 								>
 							</div>
 						</div>
@@ -156,7 +157,7 @@
 		</div>
 		<div>
 			<div class="flex gap-4 items-center justify-end">
-				<Button variant="outline" href="/events/{item.id}">{data.t.forms.buttons.view()}</Button>
+				<Button variant="outline" href="/events/{item.id}">{m.dull_fluffy_jannes_hike()}</Button>
 			</div>
 		</div>
 	</div>

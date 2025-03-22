@@ -17,6 +17,7 @@
 	import { page } from '$app/stores';
 	import * as Popover from '$lib/comps/ui/popover/index.js';
 	import Globe from 'lucide-svelte/icons/globe';
+	import * as m from '$lib/paraglide/messages';
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'long'
 	});
@@ -86,7 +87,7 @@
 						<CalendarIcon class="mr-2 h-4 w-4" />
 						{value
 							? `${tf.format(zonedValue.toDate())} ${df.format(zonedValue.toDate())}`
-							: $page.data.t.forms.generic.date.placeholder()}
+							: m.home_arable_firefox_arrive()}
 					</Popover.Trigger>
 					<Popover.Content class="flex w-auto flex-col space-y-2 p-2">
 						<div class="flex items-center gap-0.5">

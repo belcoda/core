@@ -12,10 +12,11 @@
 	import { getFlash } from 'sveltekit-flash-message';
 	import Badge from '$lib/comps/ui/badge/badge.svelte';
 	const flash = getFlash(page);
+	import * as m from '$lib/paraglide/messages';
 
 	function copy() {
 		navigator.clipboard.writeText(upload.url);
-		$flash = { type: 'success', message: $page.data.t.forms.actions.copied_to_clipboard() };
+		$flash = { type: 'success', message: m.bright_many_mare_promise() };
 	}
 </script>
 
@@ -31,9 +32,7 @@
 		</div>
 		{#if children}{@render children()}{/if}
 		{#if showCopyButton}<div class="flex justify-center mt-3">
-				<Button variant="outline" size="sm" onclick={copy}
-					>{$page.data.t.forms.buttons.copy_url_to_clipboard()}</Button
-				>
+				<Button variant="outline" size="sm" onclick={copy}>{m.loud_spicy_wombat_reside()}</Button>
 			</div>{/if}
 	</div>
 </div>

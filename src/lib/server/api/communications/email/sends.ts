@@ -5,6 +5,7 @@ import { parse } from '$lib/schema/valibot';
 import { create as createMessage } from '$lib/server/api/communications/email/messages';
 import { read as readTemplate } from '$lib/server/api/communications/email/templates';
 import { randomUUID } from 'crypto';
+import * as m from '$lib/paraglide/messages';
 function redisString(instanceId: number, sendId: number | 'all') {
 	return `i:${instanceId}:email_sends:${sendId}`;
 }
@@ -77,7 +78,7 @@ export async function read({
 			throw new BelcodaError(
 				404,
 				'DATA:COMMUNICATIONS:EMAIL:SENDS:READ:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});
@@ -101,7 +102,11 @@ export async function update({
 		.update('communications.email_sends', parsed, { id: sendId, instance_id: instanceId })
 		.run(pool);
 	if (updated.length !== 1) {
-		throw new BelcodaError(404, 'DATA:COMMUNICATIONS:EMAIL:SENDS:UPDATE:01', t.errors.not_found());
+		throw new BelcodaError(
+			404,
+			'DATA:COMMUNICATIONS:EMAIL:SENDS:UPDATE:01',
+			m.pretty_tired_fly_lead()
+		);
 	}
 	await redis.del(redisString(instanceId, 'all'));
 	const parsedUpdated = parse(schema.read, updated[0]);
@@ -134,7 +139,7 @@ export async function markAsStarted({
 		throw new BelcodaError(
 			404,
 			'DATA:COMMUNICATIONS:EMAIL:SENDS:MARK_AS_STARTED:01',
-			t.errors.not_found()
+			m.pretty_tired_fly_lead()
 		);
 	}
 	await redis.del(redisString(instanceId, 'all'));
@@ -163,7 +168,7 @@ export async function markAsComplete({
 		throw new BelcodaError(
 			404,
 			'DATA:COMMUNICATIONS:EMAIL:SENDS:MARK_AS_STARTED:01',
-			t.errors.not_found()
+			m.pretty_tired_fly_lead()
 		);
 	}
 	await redis.del(redisString(instanceId, 'all'));

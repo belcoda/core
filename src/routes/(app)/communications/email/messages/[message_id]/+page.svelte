@@ -10,9 +10,10 @@
 	});
 	const { form: formData, message, enhance } = form;
 	import EditMessageForm from '$lib/comps/forms/EditEmailMessageForm.svelte';
+	import * as m from '$lib/paraglide/messages';
 </script>
 
-<PageHeader title={data.t.pages.communications.email.edit()} />
+<PageHeader title={m.ideal_fuzzy_grebe_cut()} />
 <form method="post" use:enhance>
 	<Grid cols={1}>
 		<Error error={$message} />
@@ -30,7 +31,7 @@
 			text="text"
 		/>
 		<div class="flex items-center justify-end">
-			<Button type="submit">{data.t.forms.buttons.save()}</Button>
+			<Button type="submit">{m.empty_warm_squirrel_chop()}</Button>
 		</div>
 		<Debug data={$formData} />
 	</Grid>

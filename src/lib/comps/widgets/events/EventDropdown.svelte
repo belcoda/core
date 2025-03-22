@@ -4,6 +4,8 @@
 	import { debounce } from '$lib/utils';
 	import type { Snippet } from 'svelte';
 
+	import * as m from '$lib/paraglide/messages';
+
 	type Props = {
 		item?: List['items'][number];
 		items?: List['items'];
@@ -68,22 +70,22 @@
 					{@render children()}
 				{:else}
 					<Plus size={14} />
-					<div class="text-sm">{$page.data.t.forms.buttons.search()}</div>
+					<div class="text-sm">{m.low_hour_pig_talk()}</div>
 				{/if}
 			</Button>
 		</Popover.Trigger>
 		<Popover.Content class="p-0" align="start" side="right">
 			<Command.Root>
 				<Command.Input
-					placeholder={$page.data.t.common.actions.search()}
+					placeholder={m.teal_dizzy_eagle_sing()}
 					bind:value={searchString}
 					oninput={debounce(search, 500)}
 				/>
 				<Command.List>
 					{#if loading}
-						<Command.Loading>{$page.data.t.common.status.loading()}</Command.Loading>
+						<Command.Loading>{m.just_grand_quail_hack()}</Command.Loading>
 					{:else}
-						<Command.Empty>{$page.data.t.common.data.no_items()}</Command.Empty>
+						<Command.Empty>{m.deft_agent_parakeet_peek()}</Command.Empty>
 						{#each items as object, i}
 							<Command.Item
 								value={`${object.id}:::${object.name}`}

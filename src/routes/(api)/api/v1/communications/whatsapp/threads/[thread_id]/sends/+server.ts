@@ -1,6 +1,6 @@
 import { json, error } from '$lib/server';
 import { create, listForThread } from '$lib/server/api/communications/whatsapp/sends';
-
+import * as m from '$lib/paraglide/messages';
 export async function GET(event) {
 	try {
 		const threadId = Number(event.params.thread_id);
@@ -15,7 +15,7 @@ export async function GET(event) {
 		return error(
 			500,
 			'API:/api/v1/communications/whatsapp/threads/[thread_id]/sends/+server.ts:GET',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}
@@ -39,7 +39,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'API:/api/v1/communications/whatsapp/threads/[thread_id]/sends/+server.ts:POST',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

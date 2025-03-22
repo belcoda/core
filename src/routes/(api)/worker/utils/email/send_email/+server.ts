@@ -5,6 +5,7 @@ import { markAsComplete } from '$lib/server/api/communications/email/sends.js';
 const log = pino(import.meta.url);
 import { read } from '$lib/server/api/people/people';
 import { create as createSentEmail } from '$lib/server/api/communications/email/sent_emails';
+import * as m from '$lib/paraglide/messages';
 
 import { parse } from '$lib/schema/valibot';
 
@@ -21,28 +22,28 @@ export async function POST(event) {
 			throw new BelcodaError(
 				404,
 				'WORKER:/utils/email/send_email:01',
-				event.locals.t.errors.generic(),
+				m.teary_dizzy_earthworm_urge(),
 				`Person with unique ID ${person.unique_id} has no email address`
 			);
 		if (!person.email?.subscribed)
 			throw new BelcodaError(
 				404,
 				'WORKER:/utils/email/send_email:02',
-				event.locals.t.errors.generic(),
+				m.teary_dizzy_earthworm_urge(),
 				`Person with unique ID ${person.unique_id} is not subscribed`
 			);
 		if (!person.email?.contactable)
 			return error(
 				404,
 				'WORKER:/utils/email/send_email:03',
-				event.locals.t.errors.generic(),
+				m.teary_dizzy_earthworm_urge(),
 				`Person with unique ID ${person.unique_id} is not contactable by email`
 			);
 		if (person.do_not_contact)
 			throw new BelcodaError(
 				404,
 				'WORKER:/utils/email/send_email:04',
-				event.locals.t.errors.generic(),
+				m.teary_dizzy_earthworm_urge(),
 				`Person with unique ID ${person.unique_id} is on the Do Not Contact list`
 			);
 		await sendEmail({
@@ -84,6 +85,6 @@ export async function POST(event) {
 
 		return json(sentEmailResponse);
 	} catch (err) {
-		return error(500, 'WORKER:/utils/email/send_email:01', event.locals.t.errors.generic(), err);
+		return error(500, 'WORKER:/utils/email/send_email:01', m.teary_dizzy_earthworm_urge(), err);
 	}
 }

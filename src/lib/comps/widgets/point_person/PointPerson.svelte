@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-
+	import * as m from '$lib/paraglide/messages';
 	import type { Read, List } from '$lib/schema/core/admin';
 	import AdminBadge from '$lib/comps/widgets/AdminBadge.svelte';
 	import {
@@ -44,7 +44,7 @@
 		{@render header()}
 	{:else}
 		<div class="text-sm font-medium text-right mb-0.5">
-			{$page.data.t.forms.fields.admins.point_person()}
+			{m.sour_kind_whale_cuddle()}
 		</div>
 	{/if}
 	<div class="flex items-center justify-start gap-1 w-full flex-wrap">
@@ -65,9 +65,9 @@
 			</Popover.Trigger>
 			<Popover.Content class="p-0" align="start" side="right">
 				<Command.Root>
-					<Command.Input placeholder={$page.data.t.forms.fields.admins.filter_admins()} />
+					<Command.Input placeholder={m.sea_crazy_sheep_catch()} />
 					<Command.List>
-						<Command.Empty>{$page.data.t.common.data.no_items()}</Command.Empty>
+						<Command.Empty>{m.deft_agent_parakeet_peek()}</Command.Empty>
 						<Command.Group>
 							{#each selectableAdmins as adminItem}
 								<Command.Item

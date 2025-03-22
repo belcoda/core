@@ -1,7 +1,7 @@
-import { error, redis, db, pool, t, type SL, pino, BelcodaError } from '$lib/server';
+import { error, redis, db, pool, pino, BelcodaError } from '$lib/server';
 import * as schema from '$lib/schema/core/admin';
 import { v } from '$lib/schema/valibot';
-
+import * as m from '$lib/paraglide/messages';
 import { filterQuery } from '$lib/server/utils/filters/filter';
 
 import type { Read as ReadInstance } from '$lib/schema/core/instance';
@@ -29,7 +29,7 @@ export async function exists({
 		.selectExactlyOne('admins', { instance_id: instanceId, id: adminId })
 		.run(pool)
 		.catch((err) => {
-			return new BelcodaError(404, 'DATA:CORE:ADMINS:EXISTS:01', t.errors.not_found(), err);
+			return new BelcodaError(404, 'DATA:CORE:ADMINS:EXISTS:01', m.pretty_tired_fly_lead(), err);
 		});
 	return true;
 }
@@ -75,7 +75,7 @@ export async function read({
 		.selectExactlyOne('admins', { instance_id, id: admin_id })
 		.run(pool)
 		.catch((err: Error) => {
-			throw new BelcodaError(404, 'DATA:CORE:ADMINS:READ:01', t.errors.not_found(), err);
+			throw new BelcodaError(404, 'DATA:CORE:ADMINS:READ:01', m.pretty_tired_fly_lead(), err);
 		});
 	const parsedResponse = v.parse(schema.read, response);
 	await redis.set(redisString(instance_id, admin_id), parsedResponse);
@@ -97,7 +97,7 @@ export async function update({
 	const parsed = v.parse(schema.update, body);
 	const response = await db.update('admins', parsed, { instance_id, id: admin_id }).run(pool);
 	if (response.length !== 1) {
-		throw new BelcodaError(500, 'DATA:CORE:ADMINS:UPDATE:01', t.errors.generic());
+		throw new BelcodaError(500, 'DATA:CORE:ADMINS:UPDATE:01', m.teary_dizzy_earthworm_urge());
 	}
 	const parsedResponse = v.parse(schema.read, response[0]);
 	await redis.set(redisString(instance_id, admin_id), parsedResponse);
@@ -121,7 +121,7 @@ export async function signIn({
 		.update('admins', toUpdate, { email: parsed.email, active: true })
 		.run(pool);
 	if (response.length !== 1) {
-		throw error(500, 'DATA:CORE:ADMINS:SIGNIN:01', t.errors.sign_in());
+		throw error(500, 'DATA:CORE:ADMINS:SIGNIN:01', m.dizzy_awful_anteater_sew());
 	}
 	const parsedResponse = v.parse(schema.read, response[0]);
 	const sessionCode = await createSession({
@@ -164,7 +164,7 @@ export async function readAdminApiKey({
 		.selectExactlyOne('admins', { instance_id, id: admin_id })
 		.run(pool)
 		.catch((err: Error) => {
-			throw new BelcodaError(404, 'DATA:CORE:ADMINS:READAPIKEY:01', t.errors.not_found(), err);
+			throw new BelcodaError(404, 'DATA:CORE:ADMINS:READAPIKEY:01', m.pretty_tired_fly_lead(), err);
 		});
 	const parsedResponse = v.parse(schema.readApiKey, response);
 	return parsedResponse;
@@ -186,12 +186,12 @@ export async function updateApiKey({
 			throw new BelcodaError(
 				500,
 				'DATA:CORE:ADMINS:UPDATEAPIKEY:01',
-				t.errors.updating_data(),
+				m.early_nimble_jackal_trim(),
 				err
 			);
 		});
 	if (response.length !== 1)
-		throw new BelcodaError(500, 'DATA:CORE:ADMINS:UPDATEAPIKEY:02', t.errors.not_found());
+		throw new BelcodaError(500, 'DATA:CORE:ADMINS:UPDATEAPIKEY:02', m.pretty_tired_fly_lead());
 	const parsedResponse = v.parse(schema.readApiKey, response[0]);
 	return parsedResponse;
 }

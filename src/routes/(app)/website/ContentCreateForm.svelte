@@ -11,6 +11,7 @@
 		Grid,
 		HTML
 	} from '$lib/comps/ui/forms';
+	import * as m from '$lib/paraglide/messages';
 	import UploadWidget from '$lib/comps/widgets/uploads/UploadWidget.svelte';
 	import { create, update } from '$lib/schema/website/content';
 	const { isCreate, contentTypeSlug = 'pages' }: { isCreate: boolean; contentTypeSlug: string } =
@@ -36,18 +37,13 @@
 		<Input
 			{form}
 			name="heading"
-			label={$page.data.t.forms.fields.generic.page_heading.label()}
+			label={m.major_vivid_reindeer_kick()}
 			bind:value={$formData.heading}
 		/>
 		{@render slug()}
-		<HTML
-			{form}
-			name="html"
-			label={$page.data.t.forms.fields.generic.html.label()}
-			bind:value={$formData.html}
-		/>
+		<HTML {form} name="html" label={m.whole_sweet_slug_attend()} bind:value={$formData.html} />
 		<UploadWidget
-			label={$page.data.t.forms.fields.feature_image.label()}
+			label={m.funny_away_spider_trust()}
 			upload_id={$formData.feature_image_upload_id}
 			onselected={(upload) => {
 				if (upload?.id) $formData.feature_image_upload_id = upload.id;
@@ -64,7 +60,7 @@
 		<div class="flex justify-end items-center gap-2">
 			<Link size={18} class="text-muted-foreground" />
 			<div class="text-sm text-muted-foreground">
-				{$page.data.t.forms.fields.website.page_link.label()}
+				{m.weary_inclusive_whale_dial()}
 			</div>
 			<button
 				onclick={() => {
@@ -81,7 +77,7 @@
 		<div class="flex justify-end items-center gap-2">
 			<Link size={18} class="text-muted-foreground" />
 			<code class="text-sm text-primary-500 underline">
-        {`http${dev ? '' : 's'}://${$page.data.instance.slug}.${PUBLIC_ROOT_DOMAIN}/${contentTypeSlug}/`}
+				{`http${dev ? '' : 's'}://${$page.data.instance.slug}.${PUBLIC_ROOT_DOMAIN}/${contentTypeSlug}/`}
 			</code>
 			<Slug
 				{form}
@@ -91,7 +87,7 @@
 				bind:value={$formData.slug as string}
 			/>
 			<Button onclick={() => (editSlug = false)} size="sm" variant="ghost"
-				>{$page.data.t.forms.buttons.save()}</Button
+				>{m.empty_warm_squirrel_chop()}</Button
 			>
 		</div>
 	{/if}

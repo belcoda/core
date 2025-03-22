@@ -5,7 +5,7 @@ export async function load(event) {
 	const form = await superValidate(valibot(create));
 	return { form };
 }
-
+import * as m from '$lib/paraglide/messages';
 export const actions = {
 	default: async function (event) {
 		const output = await formAction({
@@ -18,7 +18,7 @@ export const actions = {
 		const parsed = parse(read, output.output);
 		return redirect(event, {
 			location: `/people/groups/${parsed.id}`,
-			message: event.locals.t.forms.actions.created()
+			message: m.flat_sleek_millipede_agree()
 		});
 	}
 };

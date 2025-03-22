@@ -11,6 +11,7 @@ import {
 } from '$lib/server';
 import { read, update } from '$lib/schema/communications/email/messages';
 import { parse } from '$lib/schema/valibot';
+import * as m from '$lib/paraglide/messages';
 export async function load(event) {
 	const response = await event.fetch(
 		`/api/v1/communications/email/messages/${event.params.message_id}`
@@ -34,11 +35,9 @@ export const actions = {
 			valibot(update)
 		);
 		if (!form.valid) {
-			return message(
-				form,
-				new BelcodaError(400, 'VALIDATION', event.locals.t.errors.validation()),
-				{ status: 400 }
-			);
+			return message(form, new BelcodaError(400, 'VALIDATION', m.spare_mushy_dachshund_quell()), {
+				status: 400
+			});
 		}
 		const response = await event.fetch(
 			`/api/v1/communications/email/messages/${event.params.message_id}`,
@@ -59,7 +58,7 @@ export const actions = {
 
 		return redirect(event, {
 			location: `/communications/email/messages/${parsed.id}`,
-			message: event.locals.t.forms.actions.saved()
+			message: m.lower_least_sawfish_favor()
 		});
 	}
 };

@@ -1,6 +1,9 @@
 import { db, pool, redis, type s, BelcodaError, filterQuery, pino } from '$lib/server';
 import { DEFAULT_COUNTRY } from '$lib/i18n';
 import { parse, slug } from '$lib/schema/valibot';
+
+import * as m from '$lib/paraglide/messages';
+
 import * as schema from '$lib/schema/events/events';
 import type { Read as ReadInstance } from '$lib/schema/core/instance';
 import { slugify } from '$lib/utils/text/string';
@@ -36,7 +39,7 @@ export async function exists({
 		.selectExactlyOne('events.events', { instance_id: instanceId, id: eventId })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:EVENTS:EXISTS:01', t.errors.not_found(), err);
+			throw new BelcodaError(404, 'DATA:EVENTS:EXISTS:01', m.pretty_tired_fly_lead(), err);
 		});
 	return true;
 }
@@ -166,7 +169,7 @@ export async function update({
 		.update('events.events', parsed, { instance_id: instanceId, id: eventId })
 		.run(pool);
 	if (result.length !== 1) {
-		throw new BelcodaError(404, 'DATA:EVENTS:UPDATE:01', t.errors.not_found());
+		throw new BelcodaError(404, 'DATA:EVENTS:UPDATE:01', m.pretty_tired_fly_lead());
 	}
 	await redis.del(redisString(instanceId, eventId));
 	await redis.del(redisString(instanceId, 'all'));
@@ -235,7 +238,7 @@ export async function read({
 		)
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:EVENTS:READ:01', t.errors.not_found(), err);
+			throw new BelcodaError(404, 'DATA:EVENTS:READ:01', m.pretty_tired_fly_lead(), err);
 		});
 	const parsedResult = parse(schema.read, result);
 	await redis.set(redisString(instanceId, eventId), parsedResult);

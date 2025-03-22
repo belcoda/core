@@ -1,6 +1,7 @@
 import { superValidate, valibot, formAction, redirect, loadError } from '$lib/server';
 import { update, read } from '$lib/schema/people/groups';
 import { parse } from '$lib/schema/valibot';
+import * as m from '$lib/paraglide/messages';
 export async function load(event) {
 	const response = await event.fetch(`/api/v1/people/groups/${event.params.group_id}`);
 	if (!response.ok) return loadError(response);
@@ -22,7 +23,7 @@ export const actions = {
 		const parsed = parse(read, output.output);
 		return redirect(event, {
 			location: `/people/groups/${parsed.id}`,
-			message: event.locals.t.forms.actions.updated()
+			message: m.white_acidic_koala_pop()
 		});
 	}
 };

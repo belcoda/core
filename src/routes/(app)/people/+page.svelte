@@ -6,6 +6,7 @@
 	import TagFilter from '$lib/comps/widgets/tags/TagFilter.svelte';
 	import Filter from 'lucide-svelte/icons/filter';
 	import { goto } from '$app/navigation';
+	import * as m from '$lib/paraglide/messages';
 
 	async function onAddTag(tagId: number) {
 		const params = new URLSearchParams(window.location.search);
@@ -25,14 +26,14 @@
 </script>
 
 <DataGrid
-	title={data.t.pages.people.index()}
+	title={m.round_new_ape_offer()}
 	items={data.people.items}
 	count={data.people.count}
 	filterKey="search"
 	newItemHref="/people/new"
 	options={{
-		filterPlaceholder: data.t.forms.fields.generic.filter.types.people.placeholder(),
-		nothingFoundMessage: data.t.common.data.not_found_types.people()
+		filterPlaceholder: m.seemly_that_warthog_explore(),
+		nothingFoundMessage: m.weird_that_earthworm_foster()
 	}}
 >
 	{#snippet filterSnippet(filter)}
@@ -40,7 +41,7 @@
 			<TagFilter
 				{onAddTag}
 				{onRemoveTag}
-				buttonText={data.t.forms.fields.tags.filter_by_tag.placeholder()}
+				buttonText={m.legal_kind_ape_twist()}
 				ButtonIcon={Filter}
 			/>
 			{@render filter()}
@@ -50,13 +51,13 @@
 		<div class="flex items-center gap-2 justify-between">
 			<PersonBadge {person} />
 			<Button href={`/people/${person.id}`} variant="outline" size="sm">
-				{data.t.forms.buttons.view()}
+				{m.dull_fluffy_jannes_hike()}
 			</Button>
 		</div>
 	{/snippet}
 	{#snippet headerButton()}
 		<Button href="/people/new" variant="default" size="sm">
-			{data.t.pages.people.new_person()}
+			{m.upper_seemly_swan_race()}
 		</Button>
 	{/snippet}
 </DataGrid>

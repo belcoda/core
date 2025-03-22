@@ -7,6 +7,7 @@ import { create as createPerson } from '$lib/server/api/people/people';
 import { create as createSchema } from '$lib/schema/people/people';
 import { renderName } from '$lib/utils/text/names';
 import { v, parse } from '$lib/schema/valibot';
+import * as m from '$lib/paraglide/messages';
 const log = pino(import.meta.url);
 
 export async function POST(event) {
@@ -128,7 +129,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'API:/api/v1/worker/imports/people/[import_id]:POST:01',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

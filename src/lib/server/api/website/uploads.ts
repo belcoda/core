@@ -1,5 +1,6 @@
 import { db, pool, redis, BelcodaError, filterQuery } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
+import * as m from '$lib/paraglide/messages';
 import * as schema from '$lib/schema/website/uploads';
 
 function redisString(instanceId: number, uploadId: number | 'all') {
@@ -40,7 +41,7 @@ export async function read({
 		.selectExactlyOne('website.uploads', { instance_id: instanceId, id: uploadId })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:WEBSITE:UPLOADS:READ:01', t.errors.not_found(), err);
+			throw new BelcodaError(404, 'DATA:WEBSITE:UPLOADS:READ:01', m.pretty_tired_fly_lead(), err);
 		});
 	const parsedResult = parse(schema.read, result);
 	await redis.set(redisString(instanceId, uploadId), parsedResult);

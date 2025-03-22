@@ -2,7 +2,7 @@ import { update, secrets as secretsSchema, updateSecrets } from '$lib/schema/cor
 import { superValidate, valibot, redirect } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 import { formAction } from '$lib/server';
-
+import * as m from '$lib/paraglide/messages';
 export const load = async (event) => {
 	const services = await event.fetch(`/api/v1/settings/secrets`);
 	const body = await services.json();
@@ -29,7 +29,7 @@ export const actions = {
 		parse(secretsSchema, output); // To make sure we throw an error if the response is not what we expect
 		return redirect(event, {
 			location: `/settings/secrets`,
-			message: event.locals.t.forms.actions.updated()
+			message: m.white_acidic_koala_pop()
 		});
 		/* const form = await superValidate<Infer<typeof update>, BelcodaError>(
 			event.request,
@@ -39,7 +39,7 @@ export const actions = {
 		if (!form.valid) {
 			return message(
 				form,
-				new BelcodaError(400, 'VALIDATION', event.locals.t.errors.validation()),
+				new BelcodaError(400, 'VALIDATION', m.spare_mushy_dachshund_quell()),
 				{ status: 400 }
 			);
 		}

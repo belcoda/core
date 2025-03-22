@@ -10,7 +10,7 @@ import { read as readMessage } from '$lib/server/api/communications/whatsapp/mes
 import { parse } from '$lib/schema/valibot';
 import { _readSecretsUnsafe } from '$lib/server/api/core/instances';
 import { _updateWhatsappId, read } from '$lib/server/api/people/people';
-
+import * as m from '$lib/paraglide/messages';
 import type { AfterSend } from '$lib/schema/communications/whatsapp/worker/sending.js';
 const log = pino(import.meta.url);
 export async function POST(event) {
@@ -36,7 +36,7 @@ export async function POST(event) {
 			throw new BelcodaError(
 				400,
 				'DATA:/whatsapp/send_message/+server.ts:01',
-				event.locals.t.errors.generic()
+				m.teary_dizzy_earthworm_urge()
 			);
 		}
 		const parsedPhoneNumberTo = parsePhoneNumber(person.phone_number.phone_number, {
@@ -46,7 +46,7 @@ export async function POST(event) {
 			throw new BelcodaError(
 				400,
 				'DATA:/whatsapp/send_message/+server.ts:02',
-				event.locals.t.errors.generic()
+				m.teary_dizzy_earthworm_urge()
 			);
 		}
 
@@ -54,7 +54,7 @@ export async function POST(event) {
 			throw new BelcodaError(
 				400,
 				'DATA:/whatsapp/send_message/+server.ts:03',
-				event.locals.t.errors.generic()
+				m.teary_dizzy_earthworm_urge()
 			);
 		}
 
@@ -110,11 +110,6 @@ export async function POST(event) {
 		}
 		return json({ success: true });
 	} catch (err) {
-		return error(
-			500,
-			'WORKER:/whatsapp/send_message/+server.ts:05',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'WORKER:/whatsapp/send_message/+server.ts:05', m.spry_ago_baboon_cure(), err);
 	}
 }

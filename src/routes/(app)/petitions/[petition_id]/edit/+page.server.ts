@@ -1,5 +1,5 @@
 import { superValidate, valibot, formAction, redirect, pino, loadError } from '$lib/server';
-
+import * as m from '$lib/paraglide/messages';
 import { update, read } from '$lib/schema/petitions/petitions';
 import { parse } from '$lib/schema/valibot';
 const log = pino(import.meta.url);
@@ -24,7 +24,7 @@ export const actions = {
 		const parsed = parse(read, response.output);
 		return redirect(event, {
 			location: `/petitions/${parsed.id}`,
-			message: event.locals.t.forms.actions.updated()
+			message: m.white_acidic_koala_pop()
 		});
 	}
 };

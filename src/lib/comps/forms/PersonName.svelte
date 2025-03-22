@@ -4,6 +4,7 @@
 
 <script lang="ts" generics="T extends Record<string, unknown>">
 	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 	import {
 		formFieldProxy,
 		type SuperForm,
@@ -63,7 +64,7 @@
 					//@ts-expect-error
 					$fullName = generatedFullName;
 				}}
-				label={$page.data.t.forms.fields.people.family_name.label()}
+				label={m.less_plane_lionfish_lift()}
 				bind:value={$familyName as string}
 			/>
 			<Input
@@ -73,19 +74,19 @@
 					$fullName = generatedFullName;
 				}}
 				name={given_name}
-				label={$page.data.t.forms.fields.people.given_name.label()}
+				label={m.game_quiet_swan_spark()}
 				bind:value={$givenName as string}
 			/>
 
 			<Input
 				{form}
 				name={family_name_alt}
-				label={$page.data.t.forms.fields.people.family_name_alt.label()}
+				label={m.low_mean_frog_accept()}
 				bind:value={$familyNameAlt as string}
 			/><Input
 				{form}
 				name={given_name_alt}
-				label={$page.data.t.forms.fields.people.given_name_alt.label()}
+				label={m.still_legal_stingray_urge()}
 				bind:value={$givenNameAlt as string}
 			/>
 		</Grid>
@@ -101,7 +102,7 @@
 					$fullName = generatedFullName;
 				}}
 				name={given_name}
-				label={$page.data.t.forms.fields.people.given_name.label()}
+				label={m.pink_fair_mantis_drum()}
 				bind:value={$givenName as string}
 			/>
 			<Input
@@ -111,7 +112,7 @@
 					//@ts-expect-error
 					$fullName = generatedFullName;
 				}}
-				label={$page.data.t.forms.fields.people.family_name.label()}
+				label={m.gross_long_husky_dine()}
 				bind:value={$familyName as string}
 			/>
 		</Grid>

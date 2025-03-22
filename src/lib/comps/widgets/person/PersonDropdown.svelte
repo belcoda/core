@@ -20,6 +20,7 @@
 	let loading = $state(false);
 	let open = $state(false);
 	let selectablePeople = $derived(people.filter((p) => selectedPersonIds.indexOf(p.id) === -1));
+	import * as m from '$lib/paraglide/messages';
 
 	import { load } from '$lib/comps/widgets/person/actions';
 	import PersonBadge from '$lib/comps/widgets/PersonBadge.svelte';
@@ -72,23 +73,23 @@
 				{@render children()}
 			{:else}
 				<Plus size={14} />
-				<div class="text-sm">{$page.data.t.forms.buttons.search_people()}</div>
+				<div class="text-sm">{m.orange_inner_monkey_launch()}</div>
 			{/if}
 		</Popover.Trigger>
 		<Popover.Content class="p-0" align="start" side="right">
 			<Command.Root>
 				<Command.Input
-					placeholder={$page.data.t.forms.fields.tags.filter_tags.label()}
+					placeholder={m.jumpy_alert_mouse_cry()}
 					bind:value
 					oninput={debounce(search, 500)}
 				/>
 				<Command.List>
 					{#if loading}
 						<Command.Loading class="p-2 text-foreground-muted"
-							>{$page.data.t.common.status.loading()}</Command.Loading
+							>{m.loud_bland_lionfish_pray()}</Command.Loading
 						>
 					{:else}
-						<Command.Empty>{$page.data.t.common.data.no_items()}</Command.Empty>
+						<Command.Empty>{m.deft_agent_parakeet_peek()}</Command.Empty>
 						{#each selectablePeople as person, i}
 							<Command.Item
 								forceMount={true}

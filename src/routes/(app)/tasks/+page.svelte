@@ -1,5 +1,6 @@
 <script lang="ts">
 	let { data } = $props();
+	import * as m from '$lib/paraglide/messages';
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import H1 from '$lib/comps/typography/H1.svelte';
 	import DataGrid from '$lib/comps/ui/custom/table/DataGrid.svelte';
@@ -41,7 +42,7 @@
 				});
 				if (response.ok) {
 					task.completed_at = new Date();
-					$flash = { type: 'success', message: data.t.forms.actions.success() };
+					$flash = { type: 'success', message: m.away_moving_ray_flow() };
 					await invalidateAll();
 				}
 			}
@@ -49,13 +50,13 @@
 			if (err instanceof Error) {
 				$flash = { type: 'error', message: err.message };
 			} else {
-				$flash = { type: 'error', message: data.t.errors.generic() };
+				$flash = { type: 'error', message: m.teary_dizzy_earthworm_urge() };
 			}
 		}
 	}
 </script>
 
-<DataGrid items={data.tasks.items} count={data.tasks.count} title={data.t.pages.tasks.index()}>
+<DataGrid items={data.tasks.items} count={data.tasks.count} title={m.stock_flaky_cuckoo_agree()}>
 	{#snippet headerButton()}
 		<Button
 			onclick={() => (newTask = !newTask)}
@@ -68,7 +69,7 @@
 			{:else}
 				<Plus size={16} />
 			{/if}
-			<div>{data.t.pages.tasks.new()}</div>
+			<div>{m.flat_acidic_falcon_breathe()}</div>
 		</Button>
 	{/snippet}
 
@@ -78,7 +79,7 @@
 		{/if}
 	</div>
 
-	{#snippet content(task: typeof data.tasks.items[0], i)}
+	{#snippet content(task: (typeof data.tasks.items)[0], i)}
 		{#if typeof i === 'number'}
 			<div class="flex items-center divide-x flex-wrap md:flex-nowrap">
 				<button
@@ -117,17 +118,17 @@
 	{/snippet}
 </DataGrid>
 
-{#snippet doneButton(task: typeof data.tasks.items[0], i: number)}
+{#snippet doneButton(task: (typeof data.tasks.items)[0], i: number)}
 	<Button class="my-0 py-0" variant="secondary" size="sm" onclick={() => doneTask(i, task)}>
-		{data.t.forms.buttons.done()}
+		{m.safe_dry_snake_cheer()}
 	</Button>
 {/snippet}
 
-{#snippet openTask(task: typeof data.tasks.items[0], i: number)}
+{#snippet openTask(task: (typeof data.tasks.items)[0], i: number)}
 	<div class="mt-2 py-4 text-sm text-muted-foreground">{task.description}</div>
 {/snippet}
 
-{#snippet calendar(task: typeof data.tasks.items[0], i: number)}
+{#snippet calendar(task: (typeof data.tasks.items)[0], i: number)}
 	<TaskDatePicker
 		bind:value={task.due_at}
 		onchange={async (date) => {

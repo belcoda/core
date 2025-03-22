@@ -9,17 +9,18 @@
 	import CalendarClock from 'lucide-svelte/icons/calendar-clock';
 	import MapPin from 'lucide-svelte/icons/map-pin';
 	import Link from 'lucide-svelte/icons/link';
+	import * as m from '$lib/paraglide/messages';
 </script>
 
 <DataGrid
 	items={data.events.items}
 	count={data.events.count}
-	title={data.t.pages.events.index()}
+	title={m.loose_cool_herring_quiz()}
 	newItemHref="/events/new"
-	options={{ nothingFoundMessage: data.t.common.data.not_found_types.events() }}
+	options={{ nothingFoundMessage: m.sharp_honest_cheetah_evoke() }}
 >
 	{#snippet headerButton()}
-		<Button href="/events/new">{data.t.pages.events.new_event()}</Button>
+		<Button href="/events/new">{m.shy_giant_rat_bake()}</Button>
 	{/snippet}
 	{#snippet content(item: List['items'][0])}
 		<div class="items-center flex justify-between gap-4">
@@ -48,7 +49,7 @@
 			<div>
 				<div class="flex gap-4 items-center justify-end">
 					<AdminBadge admin={item.point_person} />
-					<Button href="/events/{item.id}" variant="outline">{data.t.forms.buttons.view()}</Button>
+					<Button href="/events/{item.id}" variant="outline">{m.dull_fluffy_jannes_hike()}</Button>
 				</div>
 			</div>
 		</div>

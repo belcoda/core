@@ -13,11 +13,12 @@
 	});
 
 	const { form: formData, errors: formErrors, enhance } = form;
+	import * as m from '$lib/paraglide/messages';
 </script>
 
 <form method="POST" use:enhance>
 	<DataGrid
-		title={data.t.pages.config.settings.secrets.index()}
+		title={m.less_acidic_capybara_fold()}
 		items={data.services}
 		count={data.services.length}
 		options={{ showFilter: false }}
@@ -34,6 +35,6 @@
 			</Grid>
 		{/snippet}
 	</DataGrid>
-	<Button type="submit" class="col-span-2 mt-4">{data.t.forms.buttons.submit()}</Button>
+	<Button type="submit" class="col-span-2 mt-4">{m.just_away_horse_urge()}</Button>
 </form>
 <Debug data={$formData} />

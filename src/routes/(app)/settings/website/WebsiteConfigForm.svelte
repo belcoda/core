@@ -18,6 +18,7 @@
 	import Checkbox from '$lib/comps/ui/checkbox/checkbox.svelte';
 	import * as Card from '$lib/comps/ui/card';
 	import Label from '$lib/comps/ui/label/label.svelte';
+	import * as m from '$lib/paraglide/messages';
 	type Props = {
 		superform: SuperValidated<Infer<typeof update>>;
 	};
@@ -63,27 +64,27 @@
 			<!-- We don't yet support custom domains, but we we will include this setting here once support is added -->
 			<!-- <Input
 				name="settings.website.custom_domain"
-				label={$page.data.t.forms.fields.settings.website.custom_domain.label()}
-				description={$page.data.t.forms.fields.settings.website.custom_domain.description()}
+				label={"Custom domain"}
+				description={"Custom domain for your instance"}
 				{form}
 				bind:value={$formData.settings.website.custom_domain as string}
 			/> -->
 			<ImageUpload
 				bind:value={$formData.settings.website.logo_url as string}
-				label={$page.data.t.forms.fields.settings.website.logo.label()}
-				description={$page.data.t.forms.fields.settings.website.logo.description()}
+				label={m.livid_less_boar_foster()}
+				description={m.dry_deft_puma_endure()}
 			/>
 			<ImageUpload
-				label={$page.data.t.forms.fields.settings.website.favicon.label()}
-				description={$page.data.t.forms.fields.settings.website.favicon.description()}
+				label={m.grand_cute_nils_swim()}
+				description={m.key_free_rat_lend()}
 				bind:value={$formData.settings.website.favicon as string}
 			/>
 
 			<Card.Root class="mt-4">
 				<Card.Header>
-					<Card.Title>{$page.data.t.forms.fields.settings.website.header_links.title()}</Card.Title>
+					<Card.Title>{m.late_quiet_chipmunk_burn()}</Card.Title>
 					<p class="text-muted-foreground text-sm">
-						{$page.data.t.forms.fields.settings.website.header_links.description()}
+						{m.happy_seemly_leopard_boost()}
 					</p>
 				</Card.Header>
 				<Card.Content>
@@ -92,7 +93,7 @@
 					{/each}
 					<div class="flex justify-end">
 						<SimpleButton variant="outline" size="sm" onclick={addHeaderRow}
-							>{$page.data.t.forms.fields.settings.website.add_link.label()}</SimpleButton
+							>{m.direct_trick_crocodile_agree()}</SimpleButton
 						>
 					</div>
 				</Card.Content>
@@ -100,9 +101,9 @@
 
 			<Card.Root class="mt-4">
 				<Card.Header>
-					<Card.Title>{$page.data.t.forms.fields.settings.website.footer_links.title()}</Card.Title>
+					<Card.Title>{m.next_white_cheetah_spur()}</Card.Title>
 					<p class="text-muted-foreground text-sm">
-						{$page.data.t.forms.fields.settings.website.footer_links.description()}
+						{m.nimble_teary_dingo_launch()}
 					</p>
 				</Card.Header>
 				<Card.Content>
@@ -111,7 +112,7 @@
 					{/each}
 					<div class="flex justify-end">
 						<SimpleButton variant="outline" size="sm" onclick={addFooterRow}
-							>{$page.data.t.forms.fields.settings.website.add_link.label()}</SimpleButton
+							>{m.gross_small_worm_animate()}</SimpleButton
 						>
 					</div>
 				</Card.Content>
@@ -127,11 +128,11 @@
 	<Grid cols={3}>
 		{#if $formData.settings}
 			<div>
-				<Label>{$page.data.t.forms.fields.generic.name.label()}</Label>
+				<Label>{m.extra_wild_earthworm_commend()}</Label>
 				<SimpleInput bind:value={$formData.settings.website.header_links[row].text} />
 			</div>
 			<div>
-				<Label>{$page.data.t.forms.fields.generic.url.label()}</Label>
+				<Label>{m.flaky_nimble_nuthatch_borrow()}</Label>
 				<SimpleInput bind:value={$formData.settings.website.header_links[row].url} />
 			</div>
 			<div class="flex items-center gap-1 justify-between">
@@ -142,15 +143,15 @@
 							for="terms1"
 							class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 						>
-							{$page.data.t.forms.fields.settings.website.open_in_new_tab.label()}
+							{m.super_antsy_flea_honor()}
 						</Label>
 						<p class="text-muted-foreground text-sm">
-							{$page.data.t.forms.fields.settings.website.open_in_new_tab.description()}
+							{m.gaudy_low_baboon_pinch()}
 						</p>
 					</div>
 				</div>
 				<SimpleButton variant="destructive" size="sm" onclick={() => removeHeaderRow(row)}
-					>{$page.data.t.forms.buttons.remove()}</SimpleButton
+					>{m.tame_late_hare_push()}</SimpleButton
 				>
 			</div>
 		{/if}
@@ -161,11 +162,11 @@
 	<Grid cols={3}>
 		{#if $formData.settings}
 			<div>
-				<Label>{$page.data.t.forms.fields.generic.name.label()}</Label>
+				<Label>{m.extra_wild_earthworm_commend()}</Label>
 				<SimpleInput bind:value={$formData.settings.website.footer_links[row].text} />
 			</div>
 			<div>
-				<Label>{$page.data.t.forms.fields.generic.url.label()}</Label>
+				<Label>{m.aqua_proud_oryx_gasp()}</Label>
 				<SimpleInput bind:value={$formData.settings.website.footer_links[row].url} />
 			</div>
 			<div class="flex items-center gap-1 justify-between">
@@ -176,15 +177,15 @@
 							for="terms1"
 							class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 						>
-							{$page.data.t.forms.fields.settings.website.open_in_new_tab.label()}
+							{m.any_quick_squirrel_leap()}
 						</Label>
 						<p class="text-muted-foreground text-sm">
-							{$page.data.t.forms.fields.settings.website.open_in_new_tab.description()}
+							{m.dry_key_walrus_borrow()}
 						</p>
 					</div>
 				</div>
 				<SimpleButton variant="destructive" size="sm" onclick={() => removeFooterRow(row)}
-					>{$page.data.t.forms.buttons.remove()}</SimpleButton
+					>{m.acidic_cuddly_rooster_roam()}</SimpleButton
 				>
 			</div>
 		{/if}

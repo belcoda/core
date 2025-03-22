@@ -1,7 +1,7 @@
 import { loadError, filter, formAction, redirect, valibot, superValidate } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 import * as schema from '$lib/schema/core/tags';
-
+import * as m from '$lib/paraglide/messages';
 export async function load(event) {
 	const response = await event.fetch(filter(`/api/v1/tags/${event.params.tag_id}`, event.url));
 	if (!response.ok) {
@@ -24,7 +24,7 @@ export const actions = {
 		if (error) return output;
 		return redirect(event, {
 			location: `/settings/tags`,
-			message: event.locals.t.forms.actions.created()
+			message: m.flat_sleek_millipede_agree()
 		});
 	}
 };

@@ -1,6 +1,6 @@
 import { json, error } from '$lib/server/';
 import * as api from '$lib/server/api/website/content_types';
-
+import * as m from '$lib/paraglide/messages';
 export async function GET(event) {
 	try {
 		const templates = await api.list({
@@ -10,12 +10,7 @@ export async function GET(event) {
 		});
 		return json(templates);
 	} catch (err) {
-		return error(
-			500,
-			'API:/api/v1/website/content_types:GET01',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'API:/api/v1/website/content_types:GET01', m.spry_ago_baboon_cure(), err);
 	}
 }
 
@@ -28,11 +23,6 @@ export async function POST(event) {
 		});
 		return json(createdTemplate);
 	} catch (err) {
-		return error(
-			500,
-			'API:/api/v1/website/content_types:POST01',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'API:/api/v1/website/content_types:POST01', m.spry_ago_baboon_cure(), err);
 	}
 }

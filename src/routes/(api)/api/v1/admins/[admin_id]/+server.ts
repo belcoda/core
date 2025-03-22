@@ -1,6 +1,7 @@
 import { error, json } from '$lib/server/';
 import * as schema from '$lib/schema/core/admin';
 import * as api from '$lib/server/api/core/admins';
+import * as m from '$lib/paraglide/messages';
 import { parse } from '$lib/schema/valibot';
 
 export async function PUT(event) {
@@ -15,7 +16,7 @@ export async function PUT(event) {
 		});
 		return json(updated);
 	} catch (err) {
-		return error(500, 'API:/ADMINS:PUT:01', event.locals.t.errors.http[500](), err);
+		return error(500, 'API:/ADMINS:PUT:01', m.spry_ago_baboon_cure(), err);
 	}
 }
 
@@ -28,6 +29,6 @@ export async function GET(event) {
 		});
 		return json(read);
 	} catch (err) {
-		return error(500, 'API:/ADMINS:GET:01', event.locals.t.errors.http[500](), err);
+		return error(500, 'API:/ADMINS:GET:01', m.spry_ago_baboon_cure(), err);
 	}
 }

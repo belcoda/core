@@ -3,28 +3,25 @@ import Cog from 'lucide-svelte/icons/cog';
 import Settings from 'lucide-svelte/icons/settings-2';
 import CircleCheckBig from 'lucide-svelte/icons/circle-check-big';
 
+import * as m from '$lib/paraglide/messages';
+
 import type { Localization } from '$lib/i18n';
 
 export default function (t: Localization) {
 	return {
 		my_tasks: {
-			title: () => t.pages.tasks.index(),
+			title: () => m.true_stale_anteater_adore(),
 			href: () => '/tasks',
 			icon: CircleCheckBig
 		},
 		settings: {
-			title: () => t.pages.config.settings.index(),
+			title: () => m.aqua_dirty_opossum_flip(),
 			href: () => '/settings',
 			icon: Cog
 		},
-		/* preferences: {
-			title: () => t.pages.config.preferences(),
-			href: () => '/preferences',
-			disabled: true,
-			icon: Settings
-		}, */
+
 		logout: {
-			title: () => t.pages.auth.logout(),
+			title: () => m.cuddly_odd_tuna_intend(),
 			href: () => '/logout',
 			icon: Logout
 		}

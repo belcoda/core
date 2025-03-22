@@ -5,6 +5,8 @@
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import H1 from '$lib/comps/typography/H1.svelte';
 
+	import * as m from '$lib/paraglide/messages';
+
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import Pagination from '$lib/comps/ui/custom/pagination/pagination.svelte';
 	import { page } from '$app/stores';
@@ -39,9 +41,9 @@
 		showDivider: true,
 		contentPadding: true,
 		contentGridClass: 'grid grid-cols-1 relative',
-		filterPlaceholder: $page.data.t.forms.fields.generic.filter.placeholder(),
-		nothingFoundMessage: $page.data.t.common.data.no_items(),
-		createNewButtonText: $page.data.t.forms.buttons.create()
+		filterPlaceholder: m.home_fancy_rooster_love(),
+		nothingFoundMessage: m.deft_agent_parakeet_peek(),
+		createNewButtonText: m.glad_day_barbel_vent()
 	} as const;
 
 	type Props = {

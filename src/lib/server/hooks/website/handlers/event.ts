@@ -3,7 +3,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import eventPageTemplate from '$lib/server/templates/website/events/default.hbs?raw';
 import eventPageCopy from '$lib/server/templates/website/events/default.copy';
 import utilsCopy from '$lib/server/templates/website/blocks/utils/utils.copy';
-
+import * as m from '$lib/paraglide/messages';
 import renderHandlebarsTemplate from '$lib/server/utils/handlebars/render';
 import {
 	render,
@@ -73,7 +73,7 @@ export default async function ({
 			if (err instanceof Error) {
 				status.error = err.message;
 			} else {
-				status.error = event.locals.t.errors.generic();
+				status.error = m.teary_dizzy_earthworm_urge();
 			}
 		}
 	}

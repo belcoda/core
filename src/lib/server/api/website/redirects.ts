@@ -1,5 +1,6 @@
 import { db, pool, redis, BelcodaError, filterQuery } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
+import * as m from '$lib/paraglide/messages';
 import * as schema from '$lib/schema/website/redirects';
 
 function redisString(instanceId: number, fromUrl: string) {
@@ -81,7 +82,7 @@ export async function readByUrl({
 		.selectExactlyOne('website.redirects', { instance_id, from: url })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:WEBSITE:REDIRECTS:READ:01', t.errors.not_found(), err);
+			throw new BelcodaError(404, 'DATA:WEBSITE:REDIRECTS:READ:01', m.pretty_tired_fly_lead(), err);
 		});
 	const parsedResult = parse(schema.read, result);
 	await redis.set(redisString(instance_id, url), parsedResult);

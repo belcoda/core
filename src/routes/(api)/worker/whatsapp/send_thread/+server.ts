@@ -2,7 +2,7 @@ import { json, error, BelcodaError } from '$lib/server';
 import * as schema from '$lib/schema/communications/whatsapp/sends';
 import { parse } from '$lib/schema/valibot';
 import { getAllPersonIds } from '$lib/server/api/people/lists';
-
+import * as m from '$lib/paraglide/messages';
 import { read as readThread } from '$lib/server/api/communications/whatsapp/threads';
 import { update as updateSentMessage } from '$lib/server/api/communications/whatsapp/sends';
 import { type SendMessage } from '$lib/schema/communications/whatsapp/elements/message';
@@ -11,11 +11,7 @@ export async function POST(event) {
 		const body = await event.request.json();
 		const parsed = parse(schema.read, body);
 		if (parsed.completed_at)
-			throw new BelcodaError(
-				400,
-				'WORKER:/whatsapp/send_thread:01',
-				event.locals.t.errors.http[400]()
-			);
+			throw new BelcodaError(400, 'WORKER:/whatsapp/send_thread:01', m.stock_minor_barbel_zip());
 
 		const list = await getAllPersonIds({
 			instanceId: event.locals.instance.id,
@@ -53,6 +49,6 @@ export async function POST(event) {
 
 		return json({ success: true });
 	} catch (err) {
-		return error(500, 'WORKER:/whatsapp/send_thread:01', event.locals.t.errors.http[500](), err);
+		return error(500, 'WORKER:/whatsapp/send_thread:01', m.spry_ago_baboon_cure(), err);
 	}
 }

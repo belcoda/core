@@ -2,6 +2,7 @@ import { json, error } from '$lib/server';
 import * as api from '$lib/server/api/people/lists';
 import { read as readList } from '$lib/server/api/people/lists';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
+import * as m from '$lib/paraglide/messages';
 export async function POST(event) {
 	try {
 		const listId = Number(event.params.list_id);
@@ -33,7 +34,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'API:/api/v1/people/[person_id]/lists/[list_id]:POST',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}
@@ -70,7 +71,7 @@ export async function DELETE(event) {
 		return error(
 			500,
 			'API:/api/v1/people/[person_id]/lists/[list_id]:DELETE',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

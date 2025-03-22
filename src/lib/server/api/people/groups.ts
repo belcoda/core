@@ -1,4 +1,6 @@
 import { BelcodaError, db, redis, pool, pino, filterQuery } from '$lib/server';
+import * as m from '$lib/paraglide/messages';
+
 import * as schema from '$lib/schema/people/groups';
 import * as membersSchema from '$lib/schema/people/group_members';
 import { list as listInGroup } from '$lib/server/api/people/filters/in_group';
@@ -24,7 +26,7 @@ export async function exists({
 		.selectExactlyOne('people.groups', { instance_id: instanceId, id: groupId })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:PEOPLE:GROUPS:EXISTS:01', t.errors.not_found(), err);
+			throw new BelcodaError(404, 'DATA:PEOPLE:GROUPS:EXISTS:01', m.pretty_tired_fly_lead(), err);
 		});
 	return true;
 }
@@ -49,7 +51,7 @@ export async function personExists({
 			throw new BelcodaError(
 				404,
 				'DATA:PEOPLE:GROUPS:MEMBERS:EXISTS:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});
@@ -136,7 +138,7 @@ export async function update({
 		.update('people.groups', parsed, { instance_id: instanceId, id: groupId })
 		.run(pool);
 	if (updated.length !== 1) {
-		throw new BelcodaError(404, 'DATA:PEOPLE:GROUPS:UPDATE:01', t.errors.not_found());
+		throw new BelcodaError(404, 'DATA:PEOPLE:GROUPS:UPDATE:01', m.pretty_tired_fly_lead());
 	}
 	await redis.del(redisString(instanceId, 'all'));
 	await redis.del(redisString(instanceId, groupId));
@@ -224,7 +226,7 @@ export async function updateMember({
 		)
 		.run(pool);
 	if (updated.length !== 1) {
-		throw new BelcodaError(404, 'DATA:PEOPLE:GROUPS:MEMBERS:UPDATE:01', t.errors.not_found());
+		throw new BelcodaError(404, 'DATA:PEOPLE:GROUPS:MEMBERS:UPDATE:01', m.pretty_tired_fly_lead());
 	}
 	const parsedUpdated = parse(membersSchema.read, updated[0]);
 	await redis.del(redisString(instanceId, groupId));
@@ -247,7 +249,7 @@ export async function removeMember({
 		.deletes('people.group_members', { group_id: groupId, person_id: personId })
 		.run(pool);
 	if (deleted.length !== 1) {
-		throw new BelcodaError(404, 'DATA:PEOPLE:GROUPS:MEMBERS:DELETE:01', t.errors.not_found());
+		throw new BelcodaError(404, 'DATA:PEOPLE:GROUPS:MEMBERS:DELETE:01', m.pretty_tired_fly_lead());
 	}
 	await redis.del(redisString(instanceId, groupId));
 }
@@ -294,7 +296,7 @@ export async function _getGroupByWhatsappId({
 			throw new BelcodaError(
 				404,
 				'DATA:PEOPLE:GROUPS:GET_BY_WHATSAPP_ID:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});
@@ -315,7 +317,7 @@ export async function _getInstanceIdByWhatsappGroupChatId({
 			throw new BelcodaError(
 				404,
 				'DATA:PEOPLE:GROUPS:GET_BY_WHATSAPP_ID:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});

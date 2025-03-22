@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 	import { list as listPeople, type List as ListPeople } from '$lib/schema/people/people';
 	import {
 		filterGroup,
@@ -34,19 +35,22 @@
 				body: JSON.stringify(parsed)
 			});
 			if (!result.ok) {
-				throw new Error($page.data.t.errors.generic());
+				throw new Error(m.teary_dizzy_earthworm_urge());
 			}
 			const body = await result.json();
 			const parsedPeople = parse(listPeople, body);
 			people = parsedPeople;
 			hasSearched = true;
-			$flash = { type: 'success', message: $page.data.t.forms.actions.foundResults(people.count) };
+			$flash = {
+				type: 'success',
+				message: m.merry_bright_koala_glow({ count: people.count.toString() })
+			};
 			document.getElementById('results')?.scrollIntoView();
 		} catch (err) {
 			if (err instanceof Error) {
 				$flash = { type: 'error', message: err.message };
 			} else {
-				$flash = { type: 'error', message: $page.data.t.errors.generic() };
+				$flash = { type: 'error', message: m.teary_dizzy_earthworm_urge() };
 			}
 		}
 	}
@@ -62,27 +66,25 @@
 				body: JSON.stringify(parsed)
 			});
 			if (!result.ok) {
-				throw new Error($page.data.t.errors.generic());
+				throw new Error(m.teary_dizzy_earthworm_urge());
 			}
-			$flash = { type: 'success', message: $page.data.t.forms.actions.success() };
+			$flash = { type: 'success', message: m.bright_suave_dove_arise() };
 		} catch (err) {
 			if (err instanceof Error) {
 				$flash = { type: 'error', message: err.message };
 			} else {
-				$flash = { type: 'error', message: $page.data.t.errors.generic() };
+				$flash = { type: 'error', message: m.teary_dizzy_earthworm_urge() };
 			}
 		}
 	}
 </script>
 
-<PageHeader title={$page.data.t.pages.people.filter()} separator={false} class="mb-6" />
+<PageHeader title={m.tired_clean_grizzly_link()} separator={false} class="mb-6" />
 
 <FilterGroupWidget bind:filter root={true} onDelete={() => {}} />
 
 <div class="flex justify-end">
-	<Button class="mt-6" onclick={runFilter}
-		>{$page.data.t.forms.fields.filters.filter_action()}</Button
-	>
+	<Button class="mt-6" onclick={runFilter}>{m.top_raw_impala_twirl()}</Button>
 </div>
 
 <span id="results"></span>
@@ -90,7 +92,7 @@
 	<Separator class="my-6" />
 	<DataGrid
 		options={{ showFilter: false }}
-		title={$page.data.t.people.filter.results.title()}
+		title={m.smug_lost_hamster_spin()}
 		items={people.items}
 		count={people.count}
 	>
@@ -98,15 +100,14 @@
 			<div class="flex justify-between items-center w-full py-2 pl-2">
 				<div><PersonBadge {person} /></div>
 				<div>
-					<Button variant="outline" href="/people/{person.id}"
-						>{$page.data.t.forms.buttons.view()}</Button
+					<Button variant="outline" href="/people/{person.id}">{m.dull_fluffy_jannes_hike()}</Button
 					>
 				</div>
 			</div>
 		{/snippet}
 
 		{#snippet headerButton()}
-			<Button onclick={createList}>{$page.data.t.forms.fields.filters.create_list_action()}</Button>
+			<Button onclick={createList}>{m.elegant_quaint_dog_dart()}</Button>
 		{/snippet}
 	</DataGrid>
 {/if}
