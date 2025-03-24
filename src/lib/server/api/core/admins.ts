@@ -133,17 +133,27 @@ export async function signIn({
 
 export async function list({
 	instance_id,
-	url
+	url,
+	includeDeleted = false
 }: {
 	instance_id: number;
 	url: URL;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const { where, options, filtered } = filterQuery(url, { search_key: 'full_name' });
-	if (!filtered) {
+	if (!filtered && !includeDeleted) {
 		const cached = await redis.get(redisString(instance_id, 'all'));
 		if (cached) return v.parse(schema.list, cached);
 	}
-	const sql = await db.select('admins', { instance_id: instance_id, ...where }, options);
+	const sql = await db.select(
+		'admins',
+		{
+			instance_id: instance_id,
+			...where,
+			...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+		},
+		options
+	);
 	const response = await sql.run(pool);
 	const count = await db.count('admins', { instance_id: instance_id, ...where }).run(pool);
 	const parsedResponse = v.parse(schema.list, { count: count, items: response });
