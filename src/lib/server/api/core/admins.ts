@@ -260,3 +260,40 @@ export async function getApiKey({
 		return { admin, instance };
 	}
 }
+
+export async function del({
+	instance_id,
+	admin_id,
+	t
+}: {
+	instance_id: number;
+	admin_id: number;
+	t: App.Localization;
+}): Promise<void> {
+	// Return error if admin is already deleted.
+	// The read function will throw an error if the admin is not found or if the admin is deleted.
+	await read({ instance_id, admin_id, t });
+
+	// Throw error if the admin is the only admin.
+	const count = await db
+		.count('admins', { instance_id, deleted_at: db.conditions.isNull })
+		.run(pool);
+	if (count === 1) {
+		throw new BelcodaError(500, 'DATA:CORE:ADMINS:DELETE:01', t.errors.authorization());
+	}
+
+	// TODO: Expire all the admin's sessions.
+
+	// TODO: Reassing all the admin's resources to the default admin.
+
+	// Delete the admin from cache.
+	await redis.del(redisString(instance_id, admin_id));
+
+	// Delete the admin.
+	const response = await db
+		.update('admins', { deleted_at: new Date() }, { instance_id, id: admin_id })
+		.run(pool);
+	if (response.length !== 1) {
+		throw new BelcodaError(500, 'DATA:CORE:ADMINS:DELETE:01', t.errors.generic());
+	}
+}
