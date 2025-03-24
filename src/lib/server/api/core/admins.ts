@@ -17,16 +17,22 @@ const redisString = (instance_id: number, admin_id: number | 'all') =>
 export async function exists({
 	instanceId,
 	adminId,
-	t
+	t,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	adminId: number;
 	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<true> {
 	const cached = await redis.get(redisString(instanceId, adminId));
 	if (cached) return true;
-	const response = await db
-		.selectExactlyOne('admins', { instance_id: instanceId, id: adminId })
+	await db
+		.selectExactlyOne('admins', {
+			instance_id: instanceId,
+			id: adminId,
+			...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+		})
 		.run(pool)
 		.catch((err) => {
 			return new BelcodaError(404, 'DATA:CORE:ADMINS:EXISTS:01', t.errors.not_found(), err);
@@ -63,16 +69,24 @@ export async function create({
 export async function read({
 	instance_id,
 	t,
-	admin_id
+	admin_id,
+	includeDeleted = false
 }: {
 	instance_id: number;
 	t: App.Localization;
 	admin_id: number;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
-	const cached = await redis.get(redisString(instance_id, admin_id));
-	if (cached) return v.parse(schema.read, cached);
+	if (!includeDeleted) {
+		const cached = await redis.get(redisString(instance_id, admin_id));
+		if (cached) return v.parse(schema.read, cached);
+	}
 	const response = await db
-		.selectExactlyOne('admins', { instance_id, id: admin_id })
+		.selectExactlyOne('admins', {
+			instance_id,
+			id: admin_id,
+			...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+		})
 		.run(pool)
 		.catch((err: Error) => {
 			throw new BelcodaError(404, 'DATA:CORE:ADMINS:READ:01', t.errors.not_found(), err);
@@ -87,15 +101,23 @@ export async function update({
 	instance_id,
 	admin_id,
 	t,
-	body
+	body,
+	includeDeleted = false
 }: {
 	instance_id: number;
 	admin_id: number;
 	t: App.Localization;
 	body: schema.Update;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const parsed = v.parse(schema.update, body);
-	const response = await db.update('admins', parsed, { instance_id, id: admin_id }).run(pool);
+	const response = await db
+		.update('admins', parsed, {
+			instance_id,
+			id: admin_id,
+			...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+		})
+		.run(pool);
 	if (response.length !== 1) {
 		throw new BelcodaError(500, 'DATA:CORE:ADMINS:UPDATE:01', t.errors.generic());
 	}
@@ -118,7 +140,11 @@ export async function signIn({
 		...parsed
 	};
 	const response = await db
-		.update('admins', toUpdate, { email: parsed.email, active: true })
+		.update('admins', toUpdate, {
+			email: parsed.email,
+			active: true,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool);
 	if (response.length !== 1) {
 		throw error(500, 'DATA:CORE:ADMINS:SIGNIN:01', t.errors.sign_in());
@@ -171,7 +197,7 @@ export async function readAdminApiKey({
 	admin_id: number;
 }): Promise<schema.ReadApiKey> {
 	const response = await db
-		.selectExactlyOne('admins', { instance_id, id: admin_id })
+		.selectExactlyOne('admins', { instance_id, id: admin_id, deleted_at: db.conditions.isNull })
 		.run(pool)
 		.catch((err: Error) => {
 			throw new BelcodaError(404, 'DATA:CORE:ADMINS:READAPIKEY:01', t.errors.not_found(), err);
@@ -190,7 +216,11 @@ export async function updateApiKey({
 	admin_id: number;
 }): Promise<schema.ReadApiKey> {
 	const response = await db
-		.update('admins', { api_key: db.raw('uuid_generate_v4()') }, { instance_id, id: admin_id })
+		.update(
+			'admins',
+			{ api_key: db.raw('uuid_generate_v4()') },
+			{ instance_id, id: admin_id, deleted_at: db.conditions.isNull }
+		)
 		.run(pool)
 		.catch((err: Error) => {
 			throw new BelcodaError(
@@ -220,7 +250,9 @@ export async function getApiKey({
 		const instance = await readInstance({ instance_id: parsed.instance_id });
 		return { admin, instance };
 	} else {
-		const response = await db.selectExactlyOne('admins', { api_key, active: true }).run(pool);
+		const response = await db
+			.selectExactlyOne('admins', { api_key, active: true, deleted_at: db.conditions.isNull })
+			.run(pool);
 		const parsed = v.parse(schema.getAdminByApiKey, response);
 		await redis.set(`api_key:${api_key}`, parsed);
 		const admin = v.parse(schema.read, response);
