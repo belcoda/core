@@ -282,12 +282,14 @@ export async function del({
 		throw new BelcodaError(500, 'DATA:CORE:ADMINS:DELETE:01', t.errors.authorization());
 	}
 
-	// TODO: Expire all the admin's sessions.
+	// Expire all the admin's sessions
+	await db.update('sessions', { expires_at: db.sql`now()` }, { admin_id, instance_id }).run(pool);
 
-	// TODO: Reassing all the admin's resources to the default admin.
+	// TODO: Reassign all the admin's resources to the default admin.
 
-	// Delete the admin from cache.
+	// Clear admins list from cache.
 	await redis.del(redisString(instance_id, admin_id));
+	await redis.del(redisString(instance_id, 'all'));
 
 	// Delete the admin.
 	const response = await db
