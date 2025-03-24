@@ -2823,6 +2823,18 @@ export default function (locale: SL) {
 					zh: '搜索'
 				});
 			},
+			delete: () => {
+				return t(locale, {
+					en: 'Delete',
+					ja: '削除',
+					pt: 'Excluir',
+					es: 'Eliminar',
+					fr: 'Supprimer',
+					sw: 'Futa',
+					th: 'ลบ',
+					zh: '删除'
+				});
+			},
 			filters: {
 				add_filter: () => {
 					return t(locale, {
@@ -3005,6 +3017,20 @@ export default function (locale: SL) {
 					sw: 'Imenakiliwa kwenye ubao',
 					th: 'คัดลอกไปยังคลิปบอร์ด',
 					zh: '已复制到剪贴板'
+				});
+			}
+		},
+		messages: {
+			confirm_delete: () => {
+				return t(locale, {
+					en: 'Are you sure you want to delete this item?',
+					ja: 'この項目を削除してもよろしいですか？',
+					pt: 'Tem certeza que deseja excluir este item?',
+					es: '¿Está seguro de que desea eliminar este elemento?',
+					fr: 'Êtes-vous sûr de vouloir supprimer cet élément?',
+					sw: 'Jewekani kwamba unataka kufuta kipengele hili?',
+					th: 'คุณแน่ใจหรือว่าคุณต้องการลบรายการนี้?',
+					zh: '您确定要删除此项吗？'
 				});
 			}
 		}
