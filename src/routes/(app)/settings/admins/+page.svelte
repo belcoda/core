@@ -5,18 +5,22 @@
 	import Avatar from '$lib/comps/ui/custom/avatar/avatar.svelte';
 	import { Badge } from '$lib/comps/ui/badge';
 	import DataGrid from '$lib/comps/ui/custom/table/DataGrid.svelte';
+	import { page } from '$app/stores';
+	import { getFlash } from 'sveltekit-flash-message';
+	const flash = getFlash(page);
 
 	async function deleteAdmin(adminId: number) {
 		try {
-			console.log('Deleting admin: ', adminId);
 			const response = await fetch(`/api/v1/admins/${adminId}`, {
 				method: 'DELETE'
 			});
 			if (!response.ok) throw new Error('Failed to delete admin');
+
+			$flash = { type: 'success', message: data.t.forms.actions.success() };
 			goto('/settings/admins', { invalidateAll: true });
 		} catch (error) {
 			console.error('Error deleting admin: ', error);
-			alert(data.t.forms.actions.failed());
+			$flash = { type: 'error', message: data.t.forms.actions.failed() };
 		}
 	}
 </script>
