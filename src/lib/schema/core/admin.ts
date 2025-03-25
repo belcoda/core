@@ -91,3 +91,10 @@ export type GetAdminByApiKey = v.InferOutput<typeof getAdminByApiKey>;
 export const update = v.partial(v.pick(base, ['full_name', 'profile_picture_url', 'active']));
 
 export type Update = v.InferOutput<typeof update>;
+
+export const reassignAdminResources = v.object({
+	admin_id: id,
+	new_admin_id: v.optional(id)
+});
+
+export type ReassignAdminResources = v.InferOutput<typeof reassignAdminResources>;

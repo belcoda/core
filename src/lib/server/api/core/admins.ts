@@ -270,11 +270,13 @@ export async function getApiKey({
 export async function del({
 	instance_id,
 	admin_id,
-	t
+	t,
+	queue
 }: {
 	instance_id: number;
 	admin_id: number;
 	t: App.Localization;
+	queue: App.Queue;
 }): Promise<void> {
 	// Return error if admin is already deleted.
 	// The read function will throw an error if the admin is not found or if the admin is deleted.
@@ -291,7 +293,9 @@ export async function del({
 	// Expire all the admin's sessions
 	await db.update('sessions', { expires_at: db.sql`now()` }, { admin_id, instance_id }).run(pool);
 
-	// TODO: Reassign all the admin's resources to the default admin.
+	// Reassign all the admin's resources to the default admin
+	// TODO: Allow the user to specify the new admin.
+	await queue('core/people/reassign_admin_resources', instance_id, { admin_id }, admin_id);
 
 	// Clear admins list from cache.
 	await redis.del(redisString(instance_id, admin_id));

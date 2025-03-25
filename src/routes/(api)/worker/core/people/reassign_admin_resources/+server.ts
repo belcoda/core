@@ -10,7 +10,7 @@ export async function POST(event) {
 		// If no new admin is specified, use the default admin from instance settings
 		const new_admin_id = parsed.new_admin_id || event.locals.instance.settings.default_admin_id;
 
-		// Update people.people
+		// Update point person in other tables
 		await db
 			.update(
 				'people.people',
@@ -19,7 +19,6 @@ export async function POST(event) {
 			)
 			.run(pool);
 
-		// Update people.groups
 		await db
 			.update(
 				'people.groups',
@@ -28,7 +27,6 @@ export async function POST(event) {
 			)
 			.run(pool);
 
-		// Update petitions.petitions
 		await db
 			.update(
 				'petitions.petitions',
@@ -37,7 +35,6 @@ export async function POST(event) {
 			)
 			.run(pool);
 
-		// Update events.events
 		await db
 			.update(
 				'events.events',
