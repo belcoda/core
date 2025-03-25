@@ -181,7 +181,13 @@ export async function list({
 		options
 	);
 	const response = await sql.run(pool);
-	const count = await db.count('admins', { instance_id: instance_id, ...where }).run(pool);
+	const count = await db
+		.count('admins', {
+			instance_id: instance_id,
+			...where,
+			...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+		})
+		.run(pool);
 	const parsedResponse = v.parse(schema.list, { count: count, items: response });
 	if (!filtered) await redis.set(redisString(instance_id, 'all'), parsedResponse);
 	return parsedResponse;
