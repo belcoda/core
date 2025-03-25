@@ -34,13 +34,14 @@ export async function GET(event) {
 
 export async function DELETE(event) {
 	try {
-		const deleted = await api.del({
+		await api.del({
 			instance_id: event.locals.instance.id,
 			admin_id: Number(event.params.admin_id),
-			t: event.locals.t
+			t: event.locals.t,
+			queue: event.locals.queue
 		});
-		return json(deleted);
+		return json({ success: true });
 	} catch (err) {
-		return error(500, 'API01:/ADMINS:DELETE:01', event.locals.t.errors.http[500](), err);
+		return error(500, 'API:/admins/[admin_id]:DELETE:01', event.locals.t.errors.http[500](), err);
 	}
 }
