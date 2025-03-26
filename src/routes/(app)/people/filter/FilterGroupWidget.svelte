@@ -62,11 +62,11 @@
 	<div class="flex items-center justify-end gap-2 p-4">
 		<AndOrNot bind:logic={filter.logic} />
 		<!-- <Button onclick={() => filter.groups.push(structuredClone(DEFAULT_FILTER_GROUP))}
-			>{"Add filter group"}</Button
+			>{m.misty_fair_hyena_radiate()}</Button
 		> -->
 		<!-- TODO: There's a strange bug here with recursive state triggering multiple group creation -->
 		<Button onclick={() => filter.filters.push(structuredClone(defaultFullName))}
-			>{m.loose_arable_jurgen_hurl()}</Button
+			>{m.slimy_ago_fly_tend()}</Button
 		>
 	</div>
 </div>
