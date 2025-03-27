@@ -295,7 +295,14 @@ export async function del({
 		.count('admins', { instance_id, deleted_at: db.conditions.isNull })
 		.run(pool);
 	if (count === 1) {
-		throw new BelcodaError(500, 'DATA:CORE:ADMINS:DELETE:01', t.errors.authorization());
+		throw new BelcodaError(500, 'DATA:CORE:ADMINS:DELETE:03', t.errors.authorization());
+	}
+
+	// Return error if the admin is the default admin of the instance
+	const instance = await readInstance({ instance_id });
+	const defaultAdmin = instance.settings.default_admin_id;
+	if (defaultAdmin === admin_id) {
+		throw new BelcodaError(500, 'DATA:CORE:ADMINS:DELETE:04', m.patient_muddy_llama_work());
 	}
 
 	// Expire all the admin's sessions
