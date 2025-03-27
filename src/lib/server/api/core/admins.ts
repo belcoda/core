@@ -10,6 +10,7 @@ import { create as createSession } from '$lib/server/api/core/sessions';
 import { read as readInstance } from '$lib/server/api/core/instances';
 
 const log = pino(import.meta.url);
+import * as m from '$lib/paraglide/messages';
 
 const redisString = (instance_id: number, admin_id: number | 'all') =>
 	`i:${instance_id}:admin:${admin_id}`;
@@ -270,14 +271,21 @@ export async function getApiKey({
 export async function del({
 	instance_id,
 	admin_id,
+	currentlySignedInAdminId,
 	t,
 	queue
 }: {
 	instance_id: number;
 	admin_id: number;
+	currentlySignedInAdminId: number;
 	t: App.Localization;
 	queue: App.Queue;
 }): Promise<void> {
+	// Return an error if the admin is trying to delete themselves.
+	if (admin_id === currentlySignedInAdminId) {
+		throw new BelcodaError(500, 'DATA:CORE:ADMINS:DELETE:02', m.wide_male_parrot_enrich());
+	}
+
 	// Return error if admin is already deleted.
 	// The read function will throw an error if the admin is not found or if the admin is deleted.
 	await read({ instance_id, admin_id, t });
