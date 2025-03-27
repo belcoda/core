@@ -3,10 +3,11 @@
 	let { logic = $bindable() }: { logic: Logic } = $props();
 	import * as Select from '$lib/comps/ui/select';
 	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 	const selectOptions = [
-		{ value: 'AND', label: $page.data.t.forms.fields.filters.boolean_logic.AND() },
-		{ value: 'OR', label: $page.data.t.forms.fields.filters.boolean_logic.OR() },
-		{ value: 'NOT', label: $page.data.t.forms.fields.filters.boolean_logic.NOT() }
+		{ value: 'AND', label: m.spry_top_skunk_link() },
+		{ value: 'OR', label: m.agent_large_eagle_sew() },
+		{ value: 'NOT', label: m.green_level_boar_grasp() }
 	];
 	let selected = $derived(selectOptions.find((option) => option.value === logic));
 	function logicTypeGuard(input: unknown): input is Logic {

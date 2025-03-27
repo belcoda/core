@@ -17,19 +17,20 @@
 	});
 	const { form: formData, enhance, message } = form;
 	import Plus from 'lucide-svelte/icons/plus';
+	import * as m from '$lib/paraglide/messages';
 </script>
 
-<PageHeader title={data.t.pages.communications.whatsapp.sends.new()} />
+<PageHeader title={m.each_alert_cougar_offer()} />
 <form use:enhance method="post">
 	<Grid cols={1} class="mt-4">
 		<Error error={$message} />
 		<div class="flex items-center gap-4">
 			<ListDropdown bind:value={$formData.list_id}>
 				<Plus size={14} />
-				{data.t.forms.fields.communications.whatsapp.send_message.choose_list_to_send()}
+				{m.vivid_grassy_leopard_fold()}
 			</ListDropdown>
 		</div>
-		<FormButton>{data.t.forms.buttons.send()}</FormButton>
+		<FormButton>{m.merry_key_platypus_pray()}</FormButton>
 		<Debug data={$formData} />
 	</Grid>
 </form>

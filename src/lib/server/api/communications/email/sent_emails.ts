@@ -12,6 +12,8 @@ function redisString(instanceId: number, personId: number) {
 	return `i:${instanceId}:sent_emails:${personId}`;
 }
 
+import * as m from '$lib/paraglide/messages';
+
 export async function create({
 	instanceId,
 	body,
@@ -46,7 +48,7 @@ export async function unsubscribeFromSentEmail({
 
 	const updatedPerson = await updatedPersonSql.run(pool);
 	if (updatedPerson.length !== 1) {
-		throw new BelcodaError(404, 'DATA:PEOPLE:PEOPLE:UPDATE:01', t.errors.not_found());
+		throw new BelcodaError(404, 'DATA:PEOPLE:PEOPLE:UPDATE:01', m.pretty_tired_fly_lead());
 	}
 	await redis.del(personRedisString(updatedPerson[0].instance_id, parsedSelected.person_id));
 	const readPersonResponse = await readPerson({

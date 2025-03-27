@@ -17,6 +17,7 @@
 			messages = parsed;
 		}
 	}
+	import * as m from '$lib/paraglide/messages';
 
 	onMount(() => {
 		timer = setInterval(async () => await fetchLatestInteractions(), 30000);
@@ -38,7 +39,7 @@
 	count={messages.count}
 	title={`${data.group.name}`}
 >
-	{#snippet content(message: typeof data.messages.items[0], i)}
+	{#snippet content(message: (typeof data.messages.items)[0], i)}
 		<RenderInboundWhatsapp
 			messageId={message.id}
 			timeAgo={message.received_at}
@@ -50,9 +51,9 @@
 	{#snippet headerButton()}
 		<div class="flex items-center justify-end w-full lg:w-auto gap-4">
 			<Button href="/people/groups/{data.group.id}/members" variant="outline"
-				>{data.t.pages.people.groups.members()}</Button
+				>{m.smart_light_lynx_nudge()}</Button
 			>
-			<Button href="/people/groups/{data.group.id}/edit">{data.t.forms.buttons.edit()}</Button>
+			<Button href="/people/groups/{data.group.id}/edit">{m.giant_misty_shrimp_stop()}</Button>
 		</div>
 	{/snippet}
 </DataGrid>

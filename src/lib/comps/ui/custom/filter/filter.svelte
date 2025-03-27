@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Input from '$lib/comps/ui/input/input.svelte';
+	import * as m from '$lib/paraglide/messages';
 	let {
 		filterKey,
-		placeholder = $page.data.t.forms.fields.generic.filter.placeholder(),
+		placeholder = m.weary_weary_insect_prosper(),
 		loading = $bindable(false)
 	}: { filterKey: string; placeholder?: string; loading: boolean } = $props();
 	let filterValue = $state($page.url.searchParams.get(filterKey));

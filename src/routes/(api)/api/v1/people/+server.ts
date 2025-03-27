@@ -2,7 +2,7 @@ import { error, json } from '$lib/server/';
 import * as schema from '$lib/schema/people/people';
 import * as api from '$lib/server/api/people/people';
 import { v } from '$lib/schema/valibot';
-
+import * as m from '$lib/paraglide/messages';
 import { list as listAllRegisteredForEvent } from '$lib/server/api/people/filters/registered_for_event';
 import { list as listAllNotRegisteredForEvent } from '$lib/server/api/people/filters/not_registered_for_event';
 export async function POST(event) {
@@ -19,7 +19,7 @@ export async function POST(event) {
 		});
 		return json(created);
 	} catch (err) {
-		return error(500, 'API:/people:POST:01', event.locals.t.errors.http[500](), err);
+		return error(500, 'API:/people:POST:01', m.spry_ago_baboon_cure(), err);
 	}
 }
 
@@ -55,6 +55,6 @@ export async function GET(event) {
 		});
 		return json(list);
 	} catch (err) {
-		return error(500, 'API:/people:GET:01', event.locals.t.errors.http[500](), err);
+		return error(500, 'API:/people:GET:01', m.spry_ago_baboon_cure(), err);
 	}
 }

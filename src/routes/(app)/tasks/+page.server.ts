@@ -1,6 +1,7 @@
 import { loadError, formAction, redirect, filter, superValidate, valibot } from '$lib/server';
 import * as schema from '$lib/schema/core/tasks';
 import { parse } from '$lib/schema/valibot';
+import * as m from '$lib/paraglide/messages';
 export async function load(event) {
 	const result = await event.fetch(filter('/api/v1/tasks', event.url));
 	if (!result.ok) return loadError(result);
@@ -20,6 +21,6 @@ export const actions = {
 		});
 		if (output.error) return output.output;
 		console.log(output.output);
-		return redirect(event, { location: '/tasks', message: event.locals.t.forms.actions.created() });
+		return redirect(event, { location: '/tasks', message: m.flat_sleek_millipede_agree() });
 	}
 };

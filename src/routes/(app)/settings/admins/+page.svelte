@@ -1,5 +1,8 @@
+
 <script lang="ts">
-	import { goto } from '$app/navigation';
+  import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 	export let data;
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import Avatar from '$lib/comps/ui/custom/avatar/avatar.svelte';
@@ -26,13 +29,13 @@
 </script>
 
 <DataGrid
-	title={data.t.pages.config.settings.admins.index()}
+	title={m.top_stock_seahorse_feast()}
 	items={data.admins.items}
 	count={data.admins.count}
 	newItemHref="/settings/admins/new"
 >
 	{#snippet headerButton()}
-		<Button href="/settings/admins/new">{data.t.pages.config.settings.admins.new()}</Button>
+		<Button href="/settings/admins/new">{m.blue_yummy_hare_love()}</Button>
 	{/snippet}
 
 	{#snippet content(admin)}
@@ -48,18 +51,18 @@
 				<div class="hidden lg:block">
 					{#if admin.has_signed_in}
 						{#if admin.active}
-							<Badge class="ml-3" variant="success">{data.t.common.status.active()}</Badge>
+							<Badge class="ml-3" variant="success">{m.fair_nice_piranha_work()}</Badge>
 						{:else}
-							<Badge class="ml-3" variant="danger">{data.t.common.status.inactive()}</Badge>
+							<Badge class="ml-3" variant="danger">{m.these_safe_mantis_kick()}</Badge>
 						{/if}
 					{:else}
-						<Badge class="ml-3" variant="warning">{data.t.common.status.pending()}</Badge>
+						<Badge class="ml-3" variant="warning">{m.sunny_noble_kudu_bask()}</Badge>
 					{/if}
 				</div>
 			</div>
 			<div class="flex gap-2">
 				<Button href="/settings/admins/{admin.id}" variant="outline" size="sm">
-					{data.t.forms.buttons.edit()}
+					{m.giant_misty_shrimp_stop()}
 				</Button>
 				<Button
 					size="sm"

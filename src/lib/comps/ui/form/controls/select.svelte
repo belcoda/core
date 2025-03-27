@@ -14,10 +14,12 @@
 	export { className as class };
 	// Everything above this can be copied
 
+	import * as m from '$lib/paraglide/messages';
+
 	import { page } from '$app/stores';
 	import * as Select from '$lib/comps/ui/select';
 	export let value: string;
-	export let placeholder: string = $page.data.t.forms.generic.select.placeholder();
+	export let placeholder: string = m.front_solid_canary_arrive();
 
 	export let options: { label: string; value: string }[] = [];
 	$: currentOption = options.find((option) => option.value === value);
