@@ -37,6 +37,7 @@ export async function DELETE(event) {
 		await api.del({
 			instance_id: event.locals.instance.id,
 			admin_id: Number(event.params.admin_id),
+			currentlySignedInAdminId: event.locals.admin.id,
 			t: event.locals.t,
 			queue: event.locals.queue
 		});
