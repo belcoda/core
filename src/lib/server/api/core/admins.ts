@@ -1,4 +1,4 @@
-import { error, redis, db, pool, type SL, pino, BelcodaError } from '$lib/server';
+import { error, redis, db, pool, pino, BelcodaError } from '$lib/server';
 import * as schema from '$lib/schema/core/admin';
 import { v } from '$lib/schema/valibot';
 

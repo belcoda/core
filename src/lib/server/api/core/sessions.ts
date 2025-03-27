@@ -1,4 +1,4 @@
-import { redis, db, pool, t, error, type SL, pino } from '$lib/server';
+import { redis, db, pool, error, pino } from '$lib/server';
 
 const log = pino(import.meta.url);
 
