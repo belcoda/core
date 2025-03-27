@@ -303,6 +303,8 @@ export async function del({
 
 	// Reassign all the admin's resources to the default admin
 	// TODO: Allow the user to specify the new admin.
+	// TODO: Maybe convert this from a queued job to a transaction in the future
+	// (we don't want to silently fail to reassign resources, if they can't be reassigned for whatever reason, we should probably fail to delete the admin)
 	await queue(
 		'core/people/reassign_admin_resources',
 		instance_id,
