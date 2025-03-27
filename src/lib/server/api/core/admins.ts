@@ -303,7 +303,12 @@ export async function del({
 
 	// Reassign all the admin's resources to the default admin
 	// TODO: Allow the user to specify the new admin.
-	await queue('core/people/reassign_admin_resources', instance_id, { admin_id }, admin_id);
+	await queue(
+		'core/people/reassign_admin_resources',
+		instance_id,
+		{ admin_id },
+		currentlySignedInAdminId
+	);
 
 	// Clear admins list from cache.
 	await redis.del(redisString(instance_id, admin_id));
