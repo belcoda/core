@@ -23,6 +23,22 @@ export const create = async ({
 	return createdParsed;
 };
 
+export async function expireAllSessionsForAdmin({
+	instanceId,
+	adminId
+}: {
+	instanceId: number;
+	adminId: number;
+}): Promise<void> {
+	await db
+		.update(
+			'sessions',
+			{ expires_at: db.sql`now()` },
+			{ instance_id: instanceId, admin_id: adminId }
+		)
+		.run(pool);
+}
+
 export const del = async ({ code }: { code: string }): Promise<void> => {
 	await db.update('sessions', { expires_at: db.sql`now()` }, { code: code }).run(pool);
 };

@@ -6,7 +6,7 @@ import { filterQuery } from '$lib/server/utils/filters/filter';
 
 import type { Read as ReadInstance } from '$lib/schema/core/instance';
 
-import { create as createSession } from '$lib/server/api/core/sessions';
+import { create as createSession, expireAllSessionsForAdmin } from '$lib/server/api/core/sessions';
 import { read as readInstance } from '$lib/server/api/core/instances';
 
 const log = pino(import.meta.url);
@@ -299,7 +299,7 @@ export async function del({
 	}
 
 	// Expire all the admin's sessions
-	await db.update('sessions', { expires_at: db.sql`now()` }, { admin_id, instance_id }).run(pool);
+	await expireAllSessionsForAdmin({ instanceId: instance_id, adminId: admin_id });
 
 	// Reassign all the admin's resources to the default admin
 	// TODO: Allow the user to specify the new admin.
