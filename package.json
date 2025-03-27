@@ -26,7 +26,7 @@
 		"inlang:lint": "npx @inlang/cli lint --project ./project.inlang",
 		"inlang:translate": "npx @inlang/cli machine translate --project ./project.inlang",
 		"prepare": "husky",
-		"check-console-logs": "node scripts/check-console-logs.js"
+		"check-console-logs": "node scripts/check-console-logs.mjs"
 	},
 	"devDependencies": {
 		"@inlang/paraglide-js": "^2.0.0-beta.11",
