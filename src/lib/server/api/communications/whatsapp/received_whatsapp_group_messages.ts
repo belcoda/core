@@ -72,6 +72,7 @@ export async function list({
 		)
 		.run(pool);
 	console.log(list);
+	console.log(where);
 	const count = await db
 		.count('communications.received_whatsapp_group_messages', {
 			instance_id: instanceId,
