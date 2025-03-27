@@ -319,10 +319,6 @@ export async function del({
 		currentlySignedInAdminId
 	);
 
-	// Clear admins list from cache.
-	await redis.del(redisString(instance_id, admin_id));
-	await redis.del(redisString(instance_id, 'all'));
-
 	// Delete the admin.
 	const response = await db
 		.update('admins', { deleted_at: new Date() }, { instance_id, id: admin_id })
@@ -330,4 +326,8 @@ export async function del({
 	if (response.length !== 1) {
 		throw new BelcodaError(500, 'DATA:CORE:ADMINS:DELETE:01', m.ornate_real_swallow_honor());
 	}
+
+	// Clear admins list from cache.
+	await redis.del(redisString(instance_id, admin_id));
+	await redis.del(redisString(instance_id, 'all'));
 }
