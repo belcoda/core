@@ -295,7 +295,7 @@ export async function del({
 		.count('admins', { instance_id, deleted_at: db.conditions.isNull })
 		.run(pool);
 	if (count === 1) {
-		throw new BelcodaError(500, 'DATA:CORE:ADMINS:DELETE:03', t.errors.authorization());
+		throw new BelcodaError(500, 'DATA:CORE:ADMINS:DELETE:03', m.low_petty_martin_dazzle());
 	}
 
 	// Return error if the admin is the default admin of the instance
@@ -328,6 +328,6 @@ export async function del({
 		.update('admins', { deleted_at: new Date() }, { instance_id, id: admin_id })
 		.run(pool);
 	if (response.length !== 1) {
-		throw new BelcodaError(500, 'DATA:CORE:ADMINS:DELETE:01', t.errors.generic());
+		throw new BelcodaError(500, 'DATA:CORE:ADMINS:DELETE:01', m.ornate_real_swallow_honor());
 	}
 }

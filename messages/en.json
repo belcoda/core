@@ -39,5 +39,7 @@
 	"misty_fair_hyena_radiate": "Add filter group",
 	"slimy_ago_fly_tend": "New filter",
 	"wide_male_parrot_enrich": "You can't delete yourself. If you wish to delete the currently signed in admin account, please ask another admin to delete it.",
-	"patient_muddy_llama_work": "Unable to delete default instance administrator record"
+	"patient_muddy_llama_work": "Unable to delete default instance administrator record",
+	"low_petty_martin_dazzle": "Unable to delete only admin in organization. Please contact support if you wish to delete the entire organization account.",
+	"ornate_real_swallow_honor": "Error deleting admin record. Record was not deleted."
 }
