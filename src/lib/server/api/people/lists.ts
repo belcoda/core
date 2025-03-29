@@ -133,7 +133,7 @@ export async function addPersonToList({
 	personId: number;
 	t: App.Localization;
 }): Promise<schema.AddPersonToList> {
-	await personExists({ instanceId, personId, t });
+	await personExists({ instanceId, personId });
 	await exists({ instanceId, listId, t });
 	const inserted = await db
 		.insert('people.list_people', { list_id: listId, person_id: personId })
@@ -166,7 +166,7 @@ export async function removePersonFromList({
 	t: App.Localization;
 }): Promise<schema.RemovePersonFromList> {
 	await exists({ instanceId, listId, t });
-	await personExists({ instanceId, personId, t });
+	await personExists({ instanceId, personId });
 	await db.deletes('people.list_people', { list_id: listId, person_id: personId }).run(pool);
 	await redis.del(redisString(instanceId, listId));
 	await redis.del(redisString(instanceId, 'all'));

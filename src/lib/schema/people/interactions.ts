@@ -76,7 +76,8 @@ export const ACTIVITY_INTERACTION_TYPES = [
 	'added_to_group',
 	'removed_from_group',
 	'added_tag',
-	'removed_tag'
+	'removed_tag',
+	'person_deleted'
 ] as const;
 
 export const interactionTypes = {
@@ -228,6 +229,10 @@ export const interactionTypes = {
 		type: v.literal('removed_from_group'),
 		group_name: shortStringNotEmpty,
 		group_id: id
+	}),
+	person_deleted: v.object({
+		type: v.literal('person_deleted'),
+		person_id: id
 	})
 };
 export type InteractionTypeNotes = v.InferOutput<typeof interactionTypes.notes>;

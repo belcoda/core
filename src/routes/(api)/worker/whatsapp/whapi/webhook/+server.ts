@@ -41,8 +41,7 @@ export async function POST(event) {
 		//get person by phone number or whatsapp ID...
 		const person = await _getPersonByWhatsappId({
 			instanceId: event.locals.instance.id,
-			whatsappId: message.from,
-			t: event.locals.t
+			whatsappId: message.from
 		});
 		log.debug(person.id);
 

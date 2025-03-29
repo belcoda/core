@@ -21,7 +21,7 @@ export async function create({
 	if (parsed.message_id) {
 		await messageExists({ instanceId, messageId: parsed.message_id, t });
 	}
-	await personExists({ instanceId, personId: parsed.person_id, t });
+	await personExists({ instanceId, personId: parsed.person_id });
 	const inserted = await db.insert('communications.received_emails', parsed).run(pool);
 	const parsedInserted = parse(schema.read, inserted);
 	await redis.del(redisString(instanceId, parsed.person_id));
@@ -46,7 +46,7 @@ export async function listForPerson({
 			return parse(schema.list, cached);
 		}
 	}
-	await personExists({ instanceId, personId, t });
+	await personExists({ instanceId, personId });
 	const selected = await db
 		.select(
 			'communications.received_emails',

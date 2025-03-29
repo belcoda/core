@@ -31,7 +31,6 @@ export async function POST(event: RequestEvent) {
 		const person = await readPerson({
 			instance_id: event.locals.instance.id,
 			person_id: personId,
-			t: event.locals.t,
 			url: event.url
 		});
 		const interaction: CreateInteraction = {

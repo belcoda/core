@@ -22,7 +22,6 @@ export async function POST(event) {
 				event.locals.instance.id,
 				parsed.whatsappInboundMessage.from,
 				parsed.whatsappInboundMessage,
-				event.locals.t,
 				event.locals.queue
 			);
 			const receivedMessageToCreate = {

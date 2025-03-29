@@ -9,7 +9,8 @@ export async function list({
 	groupId,
 	t,
 	notPaged,
-	banned = false
+	banned = false,
+	includeDeleted = false
 }: {
 	instance_id: number;
 	url: URL;
@@ -17,6 +18,7 @@ export async function list({
 	t: App.Localization;
 	notPaged?: boolean;
 	banned?: boolean;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	await exists({ instanceId: instance_id, groupId, t });
 	const query = filterQuery(url, { search_key: 'full_name', notPaged });
@@ -31,7 +33,12 @@ export async function list({
 				lateral: {
 					person: db.selectExactlyOne(
 						'people.people',
-						{ id: db.parent('person_id'), instance_id, ...query.where },
+						{
+							id: db.parent('person_id'),
+							instance_id,
+							...query.where,
+							...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+						},
 						{
 							...query.options,
 							lateral: {
@@ -74,7 +81,8 @@ export async function list({
 					person: db.selectExactlyOne('people.people', {
 						id: db.parent('person_id'),
 						instance_id,
-						...query.where
+						...query.where,
+						...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
 					})
 				}
 			}

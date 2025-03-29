@@ -178,7 +178,7 @@ export async function listForPerson({
 	url: URL;
 	t: App.Localization;
 }): Promise<schema.List> {
-	await personExists({ instanceId, personId, t });
+	await personExists({ instanceId, personId });
 	const filter = filterQuery(url);
 	const result = await db
 		.select('events.attendees', { person_id: personId, ...filter.where }, filter.options) //pagination only
