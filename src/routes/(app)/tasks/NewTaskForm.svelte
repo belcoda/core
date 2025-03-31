@@ -19,6 +19,7 @@
 		type Infer
 	} from '$lib/comps/ui/forms';
 	import { create } from '$lib/schema/core/tasks';
+	import * as m from '$lib/paraglide/messages';
 	type Props = {
 		superform: SuperValidated<Infer<typeof create>>;
 		open: boolean;
@@ -38,14 +39,14 @@
 		<Input
 			{form}
 			name="name"
-			label={$page.data.t.forms.fields.generic.name.label()}
+			label={m.extra_wild_earthworm_commend()}
 			bind:value={$formData.name}
 		/>
 		<Textarea
 			{form}
 			name="description"
 			rows={1}
-			label={$page.data.t.forms.fields.generic.description.label()}
+			label={m.livid_spicy_felix_dance()}
 			bind:value={$formData.description as string}
 		/>
 		<Button type="submit"></Button>

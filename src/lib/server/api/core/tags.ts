@@ -1,5 +1,6 @@
 import { db, redis, pool, BelcodaError, filterQuery } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
+import * as m from '$lib/paraglide/messages';
 import * as schema from '$lib/schema/core/tags';
 function redisString(instanceId: number, tagId: number | 'all') {
 	return `i:${instanceId}:tags:${tagId}`;
@@ -59,11 +60,21 @@ export async function read({
 		.selectExactlyOne('tags', { instance_id: instanceId, id: tagId })
 		.run(pool);
 	if (!fetched) {
-		throw new BelcodaError(404, 'DATA:TAGS:READ:01', t.errors.http[404]());
+		throw new BelcodaError(404, 'DATA:TAGS:READ:01', m.that_tasty_dove_pop());
 	}
 	const parsedFetched = parse(schema.read, fetched);
 	await redis.set(redisString(instanceId, tagId), parsedFetched);
 	return parsedFetched;
+}
+
+export async function readByName({ instanceId, tagName }: { instanceId: number; tagName: string }) {
+	const fetched = await db
+		.selectExactlyOne('tags', { instance_id: instanceId, name: tagName })
+		.run(pool);
+	if (!fetched) {
+		throw new BelcodaError(404, 'DATA:TAGS:READ:01', `Unable to find tag with name: ${tagName}`);
+	}
+	return parse(schema.read, fetched);
 }
 
 export async function update({
@@ -80,7 +91,7 @@ export async function update({
 	const parsed = parse(schema.update, body);
 	const updated = await db.update('tags', parsed, { instance_id: instanceId, id: tagId }).run(pool);
 	if (updated.length !== 1)
-		throw new BelcodaError(404, 'DATA:TAGS:UPDATE:01', t.errors.http[404]());
+		throw new BelcodaError(404, 'DATA:TAGS:UPDATE:01', m.that_tasty_dove_pop());
 	const parsedUpdated = parse(schema.read, updated[0]);
 	await redis.del(redisString(instanceId, 'all'));
 	await redis.set(redisString(instanceId, tagId), parsedUpdated);

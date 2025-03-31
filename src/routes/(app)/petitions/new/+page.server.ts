@@ -9,10 +9,10 @@ import {
 	BelcodaError,
 	returnMessage
 } from '$lib/server';
-
+import * as m from '$lib/paraglide/messages';
 import { create, read } from '$lib/schema/petitions/petitions';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/events/new/+page.server.ts');
+const log = pino(import.meta.url);
 export async function load(event) {
 	const form = await superValidate(
 		{ ...event.locals.instance.settings.events.default_event_info_settings },
@@ -34,7 +34,7 @@ export const actions = {
 		const parsed = parse(read, output.output);
 		return redirect(event, {
 			location: `/petitions/${parsed.id}`,
-			message: event.locals.t.forms.actions.created()
+			message: m.flat_sleek_millipede_agree()
 		});
 	}
 };

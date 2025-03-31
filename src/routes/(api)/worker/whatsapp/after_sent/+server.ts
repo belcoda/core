@@ -11,8 +11,9 @@ import { _getThreadByStartingMessageId } from '$lib/server/api/communications/wh
 import { read as readTemplate } from '$lib/server/api/communications/whatsapp/templates';
 import { type Create } from '$lib/schema/communications/whatsapp/sent_whatsapp_messages';
 import type { InteractionTypeOutboundWhatsapp } from '$lib/schema/people/interactions';
+import * as m from '$lib/paraglide/messages';
 
-const log = pino('WORKER:/whatsapp/after_sent/+server.ts');
+const log = pino(import.meta.url);
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
@@ -115,6 +116,6 @@ export async function POST(event) {
 
 		return json({ success: true });
 	} catch (err) {
-		return error(500, 'WORKER:/whatsapp/after_sent:01', event.locals.t.errors.http[500](), err);
+		return error(500, 'WORKER:/whatsapp/after_sent:01', m.spry_ago_baboon_cure(), err);
 	}
 }

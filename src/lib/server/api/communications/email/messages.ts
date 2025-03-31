@@ -7,6 +7,8 @@ function redisString(instanceId: number, messageId: number | 'all') {
 }
 import { read as readTemplate } from '$lib/server/api/communications/email/templates';
 
+import * as m from '$lib/paraglide/messages';
+
 export async function exists({
 	instanceId,
 	messageId,
@@ -27,7 +29,7 @@ export async function exists({
 			throw new BelcodaError(
 				404,
 				'DATA:COMMUNICATIONS:EMAIL:MESSAGES:EXISTS:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});
@@ -108,7 +110,7 @@ export async function update({
 		throw new BelcodaError(
 			404,
 			'DATA:COMMUNICATIONS:EMAIL:MESSAGES:UPDATE:01',
-			t.errors.not_found()
+			m.pretty_tired_fly_lead()
 		);
 	}
 	const parsedUpdated = parse(schema.read, updated[0]);
@@ -143,7 +145,7 @@ export async function read({
 			throw new BelcodaError(
 				404,
 				'DATA:COMMUNICATIONS:EMAIL:MESSAGES:READ:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});

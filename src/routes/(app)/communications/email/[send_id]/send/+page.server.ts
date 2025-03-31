@@ -1,6 +1,6 @@
 import { formAction, valibot, superValidate, redirect, loadError } from '$lib/server';
 import { update, read, sendToList } from '$lib/schema/communications/email/sends';
-
+import * as m from '$lib/paraglide/messages';
 import { parse } from '$lib/schema/valibot';
 export async function load(event) {
 	const result = await event.fetch(`/api/v1/communications/email/sends/${event.params.send_id}`);
@@ -24,7 +24,7 @@ export const actions = {
 		}
 		return redirect(event, {
 			location: `/communications/email/${event.params.send_id}`,
-			message: event.locals.t.forms.actions.success()
+			message: m.muddy_ornate_lionfish_gaze()
 		});
 	}
 };

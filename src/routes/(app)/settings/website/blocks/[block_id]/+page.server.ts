@@ -11,8 +11,8 @@ import {
 } from '$lib/server';
 import { update, read } from '$lib/schema/website/blocks';
 import { v } from '$lib/schema/valibot';
-
-const log = pino('(app)/settings/website/blocks/[block_id]/+page.server.ts');
+import * as m from '$lib/paraglide/messages';
+const log = pino(import.meta.url);
 
 export async function load(event) {
 	const response = await event.fetch(`/api/v1/website/blocks/${event.params.block_id}`);
@@ -32,13 +32,9 @@ export const actions = {
 			valibot(update)
 		);
 		if (!form.valid) {
-			return message(
-				form,
-				new BelcodaError(400, 'VALIDATION', event.locals.t.errors.validation()),
-				{
-					status: 400
-				}
-			);
+			return message(form, new BelcodaError(400, 'VALIDATION', m.spare_mushy_dachshund_quell()), {
+				status: 400
+			});
 		}
 		const response = await event.fetch(`/api/v1/website/blocks/${event.params.block_id}`, {
 			method: 'PUT',
@@ -52,7 +48,7 @@ export const actions = {
 		}
 		return redirect(event, {
 			location: `/settings/website/blocks`,
-			message: event.locals.t.forms.actions.updated()
+			message: m.white_acidic_koala_pop()
 		});
 	}
 };

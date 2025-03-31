@@ -26,7 +26,7 @@
 					onclick={() => {
 						if (messages[messageIndex].message.type === 'interactive') {
 							messages[messageIndex].actions = actionsActions.createWhatsAppMessageAction(
-								messages[messageIndex].message.interactive.action.buttons[buttonIndex].id,
+								messages[messageIndex].message.interactive.action.buttons[buttonIndex].reply.id,
 								messages[messageIndex].actions
 							);
 						}
@@ -36,7 +36,7 @@
 					onclick={() => {
 						if (messages[messageIndex].message.type === 'interactive') {
 							messages[messageIndex].actions = actionsActions.createEventRegistrationAction(
-								messages[messageIndex].message.interactive.action.buttons[buttonIndex].id,
+								messages[messageIndex].message.interactive.action.buttons[buttonIndex].reply.id,
 								messages[messageIndex].actions
 							);
 						}

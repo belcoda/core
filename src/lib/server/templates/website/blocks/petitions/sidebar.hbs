@@ -1,0 +1,12 @@
+<div class="bg-gray-900 p-4 lg:p6 xl:p-8 text-white grid grid-cols-1">
+  {{#if status.success}}
+  {{> blocks.petition_success}}
+  {{else}}
+  {{> blocks.petition_info}}
+
+  {{#if status.error}}
+  {{>blocks.error}}
+  {{/if}}
+  {{> blocks.petition_form}}
+  {{/if}}
+</div>

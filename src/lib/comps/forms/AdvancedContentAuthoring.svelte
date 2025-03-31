@@ -8,7 +8,7 @@
 	import H3 from '$lib/comps/typography/H3.svelte';
 	import Separator from '$lib/comps/ui/separator/separator.svelte';
 	import Collapsible from '$lib/comps/ui/custom/collapsible/collapsible.svelte';
-
+	import * as m from '$lib/paraglide/messages';
 	import {
 		superForm,
 		valibotClient,
@@ -46,7 +46,7 @@
 			<Collapsible class="mb-4">
 				{#snippet trigger()}
 					<div class="text-xl">
-						{$page.data.t.forms.fields.events.user_information_settings.label()}
+						{m.plane_patient_porpoise_prosper()}
 					</div>
 				{/snippet}
 				<Grid cols={1}>
@@ -54,13 +54,13 @@
 						<Checkbox
 							{form}
 							name="ask_email"
-							label={$page.data.t.forms.fields.events.user_information_settings.fields.ask_email.label()}
+							label={m.bright_long_ant_breathe()}
 							bind:checked={$formData.ask_email}
 						/>
 						<Checkbox
 							{form}
 							name="require_email"
-							label={$page.data.t.forms.fields.events.user_information_settings.fields.require_email.label()}
+							label={m.green_ago_newt_find()}
 							bind:checked={$formData.require_email}
 						/>
 					</Grid>
@@ -68,13 +68,13 @@
 						<Checkbox
 							{form}
 							name="ask_phone_number"
-							label={$page.data.t.forms.fields.events.user_information_settings.fields.ask_phone_number.label()}
+							label={m.long_shy_ocelot_kick()}
 							bind:checked={$formData.ask_phone_number}
 						/>
 						<Checkbox
 							{form}
 							name="require_phone_number"
-							label={$page.data.t.forms.fields.events.user_information_settings.fields.require_phone_number.label()}
+							label={m.strong_ago_shad_pull()}
 							bind:checked={$formData.require_phone_number}
 						/>
 					</Grid>
@@ -82,13 +82,13 @@
 						<Checkbox
 							{form}
 							name="ask_address"
-							label={$page.data.t.forms.fields.events.user_information_settings.fields.ask_full_address.label()}
+							label={m.polite_red_martin_hike()}
 							bind:checked={$formData.ask_address}
 						/>
 						<Checkbox
 							{form}
 							name="require_address"
-							label={$page.data.t.forms.fields.events.user_information_settings.fields.require_full_address.label()}
+							label={m.topical_mealy_koala_roar()}
 							bind:checked={$formData.require_address}
 						/>
 					</Grid>
@@ -96,13 +96,13 @@
 						<Checkbox
 							{form}
 							name="ask_postcode"
-							label={$page.data.t.forms.fields.events.user_information_settings.fields.ask_postcode.label()}
+							label={m.knotty_ago_cod_launch()}
 							bind:checked={$formData.ask_postcode}
 						/>
 						<Checkbox
 							{form}
 							name="require_postcode"
-							label={$page.data.t.forms.fields.events.user_information_settings.fields.require_postcode.label()}
+							label={m.bad_royal_stork_endure()}
 							bind:checked={$formData.require_postcode}
 						/>
 					</Grid>
@@ -111,92 +111,85 @@
 		{/if}
 		<Collapsible class="mb-4">
 			{#snippet trigger()}
-				<div class="text-xl">{$page.data.t.forms.fields.metatags.header()}</div>
+				<div class="text-xl">{m.agent_jumpy_warthog_spark()}</div>
 			{/snippet}
 			<Grid cols={1}>
 				<div class="justify-end">
 					<Switch
 						{form}
 						name="html_metatags.isManuallySet"
-						label={$page.data.t.forms.fields.metatags.manually_generate.label()}
-						description={$page.data.t.forms.fields.metatags.manually_generate.description()}
+						label={m.factual_moving_raven_flow()}
+						description={m.gray_trite_marten_sew()}
 						bind:checked={$formData.html_metatags.isManuallySet}
 					/>
 				</div>
 				<Input
 					{form}
 					name="html_metatags.title"
-					label={$page.data.t.forms.fields.metatags.title.label()}
-					description={$page.data.t.forms.fields.metatags.title.description()}
+					label={m.elegant_neat_sawfish_spark()}
+					description={m.long_true_weasel_seek()}
 					bind:value={$formData.html_metatags.title as string}
 				/>
 				<Textarea
 					{form}
 					name="html_metatags.description"
-					label={$page.data.t.forms.fields.metatags.description.label()}
-					description={$page.data.t.forms.fields.metatags.description.description()}
+					label={m.loved_sound_tortoise_persist()}
+					description={m.alert_mild_ox_create()}
 					bind:value={$formData.html_metatags.description as string}
 				/>
 				<Input
 					{form}
 					name="html_metatags.subject"
-					label={$page.data.t.forms.fields.metatags.subject.label()}
-					description={$page.data.t.forms.fields.metatags.subject.description()}
+					label={m.quiet_extra_tortoise_boost()}
+					description={m.mellow_extra_lynx_treasure()}
 					bind:value={$formData.html_metatags.subject as string}
 				/>
 				<Input
 					{form}
 					name="html_metatags.keywords"
-					label={$page.data.t.forms.fields.metatags.keywords.label()}
-					description={$page.data.t.forms.fields.metatags.keywords.description()}
+					label={m.clear_proud_warthog_stab()}
+					description={m.ideal_left_jackal_aim()}
 					bind:value={$formData.html_metatags.keywords as string}
 				/>
 				<Input
 					{form}
 					name="html_metatags.openGraph.title"
-					label={$page.data.t.forms.fields.metatags.open_graph.title.label()}
-					description={$page.data.t.forms.fields.metatags.open_graph.title.description()}
+					label={m.that_witty_wolf_quiz()}
+					description={m.misty_short_cockroach_trim()}
 					bind:value={$formData.html_metatags.openGraph.title as string}
 				/>
 				<Input
 					{form}
 					name="html_metatags.openGraph.description"
-					label={$page.data.t.forms.fields.metatags.open_graph.description.label()}
-					description={$page.data.t.forms.fields.metatags.open_graph.description.description()}
-					bind:value={$formData.html_metatags.openGraph.description as string}
-				/>
-				<Input
-					{form}
-					name="html_metatags.openGraph.description"
-					label={$page.data.t.forms.fields.metatags.open_graph.description.label()}
-					description={$page.data.t.forms.fields.metatags.open_graph.description.description()}
+					label={m.full_extra_newt_tear()}
+					description={m.even_happy_ox_rise()}
 					bind:value={$formData.html_metatags.openGraph.description as string}
 				/>
 				<Input
 					{form}
 					name="html_metatags.openGraph.image"
-					label={$page.data.t.forms.fields.metatags.open_graph.image.label()}
-					description={$page.data.t.forms.fields.metatags.open_graph.image.description()}
+					label={m.inner_fuzzy_chicken_jest()}
+					description={m.loud_watery_cougar_trim()}
 					bind:value={$formData.html_metatags.openGraph.image as string}
 				/>
 				<Input
 					{form}
 					name="html_metatags.openGraph.image_alt"
-					label={$page.data.t.forms.fields.metatags.open_graph.image_alt.label()}
-					description={$page.data.t.forms.fields.metatags.open_graph.image_alt.description()}
+					label={m.actual_nice_lark_cry()}
+					description={m.suave_alert_flea_drop()}
 					bind:value={$formData.html_metatags.openGraph.image_alt as string}
 				/>
 			</Grid>
 		</Collapsible>
 		<Collapsible class="mb-4">
 			{#snippet trigger()}
-				<div class="text-xl">{$page.data.t.forms.fields.custom_code.header()}</div>
+				<div class="text-xl">{m.wacky_safe_mule_revive()}</div>
 			{/snippet}
 			<Grid cols={1}>
 				<Code
 					{form}
 					name="custom_code.custom_css"
-					label={$page.data.t.forms.fields.custom_code.custom_css.label()}
+					label={m.sea_tasty_manatee_attend()}
 					options={{
 						language: 'css',
 						lineNumbers: true,
@@ -207,7 +200,7 @@
 				<Code
 					{form}
 					name="custom_code.custom_js"
-					label={$page.data.t.forms.fields.custom_code.custom_js.label()}
+					label={m.sad_gross_seahorse_care()}
 					options={{
 						language: 'js',
 						lineNumbers: true,
@@ -218,19 +211,19 @@
 				<Code
 					{form}
 					name="custom_code.custom_html_head"
-					label={$page.data.t.forms.fields.custom_code.custom_html_head.label()}
+					label={m.bold_civil_clownfish_zip()}
 					bind:value={$formData.custom_code.custom_html_head as string}
 				/>
 				<Code
 					{form}
 					name="custom_code.custom_html_body"
-					label={$page.data.t.forms.fields.custom_code.custom_html_body.label()}
+					label={m.zesty_front_tapir_trip()}
 					bind:value={$formData.custom_code.custom_html_body as string}
 				/>
 			</Grid>
 		</Collapsible>
 
-		<Button>{$page.data.t.forms.buttons.submit()}</Button>
+		<Button>{m.just_away_horse_urge()}</Button>
 		<Debug data={$formData} />
 	</Grid>
 </form>

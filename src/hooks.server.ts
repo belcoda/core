@@ -9,7 +9,7 @@ import createDefaultInstance from '$lib/server/utils/install/default_instance';
 import { _count, _count as _countInstance } from '$lib/server/api/core/instances';
 process.on('warning', (e) => console.warn(e.stack));
 import { defineGetLocale, baseLocale } from '$lib/paraglide/runtime';
-const log = pino('hooks.server.ts');
+const log = pino(import.meta.url);
 import mainHandler from '$lib/server/hooks/handlers';
 
 import { default as queue } from '$lib/server/utils/queue/add_job';
@@ -18,9 +18,10 @@ import * as Sentry from '@sentry/sveltekit';
 import { type HandleServerError, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { dev } from '$app/environment';
-Sentry.init({
-	dsn: 'https://8b4cdb05d7907fe3f9b43aec4a060811@o4508220361342976.ingest.de.sentry.io/4508220380282960',
+import { PUBLIC_SENTRY_DSN } from '$env/static/public';
 
+Sentry.init({
+	dsn: PUBLIC_SENTRY_DSN,
 	// We recommend adjusting this value in production, or using tracesSampler
 	// for finer control
 	tracesSampleRate: dev ? 0 : 1.0,
@@ -47,7 +48,6 @@ const localizationHandler: Handle = async ({ event, resolve }) => {
 
 const belcodaHandler: Handle = async ({ event, resolve }) => {
 	event.locals.queue = queue;
-
 	//get all instances. If the count is zero, run the install script... this is a one-time thing.
 	const instanceCount = await _countInstance();
 	if (!(instanceCount > 0)) {

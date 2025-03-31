@@ -1,6 +1,6 @@
-import { redis, db, pool, t, error, type SL, pino } from '$lib/server';
+import { redis, db, pool, error, pino } from '$lib/server';
 
-const log = pino('$lib/server/api/core/sessions');
+const log = pino(import.meta.url);
 
 import * as schemaSession from '$lib/schema/core/session';
 import * as schemaAdmin from '$lib/schema/core/admin';
@@ -22,6 +22,22 @@ export const create = async ({
 	const createdParsed = v.parse(schemaSession.read, created);
 	return createdParsed;
 };
+
+export async function expireAllSessionsForAdmin({
+	instanceId,
+	adminId
+}: {
+	instanceId: number;
+	adminId: number;
+}): Promise<void> {
+	await db
+		.update(
+			'sessions',
+			{ expires_at: db.sql`now()` },
+			{ instance_id: instanceId, admin_id: adminId }
+		)
+		.run(pool);
+}
 
 export const del = async ({ code }: { code: string }): Promise<void> => {
 	await db.update('sessions', { expires_at: db.sql`now()` }, { code: code }).run(pool);

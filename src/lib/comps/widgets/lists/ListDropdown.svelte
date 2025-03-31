@@ -3,7 +3,7 @@
 	import { type List } from '$lib/schema/people/lists';
 	import { cn, debounce } from '$lib/utils';
 	import type { Snippet } from 'svelte';
-
+	import * as m from '$lib/paraglide/messages';
 	type Props = {
 		list?: List['items'][number];
 		lists?: List['items'];
@@ -16,7 +16,7 @@
 		list = $bindable(),
 		value = $bindable(),
 		lists = $bindable([]),
-		label = $page.data.t.forms.buttons.search(),
+		label = m.low_hour_pig_talk(),
 		onSelectList,
 		children
 	}: Props = $props();
@@ -81,15 +81,15 @@
 		<Popover.Content class="p-0" align="start" side="right">
 			<Command.Root>
 				<Command.Input
-					placeholder={$page.data.t.forms.fields.tags.filter_tags.label()}
+					placeholder={m.tense_raw_flamingo_find()}
 					bind:value={searchString}
 					oninput={debounce(search, 500)}
 				/>
 				<Command.List>
 					{#if loading}
-						<Command.Loading>{$page.data.t.common.status.loading()}</Command.Loading>
+						<Command.Loading>{m.loud_bland_lionfish_pray()}</Command.Loading>
 					{:else}
-						<Command.Empty>{$page.data.t.common.data.no_items()}</Command.Empty>
+						<Command.Empty>{m.deft_agent_parakeet_peek()}</Command.Empty>
 						{#each lists as item, i}
 							<Command.Item
 								value={`${item.id}:::${item.name}`}

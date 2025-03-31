@@ -1,0 +1,13 @@
+{{#if petition.petition_target}}
+<h5 class="font-bold text-xl">{{petition.petition_target}}</h5>
+{{/if}}
+{{#if petition.petition_text}}
+<p class="italic text-lg mt-3">{{{petition.petition_text}}}</p>
+{{/if}}
+
+<div class="flex items-center gap-2 mt-4">
+  <div class="font-bold">{{icon "message-circle"}}</div>
+  <div class="">
+    <a href="{{whatsapp_registration_url instance petition}}" target="_blank" class="text-primary hover:underline">Sign via WhatsApp</a>
+  </div>
+</div>

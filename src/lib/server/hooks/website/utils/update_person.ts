@@ -1,6 +1,6 @@
 import { update, type Read } from '$lib/schema/people/people';
-import { eventSignup, type EventSignup } from '$lib/schema/events/events';
-import { petitionSignature, type PetitionSignature } from '$lib/schema/petitions/petitions';
+import { type EventSignup } from '$lib/schema/events/events';
+import { type PetitionSignature } from '$lib/schema/petitions/petitions';
 import {
 	update as updatePerson,
 	getIdsFromEmailPhoneNumber,
@@ -39,16 +39,36 @@ export default async function ({
 	country: Country;
 }): Promise<Read> {
 	const signupInfo = signup;
-	const emailInfo = parse(update.entries.email, {
-		email: signupInfo.email,
-		subscribed: signupInfo.opt_in
-	});
+
+	// Only parse email if it's not null. We dont have emails when a
+	// person is added from a whatsapp interaction.
+	let emailInfo = undefined;
+	if (signupInfo.email !== null) {
+		emailInfo = parse(update.entries.email, {
+			email: signupInfo.email,
+			subscribed: signupInfo.opt_in
+		});
+	}
+
 	const phoneInfo = parse(update.entries.phone_number, {
 		phone_number: signupInfo.phone_number,
+		whatsapp_id: signupInfo.phone_number,
 		country: country,
+		strict: false, //this is to allow international signups. Eventually this code needs to be refactored.
 		subscribed: signupInfo.opt_in
 	});
-	const personInfo = parse(update, { ...signupInfo, email: emailInfo, phone_number: phoneInfo });
+
+	// Only include email in personInfo if emailInfo is defined
+	const personInfo = parse(update, {
+		full_name: signupInfo.full_name,
+		country: country || DEFAULT_COUNTRY,
+		...(emailInfo && { email: emailInfo }),
+		...(phoneInfo && { phone_number: phoneInfo }),
+		do_not_contact: false,
+		preferred_language: t.locale,
+		point_person_id: adminId
+	});
+
 	const getPersonIds = await getIdsFromEmailPhoneNumber({
 		instanceId,
 		email: signupInfo.email,

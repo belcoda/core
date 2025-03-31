@@ -6,7 +6,7 @@ import { parse } from '$lib/schema/valibot';
 import { COOKIE_SESSION_NAME } from '$env/static/private';
 import { Localization } from '$lib/i18n';
 import { BelcodaError } from '$lib/server';
-
+import * as m from '$lib/paraglide/messages';
 export const POST = async function (event) {
 	try {
 		const tokenCookie = event.cookies.get('g_csrf_token');
@@ -28,12 +28,7 @@ export const POST = async function (event) {
 		return redirect(302, continueUrl ? continueUrl : '/');
 	} catch (err) {
 		if (err instanceof Error) {
-			throw new BelcodaError(
-				500,
-				'API01:/AUTH/GOOGLE:POST:01',
-				event.locals.t.errors.http[500](),
-				err
-			);
+			throw new BelcodaError(500, 'API01:/AUTH/GOOGLE:POST:01', m.spry_ago_baboon_cure(), err);
 		} else {
 			throw err;
 		}

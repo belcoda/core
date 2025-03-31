@@ -8,7 +8,7 @@ export function addButton(message: Read['message']): Read['message'] {
 				...message.interactive,
 				action: {
 					buttons: message.interactive.action.buttons.concat([
-						{ type: 'reply', id: uuidv4(), title: '[Button title]' }
+						{ type: 'reply', reply: { id: uuidv4(), title: '[Button title]' } }
 					])
 				}
 			}
@@ -23,7 +23,7 @@ export function addButton(message: Read['message']): Read['message'] {
 				},
 				type: 'button',
 				action: {
-					buttons: [{ type: 'reply', id: uuidv4(), title: '[Button title]' }]
+					buttons: [{ type: 'reply', reply: { id: uuidv4(), title: '[Button title]' } }]
 				}
 			}
 		};
@@ -43,7 +43,7 @@ export function addButton(message: Read['message']): Read['message'] {
 				},
 				type: 'button',
 				action: {
-					buttons: [{ type: 'reply', id: uuidv4(), title: '[Button title]' }]
+					buttons: [{ type: 'reply', reply: { id: uuidv4(), title: '[Button title]' } }]
 				}
 			}
 		};

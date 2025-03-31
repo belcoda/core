@@ -1,4 +1,5 @@
 import { db, pool, redis, pino, BelcodaError, error, filterQuery, type s } from '$lib/server';
+import * as m from '$lib/paraglide/messages';
 import { filterInteractions } from '$lib/server/utils/filters/filter';
 import { format } from 'node-pg-format';
 import * as schema from '$lib/schema/people/people';
@@ -9,11 +10,12 @@ import { queue as queueInteraction } from '$lib/server/api/people/interactions';
 import { getUniqueKeys } from '$lib/utils/objects/get_unique_keys';
 import { parse, v, mediumString, longString } from '$lib/schema/valibot';
 import { whatsappNumberForVerification } from '$lib/schema/people/channels/channels';
+import type { WhatsappInboundMessage } from '$lib/schema/communications/whatsapp/webhooks/ycloud';
 
 export const redisString = (instance_id: number, person_id: number | 'all') =>
 	`i:${instance_id}:people:${person_id}`;
 
-const log = pino('$lib/server/api/people/people');
+const log = pino(import.meta.url);
 
 async function queueCustomFieldSet({
 	objectSchema,
@@ -202,44 +204,60 @@ export async function update({
 	queue: App.Queue;
 	options?: UpdateOptions;
 }) {
-	const parsed = parse(schema.update, body);
-	const updated = await db
-		.update(
-			'people.people',
-			{
-				...parsed
-			},
-			{ instance_id, id: person_id }
-		)
-		.run(pool)
-		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:PEOPLE:PEOPLE:UPDATE:01', t.errors.updating_data(), err);
-		});
-	if (updated.length !== 1)
-		throw new BelcodaError(404, 'DATA:PEOPLE:PEOPLE:UPDATE:01', t.errors.http[404]());
-	if (options?.skipCustomFieldsQueue !== true) {
-		await queueCustomFieldSet({
-			objectSchema: schema.update,
-			body,
-			instance_id,
-			admin_id,
-			person_id: updated[0].id,
-			queue: queue
-		});
-	}
-	if (options?.skipWhatsappCheck !== true) {
-		const cachedPerson = await redis.get(redisString(instance_id, updated[0].id));
-		const cachedPersonParsed = parse(schema.read, cachedPerson);
-		if (cachedPersonParsed.phone_number?.phone_number !== updated[0].phone_number?.phone_number) {
-			const personToUpdate = parse(whatsappNumberForVerification, { person_id: updated[0].id });
-			await queue('/whatsapp/whapi/check_phone_number', instance_id, personToUpdate, admin_id);
-		}
-	}
+	try {
+		const parsed = parse(schema.update, body);
+		const updated = await db
+			.update(
+				'people.people',
+				{
+					...parsed
+				},
+				{ instance_id, id: person_id }
+			)
+			.run(pool)
+			.catch((err) => {
+				throw new BelcodaError(
+					404,
+					'DATA:PEOPLE:PEOPLE:UPDATE:01',
+					m.basic_slimy_reindeer_treat(),
+					err
+				);
+			});
 
-	await redis.del(redisString(instance_id, person_id));
-	await redis.del(redisString(instance_id, 'all'));
-	const person = await read({ instance_id, person_id: updated[0].id, t });
-	return person;
+		if (updated.length !== 1)
+			throw new BelcodaError(404, 'DATA:PEOPLE:PEOPLE:UPDATE:01', m.that_tasty_dove_pop());
+
+		if (options?.skipCustomFieldsQueue !== true) {
+			await queueCustomFieldSet({
+				objectSchema: schema.update,
+				body,
+				instance_id,
+				admin_id,
+				person_id: updated[0].id,
+				queue: queue
+			});
+		}
+		if (options?.skipWhatsappCheck !== true) {
+			const cachedPerson = await redis.get(redisString(instance_id, updated[0].id));
+			console.log('cachedPerson', cachedPerson);
+			if (cachedPerson) {
+				const cachedPersonParsed = parse(schema.read, cachedPerson);
+				if (
+					cachedPersonParsed.phone_number?.phone_number !== updated[0].phone_number?.phone_number
+				) {
+					const personToUpdate = parse(whatsappNumberForVerification, { person_id: updated[0].id });
+					await queue('/whatsapp/whapi/check_phone_number', instance_id, personToUpdate, admin_id);
+				}
+			}
+		}
+		await redis.del(redisString(instance_id, person_id));
+		await redis.del(redisString(instance_id, 'all'));
+		const person = await read({ instance_id, person_id: updated[0].id, t });
+		return person;
+	} catch (err) {
+		console.log('Update person error:', { error: err, body });
+		throw err;
+	}
 }
 
 export async function read({
@@ -292,7 +310,7 @@ export async function read({
 		)
 		.run(pool)
 		.catch((err) => {
-			return error(404, 'DATA:PEOPLE:PEOPLE:READ:01', t.errors.not_found(), err);
+			return error(404, 'DATA:PEOPLE:PEOPLE:READ:01', m.pretty_tired_fly_lead(), err);
 		});
 	const parsed = v.parse(schema.read, person);
 	await redis.set(redisString(instance_id, person_id), parsed);
@@ -422,7 +440,7 @@ export async function exists({
 			throw new BelcodaError(
 				404,
 				'DATA:PEOPLE:PEOPLE:EXISTS:01',
-				t.errors.not_found_variants.person(),
+				m.every_formal_jellyfish_stop(),
 				err
 			);
 		});
@@ -471,7 +489,7 @@ export async function _getPersonByWhatsappId({
 	log.debug('phoneNumber.number.e164');
 	log.debug(parsedPhoneNumber);
 	const person =
-		await db.sql`SELECT id FROM ${'people.people'} WHERE (phone_number->>'whatsapp_id' = ${db.param(whatsappId)} OR phone_number->>'phone_number' = ${db.param(parsedPhoneNumber)} OR phone_number ->>'whapi_id' = ${db.param(whapiId)}) AND instance_id = ${db.param(instanceId)}`.run(
+		await db.sql`SELECT id FROM ${'people.people'} WHERE (phone_number->>'whatsapp_id' = ${db.param(parsedPhoneNumber)} OR phone_number->>'phone_number' = ${db.param(parsedPhoneNumber)} OR phone_number ->>'whapi_id' = ${db.param(whapiId)}) AND instance_id = ${db.param(instanceId)} LIMIT 1`.run(
 			pool
 		);
 	log.info(whatsappId);
@@ -479,11 +497,48 @@ export async function _getPersonByWhatsappId({
 		throw new BelcodaError(
 			404,
 			'DATA:PEOPLE:PEOPLE:GET_PERSON_BY_WHATSAPP_ID:01',
-			t.errors.not_found_variants.person()
+			m.every_formal_jellyfish_stop()
 		);
 	}
-	log.debug('_getPersonByWhatsappId done');
+	log.debug('_getPersonByWhatsappId done: ', person);
 	return await read({ instance_id: instanceId, person_id: person[0].id, t });
+}
+
+export async function _createPersonByWhatsappId({
+	instanceId,
+	whatsappId,
+	name,
+	queue,
+	t
+}: {
+	instanceId: number;
+	whatsappId: string;
+	name: string;
+	queue: App.Queue;
+	t: App.Localization;
+}) {
+	return await create({
+		instance_id: instanceId,
+		body: {
+			full_name: name,
+			phone_number: {
+				phone_number: whatsappId,
+				whatsapp_id: whatsappId,
+				country: DEFAULT_COUNTRY, // TODO: Get country from phone number country code
+				contactable: true,
+				subscribed: true,
+				textable: true,
+				strict: false,
+				validated: false,
+				whapi_id: null,
+				whatsapp: true
+			},
+			country: DEFAULT_COUNTRY // TODO: Get country from phone number country code
+		},
+		method: 'event_registration',
+		queue,
+		t
+	});
 }
 
 export async function _getInstanceIdByPersonId({
@@ -495,4 +550,33 @@ export async function _getInstanceIdByPersonId({
 		.selectExactlyOne('people.people', { id: personId }, { columns: ['instance_id'] })
 		.run(pool);
 	return response.instance_id;
+}
+
+export async function getPersonOrCreatePersonByWhatsappId(
+	instanceId: number,
+	whatsappId: string,
+	message: WhatsappInboundMessage,
+	t: App.Localization,
+	queue: App.Queue
+) {
+	try {
+		return await _getPersonByWhatsappId({
+			instanceId,
+			whatsappId,
+			t
+		});
+	} catch (err) {
+		if (err instanceof BelcodaError && err.code === 404) {
+			log.debug('Person not found by whatsappId. Creating person');
+			return await _createPersonByWhatsappId({
+				instanceId,
+				whatsappId,
+				name: message.customerProfile?.name,
+				t,
+				queue
+			});
+		} else {
+			throw err;
+		}
+	}
 }

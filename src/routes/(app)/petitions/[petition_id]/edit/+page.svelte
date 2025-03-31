@@ -4,20 +4,19 @@
 	import Button from '$lib/comps/ui/button/button.svelte';
 	export let data;
 	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 </script>
 
-<PageHeader title={data.t.pages.actions.petitions.edit()}>
+<PageHeader title={m.candid_trite_capybara_trust()}>
 	{#snippet button()}
 		<div class="flex items-center gap-2">
 			<Button href="/petitions/{$page.params.petition_id}/edit/notifications" variant="outline"
-				>{$page.data.t.forms.buttons.notification_settings()}</Button
+				>{m.warm_ornate_cat_enrich()}</Button
 			>
 			<Button href="/petitions/{$page.params.petition_id}/edit/advanced" variant="outline"
-				>{$page.data.t.forms.buttons.advanced_settings()}</Button
+				>{m.sharp_same_anaconda_laugh()}</Button
 			>
-			<Button href="/petitions/{$page.params.petition_id}"
-				>{$page.data.t.forms.buttons.back()}</Button
-			>
+			<Button href="/petitions/{$page.params.petition_id}">{m.super_broad_gopher_hurl()}</Button>
 		</div>
 	{/snippet}
 </PageHeader>

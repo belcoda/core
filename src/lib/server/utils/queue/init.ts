@@ -1,6 +1,6 @@
 import { makeWorkerUtils } from 'graphile-worker';
 import { pool, pino } from '$lib/server';
-const log = pino('$lib/server/utils/queue');
+const log = pino(import.meta.url);
 async function main() {
 	const workerUtils = await makeWorkerUtils({
 		pgPool: pool

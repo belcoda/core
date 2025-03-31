@@ -9,10 +9,10 @@ import {
 	returnMessage,
 	loadError
 } from '$lib/server';
-
+import * as m from '$lib/paraglide/messages';
 import { update, read } from '$lib/schema/events/events';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/events/new/+page.server.ts');
+const log = pino(import.meta.url);
 export async function load(event) {
 	const response = await event.fetch(`/api/v1/events/${event.params.event_id}`);
 	if (!response.ok) return loadError(response);
@@ -29,11 +29,9 @@ export const actions = {
 			valibot(update)
 		);
 		if (!form.valid) {
-			return message(
-				form,
-				new BelcodaError(400, 'VALIDATION', event.locals.t.errors.validation()),
-				{ status: 400 }
-			);
+			return message(form, new BelcodaError(400, 'VALIDATION', m.spare_mushy_dachshund_quell()), {
+				status: 400
+			});
 		}
 		log.debug(form.data);
 		const response = await event.fetch(`/api/v1/events/${event.params.event_id}`, {
@@ -50,7 +48,7 @@ export const actions = {
 		const parsed = parse(read, body);
 		return redirect(event, {
 			location: `/events/${parsed.id}`,
-			message: event.locals.t.forms.actions.updated()
+			message: m.white_acidic_koala_pop()
 		});
 	}
 };

@@ -2,7 +2,7 @@ import { superValidate, valibot, pino, loadError } from '$lib/server';
 
 import { update, read } from '$lib/schema/website/content';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/website/pages/[page_id]/advanced/+page.server.ts');
+const log = pino(import.meta.url);
 
 export async function load(event) {
 	const response = await event.fetch(

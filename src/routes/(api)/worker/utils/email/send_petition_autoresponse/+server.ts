@@ -9,8 +9,9 @@ import { read as readPetition } from '$lib/server/api/petitions/petitions';
 import { read as readPerson } from '$lib/server/api/people/people';
 import { read as readTemplate } from '$lib/server/api/communications/email/templates';
 import { read as readMessage } from '$lib/server/api/communications/email/messages';
-const log = pino('/worker/utils/email/send_event_email');
+const log = pino(import.meta.url);
 import { randomUUID } from 'crypto';
+import * as m from '$lib/paraglide/messages';
 import { id, parse } from '$lib/schema/valibot';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
 
@@ -101,7 +102,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'WORKER:/utils/email/send_petition_autoresponse:01',
-			event.locals.t.errors.generic(),
+			m.teary_dizzy_earthworm_urge(),
 			err
 		);
 	}

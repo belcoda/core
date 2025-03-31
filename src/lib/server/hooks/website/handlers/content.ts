@@ -1,9 +1,7 @@
-import renderTemplate from '$lib/server/utils/handlebars/render';
-import updatePerson from '$lib/server/hooks/website/utils/update_person';
+import renderHandlebarsTemplate from '$lib/server/utils/handlebars/render';
 
 import { readBySlug as readContentTypeBySlug } from '$lib/server/api/website/content_types';
 import { readBySlug as readContentBySlug } from '$lib/server/api/website/content';
-import { read as readTemplate } from '$lib/server/api/website/templates';
 
 import {
 	render,
@@ -14,12 +12,21 @@ import {
 
 import { pino } from '$lib/server';
 
-const log = pino('/lib/server/hooks/website/handlers/content');
-const error404 = {
-	title: 'Error',
-	error_code: 'Error 404',
-	error_message: 'Page not found'
+import contentDefaultTemplate from '$lib/server/templates/website/content/default.hbs?raw';
+import contentPageTemplate from '$lib/server/templates/website/content/page.hbs?raw';
+import contentPostTemplate from '$lib/server/templates/website/content/post.hbs?raw';
+const templates = {
+	page: contentPageTemplate,
+	post: contentPostTemplate,
+	default: contentDefaultTemplate
 };
+import contentPageCopy from '$lib/server/templates/website/content/default.copy';
+import utilsCopy from '$lib/server/templates/website/blocks/utils/utils.copy';
+
+import { parse, type TemplateGlobals } from '$lib/schema/valibot';
+
+import { error500, error404 } from '$lib/server/hooks/website/handlers/errors';
+const log = pino(import.meta.url);
 
 export default async function ({
 	content_slug,
@@ -54,6 +61,10 @@ export default async function ({
 		throw error404;
 	});
 
+	// Get the correct template to correspond with the content type
+	// Type casting here should be okay becuse there is a fallback to the default template if needed
+	const contentTemplate = templates[contentType.slug as 'post' | 'page'] ?? contentDefaultTemplate;
+
 	const content = await readContentBySlug({
 		instanceId: instance.id,
 		slug: content_slug,
@@ -65,27 +76,42 @@ export default async function ({
 		throw error404;
 	});
 
-	const template = await readTemplate({
+	const globals: TemplateGlobals = {
+		url: `https://${instance.slug}.belcoda.com/${contentType.slug}/${content.slug}`,
+		encoded_url: encodeURIComponent(
+			`https://${instance.slug}.belcoda.com/${contentType.slug}/${content.slug}`
+		)
+	};
+
+	const output = await renderHandlebarsTemplate({
+		template: contentTemplate,
 		instanceId: instance.id,
-		templateId: content.template_id,
-		t: t
+		context: {
+			content: content,
+			status,
+			instance,
+			globals,
+			copy: { event: contentPageCopy(), utils: utilsCopy() }
+		},
+		t
 	}).catch((err) => {
-		log.error('Error reading template');
+		log.error('Error rendering content');
 		log.error(err);
-		throw error404;
+		throw error500;
 	});
 
-	const output = await renderTemplate({
-		instanceId: instance.id,
-		template: template.html,
-		context: { content: content },
-		t
-	});
-	const custom_code = compile_custom_code(content, template);
+	//this is needed to avoid the error: "Cannot read property 'custom_css' of undefined"
+	const DEFAULT_CUSTOM_TEMPLATE_CODE = {
+		custom_html_head: '',
+		custom_html_body: '',
+		custom_css: '',
+		custom_js: ''
+	};
+
+	const custom_code = compile_custom_code(content, DEFAULT_CUSTOM_TEMPLATE_CODE);
 	const final = render({
-		template: template,
 		renderedContent: output,
-		context: { content: content, status },
+		context: { content: content, status, instance },
 		customCode: custom_code,
 		metatags: content.html_metatags
 	});

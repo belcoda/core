@@ -11,15 +11,16 @@
 	const flash = getFlash(page);
 	const loadingIds: Writable<number[]> = writable([]);
 	import Plus from 'lucide-svelte/icons/plus';
+	import * as m from '$lib/paraglide/messages';
 </script>
 
 <DataGrid
-	options={{ showFilter: false, nothingFoundMessage: data.t.common.data.not_found_types.lists() }}
+	options={{ showFilter: false, nothingFoundMessage: m.warm_quiet_bulldog_roar() }}
 	items={data.list.people.items}
 	count={data.list.people.count}
 	title={`${data.list.name} (${data.list.count})`}
 >
-	{#snippet content(person: typeof data.list.people.items[0])}
+	{#snippet content(person: (typeof data.list.people.items)[0])}
 		<div class="flex items-center justify-between gap-4">
 			{#if $loadingIds.includes(person.id)}
 				<div class="saturate-0 animated animate-pulse text-muted-foreground">
@@ -38,15 +39,15 @@
 							method: 'DELETE'
 						});
 						if (!result.ok) {
-							$flash = { type: 'error', message: data.t.errors.updating_data() };
+							$flash = { type: 'error', message: m.basic_slimy_reindeer_treat() };
 						}
-						$flash = { type: 'success', message: data.t.forms.actions.removed() };
+						$flash = { type: 'success', message: m.red_loud_oryx_love() };
 						const personIndex = data.list.people.items.findIndex((p) => p.id === person.id);
 						data.list.people.items = data.list.people.items.toSpliced(personIndex, 1);
 						await invalidateAll();
 						const loadingIdIndex = $loadingIds.findIndex((id) => id === person.id);
 						$loadingIds = $loadingIds.toSpliced(loadingIdIndex, 1);
-					}}>{data.t.forms.buttons.remove()}</Button
+					}}>{m.close_north_termite_commend()}</Button
 				>
 			</div>
 		</div>
@@ -63,18 +64,18 @@
 						method: 'POST'
 					});
 					if (!result.ok) {
-						$flash = { type: 'error', message: data.t.errors.updating_data() };
+						$flash = { type: 'error', message: m.basic_slimy_reindeer_treat() };
 					}
-					$flash = { type: 'success', message: data.t.forms.actions.created() };
+					$flash = { type: 'success', message: m.flat_sleek_millipede_agree() };
 					await invalidateAll();
 					const loadingIdIndex = $loadingIds.findIndex((id) => id === person.id);
 					$loadingIds = $loadingIds.toSpliced(loadingIdIndex, 1);
 				}}
 			>
 				<Plus size={14} />
-				{$page.data.t.people.actions.search_and_add()}
+				{m.ideal_spry_snail_fade()}
 			</PersonDropdown>
-			<Button href="/people/lists/{data.list.id}/edit">{data.t.forms.buttons.edit()}</Button>
+			<Button href="/people/lists/{data.list.id}/edit">{m.giant_misty_shrimp_stop()}</Button>
 		</div>
 	{/snippet}
 </DataGrid>

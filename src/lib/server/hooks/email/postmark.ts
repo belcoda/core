@@ -3,7 +3,7 @@ type Resolve = (event: RequestEvent, opts?: ResolveOptions | undefined) => Maybe
 import type { HandlerResponse } from '$lib/server/hooks/handlers';
 import { pino } from '$lib/server';
 import { incomingPostmarkWebhook } from '$lib/schema/communications/email/received_emails';
-const log = pino('$lib/server/hooks/email');
+const log = pino(import.meta.url);
 import { parse } from '$lib/schema/valibot';
 import { readBySubdomain } from '$lib/server/api/core/instances';
 import { POSTMARK_INBOUND_WEBHOOK_TOKEN } from '$env/static/private';

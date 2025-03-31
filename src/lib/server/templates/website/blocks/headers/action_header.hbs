@@ -1,0 +1,17 @@
+<header class="px-6 pt-6 lg:px-8 z-20">
+  <nav class="flex h-9 items-center justify-center lg:justify-between" aria-label="Global">
+    <div class="flex lg:min-w-0 lg:flex-1" aria-label="Global">
+      <a href="{{instance.settings.home_page_url}}" target="_blank" class="-m-1.5 p-1.5">
+        <span class="sr-only">{{instance.name}}</span>
+        <img src="{{instance.settings.website.logo_url}}" class="mr-3 h-6 md:h-8 lg:h-10"
+          alt="{{instance.name}} Logo" />
+      </a>
+    </div>
+    <div class="sm:flex sm:gap-x-4 md:gap-x-6 lg:min-w-0 lg:justify-center lg:gap-x-12">
+      {{#each instance.settings.website.header_links}}
+      <a href="{{this.url}}" class="font-bold text-gray-700 hover:text-gray-900 hover:underline"
+        target="{{#if this.new_tab}}_blank{{/if}}{{#unless this.new_tab}}_self{{/unless}}">{{this.text}}</a>
+      {{/each}}
+    </div>
+  </nav>
+</header>

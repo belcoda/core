@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { type SuperValidated } from 'sveltekit-superforms';
+	import * as m from '$lib/paraglide/messages';
 	import {
 		DEFAULT_EMAIL,
 		generateDefaultPhoneNumber,
@@ -20,6 +21,7 @@
 		Switch,
 		Code,
 		Debug,
+		Select,
 		superForm,
 		valibotClient,
 		type Infer
@@ -42,6 +44,7 @@
 	import { DEFAULT_COUNTRY } from '$lib/i18n';
 	let storedPhoneNumber: PhoneNumber | null | undefined = null;
 	let storedEmail: Email | null | undefined = null;
+
 </script>
 
 <form use:enhance method="post">
@@ -78,14 +81,14 @@
 							{form}
 							name="email.email"
 							bind:value={$formData.email.email as string}
-							label={$page.data.t.forms.fields.people.email_address.label()}
+							label={m.stock_tame_monkey_dine()}
 						/>
 						<div class="flex justify-end">
 							<Checkbox
 								{form}
 								name="email.subscribed"
 								bind:checked={$formData.email.subscribed as boolean}
-								label={$page.data.t.common.status.subscribed()}
+								label={m.day_kind_weasel_cook()}
 							/>
 						</div>
 					</Grid>
@@ -94,7 +97,7 @@
 						variant="outline"
 						class="mt-0"
 						onclick={() => ($formData.email = storedEmail ? storedEmail : DEFAULT_EMAIL)}
-						>{$page.data.t.forms.fields.people.email_address.add_email_button()}</Button
+						>{m.aware_long_starfish_buy()}</Button
 					>
 				{/if}
 			</div>
@@ -118,14 +121,14 @@
 							{form}
 							name="phone_number.phone_number"
 							bind:value={$formData.phone_number.phone_number as string}
-							label={$page.data.t.forms.fields.people.phone_number.label()}
+							label={m.sleek_frail_parakeet_buzz()}
 						/>
 						<div class="flex justify-end">
 							<Checkbox
 								{form}
 								name="phone_number.subscribed"
 								bind:checked={$formData.phone_number.subscribed as boolean}
-								label={$page.data.t.common.status.subscribed()}
+								label={m.day_kind_weasel_cook()}
 							/>
 						</div>
 					</Grid>
@@ -137,7 +140,7 @@
 							($formData.phone_number = storedPhoneNumber
 								? storedPhoneNumber
 								: generateDefaultPhoneNumber($formData.country || DEFAULT_COUNTRY))}
-						>{$page.data.t.forms.fields.people.phone_number.add_phone_number_button()}</Button
+						>{m.noble_low_kitten_cherish()}</Button
 					>
 				{/if}
 			</div>
@@ -151,14 +154,14 @@
 				{form}
 				name="organization"
 				bind:value={$formData.organization as string}
-				label={$page.data.t.forms.fields.people.organization.label()}
+				label={m.solid_many_giraffe_snip()}
 			/>
 			<Input
 				type="text"
 				{form}
 				name="position"
 				bind:value={$formData.position as string}
-				label={$page.data.t.forms.fields.people.position.label()}
+				label={m.noisy_tasty_moth_zoom()}
 			/>
 		</Grid>
 
@@ -186,9 +189,33 @@
 			<DateElement
 				{form}
 				name="dob"
-				bind:value={$formData.dob as Date}
-				label={$page.data.t.forms.fields.people.dob.label()}
+				bind:value={$formData.dob as string}
+				label={m.slow_factual_wolf_find()}
 			/>
+			<Select
+				{form}
+				name="gender"
+				bind:value={$formData.gender as string}
+				label="Gender"
+				options={[
+					{
+						value: 'male',
+						label: m.jolly_round_martin_trip()
+					},
+					{
+						value: 'female',
+						label: m.clean_sea_thrush_dial()
+					},
+					{
+						value: 'other',
+						label: m.teal_maroon_mantis_scoop()
+					},
+					{
+						value: 'not_specified',
+						label: m.awake_topical_rook_jolt()
+					}
+				]}
+			></Select>
 		</Grid>
 
 		<Button type="submit"></Button>

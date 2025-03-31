@@ -17,6 +17,7 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
+	import * as m from '$lib/paraglide/messages';
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'long'
 	});

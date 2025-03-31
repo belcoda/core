@@ -14,8 +14,8 @@ import {
 import { read, update } from '$lib/schema/petitions/petitions';
 import { update as updateEmailMessage } from '$lib/schema/communications/email/messages';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/petitions/[petition_id]/edit/notifications/+page.server.ts');
-
+const log = pino(import.meta.url);
+import * as m from '$lib/paraglide/messages';
 export async function load(event) {
 	const response = await event.fetch(`/api/v1/petitions/${event.params.petition_id}`);
 	if (!response.ok) return loadError(response);
@@ -51,7 +51,7 @@ export const actions = {
 
 		return redirect(event, {
 			location: `/petitions/${parsed.id}/edit`,
-			message: event.locals.t.forms.actions.updated()
+			message: m.white_acidic_koala_pop()
 		});
 	}
 };

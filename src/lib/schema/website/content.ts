@@ -18,7 +18,6 @@ import { read as readUpload } from '$lib/schema/website/uploads';
 export const base = v.object({
 	id: id,
 	content_type_id: id,
-	template_id: id,
 	name: shortStringNotEmpty,
 	slug: slug,
 	heading: shortStringNotEmpty,

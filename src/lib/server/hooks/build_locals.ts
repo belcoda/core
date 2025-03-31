@@ -11,7 +11,7 @@ export function buildLocalLanguage(event: RequestEvent): SupportedLanguage {
 	return locale;
 }
 
-const log = pino('$lib/server/hooks/build_locals');
+const log = pino(import.meta.url);
 import logToAnalytics from '$lib/server/hooks/analytics/log';
 
 export async function buildAdminInstance({ event }: { event: RequestEvent }): Promise<{
@@ -67,7 +67,7 @@ export async function buildAdminInstance({ event }: { event: RequestEvent }): Pr
 		const { admin, instance } = await getSession(event);
 		event.locals.admin = admin;
 		event.locals.instance = instance;
-    //event.locals.language = instance.language; //don't overwrite user selected language with instance default
+		//event.locals.language = instance.language; //don't overwrite user selected language with instance default
 		return { authenticated: true, event, jsonResponse: false };
 	} catch (err) {
 		log.error(err);

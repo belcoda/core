@@ -6,7 +6,8 @@ import {
 	update as updateEvent
 } from '$lib/server/api/events/events';
 import { unsafeListAllForEvent } from '$lib/server/api/events/attendees';
-const log = pino('/worker/utils/email/events/send_followup_email');
+import * as m from '$lib/paraglide/messages';
+const log = pino(import.meta.url);
 
 export async function POST(event) {
 	try {
@@ -30,7 +31,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'WORKER:/utils/email/events/send_followup_email:01',
-			event.locals.t.errors.generic(),
+			m.teary_dizzy_earthworm_urge(),
 			err
 		);
 	}

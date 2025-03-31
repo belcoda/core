@@ -16,13 +16,12 @@ import { redirect } from '@sveltejs/kit';
 import { update, read } from '$lib/schema/events/events';
 import { list as listForEvent } from '$lib/schema/events/attendees';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/events/preview/+page.server.ts');
+const log = pino(import.meta.url);
 export async function load(event) {
 	const response = await event.fetch(`/api/v1/events/${event.params.event_id}`);
 	if (!response.ok) return loadError(response);
 	const eventBody = await response.json();
 	const parsedEvent = parse(read, eventBody);
-
 	const attendeesResponse = await event.fetch(`/api/v1/events/${event.params.event_id}/attendees`);
 	if (!attendeesResponse.ok) return loadError(attendeesResponse);
 	const attendeesBody = await attendeesResponse.json();

@@ -32,8 +32,10 @@ export const action = v.object({
 		v.array(
 			v.object({
 				type: v.literal('reply'),
-				title: v.pipe(v.string(), v.maxLength(20)),
-				id: uuid
+				reply: v.object({
+					title: v.pipe(v.string(), v.maxLength(20)),
+					id: uuid
+				})
 			})
 		),
 		v.maxLength(3)

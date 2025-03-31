@@ -1,13 +1,13 @@
-import { pino, BelcodaError, json, error } from '$lib/server';
+import { BelcodaError, json, error, pino } from '$lib/server';
 import { signatureQueueMessage } from '$lib/schema/petitions/petitions';
-import { triggerEventMessage } from '$lib/schema/utils/email';
 import { parse } from '$lib/schema/valibot';
 import updatePerson from '$lib/server/hooks/website/utils/update_person';
 import { create } from '$lib/server/api/petitions/signatures';
 import { read as readPetition } from '$lib/server/api/petitions/petitions';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
+import * as m from '$lib/paraglide/messages';
 
-const log = pino('/worker/events/registration');
+const log = pino(import.meta.url);
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
@@ -32,8 +32,8 @@ export async function POST(event) {
 		}).catch((err) => {
 			throw new BelcodaError(
 				400,
-				'WORKER:/events/registration:01',
-				event.locals.t.errors.generic(),
+				'WORKER:/petitions/signature:01',
+				m.teary_dizzy_earthworm_urge(),
 				err
 			);
 		});
@@ -63,6 +63,6 @@ export async function POST(event) {
 
 		return json({ success: true });
 	} catch (err) {
-		return error(500, 'WORKER:/events/registration:02', event.locals.t.errors.generic(), err);
+		return error(500, 'WORKER:/petitions/signature:02', m.teary_dizzy_earthworm_urge(), err);
 	}
 }

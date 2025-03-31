@@ -1,6 +1,6 @@
 import { json, error } from '$lib/server/';
 import * as api from '$lib/server/api/website/uploads';
-
+import * as m from '$lib/paraglide/messages';
 export async function GET(event) {
 	try {
 		const uploads = await api.list({
@@ -9,7 +9,7 @@ export async function GET(event) {
 		});
 		return json(uploads);
 	} catch (err) {
-		return error(500, 'API:/api/v1/website/uploads:GET01', event.locals.t.errors.http[500](), err);
+		return error(500, 'API:/api/v1/website/uploads:GET01', m.spry_ago_baboon_cure(), err);
 	}
 }
 
@@ -22,6 +22,6 @@ export async function POST(event) {
 		});
 		return json(created);
 	} catch (err) {
-		return error(500, 'API:/api/v1/website/uploads:POST01', event.locals.t.errors.http[500](), err);
+		return error(500, 'API:/api/v1/website/uploads:POST01', m.spry_ago_baboon_cure(), err);
 	}
 }

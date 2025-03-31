@@ -18,11 +18,14 @@
 
 <div class="grid grid-cols-1 gap-2">
 	{#if messages[messageIndex].message.type === 'interactive'}
-		{@const buttonId = messages[messageIndex].message.interactive.action.buttons[buttonIndex].id}
+		{@const buttonId =
+			messages[messageIndex].message.interactive.action.buttons[buttonIndex].reply.id}
 		<div class="flex items-center gap-2">
 			<div class="flex-grow">
 				<Input
-					bind:value={messages[messageIndex].message.interactive.action.buttons[buttonIndex].title}
+					bind:value={
+						messages[messageIndex].message.interactive.action.buttons[buttonIndex].reply.title
+					}
 				/>
 			</div>
 			<Button

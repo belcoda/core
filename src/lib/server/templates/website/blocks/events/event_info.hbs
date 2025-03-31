@@ -1,0 +1,26 @@
+<h2 class="text-2xl font-bold mb-4">{{event.heading}}</h2>
+<div class="flex items-center gap-2 mb-4">
+  <div class="font-bold">{{icon "calendar"}}</div>
+  <div class="">{{render_event_time event}}</div>
+</div>
+
+{{#if event.online}}
+<div class="flex items-center gap-2">
+  <div class="font-bold">{{icon "globe"}}</div>
+  <div class="">Online event</div>
+</div>
+{{else}}
+<div class="flex items-center gap-2">
+  <div class=" font-bold">{{icon "mappin"}}</div>
+  <div class="">
+    <div><a href="{{google_maps_url event}}" target="_blank">{{address event}}</a></div>
+  </div>
+</div>
+{{/if}}
+
+<div class="flex items-center gap-2 mt-4">
+  <div class="font-bold">{{icon "message-circle"}}</div>
+  <div class="">
+    <a href="{{whatsapp_registration_url instance event}}" target="_blank" class="text-primary hover:underline">Register via WhatsApp</a>
+  </div>
+</div>

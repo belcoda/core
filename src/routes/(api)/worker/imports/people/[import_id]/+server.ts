@@ -2,12 +2,14 @@ import { json, error, BelcodaError, pino } from '$lib/server';
 import { getCsvFromBucket } from '$lib/server/utils/s3/put';
 import { PUBLIC_AWS_S3_USER_IMPORT_BUCKET_NAME } from '$env/static/public';
 import { update } from '$lib/server/api/people/imports';
+import { type SupportedCountry, SUPPORTED_COUNTRIES } from '$lib/i18n/index.js';
 import * as csv from 'fast-csv';
 import { create as createPerson } from '$lib/server/api/people/people';
 import { create as createSchema } from '$lib/schema/people/people';
 import { renderName } from '$lib/utils/text/names';
 import { v, parse } from '$lib/schema/valibot';
-const log = pino('/worker/imports/people');
+import * as m from '$lib/paraglide/messages';
+const log = pino(import.meta.url);
 
 export async function POST(event) {
 	try {
@@ -20,21 +22,41 @@ export async function POST(event) {
 				email_subscribed: v.optional(v.string(), 'true'),
 				phone_number: v.nullable(v.string()),
 				phone_subscribed: v.optional(v.string(), 'true'),
-				organization: v.nullable(v.string()),
-				position: v.nullable(v.string()),
 				address_line_1: v.nullable(v.string()),
 				address_line_2: v.nullable(v.string()),
 				city: v.nullable(v.string()),
 				postcode: v.nullable(v.string()),
-				state: v.nullable(v.string())
+				state: v.nullable(v.string()),
+				country: v.nullable(v.pipe(v.string(), v.length(2))),
+				organization: v.nullable(v.string()),
+				position: v.nullable(v.string()),
+				gender: v.nullable(v.picklist(['male', 'female', 'other', 'not_specified'])),
+				date_of_birth: v.nullable(v.pipe(v.string(), v.regex(new RegExp(/^\d{4}-\d{2}-\d{2}$/)))),
+				preferred_language: v.nullable(v.pipe(v.string(), v.length(2))),
+				tags: v.optional(v.nullable(v.string()), null),
+				events: v.optional(v.nullable(v.string()), null)
 			}),
 			v.transform((input) => {
 				const hasPhoneNumber = input.phone_number && input.phone_number.length > 0;
 				const hasEmail = input.email && input.email.length > 0;
+				//this has casting, but it's tested against the SUPPORTED_COUNTRIES array.
+				const inputCountry = SUPPORTED_COUNTRIES.includes(input.country as SupportedCountry)
+					? (input.country as SupportedCountry)
+					: event.locals.instance.country;
+
+				function filterEmpty(value: string[]) {
+					return value.filter((v) => {
+						return v;
+					});
+				}
+
+				const filteredTags = input.tags ? filterEmpty(input.tags.split(',')) : [];
+				const filteredEvents = input.events ? filterEmpty(input.events.split(',')) : [];
+
 				return {
 					family_name: input.family_name,
 					given_name: input.given_name,
-					full_name: renderName(input, event.locals.instance.country),
+					full_name: renderName(input, inputCountry),
 					email: !hasEmail
 						? null
 						: {
@@ -46,14 +68,21 @@ export async function POST(event) {
 						: {
 								phone_number: input.phone_number,
 								subscribed: input.phone_subscribed === 'true',
-								country: event.locals.instance.country
+								country: input.country || event.locals.instance.country
 							},
 					address_line_1: input.address_line_1,
 					address_line_2: input.address_line_2,
 					locality: input.city,
 					postcode: input.postcode,
 					state: input.state,
-					country: event.locals.instance.country
+					country: inputCountry,
+					organization: input.organization,
+					position: input.position,
+					preferred_language: input.preferred_language,
+					gender: input.gender,
+					dob: input.date_of_birth,
+					tags: filteredTags,
+					events: filteredEvents
 				};
 			})
 		);
@@ -94,14 +123,33 @@ export async function POST(event) {
 					try {
 						//todo: transform phoneNumber, etc into the budgets and add them to the created entries
 						const parsedItem = v.parse(v.looseObject({ ...createSchema.entries }), parsed); //because we want to allow custom fields to be passed through to the function
-						await createPerson({
+						const { events, tags, ...strippedPerson } = parsedItem; //remove events and tags from the person object
+						const createdPerson = await createPerson({
 							instance_id: event.locals.instance.id,
 							admin_id: event.locals.admin.id,
-							body: parsedItem,
+							body: strippedPerson,
 							t: event.locals.t,
 							queue: event.locals.queue,
 							method: 'import'
 						});
+						for (const tag of parsed.tags) {
+							await addPersonToTag({
+								instanceId: event.locals.instance.id,
+								personId: createdPerson.id,
+								tagName: tag,
+								t: event.locals.t
+							});
+						}
+						for (const eventSlug of parsed.events) {
+							await addPersonToEvent({
+								instanceId: event.locals.instance.id,
+								personId: createdPerson.id,
+								eventSlug,
+								t: event.locals.t,
+								queue: event.locals.queue,
+								importId
+							});
+						}
 						successCount++;
 					} catch (err) {
 						log.error(err);
@@ -128,8 +176,81 @@ export async function POST(event) {
 		return error(
 			500,
 			'API:/api/v1/worker/imports/people/[import_id]:POST:01',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
+		);
+	}
+}
+
+import { readByName, create as createTag } from '$lib/server/api/core/tags';
+import { create as createTagging } from '$lib/server/api/people/taggings';
+async function addPersonToTag({
+	instanceId,
+	personId,
+	tagName,
+	t
+}: {
+	instanceId: number;
+	personId: number;
+	tagName: string;
+	t: App.Localization;
+}): Promise<void> {
+	try {
+		//try to add them to an existing tag
+		const tag = await readByName({ instanceId, tagName });
+		await createTagging({ instanceId, personId, tagId: tag.id, t });
+		log.debug({ instanceId, personId, tagName }, 'Added tag');
+	} catch (err) {
+		//if no tag exists, readByName will error. So we create a new tag
+		try {
+			const newTag = await createTag({ instanceId, body: { name: tagName } });
+			log.debug(newTag, 'Created new tag');
+			await createTagging({ instanceId, personId, tagId: newTag.id, t });
+			log.debug({ instanceId, personId, tagName, newTag }, 'Added person to new tag');
+		} catch (err) {
+			//If something went wrong with the creation or adding of a new tag.
+			log.debug({ instanceId, personId, tagName }, 'Unable to create tag');
+		}
+	}
+}
+
+import { readBySlug } from '$lib/server/api/events/events';
+import { create as createAttendee } from '$lib/server/api/events/attendees';
+async function addPersonToEvent({
+	instanceId,
+	personId,
+	eventSlug,
+	t,
+	queue,
+	importId
+}: {
+	instanceId: number;
+	personId: number;
+	eventSlug: string;
+	t: App.Localization;
+	queue: App.Queue;
+	importId: number;
+}): Promise<void> {
+	try {
+		const event = await readBySlug({ instanceId, slug: eventSlug });
+		await createAttendee({
+			instanceId,
+			eventId: event.id,
+			body: {
+				person_id: personId,
+				status: 'attended',
+				send_notifications: false,
+				notes: `import:${importId}`
+			},
+			t,
+			queue
+		});
+		log.debug({ instanceId, personId, eventSlug }, 'Added person to event');
+	} catch (err) {
+		//no event?
+		log.debug(
+			{ instanceId, personId, eventSlug },
+			'Unable to add person to event. Probably no event exists with this slug'
 		);
 	}
 }

@@ -36,7 +36,6 @@ export const petitionUserInfoSettings = v.object({
 export const base = v.object({
 	id: id,
 	instance_id: id,
-	template_id: id,
 	name: longStringNotEmpty,
 	slug: slug,
 	heading: shortStringNotEmpty,
@@ -86,8 +85,6 @@ export const create = v.object({
 	petition_text: base.entries.petition_text,
 	...v.partial(petitionUserInfoSettings).entries,
 
-	template_id: v.optional(base.entries.template_id),
-
 	autoresponse_email: v.optional(base.entries.autoresponse_email),
 	send_autoresponse_email: v.optional(base.entries.send_autoresponse_email),
 	feature_image_upload_id: v.optional(base.entries.feature_image_upload_id),
@@ -125,16 +122,4 @@ export type PetitionSignature = v.InferOutput<typeof petitionSignature>;
 export const signatureQueueMessage = v.object({
 	petition_id: id,
 	signup: petitionSignature
-});
-
-export const preview = v.object({
-	html: longString,
-	text: longString,
-	template_text: longString,
-	template_html: longString,
-	context: v.object({
-		event: read,
-		person: readPerson,
-		instance: readInstance
-	})
 });

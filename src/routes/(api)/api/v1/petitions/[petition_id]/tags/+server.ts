@@ -1,6 +1,6 @@
 import { json, error } from '$lib/server';
 import * as api from '$lib/server/api/petitions/taggings';
-
+import * as m from '$lib/paraglide/messages';
 export async function GET(event) {
 	try {
 		const listData = await api.list({
@@ -13,7 +13,7 @@ export async function GET(event) {
 		return error(
 			500,
 			'API:/api/v1/petitions/[petition_id]/tags:GET',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

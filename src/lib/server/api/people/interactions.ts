@@ -7,7 +7,7 @@ import {
 	list as listSchema,
 	read as readSchema
 } from '$lib/schema/people/interactions';
-
+import * as m from '$lib/paraglide/messages';
 import { filterInteractions } from '$lib/server/utils/filters/filter';
 import { parse } from '$lib/schema/valibot';
 import {
@@ -36,12 +36,12 @@ export async function list({
 	type?: 'communications' | 'activity' | null;
 }): Promise<List> {
 	const { filtered, where, options } = filterQuery(url);
-	if (!filtered) {
-		const cached = await redis.get(redisString(instanceId, personId, type));
-		if (cached) {
-			return parse(listSchema, cached);
-		}
-	}
+	// if (!filtered) {
+	// 	const cached = await redis.get(redisString(instanceId, personId, type));
+	// 	if (cached) {
+	// 		return parse(listSchema, cached);
+	// 	}
+	// }
 	//either it's activity, or conditions or simply just not null...
 	const typeConditions = filterInteractions(url);
 	const interactions = await db
@@ -201,7 +201,7 @@ export function moveNoteToEditHistory({
 		throw new BelcodaError(
 			400,
 			'API:/people/interactions/moveNoteToEditHistory:01',
-			t.errors.updating_data()
+			m.basic_slimy_reindeer_treat()
 		);
 	}
 	const newNoteDetils: Read['details'] = {

@@ -9,7 +9,7 @@ import { parse } from '$lib/schema/valibot';
 import { webhook } from '$lib/schema/communications/whatsapp/webhooks/webhook';
 import { _getInstanceByWhatsappPhoneNumberId } from '$lib/server/api/core/instances';
 
-const log = pino('$lib/server/hooks/whatsapp');
+const log = pino(import.meta.url);
 export default async function (event: RequestEvent, resolve: Resolve): Promise<HandlerResponse> {
 	log.info(`📞 ${event.request.method} ${event.url.href}`);
 	const challenge = event.url.searchParams.get('hub.challenge');

@@ -13,7 +13,7 @@ import {
 import { read } from '$lib/schema/events/events';
 import { list as listForEvent, update as updateAttendee } from '$lib/schema/events/attendees';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/events/new/+page.server.ts');
+const log = pino(import.meta.url);
 
 export async function load(event) {
 	const response = await event.fetch(`/api/v1/events/${event.params.event_id}`);
@@ -57,7 +57,7 @@ export const actions = {
 		if (!response.ok) return loadError(response);
 		return redirect(event, {
 			location: `/events/${event.params.event_id}`,
-			message: event.locals.t.forms.actions.saved()
+			message: m.livid_that_worm_drip()
 		});
 	}
 };

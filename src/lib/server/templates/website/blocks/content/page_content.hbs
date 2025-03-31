@@ -1,0 +1,8 @@
+<div class="prose mb-6 lg:prose-lg xl:prose-xl">
+  <h1>{{content.heading}}</h1>
+</div>
+{{#if content.feature_image}}
+<div class="flex justify-center"><img src="{{content.feature_image.url}}" alt="Feature" class="w-auto" />
+</div>
+{{/if}}
+<div class="prose lg:prose-lg xl:prose-xl mt-4">{{{content.html}}}</div>

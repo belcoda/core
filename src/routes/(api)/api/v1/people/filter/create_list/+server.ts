@@ -2,7 +2,8 @@ import { json, error, pino } from '$lib/server';
 import { filterGroup } from '$lib/schema/people/filters/filters';
 import { parse } from '$lib/schema/valibot';
 import { create } from '$lib/server/api/people/lists';
-const log = pino('API:/api/v1/people/[person_id]/filters/+server.ts');
+import * as m from '$lib/paraglide/messages';
+const log = pino(import.meta.url);
 import { generateUniqueString } from '$lib/utils/text/random';
 export async function PUT(event) {
 	try {
@@ -12,7 +13,7 @@ export async function PUT(event) {
 		const list = await create({
 			instanceId: event.locals.instance.id,
 			body: {
-				name: event.locals.t.people.lists.names.new_list_name(dateString, generateUniqueString())
+				name: m.lazy_happy_bullock_cry({ dateString, randomString: generateUniqueString() })
 			},
 			t: event.locals.t
 		});
@@ -28,7 +29,7 @@ export async function PUT(event) {
 		return error(
 			500,
 			'API:/api/v1/people/[person_id]/filters/+server.ts',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

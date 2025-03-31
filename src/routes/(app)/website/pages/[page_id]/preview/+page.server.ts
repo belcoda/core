@@ -4,7 +4,7 @@ import { redirect } from '@sveltejs/kit';
 import { PUBLIC_HOST } from '$env/static/public';
 import { read } from '$lib/schema/website/content';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/pages/[page_id]/preview/+page.server.ts');
+const log = pino(import.meta.url);
 export async function load(event) {
 	const response = await event.fetch(
 		`/api/v1/website/content_types/${event.locals.instance.settings.website.pages_content_type_id}/content/${event.params.page_id}`
@@ -15,6 +15,6 @@ export async function load(event) {
 	const url = new URL(PUBLIC_HOST);
 	return redirect(
 		301,
-		`${url.protocol}//${event.locals.instance.slug}.${url.host}/pages/${parsed.slug}`
+		`${url.protocol}//${event.locals.instance.slug}.${url.host}/page/${parsed.slug}`
 	);
 }

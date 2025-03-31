@@ -3,6 +3,7 @@
 	import * as Select from '$lib/comps/ui/select';
 	import Input from '$lib/comps/ui/input/input.svelte';
 	import TextArea from '$lib/comps/ui/textarea/textarea.svelte';
+	import * as m from '$lib/paraglide/messages';
 	type InteractionType =
 		| 'notes'
 		| 'phone_call_outbound'
@@ -10,12 +11,13 @@
 		| 'outbound_whatsapp';
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import sendWhatsappMessage from '$lib/comps/widgets/interactions/sendWhatsappMessage.js';
+	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 
 	const types: { value: InteractionType; label: string }[] = [
-		{ value: 'notes', label: $page.data.t.people.interactions.create_types.notes() },
+		{ value: 'notes', label: m.teal_careful_ox_ascend() },
 		{
 			value: 'outbound_whatsapp',
-			label: $page.data.t.people.interactions.create_types.whatsapp()
+			label: m.loved_dirty_haddock_hint()
 		}
 	];
 	let selected = $state(types[0].value);
@@ -27,6 +29,7 @@
 	import { getFlash } from 'sveltekit-flash-message';
 	let flash = getFlash(page);
 	let notes: string | undefined = $state(undefined);
+	let isPosting: boolean = $state(false);
 
 	let activeConversation: boolean = $state(false);
 	let activeConversationLoading: boolean = $state(false);
@@ -46,9 +49,9 @@
 			}
 		} catch (err) {
 			if (err instanceof Error) {
-				$flash = { type: 'error', message: err?.message || $page.data.t.errors.generic() };
+				$flash = { type: 'error', message: err?.message || m.teary_dizzy_earthworm_urge() };
 			} else {
-				$flash = { type: 'error', message: $page.data.t.errors.generic() };
+				$flash = { type: 'error', message: m.teary_dizzy_earthworm_urge() };
 			}
 		} finally {
 			activeConversationLoading = false;
@@ -68,6 +71,8 @@
 	async function logInteraction(e?: SubmitEvent) {
 		try {
 			if (e) e.preventDefault();
+			isPosting = true;
+
 			if (selected === 'outbound_whatsapp' && notes) {
 				await sendWhatsappMessage(notes, personId, $page.data.admin.id);
 				onLogged();
@@ -91,34 +96,45 @@
 			} else {
 				throw new Error();
 			}
-			$flash = { type: 'success', message: $page.data.t.forms.actions.created() };
+			$flash = { type: 'success', message: m.flat_sleek_millipede_agree() };
 		} catch (err) {
 			if (err instanceof Error) {
-				$flash = { type: 'error', message: err?.message || $page.data.t.errors.generic() };
+				$flash = { type: 'error', message: err?.message || m.teary_dizzy_earthworm_urge() };
 			} else {
-				$flash = { type: 'error', message: $page.data.t.errors.generic() };
+				$flash = { type: 'error', message: m.teary_dizzy_earthworm_urge() };
 			}
 		} finally {
-			notes = undefined;
+			isPosting = false;
 		}
 	}
 </script>
 
-<div class="bg-white border rounded-sm shadow-sm p-3">
+<div
+	class={`border rounded-sm shadow-sm p-3 ${selected === 'notes' ? 'bg-yellow-100' : selected === 'outbound_whatsapp' ? 'bg-blue-100' : 'bg-white'} relative`}
+>
+	{#if isPosting}
+		<div
+			class="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center z-10 rounded-sm"
+		>
+			<div class="animate-spin text-primary">
+				<LoaderCircle size={24} />
+			</div>
+		</div>
+	{/if}
 	<form onsubmit={logInteraction}>
 		<div class="grid items-baseline gap-3 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
 			{@render selectType()}
 			<div class="col-span-1 md:col-span-2 lg:col-span-3">
 				{#if selected === 'outbound_whatsapp'}
 					{#if activeConversationLoading}
-						{$page.data.t.common.status.loading()}
+						{m.loud_bland_lionfish_pray()}
 					{:else if activeConversation}
 						<Input
 							bind:value={notes}
 							name="message"
 							class="flex items-center h-10 w-full rounded px-3 text-sm"
 							type="text"
-							placeholder={$page.data.t.people.interactions.create_types.whatsapp_msg_input_placeholder()}
+							placeholder={m.hour_merry_felix_edit()}
 						/>
 					{:else}
 						{@render noWhatsappConversation()}
@@ -129,7 +145,7 @@
 						name="message"
 						class="flex items-center h-10 w-full rounded px-3 text-sm"
 						rows={1}
-						placeholder={$page.data.t.people.interactions.create_types.notes_input_placeholder()}
+						placeholder={m.spicy_agent_sheep_dance()}
 					/>
 				{/if}
 			</div>
@@ -137,8 +153,21 @@
 
 		<div class="sm:flex sm:justify-end mt-3">
 			{#if selected !== 'outbound_whatsapp' || activeConversation}
-				<Button class="w-full sm:w-auto" type="submit" variant="default" size="sm">
-					{$page.data.t.forms.buttons.post()}
+				<Button
+					class="w-full sm:w-auto"
+					type="submit"
+					variant="default"
+					size="sm"
+					disabled={isPosting}
+				>
+					{#if isPosting}
+						<div class="flex items-center gap-2">
+							<span class="animate-spin"><LoaderCircle size={16} /></span>
+							<span>{m.loud_bland_lionfish_pray()}</span>
+						</div>
+					{:else}
+						{m.just_away_horse_urge()}
+					{/if}
 				</Button>
 			{/if}
 		</div>
@@ -171,11 +200,11 @@
 
 {#snippet noWhatsappConversation()}
 	<div class="text-muted-foreground text-sm flex justify-center text-center">
-		{$page.data.t.people.interactions.create_types.whatsapp_no_conversation_active()}
+		{m.loved_nice_vulture_fall()}
 	</div>
 	<div class="flex justify-center mt-2">
 		<Button variant="secondary" href="/communications/whatsapp/new"
-			>{$page.data.t.pages.communications.whatsapp.new()}</Button
+			>{m.gaudy_sour_reindeer_borrow()}</Button
 		>
 	</div>
 {/snippet}

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 	import { type FilterType } from '$lib/schema/people/filters/filters';
 	import { generateDefaultFilterValue } from './generateDefaultType';
 	import { type DefaultFilterTypes } from '$lib/schema/people/filters/defaults';
@@ -21,8 +22,7 @@
 		{ value: 'not_registered_event', label: 'Not registered for event' }
 	];
 	const label = $derived(
-		items.find((item) => item.value === value.type)?.label ||
-			$page.data.t.forms.fields.filters.filter_type.placeholder()
+		items.find((item) => item.value === value.type)?.label || m.zesty_sweet_firefox_rest()
 	);
 </script>
 

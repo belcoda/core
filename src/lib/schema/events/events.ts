@@ -38,7 +38,6 @@ export const eventUserInfoSettings = v.object({
 export const base = v.object({
 	id: id,
 	instance_id: id,
-	template_id: id,
 	name: longStringNotEmpty,
 	slug: slug,
 	heading: shortStringNotEmpty,
@@ -128,8 +127,6 @@ export const create = v.object({
 	ends_at: base.entries.ends_at,
 	...v.partial(eventUserInfoSettings).entries,
 
-	template_id: v.optional(base.entries.template_id),
-
 	online: v.optional(base.entries.online, false),
 	online_url: v.optional(base.entries.online_url),
 	online_instructions: v.optional(base.entries.online_instructions),
@@ -187,20 +184,9 @@ export const eventSignup = v.object({
 	opt_in: v.optional(v.boolean(), false)
 });
 export type EventSignup = v.InferOutput<typeof eventSignup>;
+export type SignupQueueMessage = v.InferOutput<typeof signUpQueueMessage>;
 
 export const signUpQueueMessage = v.object({
 	event_id: id,
 	signup: eventSignup
-});
-
-export const preview = v.object({
-	html: longString,
-	text: longString,
-	template_text: longString,
-	template_html: longString,
-	context: v.object({
-		event: read,
-		person: readPerson,
-		instance: readInstance
-	})
 });

@@ -8,7 +8,7 @@ COPY ./.env.production ./.env
 COPY ./project.inlang ./project.inlang
 RUN npm install
 COPY . .
-ENV NODE_OPTIONS=--max_old_space_size=1800
+ENV NODE_OPTIONS=--max_old_space_size=4096
 RUN npm run build
 
 FROM node:lts-alpine AS production

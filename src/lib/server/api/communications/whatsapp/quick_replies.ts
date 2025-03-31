@@ -1,6 +1,8 @@
 import { db, pool, redis, filterQuery, BelcodaError } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 
+import * as m from '$lib/paraglide/messages';
+
 import * as schema from '$lib/schema/communications/whatsapp/quick_replies';
 
 export async function create({
@@ -34,7 +36,7 @@ export async function read({
 			throw new BelcodaError(
 				404,
 				'DATA:COMMUNICATIONS:WHATSAPP:QUICK_REPLIES:READ:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});

@@ -6,9 +6,10 @@ import {
 } from '$lib/schema/utils/email';
 import renderEmail from '$lib/server/utils/handlebars/render_email';
 import { read } from '$lib/server/api/communications/email/templates';
-const log = pino('/worker/utils/email/send_event_email');
+const log = pino(import.meta.url);
 import { randomUUID } from 'crypto';
 import { parse } from '$lib/schema/valibot';
+import * as m from '$lib/paraglide/messages';
 
 export async function POST(event) {
 	try {
@@ -60,7 +61,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'WORKER:/utils/email/send_event_email:01',
-			event.locals.t.errors.generic(),
+			m.teary_dizzy_earthworm_urge(),
 			err
 		);
 	}

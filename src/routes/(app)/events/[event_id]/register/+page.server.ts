@@ -10,14 +10,14 @@ import {
 	returnMessage,
 	loadError
 } from '$lib/server';
-
+import * as m from '$lib/paraglide/messages';
 import { list } from '$lib/schema/people/people';
 import { list as listForEvent, create } from '$lib/schema/events/attendees';
 import { parse } from '$lib/schema/valibot';
 
 import { read } from '$lib/schema/events/events';
 
-const log = pino('(app)/events/[event_id]/register/+page.server.ts');
+const log = pino(import.meta.url);
 export async function load(event) {
 	//event.url.searchParams.append('isRegisteredForEvent', event.params.event_id);
 	const url = new URL(event.url);
@@ -66,7 +66,7 @@ export const actions = {
 		const responseBody = await response.json();
 		return redirect(event, {
 			location: `/events/${event_id}/register`,
-			message: event.locals.t.forms.actions.created()
+			message: m.flat_sleek_millipede_agree()
 		});
 	}
 };

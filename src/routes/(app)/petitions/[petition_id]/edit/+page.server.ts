@@ -1,8 +1,8 @@
 import { superValidate, valibot, formAction, redirect, pino, loadError } from '$lib/server';
-
+import * as m from '$lib/paraglide/messages';
 import { update, read } from '$lib/schema/petitions/petitions';
 import { parse } from '$lib/schema/valibot';
-const log = pino('(app)/petitions/[petition_id]/petition/+page.server.ts');
+const log = pino(import.meta.url);
 export async function load(event) {
 	const response = await event.fetch(`/api/v1/petitions/${event.params.petition_id}`);
 	if (!response.ok) return loadError(response);
@@ -24,7 +24,7 @@ export const actions = {
 		const parsed = parse(read, response.output);
 		return redirect(event, {
 			location: `/petitions/${parsed.id}`,
-			message: event.locals.t.forms.actions.updated()
+			message: m.white_acidic_koala_pop()
 		});
 	}
 };

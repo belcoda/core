@@ -1,7 +1,7 @@
 import { POSTMARK_SERVER_TOKEN } from '$env/static/private';
 import type { NumericRange } from '@sveltejs/kit';
 import { BelcodaError, pino } from '$lib/server';
-const log = pino('/utils/email/send_email_postmark');
+const log = pino(import.meta.url);
 export default async function (options: {
 	to: string;
 	from: string;

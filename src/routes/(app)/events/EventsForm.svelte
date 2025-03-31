@@ -4,6 +4,7 @@
 
 <script lang="ts" generics="T extends Record<string, unknown>">
 	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 	import Separator from '$lib/comps/ui/separator/separator.svelte';
 	import {
 		Input,
@@ -46,15 +47,15 @@
 		<Input
 			{form}
 			name="heading"
-			label={$page.data.t.forms.fields.events.event_title.label()}
+			label={m.lofty_suave_bumblebee_bake()}
 			bind:value={$formData.heading}
 		/>
 		{@render slug()}
 		<HTML
 			{form}
 			name="html"
-			label={$page.data.t.forms.fields.events.event_details.label()}
-			description={$page.data.t.forms.fields.events.event_details.description()}
+			label={'Event details'}
+			description={m.trick_less_stingray_enrich()}
 			bind:value={$formData.html}
 		/>
 
@@ -62,7 +63,7 @@
 		{@render location()}
 
 		<UploadWidget
-			label={$page.data.t.forms.fields.feature_image.label()}
+			label={m.sharp_sea_anteater_walk()}
 			upload_id={$formData.feature_image_upload_id}
 			onselected={(upload) => {
 				if (upload?.id) $formData.feature_image_upload_id = upload.id;
@@ -78,9 +79,7 @@
 {#snippet dateTime()}
 	<Grid cols={2}>
 		{#if $formData.starts_at > $formData.ends_at}
-			<Alert class="col-span-2" variant="destructive"
-				>{$page.data.t.events.alerts.start_time_before_end()}</Alert
-			>
+			<Alert class="col-span-2" variant="destructive">{m.basic_basic_ape_fall()}</Alert>
 		{/if}
 		<DateTime
 			{form}
@@ -105,8 +104,8 @@
 			class="border-none p-0"
 			{form}
 			name="online"
-			label={$page.data.t.forms.fields.events.online.label()}
-			description={$page.data.t.forms.fields.events.online.description()}
+			label={m.low_polite_worm_amaze()}
+			description={m.mealy_next_manatee_favor()}
 			bind:checked={$formData.online}
 		/>
 		<Separator />
@@ -114,45 +113,45 @@
 			<Input
 				{form}
 				name="online_url"
-				label={$page.data.t.forms.fields.events.online_url.label()}
+				label={m.nice_dull_mammoth_snip()}
 				bind:value={$formData.online_url as string}
 			/>
 			<Textarea
 				{form}
 				name="online_instructions"
-				label={$page.data.t.forms.fields.events.online_instructions.label()}
+				label={m.light_green_warthog_climb()}
 				bind:value={$formData.online_instructions as string}
 			/>
 		{:else}
 			<Input
 				{form}
 				name="address_line_1"
-				label={$page.data.t.forms.fields.address.address_line_1.label()}
+				label={m.stout_salty_pelican_endure()}
 				bind:value={$formData.address_line_1 as string}
 			/>
 			<Input
 				{form}
 				name="address_line_2"
-				label={$page.data.t.forms.fields.address.address_line_2.label()}
+				label={m.proof_broad_herring_persist()}
 				bind:value={$formData.address_line_2 as string}
 			/>
 			<Grid cols={3}>
 				<Input
 					{form}
 					name="locality"
-					label={$page.data.t.forms.fields.address.locality.label()}
+					label={m.slimy_patient_seal_explore()}
 					bind:value={$formData.locality as string}
 				/>
 				<Input
 					{form}
 					name="state"
-					label={$page.data.t.forms.fields.address.state.label()}
+					label={m.dark_late_turtle_snap()}
 					bind:value={$formData.state as string}
 				/>
 				<Input
 					{form}
 					name="postcode"
-					label={$page.data.t.forms.fields.address.postcode.label()}
+					label={m.swift_white_hornet_dig()}
 					bind:value={$formData.postcode as string}
 				/>
 			</Grid>
@@ -165,7 +164,7 @@
 		<div class="flex justify-end items-center gap-2">
 			<Link size={18} class="text-muted-foreground" />
 			<div class="text-sm text-muted-foreground">
-				{$page.data.t.forms.fields.events.event_page_link.label()}
+				{m.good_dizzy_chicken_spark()}
 			</div>
 			<button
 				onclick={() => {
@@ -192,7 +191,7 @@
 				bind:value={$formData.slug as string}
 			/>
 			<Button onclick={() => (editSlug = false)} size="sm" variant="ghost"
-				>{$page.data.t.forms.buttons.save()}</Button
+				>{m.empty_warm_squirrel_chop()}</Button
 			>
 		</div>
 	{/if}

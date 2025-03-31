@@ -53,11 +53,12 @@ export const whatsappInboundMessage = v.object({
 	system: v.optional(wb.system),
 	video: v.optional(wb.video)
 });
+export type WhatsappInboundMessage = v.InferOutput<typeof whatsappInboundMessage>;
 
 export const whatsappInboundMessageReceived = v.object({
 	...base.entries,
 	type: v.literal('whatsapp.inbound_message.received'),
-	whatsappInboundMessage: whatsappInboundMessage
+	whatsappInboundMessage: v.object(whatsappInboundMessage.entries)
 });
 export type WhatsappInboundMessageReceived = v.InferOutput<typeof whatsappInboundMessageReceived>;
 

@@ -1,0 +1,41 @@
+export const petitions = {
+	id: 1,
+	instance_id: 1,
+	name: 'test petition',
+	petition_target: 'to the president',
+	petition_text: 'test test',
+	slug: 'test_petition',
+	heading: 'test petition',
+	html: '<p>test</p>',
+	point_person_id: 1,
+	ask_email: true,
+	require_email: false,
+	ask_phone_number: true,
+	require_phone_number: false,
+	ask_postcode: true,
+	require_postcode: false,
+	ask_address: false,
+	require_address: false,
+	feature_image_upload_id: null,
+	autoresponse_email: 5,
+	send_autoresponse_email: true,
+	custom_code: {
+		custom_js: null,
+		custom_css: null,
+		custom_html_body: null,
+		custom_html_head: null
+	},
+	html_metatags: {
+		title: null,
+		subject: null,
+		twitter: { card: 'summary', image: null, title: null, image_alt: null, description: null },
+		keywords: null,
+		openGraph: { image: null, title: null, image_alt: null, description: null },
+		description: null,
+		isManuallySet: false
+	},
+	active: true,
+	created_at: '2025-03-14 21:12:11.329789+09',
+	updated_at: '2025-03-14 21:12:11.329789+09',
+	published_at: null
+};

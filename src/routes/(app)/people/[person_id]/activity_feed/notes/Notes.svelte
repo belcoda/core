@@ -6,11 +6,14 @@
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import TextArea from '$lib/comps/ui/textarea/textarea.svelte';
 	import { page } from '$app/stores';
+	import * as m from '$lib/paraglide/messages';
 	import EditHistory from './EditHistory.svelte';
 	let showEditHistory: boolean = $state(false);
 	type Props = {
 		interaction: List['items'][number];
 		person: ReadPerson;
+		activityMessage?: string;
+		children?: any;
 	};
 	let { interaction, person }: Props = $props();
 	let edit: boolean = $state(false);
@@ -24,9 +27,8 @@
 	<ActivityItem
 		{interaction}
 		{person}
-		activityMessage={$page.data.t.people.interactions.interactionMessage.notes(
-			interaction.admin.full_name
-		)}
+		activityMessage={m.cool_cozy_pigeon_buy({ adminName: interaction.admin.full_name })}
+		class="bg-yellow-100"
 	>
 		{#if edit}
 			<div class="mt-2">
@@ -41,12 +43,12 @@
 							});
 							interaction = newInteraction;
 							edit = false;
-						}}>{$page.data.t.forms.buttons.save()}</Button
+						}}>{m.empty_warm_squirrel_chop()}</Button
 					>
 				</div>
 			</div>
 		{:else}
-			<div class="mt-2 text-sm text-muted-foreground">
+			<div class="mt-2 text-sm text-muted-foreground bg-yellow-100">
 				{@html sanitizeHTML(addLineBreaks(interaction.details.notes))}
 			</div>
 			{#if interaction.details.edit_history.length > 0}
@@ -66,7 +68,7 @@
 		{#snippet button()}
 			<div>
 				<Button variant="outline" size="xs" onclick={() => (edit = !edit)}
-					>{$page.data.t.forms.buttons.edit()}</Button
+					>{m.giant_misty_shrimp_stop()}</Button
 				>
 			</div>
 		{/snippet}

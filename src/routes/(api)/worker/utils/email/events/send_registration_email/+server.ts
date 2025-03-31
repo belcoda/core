@@ -4,7 +4,8 @@ import { read as readPerson } from '$lib/server/api/people/people';
 import { read as readEvent } from '$lib/server/api/events/events';
 import { read as readMessage } from '$lib/server/api/communications/email/messages';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
-const log = pino('/worker/utils/email/events/send_registration_email');
+import * as m from '$lib/paraglide/messages';
+const log = pino(import.meta.url);
 
 import { parse } from '$lib/schema/valibot';
 
@@ -64,7 +65,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'WORKER:/utils/email/events/send_registration_email:01',
-			event.locals.t.errors.generic(),
+			m.teary_dizzy_earthworm_urge(),
 			err
 		);
 	}

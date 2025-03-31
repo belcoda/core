@@ -1,6 +1,7 @@
 import { json, pino, error } from '$lib/server';
 import { create as createInteraction } from '$lib/server/api/people/interactions';
-const log = pino('WORKER:/utils/people/record_interaction');
+import * as m from '$lib/paraglide/messages';
+const log = pino(import.meta.url);
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
@@ -12,11 +13,6 @@ export async function POST(event) {
 		});
 		return json({ success: true });
 	} catch (err) {
-		return error(
-			500,
-			'WORKER:/utils/people/record_interaction:01',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'WORKER:/utils/people/record_interaction:01', m.spry_ago_baboon_cure(), err);
 	}
 }

@@ -2,7 +2,7 @@ import * as schema from '$lib/schema/people/lists';
 import { parse } from '$lib/schema/valibot';
 import { exists as personExists } from '$lib/server/api/people/people';
 import { db, pool, BelcodaError, redis, filterQuery } from '$lib/server';
-
+import * as m from '$lib/paraglide/messages';
 function redisString(instanceId: number, listId: number | 'all') {
 	return `i:${instanceId}:lists:${listId}`;
 }
@@ -24,12 +24,7 @@ export async function exists({
 		.selectExactlyOne('people.list_view', { instance_id: instanceId, id: listId })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(
-				404,
-				'DATA:PEOPLE:LISTS:READ:01',
-				t.errors.not_found_variants.list(),
-				err
-			);
+			throw new BelcodaError(404, 'DATA:PEOPLE:LISTS:READ:01', m.ago_bad_lemur_commend(), err);
 		});
 	return true; //will have already errored if not exactlyOne found
 }
@@ -51,7 +46,7 @@ export async function read({
 		.selectExactlyOne('people.list_view', { instance_id: instanceId, id: listId })
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:PEOPLE:LISTS:READ:01', t.errors.http[404](), err);
+			throw new BelcodaError(404, 'DATA:PEOPLE:LISTS:READ:01', m.that_tasty_dove_pop(), err);
 		});
 	const parsedFetched = parse(schema.read, fetched);
 	await redis.set(redisString(instanceId, listId), parsedFetched);
@@ -93,7 +88,7 @@ export async function update({
 		.update('people.lists', { ...parsed }, { instance_id: instanceId, id: listId })
 		.run(pool);
 	if (updated.length !== 1) {
-		throw new BelcodaError(404, 'DATA:PEOPLE:LISTS:UPDATE:01', t.errors.http[404]());
+		throw new BelcodaError(404, 'DATA:PEOPLE:LISTS:UPDATE:01', m.that_tasty_dove_pop());
 	}
 	await redis.del(redisString(instanceId, listId));
 	await redis.del(redisString(instanceId, 'all'));

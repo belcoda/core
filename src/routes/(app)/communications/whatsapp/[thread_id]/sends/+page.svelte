@@ -3,7 +3,7 @@
 	import DataGrid from '$lib/comps/ui/custom/table/DataGrid.svelte';
 	import H1 from '$lib/comps/typography/H3.svelte';
 	import Button from '$lib/comps/ui/button/button.svelte';
-
+	import * as m from '$lib/paraglide/messages';
 	import { Badge } from '$lib/comps/ui/badge/index.js';
 	import Check from 'lucide-svelte/icons/check';
 	import CheckCheck from 'lucide-svelte/icons/check-check';
@@ -12,17 +12,17 @@
 <DataGrid
 	items={data.sends.items}
 	count={data.sends.count}
-	title={data.t.pages.communications.whatsapp.sends.index()}
+	title={m.each_alert_cougar_offer()}
 	newItemHref={`/communications/whatsapp/${data.thread.id}/sends/new`}
 	options={{ showFilter: true, showTopSeparator: true }}
 >
 	{#snippet headerButton()}
 		<Button href="/communications/whatsapp/{data.thread.id}/sends/new"
-			>{data.t.forms.fields.communications.generic.select_recipients_and_send()}</Button
+			>{m.direct_just_buzzard_stab()}</Button
 		>
 	{/snippet}
 
-	{#snippet content(send: typeof data.sends.items[0], i: number | undefined)}
+	{#snippet content(send: (typeof data.sends.items)[0], i: number | undefined)}
 		<div class="flex items-center justify-between gap-2">
 			<div class="flex items-center justify-start gap-2">
 				<div>
@@ -34,7 +34,7 @@
 			</div>
 			{#if send.started_at && !send.completed_at}
 				<div>
-					<Badge>{data.t.common.status.sending()}</Badge>
+					<Badge>{m.funny_each_martin_wave()}</Badge>
 				</div>
 			{/if}
 			{#if send.completed_at}

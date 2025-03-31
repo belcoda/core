@@ -1,8 +1,8 @@
 import { json, error, pino } from '$lib/server';
 import { setFieldValue } from '$lib/schema/people/custom_field_values';
 import { setCustomFieldValue } from '$lib/server/api/people/custom_field_values';
-const log = pino('/worker/core/people/custom_fields/set_custom_field');
-
+const log = pino(import.meta.url);
+import * as m from '$lib/paraglide/messages';
 import { parse } from '$lib/schema/valibot';
 
 export async function POST(event) {
@@ -22,7 +22,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'WORKER:/core/people/custom_fields/set_custom_field:01',
-			event.locals.t.errors.generic(),
+			m.teary_dizzy_earthworm_urge(),
 			err
 		);
 	}

@@ -1,5 +1,5 @@
 import { pino } from '$lib/server';
-const log = pino('utils:install:testData');
+const log = pino(import.meta.url);
 import { parse } from '$lib/schema/valibot';
 import { create as createEvent } from '$lib/server/api/events/events';
 import { create as createPetition } from '$lib/server/api/petitions/petitions';
@@ -8,7 +8,7 @@ import { create as createSend } from '$lib/server/api/communications/email/sends
 import { create as createTag } from '$lib/server/api/core/tags';
 import { create as createList } from '$lib/server/api/people/lists';
 import { create as createGroup } from '$lib/server/api/people/groups';
-import { update as updateInstance } from '$lib/server/api/core/instances';
+import { _updateSetInstalled } from '$lib/server/api/core/instances';
 
 import { list as listPeople } from '$lib/server/api/people/people';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
@@ -73,7 +73,7 @@ export default async function ({
 		adminId: admin.id,
 		t: t,
 		defaultEmailTemplateId: instance.settings.events.default_email_template_id,
-		defaultTemplateId: instance.settings.events.default_template_id
+		queue: queue
 	});
 
 	const inPersonEventBody: CreateEvent = parse(createEventSchema, {
@@ -99,7 +99,7 @@ export default async function ({
 		adminId: admin.id,
 		t: t,
 		defaultEmailTemplateId: instance.settings.events.default_email_template_id,
-		defaultTemplateId: instance.settings.events.default_template_id
+		queue: queue
 	});
 
 	const petitionBody: CreatePetition = parse(createPetitionSchema, {
@@ -119,7 +119,8 @@ export default async function ({
 		instanceId: instance.id,
 		body: petitionBody,
 		adminId: admin.id,
-		t: t
+		t: t,
+		queue
 	});
 
 	const emailSendBody = parse(createSendSchema, {
@@ -130,7 +131,8 @@ export default async function ({
 		body: emailSendBody,
 		adminId: admin.id,
 		defaultTemplateId: instance.settings.communications.email.default_template_id,
-		t: t
+		t: t,
+		queue
 	});
 
 	await createTag({ instanceId: instance.id, body: { name: 'topic:energy' } });
@@ -161,10 +163,8 @@ export default async function ({
 		url: new URL(PUBLIC_HOST)
 	});
 
-	await updateInstance({
-		instanceId: instance.id,
-		body: { installed: true },
-		t: t
+	await _updateSetInstalled({
+		instanceId: instance.id
 	});
 	instance.installed = true;
 

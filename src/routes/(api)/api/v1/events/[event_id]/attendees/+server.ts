@@ -4,7 +4,8 @@ import * as schema from '$lib/schema/events/attendees';
 import { parse } from '$lib/schema/valibot';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
 import { read as readEvent } from '$lib/server/api/events/events';
-const log = pino('API:/api/v1/events/+server.ts');
+import * as m from '$lib/paraglide/messages';
+const log = pino(import.meta.url);
 export async function GET(event) {
 	try {
 		const response = await api.listForEvent({
@@ -15,12 +16,7 @@ export async function GET(event) {
 		});
 		return json(response);
 	} catch (err) {
-		return error(
-			500,
-			'API:/api/v1/events/[event_id]/attendees:GET',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'API:/api/v1/events/[event_id]/attendees:GET', m.spry_ago_baboon_cure(), err);
 	}
 }
 
@@ -58,7 +54,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'API:/api/v1/events/[event_id]/attendees:POST',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

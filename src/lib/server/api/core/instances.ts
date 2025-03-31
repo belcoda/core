@@ -1,7 +1,7 @@
 import * as schema from '$lib/schema/core/instance';
 import { v } from '$lib/schema/valibot';
 import { db, redis, pool, BelcodaError } from '$lib/server';
-
+import * as m from '$lib/paraglide/messages';
 export const read = async ({ instance_id }: { instance_id: number }): Promise<schema.Read> => {
 	const cached = await redis.get(`i:${instance_id}`);
 	if (cached) return v.parse(schema.read, cached);
@@ -38,7 +38,7 @@ export const update = async ({
 	const parsed = v.parse(schema.update, body);
 	const response = await db.update('instances', parsed, { id: instanceId }).run(pool);
 	if (response.length !== 1)
-		throw new BelcodaError(404, 'DATA:INSTANCES:UPDATE:01', t.errors.not_found());
+		throw new BelcodaError(404, 'DATA:INSTANCES:UPDATE:01', m.pretty_tired_fly_lead());
 	const parsedUpdate = v.parse(schema.read, response[0]);
 	await redis.set(`i:${instanceId}`, parsedUpdate);
 	return parsedUpdate;
@@ -104,6 +104,34 @@ export async function _getInstanceByWhatsappBAId({
 	return await read({ instance_id: response[0].id });
 }
 
+export async function _getInstanceIdByEventId(eventId: string): Promise<schema.Read> {
+	const response =
+		await db.sql`SELECT instance_id from events.events WHERE id = ${db.param(eventId)} limit 1`.run(
+			pool
+		);
+	if (response.length !== 1)
+		throw new BelcodaError(
+			400,
+			'DATA:INSTANCES:GET_BY_EVENT_ID:01',
+			'No instance found with that event ID'
+		);
+	return await read({ instance_id: response[0].instance_id });
+}
+
+export async function _getInstanceIdByPetitionId(petitionId: string): Promise<schema.Read> {
+	const response =
+		await db.sql`SELECT instance_id from petitions.petitions WHERE id = ${db.param(petitionId)} limit 1`.run(
+			pool
+		);
+	if (response.length !== 1)
+		throw new BelcodaError(
+			400,
+			'DATA:INSTANCES:GET_BY_PETITION_ID:01',
+			'No instance found with that petition ID'
+		);
+	return await read({ instance_id: response[0].instance_id });
+}
+
 const instanceCountSchema = v.pipe(v.number(), v.integer(), v.minValue(0));
 
 export async function _count(): Promise<number> {
@@ -113,4 +141,9 @@ export async function _count(): Promise<number> {
 	const parsed = v.parse(instanceCountSchema, response);
 	await redis.set(`i:count`, parsed);
 	return parsed;
+}
+
+export async function _updateSetInstalled({ instanceId }: { instanceId: number }): Promise<void> {
+	await db.update('instances', { installed: true }, { id: instanceId }).run(pool);
+	await redis.del(`i:${instanceId}`);
 }

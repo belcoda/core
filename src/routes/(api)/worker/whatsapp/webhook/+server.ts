@@ -1,14 +1,13 @@
 import { json, error, pino } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 import { webhook } from '$lib/schema/communications/whatsapp/webhooks/webhook';
-const log = pino('WORKER:/webhooks/whatsapp/+server.ts');
-
+const log = pino(import.meta.url);
+import * as m from '$lib/paraglide/messages';
 import { create as createReceivedMessage } from '$lib/server/api/communications/whatsapp/received_messages';
 import { create as createInteraction } from '$lib/server/api/people/interactions';
 import { create as createInteractionSchema } from '$lib/schema/people/interactions';
 import { _getPersonByWhatsappId } from '$lib/server/api/people/people';
 import { triggerAction } from '$lib/schema/communications/actions/actions';
-import { _getByAction } from '$lib/server/api/communications/whatsapp/messages.js';
 import { _idempotentUpdateExpiryTime } from '$lib/server/api/communications/whatsapp/conversations.js';
 
 import { update as updateSentMessage } from '$lib/server/api/communications/whatsapp/sent_messages';
@@ -156,11 +155,6 @@ export async function POST(event) {
 		}
 		return json({ success: true });
 	} catch (err) {
-		return error(
-			500,
-			'WORKER:/webhooks/whatsapp/+server.ts',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'WORKER:/webhooks/whatsapp/+server.ts', m.spry_ago_baboon_cure(), err);
 	}
 }

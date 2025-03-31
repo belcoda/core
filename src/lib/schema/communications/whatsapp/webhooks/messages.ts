@@ -68,20 +68,10 @@ export const image = v.object({
 });
 
 export const interactive = v.object({
-	type: v.object({
-		button_reply: v.optional(
-			v.object({
-				id: mediumString, //the uuid: if there is an action, we would search for the wamid.ID of the message, find the message, see if it has a message_id, and then look for actions matching this uuid in the actions record
-				title: mediumString
-			})
-		),
-		list_reply: v.optional(
-			v.object({
-				id: mediumString,
-				title: mediumString,
-				description: v.optional(mediumString)
-			})
-		)
+	type: v.literal('button_reply'),
+	button_reply: v.object({
+		id: mediumString, //the uuid: if there is an action, we would search for the wamid.ID of the message, find the message, see if it has a message_id, and then look for actions matching this uuid in the actions record
+		title: mediumString
 	})
 });
 

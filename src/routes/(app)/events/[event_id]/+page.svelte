@@ -1,5 +1,6 @@
 <script lang="ts">
 	const { data } = $props();
+	import * as m from '$lib/paraglide/messages';
 	import PageHeader from '$lib/comps/layout/PageHeader.svelte';
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import DataGrid from '$lib/comps/ui/custom/table/DataGrid.svelte';
@@ -9,31 +10,47 @@
 	import MapPin from 'lucide-svelte/icons/map-pin';
 	import CalendarClock from 'lucide-svelte/icons/calendar-clock';
 	import Link from 'lucide-svelte/icons/link';
+	import CopyButton from '$lib/comps/ui/copy-button/copy-button.svelte';
 	import { PUBLIC_HOST } from '$env/static/public';
 	import { page } from '$app/stores';
+
 	const url = new URL(PUBLIC_HOST);
 	const previewUrl = `${url.protocol}//${$page.data.instance.slug}.${url.host}/events/${data.event.slug}`;
 	import EditRegistrationForm from './EditRegistrationForm.svelte';
 	import Tags from '$lib/comps/widgets/tags/Tags.svelte';
 	import PointPerson from '$lib/comps/widgets/point_person/PointPerson.svelte';
+	import Whatsapp from '$lib/comps/icons/whatsapp.svelte';
+	import { renderRegistrationLink } from '$lib/utils/text/whatsapp';
+	import { getFlash } from 'sveltekit-flash-message';
 
+	const flash = getFlash(page);
+	let copied = $state(false);
 	const attendanceStatus: ['registered', 'attended', 'cancelled', 'noshow'] = [
 		'registered',
 		'attended',
 		'cancelled',
 		'noshow'
 	];
+
+	const attendanceStatusValues = {
+		registered: m.curly_safe_kangaroo_launch(),
+		attended: m.gaudy_brave_boar_spark(),
+		cancelled: m.heroic_swift_skate_splash(),
+		noshow: m.minor_major_antelope_feast()
+	};
+
 	const statusOptions = attendanceStatus.map((status) => ({
 		value: status,
-		label: data.t.events.status[status].title()
+		label: attendanceStatusValues[status]
 	}));
 
 	const attendees = $state(data.attendees.items);
+	const registrationLink = renderRegistrationLink(data.instance, data.event).url;
 
 	function makeStatusOptions(status: (typeof attendanceStatus)[number]) {
 		return {
 			value: status,
-			label: data.t.events.status[status].title()
+			label: attendanceStatusValues[status]
 		};
 	}
 </script>
@@ -42,9 +59,9 @@
 	{#snippet button()}
 		<div class="flex items-center gap-1">
 			<Button variant="outline" target="_blank" href={previewUrl}
-				>{data.t.forms.buttons.preview()}</Button
+				>{m.alive_silly_antelope_build()}</Button
 			>
-			<Button href="/events/{data.event.id}/edit">{data.t.forms.buttons.edit()}</Button>
+			<Button href="/events/{data.event.id}/edit">{m.giant_misty_shrimp_stop()}</Button>
 		</div>
 	{/snippet}
 </PageHeader>
@@ -60,6 +77,25 @@
 	<div class="flex items-center gap-1.5">
 		<CalendarClock size={16} />
 		{formatDateTimeRange(data.event.starts_at, data.event.ends_at)}
+	</div>
+	<div class="flex items-center gap-1.5">
+		<Link size={16} />
+		<span class="text-muted-foreground text-sm">
+			<span class="text-foreground">{previewUrl}</span>
+		</span>
+		<CopyButton textToCopy={previewUrl} />
+	</div>
+	<div class="flex items-center gap-1.5">
+		<Whatsapp />
+		<div class="flex items-center gap-2">
+			<a
+				href={renderRegistrationLink(data.instance, data.event).url}
+				target="_blank"
+				class="hover:underline cursor-pointer"
+				>{renderRegistrationLink(data.instance, data.event).text}</a
+			>
+			<CopyButton textToCopy={registrationLink} />
+		</div>
 	</div>
 	{#if data.event.online}
 		<div class="flex items-center gap-1.5">
@@ -82,7 +118,7 @@
 	</div>
 </div>
 <div class="mt-12">
-	<DataGrid title={data.t.pages.events.attendees()} items={attendees} count={data.attendees.count}>
+	<DataGrid title={m.petty_vexed_jurgen_nurture()} items={attendees} count={data.attendees.count}>
 		{#snippet content(attendee: (typeof data.attendees.items)[0], index: number)}
 			<div class="flex items-center justify-between gap-4">
 				<PersonBadge person={attendee} />
@@ -94,9 +130,12 @@
 			</div>
 		{/snippet}
 		{#snippet headerButton()}
-			<Button href="/events/{data.event.id}/register"
-				>{data.t.events.attendees.register.title()}</Button
-			>
+			<div class="flex items-center gap-1">
+				<Button variant="outline" target="_blank" href="/events/{data.event.id}/print"
+					>{m.orange_mad_deer_value()}</Button
+				>
+				<Button href="/events/{data.event.id}/register">{m.ideal_active_ray_offer()}</Button>
+			</div>
 		{/snippet}
 	</DataGrid>
 </div>

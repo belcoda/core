@@ -7,7 +7,7 @@ const CACHE_PREFIX: string = 'bc:';
 import { error, pino } from '$lib/server';
 import { building, dev } from '$app/environment';
 
-const log = pino('$lib/server/utils/redis');
+const log = pino(import.meta.url);
 
 const client = dev
 	? createClient({ url: REDIS_URL })

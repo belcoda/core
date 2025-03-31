@@ -1,0 +1,51 @@
+<form method="post" class="space-y-4 mt-6" id="event-form">
+  <div>
+    <div class="mb-1 text-xs uppercase tracking-wider">Name</div>
+    <div><input {{#if event.require_name}} required {{/if}} type='text' name="full_name"
+        class="block w-full placeholder-gray-500 px-2 py-1 text-md border-2 border-white text-gray-700 rounded">
+    </div>
+  </div>
+  {{#if event.ask_email}}<div>
+    <div class="mb-1 text-xs uppercase tracking-wider">Email</div>
+    <div><input {{#if event.require_email}} required {{/if}} type='email' name="email"
+        class="block w-full placeholder-gray-500 px-2 py-1 text-md border-2 border-white text-gray-700 rounded">
+    </div>
+  </div>
+  {{/if}}
+  {{#if event.ask_phone_number}}<div>
+    <div class="mb-1 text-xs uppercase tracking-wider">Phone number</div>
+    <div><input {{#if event.require_phone_number}} required {{/if}} type='text' name="phone_number"
+        class="block w-full placeholder-gray-500 px-2 py-1 text-md border-2 border-white text-gray-700 rounded">
+    </div>
+  </div>
+  {{/if}}
+  {{#if event.ask_postcode}}<div>
+    <div class="mb-1 text-xs uppercase tracking-wider">Postcode</div>
+    <div><input {{#if event.require_postcode}} required {{/if}} type='text' name="postcode"
+        class="block w-full placeholder-gray-500 px-2 py-1 text-md border-2 border-white text-gray-700 rounded">
+    </div>
+  </div>
+  {{/if}}
+  {{#if event.ask_address}}<div>
+    <div class="mb-1 text-xs uppercase tracking-wider">Address</div>
+    <div><input {{#if event.require_address}} required {{/if}} type='text' name="address"
+        class="block w-full placeholder-gray-500 px-2 py-1 text-md border-2 border-white text-gray-700 rounded">
+    </div>
+  </div>
+  {{/if}}
+
+
+  <div class="col-span-9 mt-4">
+    <label class="flex items-center gap-2">
+      <input type="checkbox" name="opt_in" class="form-checkbox w-5 h-5 rounded text-red-500" checked>
+      <span class="ml-2 text-sm">I want to receive updates about this and other campaigns</span>
+    </label>
+  </div>
+
+  <div class="w-full">
+    <button role="submit"
+      class="bg-red-500 hover:bg-red-600 text-white font-bold text-lg rounded py-1 px-4 text-center block w-full">
+      Register
+    </button>
+  </div>
+</form>

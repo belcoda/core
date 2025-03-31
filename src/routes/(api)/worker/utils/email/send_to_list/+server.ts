@@ -5,7 +5,7 @@ import {
 	type SendEmailMessage,
 	sendEmailToListSchema
 } from '$lib/schema/utils/email';
-const log = pino('/worker/utils/email/send_email');
+const log = pino(import.meta.url);
 import { getAllPersonIds } from '$lib/server/api/people/lists';
 import { markAsStarted } from '$lib/server/api/communications/email/sends';
 import { randomUUID } from 'crypto';
@@ -13,6 +13,7 @@ import { read as readMessage } from '$lib/server/api/communications/email/messag
 import { read as readTemplate } from '$lib/server/api/communications/email/templates';
 import { read as readPerson } from '$lib/server/api/people/people';
 import renderEmail from '$lib/server/utils/handlebars/render_email';
+import * as m from '$lib/paraglide/messages';
 
 import { parse } from '$lib/schema/valibot';
 
@@ -39,7 +40,7 @@ export async function POST(event) {
 			throw new BelcodaError(
 				400,
 				'WORKER:/utils/email/send_to_list:01',
-				event.locals.t.errors.generic()
+				m.teary_dizzy_earthworm_urge()
 			);
 		const ids = await getAllPersonIds({
 			instanceId: event.locals.instance.id,
@@ -100,6 +101,6 @@ export async function POST(event) {
 
 		return json({ success: true });
 	} catch (err) {
-		return error(500, 'WORKER:/utils/email/send_to_list:01', event.locals.t.errors.generic(), err);
+		return error(500, 'WORKER:/utils/email/send_to_list:01', m.teary_dizzy_earthworm_urge(), err);
 	}
 }
