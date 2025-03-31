@@ -66,12 +66,12 @@
 					size="sm"
 					variant="destructive"
 					on:click={() => {
-						if (window.confirm("Are you sure you want to delete this record. This action cannot be undone?")) {
+						if (window.confirm(m.moving_acidic_crow_imagine())) {
 							deleteAdmin(admin.id);
 						}
 					}}
 				>
-					{"Delete"}
+					{m.wide_major_pig_swim()}
 				</Button>
 			</div>
 		</div>
