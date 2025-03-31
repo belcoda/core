@@ -20,15 +20,13 @@ export async function POST(event) {
 	if (parsed.context.person_id) {
 		const selected = await readPerson({
 			instance_id: event.locals.instance.id,
-			person_id: parsed.context.person_id,
-			t: event.locals.t
+			person_id: parsed.context.person_id
 		});
 		person = selected;
 	} else {
 		const { items } = await listPeople({
 			instance_id: event.locals.instance.id,
-			url: event.url,
-			t: event.locals.t
+			url: event.url
 		});
 		person = items[0];
 	}

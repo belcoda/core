@@ -48,7 +48,6 @@ export default async function ({
 			instance_id: instance.id,
 			admin_id: admin.id,
 			body: person,
-			t,
 			queue,
 			method: 'manual'
 		});
@@ -171,7 +170,6 @@ export default async function ({
 	const people = await listPeople({
 		instance_id: instance.id,
 		url: new URL(PUBLIC_HOST),
-		t: t,
 		notPaged: true
 	});
 	for (let index = 0; index < people.items.length; index++) {

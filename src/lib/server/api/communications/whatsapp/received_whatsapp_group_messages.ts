@@ -55,6 +55,7 @@ export async function list({
 			return parse(schema.list, cached);
 		}
 	}
+	// ?Qn: Do we need to know if a deleted person received a message?
 	const list = await db
 		.select(
 			'communications.received_whatsapp_group_messages',

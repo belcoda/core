@@ -80,7 +80,6 @@ export default async function ({
 			body: personInfo,
 			person_id: id,
 			admin_id: adminId,
-			t,
 			queue
 		})
 	);
@@ -99,7 +98,6 @@ export default async function ({
 			admin_id: adminId,
 			queue,
 			method: type.method,
-			t,
 			options: createOptions
 		});
 		await queueInteraction({

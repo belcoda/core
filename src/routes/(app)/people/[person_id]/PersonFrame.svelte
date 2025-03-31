@@ -14,6 +14,11 @@
 	import Building from 'lucide-svelte/icons/building-2';
 	import Briefcase from 'lucide-svelte/icons/briefcase';
 	import CheckCircle from 'lucide-svelte/icons/circle-check';
+	import * as Dialog from '$lib/comps/ui/dialog/index.js';
+	import { goto } from '$app/navigation';
+	import { enhance } from '$app/forms';
+	import * as m from '$lib/paraglide/messages';
+	let showDeleteDialog = $state(false);
 </script>
 
 <div class="w-full grid cols-1 space-y-2 mt-3">
@@ -92,8 +97,40 @@
 	</div>
 	<Separator />
 
-	<div class="flex"><Button href="/people/{person.id}/edit" variant="outline">Edit</Button></div>
+	<div class="flex gap-2">
+		<Button href="/people/{person.id}/edit" variant="outline">{m.giant_misty_shrimp_stop()}</Button>
+		<Button variant="destructive" onclick={() => (showDeleteDialog = true)}>Delete</Button>
+	</div>
 </div>
+
+<Dialog.Root bind:open={showDeleteDialog}>
+	<Dialog.Content>
+		<Dialog.Header>
+			<Dialog.Title>Delete Person</Dialog.Title>
+			<Dialog.Description>
+				Are you sure you want to delete {person.full_name}? This action cannot be undone.
+			</Dialog.Description>
+		</Dialog.Header>
+		<Dialog.Footer>
+			<div class="flex gap-2 justify-end">
+				<Button variant="outline" onclick={() => (showDeleteDialog = false)}>Cancel</Button>
+				<form
+					action="?/delete"
+					method="POST"
+					use:enhance={() => {
+						return async ({ result }) => {
+							if (result.type === 'success') {
+								goto('/people');
+							}
+						};
+					}}
+				>
+					<Button variant="destructive" type="submit">Delete</Button>
+				</form>
+			</div>
+		</Dialog.Footer>
+	</Dialog.Content>
+</Dialog.Root>
 
 <style lang="postcss">
 	.section-title {

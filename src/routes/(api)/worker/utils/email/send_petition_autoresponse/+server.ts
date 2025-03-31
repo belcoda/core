@@ -44,8 +44,7 @@ export async function POST(event) {
 
 		const person = await readPerson({
 			instance_id: event.locals.instance.id,
-			person_id: parsed.person_id,
-			t: event.locals.t
+			person_id: parsed.person_id
 		});
 
 		const sentEmailId = randomUUID();

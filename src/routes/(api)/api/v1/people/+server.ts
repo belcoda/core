@@ -13,7 +13,6 @@ export async function POST(event) {
 		const created = await api.create({
 			instance_id: event.locals.instance.id,
 			body: parsed,
-			t: event.locals.t,
 			queue: event.locals.queue,
 			method: method
 		});
@@ -50,8 +49,7 @@ export async function GET(event) {
 
 		const list = await api.list({
 			instance_id: event.locals.instance.id,
-			url: event.url,
-			t: event.locals.t
+			url: event.url
 		});
 		return json(list);
 	} catch (err) {

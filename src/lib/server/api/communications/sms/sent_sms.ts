@@ -17,7 +17,7 @@ export async function create({
 	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
-	await personExists({ instanceId, personId: parsed.person_id, t });
+	await personExists({ instanceId, personId: parsed.person_id });
 	const inserted = await db.insert('communications.sent_sms', parsed).run(pool);
 	const parsedInserted = parse(schema.read, inserted);
 	await redis.set(redisString(instanceId, parsed.person_id), parsedInserted);
@@ -42,7 +42,7 @@ export async function list({
 			return parse(schema.list, cached);
 		}
 	}
-	await personExists({ instanceId, personId, t });
+	await personExists({ instanceId, personId });
 	const selected = await db
 		.select(
 			'communications.sent_sms',
