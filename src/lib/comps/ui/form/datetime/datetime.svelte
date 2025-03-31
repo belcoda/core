@@ -9,7 +9,12 @@
 
 	import CalendarIcon from 'lucide-svelte/icons/calendar';
 	import ClockIcon from 'lucide-svelte/icons/clock';
-	import { DateFormatter, getLocalTimeZone, parseAbsoluteToLocal } from '@internationalized/date';
+	import {
+		DateFormatter,
+		getLocalTimeZone,
+		parseAbsoluteToLocal,
+		CalendarDate
+	} from '@internationalized/date';
 	import { ZonedDateTime } from '@internationalized/date';
 
 	import { buttonVariants } from '$lib/comps/ui/button/index.js';
@@ -442,6 +447,13 @@
 						<div class="rounded-md border">
 							<Calendar
 								type="single"
+								value={value
+									? new CalendarDate(
+											new Date(value).getFullYear(),
+											new Date(value).getMonth() + 1,
+											new Date(value).getDate()
+										)
+									: undefined}
 								onValueChange={(v) => {
 									if (!v) return;
 
