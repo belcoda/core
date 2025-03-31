@@ -439,7 +439,6 @@
 	"just_giant_pony_urge": "CSS personnalisé",
 	"aqua_north_fox_grace": "Javascript personnalisé",
 	"teary_sharp_starfish_honor": "CSS personnalisé",
-	"misty_awful_kitten_walk": "data.t.forms.fields.custom_code.custom_js.label()",
 	"plain_real_clownfish_flow": "Javascript personnalisé",
 	"sharp_sea_anteater_walk": "Télécharger ou sélectionner l'image principale",
 	"still_zany_warbler_savor": "Télécharger ou sélectionner l'image principale",
@@ -556,7 +555,7 @@
 	"clean_sea_thrush_dial": "Femelle",
 	"teal_maroon_mantis_scoop": "Autre",
 	"awake_topical_rook_jolt": "Non spécifié",
-  "wide_male_parrot_enrich": "Vous ne pouvez pas vous supprimer vous-même. Si vous souhaitez supprimer le compte administrateur actuellement connecté, veuillez demander à un autre administrateur de le faire.",
+	"wide_male_parrot_enrich": "Vous ne pouvez pas vous supprimer vous-même. Si vous souhaitez supprimer le compte administrateur actuellement connecté, veuillez demander à un autre administrateur de le faire.",
 	"patient_muddy_llama_work": "Impossible de supprimer l'enregistrement d'administrateur d'instance par défaut",
 	"low_petty_martin_dazzle": "Impossible de supprimer uniquement le compte administrateur de l'organisation. Veuillez contacter l'assistance si vous souhaitez supprimer l'intégralité du compte de l'organisation.",
 	"ornate_real_swallow_honor": "Erreur lors de la suppression de l'enregistrement administrateur. L'enregistrement n'a pas été supprimé."

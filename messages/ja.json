@@ -439,7 +439,6 @@
 	"just_giant_pony_urge": "カスタム CSS",
 	"aqua_north_fox_grace": "カスタムJavascript",
 	"teary_sharp_starfish_honor": "カスタム CSS",
-	"misty_awful_kitten_walk": "data.t.forms.fields.custom_code.custom_js.label()",
 	"plain_real_clownfish_flow": "カスタムJavascript",
 	"sharp_sea_anteater_walk": "特集画像をアップロードまたは選択",
 	"still_zany_warbler_savor": "特集画像をアップロードまたは選択",
@@ -556,7 +555,7 @@
 	"clean_sea_thrush_dial": "女性",
 	"teal_maroon_mantis_scoop": "他の",
 	"awake_topical_rook_jolt": "指定されていない",
-  "wide_male_parrot_enrich": "自分自身を削除することはできません。現在サインインしている管理者アカウントを削除する場合は、別の管理者に削除を依頼してください。",
+	"wide_male_parrot_enrich": "自分自身を削除することはできません。現在サインインしている管理者アカウントを削除する場合は、別の管理者に削除を依頼してください。",
 	"patient_muddy_llama_work": "デフォルトのインスタンス管理者レコードを削除できません",
 	"low_petty_martin_dazzle": "組織内の管理者のみを削除することはできません。組織アカウント全体を削除する場合は、サポートにお問い合わせください。",
 	"ornate_real_swallow_honor": "管理者レコードの削除中にエラーが発生しました。レコードは削除されませんでした。"

@@ -439,7 +439,6 @@
 	"just_giant_pony_urge": "自定义 CSS",
 	"aqua_north_fox_grace": "自定义 Javascript",
 	"teary_sharp_starfish_honor": "自定义 CSS",
-	"misty_awful_kitten_walk": "数据.t.forms.fields.custom_code.custom_js.标签()",
 	"plain_real_clownfish_flow": "自定义 Javascript",
 	"sharp_sea_anteater_walk": "上传或选择特色图片",
 	"still_zany_warbler_savor": "上传或选择特色图片",
@@ -556,7 +555,7 @@
 	"clean_sea_thrush_dial": "女性",
 	"teal_maroon_mantis_scoop": "其他",
 	"awake_topical_rook_jolt": "未指定",
-  "wide_male_parrot_enrich": "您无法删除自己。如果您希望删除当前登录的管理员帐户，请让其他管理员将其删除。",
+	"wide_male_parrot_enrich": "您无法删除自己。如果您希望删除当前登录的管理员帐户，请让其他管理员将其删除。",
 	"patient_muddy_llama_work": "无法删除默认实例管理员记录",
 	"low_petty_martin_dazzle": "无法仅删除组织中的管理员。如果您希望删除整个组织帐户，请联系支持人员。",
 	"ornate_real_swallow_honor": "删除管理记录时出错。记录未被删除。"

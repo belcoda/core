@@ -439,7 +439,6 @@
 	"just_giant_pony_urge": "CSS personalizado",
 	"aqua_north_fox_grace": "Javascript personalizado",
 	"teary_sharp_starfish_honor": "CSS personalizado",
-	"misty_awful_kitten_walk": "dados.t.forms.campos.código_personalizado.js_personalizado.rótulo()",
 	"plain_real_clownfish_flow": "Javascript personalizado",
 	"sharp_sea_anteater_walk": "Carregar ou selecionar imagem de destaque",
 	"still_zany_warbler_savor": "Carregar ou selecionar imagem de destaque",
@@ -556,7 +555,7 @@
 	"clean_sea_thrush_dial": "Fêmea",
 	"teal_maroon_mantis_scoop": "Outro",
 	"awake_topical_rook_jolt": "Não especificado",
-  "wide_male_parrot_enrich": "Você não pode excluir a si mesmo. Se desejar excluir a conta de administrador atualmente conectada, peça a outro administrador para excluí-la.",
+	"wide_male_parrot_enrich": "Você não pode excluir a si mesmo. Se desejar excluir a conta de administrador atualmente conectada, peça a outro administrador para excluí-la.",
 	"patient_muddy_llama_work": "Não é possível excluir o registro do administrador da instância padrão",
 	"low_petty_martin_dazzle": "Não é possível excluir apenas o administrador na organização. Entre em contato com o suporte se desejar excluir a conta inteira da organização.",
 	"ornate_real_swallow_honor": "Erro ao excluir registro de administrador. O registro não foi excluído."

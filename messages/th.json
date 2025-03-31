@@ -439,7 +439,6 @@
 	"just_giant_pony_urge": "CSS ที่กำหนดเอง",
 	"aqua_north_fox_grace": "จาวาสคริปต์ที่กำหนดเอง",
 	"teary_sharp_starfish_honor": "CSS ที่กำหนดเอง",
-	"misty_awful_kitten_walk": "ข้อมูล.t.forms.fields.custom_code.custom_js.label()",
 	"plain_real_clownfish_flow": "จาวาสคริปต์ที่กำหนดเอง",
 	"sharp_sea_anteater_walk": "อัพโหลดหรือเลือกภาพเด่น",
 	"still_zany_warbler_savor": "อัพโหลดหรือเลือกภาพเด่น",
@@ -556,7 +555,7 @@
 	"clean_sea_thrush_dial": "หญิง",
 	"teal_maroon_mantis_scoop": "อื่น",
 	"awake_topical_rook_jolt": "ไม่ระบุ",
-  "wide_male_parrot_enrich": "คุณไม่สามารถลบตัวเองได้ หากคุณต้องการลบบัญชีผู้ดูแลระบบที่ลงชื่อเข้าใช้ในปัจจุบัน โปรดขอให้ผู้ดูแลระบบคนอื่นลบบัญชีดังกล่าว",
+	"wide_male_parrot_enrich": "คุณไม่สามารถลบตัวเองได้ หากคุณต้องการลบบัญชีผู้ดูแลระบบที่ลงชื่อเข้าใช้ในปัจจุบัน โปรดขอให้ผู้ดูแลระบบคนอื่นลบบัญชีดังกล่าว",
 	"patient_muddy_llama_work": "ไม่สามารถลบข้อมูลผู้ดูแลระบบอินสแตนซ์เริ่มต้นได้",
 	"low_petty_martin_dazzle": "ไม่สามารถลบเฉพาะผู้ดูแลระบบในองค์กรได้ โปรดติดต่อฝ่ายสนับสนุนหากคุณต้องการลบบัญชีองค์กรทั้งหมด",
 	"ornate_real_swallow_honor": "เกิดข้อผิดพลาดในการลบข้อมูลผู้ดูแลระบบ ข้อมูลไม่ถูกลบ"
