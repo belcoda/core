@@ -353,6 +353,9 @@
 						}}
 						customAnchor={dateInput}
 						class="flex w-auto flex-col space-y-4 p-3 md:min-w-[350px]"
+						onInteractOutside={() => {
+							isPopoverOpen = false;
+						}}
 					>
 						<!-- Time selector with dropdowns -->
 						{#if !dateOnly}
