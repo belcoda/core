@@ -84,15 +84,13 @@
 		<DateTime
 			{form}
 			name="starts_at"
-			label="Starts at"
-			minuteSteps={1}
+			label={m.proof_long_bird_love()}
 			bind:value={$formData.starts_at}
 		/>
 		<DateTime
 			{form}
 			name="ends_at"
-			label="Ends at"
-			minuteSteps={1}
+			label={m.close_nice_cowfish_savor()}
 			bind:value={$formData.ends_at}
 		/>
 	</Grid>
