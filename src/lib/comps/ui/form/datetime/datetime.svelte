@@ -161,17 +161,6 @@
 		}
 	});
 
-	// Watch for input value changes
-	// Commenting out this effect since we're handling updates in blur event instead
-	/*
-	$effect(() => {
-		const parsedDate = new Date(inputValue);
-		if (!isNaN(parsedDate.getTime())) {
-			value = parsedDate;
-		}
-	});
-	*/
-
 	// Format date for the input field (YYYY-MM-DD)
 	function formatDateForInput(date: Date): string {
 		const year = date.getFullYear();
@@ -313,10 +302,6 @@
 		isPopoverOpen = true;
 	}
 
-	function handleBlur() {
-		// This is a placeholder for blur handling
-	}
-
 	function handleInputChange(event: Event) {
 		// Don't automatically update the value while user is typing
 		// Let the blur event handle the finalization
@@ -366,11 +351,6 @@
 							oninput={handleInputChange}
 							onblur={handleInputBlur}
 						/>
-						<!-- <Popover.Trigger
-							class="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 flex items-center justify-center text-muted-foreground hover:text-foreground focus:outline-none"
-						>
-							<CalendarIcon class="h-4 w-4" />
-						</Popover.Trigger> -->
 					</div>
 					<Popover.Content
 						onOpenAutoFocus={(e) => {
@@ -443,7 +423,6 @@
 							</div>
 						{/if}
 
-						<!-- Calendar for date selection -->
 						<div class="rounded-md border">
 							<Calendar
 								type="single"
@@ -468,7 +447,6 @@
 							/>
 						</div>
 
-						<!-- Timezone indicator (hidden from user but shown for context) -->
 						<div
 							class="text-xs px-4 py-0.5 flex items-center justify-center text-muted-foreground gap-1 opacity-60"
 						>
