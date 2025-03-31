@@ -439,6 +439,7 @@
 	"just_giant_pony_urge": "CSS personalizado",
 	"aqua_north_fox_grace": "Javascript personalizado",
 	"teary_sharp_starfish_honor": "CSS personalizado",
+	"misty_awful_kitten_walk": "datos.t.forms.campos.código_personalizado.custom_js.etiqueta()",
 	"plain_real_clownfish_flow": "Javascript personalizado",
 	"sharp_sea_anteater_walk": "Subir o seleccionar imagen destacada",
 	"still_zany_warbler_savor": "Subir o seleccionar imagen destacada",
@@ -558,5 +559,9 @@
 	"wide_male_parrot_enrich": "No puedes eliminarte a ti mismo. Si deseas eliminar la cuenta de administrador que ha iniciado sesión, pídele a otro administrador que la elimine.",
 	"patient_muddy_llama_work": "No se puede eliminar el registro del administrador de instancia predeterminado",
 	"low_petty_martin_dazzle": "No se puede eliminar solo al administrador de la organización. Contacte con el soporte si desea eliminar toda la cuenta de la organización.",
-	"ornate_real_swallow_honor": "Error al eliminar el registro de administrador. El registro no se eliminó."
+	"ornate_real_swallow_honor": "Error al eliminar el registro de administrador. El registro no se eliminó.",
+	"happy_inclusive_hyena_cuddle": "Error al eliminar el registro. Inténtalo de nuevo.",
+	"elegant_whole_mayfly_zap": "El administrador fue eliminado exitosamente",
+	"wide_major_pig_swim": "Borrar",
+	"moving_acidic_crow_imagine": "¿Está seguro de que desea eliminar este registro? Esta acción no se puede deshacer."
 }
