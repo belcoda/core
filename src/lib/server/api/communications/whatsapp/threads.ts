@@ -193,11 +193,30 @@ export async function del({
 	instanceId: number;
 	threadId: number;
 }): Promise<void> {
+	// delete thread messages
+	await deleteThreadMessages({ instanceId, threadId });
+	// then delete thread
 	await db
 		.update(
 			'communications.whatsapp_threads',
 			{ deleted_at: new Date() },
 			{ instance_id: instanceId, id: threadId }
+		)
+		.run(pool);
+}
+
+async function deleteThreadMessages({
+	instanceId,
+	threadId
+}: {
+	instanceId: number;
+	threadId: number;
+}): Promise<void> {
+	await db
+		.update(
+			'communications.whatsapp_messages',
+			{ deleted_at: new Date() },
+			{ instance_id: instanceId, thread_id: threadId }
 		)
 		.run(pool);
 }

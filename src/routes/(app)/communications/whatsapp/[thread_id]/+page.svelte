@@ -162,6 +162,7 @@
 				}}
 			/>
 		</div>
+		<hr class="my-4" />
 		<div class="mt-4">
 			<Button variant="destructive" onclick={deleteThread}>{m.fuzzy_chunky_bobcat_glow()}</Button>
 		</div>
