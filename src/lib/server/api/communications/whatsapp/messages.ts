@@ -32,12 +32,12 @@ export async function read({
 	instanceId,
 	threadId,
 	messageId,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	threadId?: number;
 	messageId: string;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	if (threadId) {
 		const cached = await redis.get(redisString(instanceId, threadId));
@@ -48,7 +48,8 @@ export async function read({
 	const result = await db
 		.selectExactlyOne('communications.whatsapp_messages', {
 			instance_id: instanceId,
-			id: messageId
+			id: messageId,
+			...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
 		})
 		.run(pool)
 		.catch((err) => {
@@ -66,11 +67,13 @@ export async function read({
 export async function list({
 	instanceId,
 	threadId,
-	url
+	url,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	threadId: number;
 	url: URL;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const { filtered, options, where } = filterQuery(url);
 	if (!filtered) {
@@ -79,15 +82,22 @@ export async function list({
 			return parse(schema.list, cached);
 		}
 	}
+	const whereWithDeleted = {
+		...where,
+		...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+	};
 	const result = await db
 		.select(
 			'communications.whatsapp_messages',
-			{ thread_id: threadId, ...where },
-			{ ...options, order: { by: 'created_at', direction: 'ASC' } }
+			{ thread_id: threadId, ...whereWithDeleted },
+			{
+				...options,
+				order: { by: 'created_at', direction: 'ASC' }
+			}
 		)
 		.run(pool);
 	const count = await db
-		.count('communications.whatsapp_messages', { thread_id: threadId, ...where })
+		.count('communications.whatsapp_messages', { thread_id: threadId, ...whereWithDeleted })
 		.run(pool);
 	const parsedResult = parse(schema.list, { items: result, count: count });
 	if (!filtered) {
@@ -99,17 +109,19 @@ export async function list({
 export async function update({
 	instanceId,
 	messageId,
-	body,
-	t
+	body
 }: {
 	instanceId: number;
 	messageId: string;
 	body: schema.Update;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const result = await db
-		.update('communications.whatsapp_messages', parsed, { instance_id: instanceId, id: messageId })
+		.update('communications.whatsapp_messages', parsed, {
+			instance_id: instanceId,
+			id: messageId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool);
 	if (result.length !== 1) {
 		throw new BelcodaError(
@@ -125,16 +137,16 @@ export async function update({
 
 export async function _getActions({
 	actionId,
-	instanceId,
-	t
+	instanceId
 }: {
 	actionId: string;
 	instanceId: number;
-	t: App.Localization;
 }): Promise<ActionArray> {
 	const actions = await db.sql`SELECT actions->${db.param(actionId)} AS action
     FROM ${'communications.whatsapp_messages'}
-    WHERE actions ? ${db.param(actionId)} AND instance_id = ${db.param(instanceId)}`.run(pool);
+    WHERE actions ? ${db.param(actionId)} AND instance_id = ${db.param(instanceId)} AND deleted_at = ${db.conditions.isNull}`.run(
+		pool
+	);
 	if (actions.length !== 1) {
 		throw new BelcodaError(
 			404,
@@ -147,15 +159,13 @@ export async function _getActions({
 }
 
 export async function _getByAction({
-	action,
-	t
+	action
 }: {
 	action: string;
-	t: App.Localization;
 }): Promise<{ actions: ActionArray; messageId: string }> {
 	const result = await db.sql`SELECT id, actions->${db.param(action)} AS action
 FROM communications.whatsapp_messages
-WHERE actions ? ${db.param(action)}`.run(pool);
+WHERE actions ? ${db.param(action)} AND deleted_at = ${db.conditions.isNull}`.run(pool);
 	if (result.length !== 1) {
 		throw new BelcodaError(
 			404,
