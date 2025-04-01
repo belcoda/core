@@ -64,9 +64,9 @@ describe('DateTime Component Utils', () => {
 		});
 	});
 
-	describe('timezone conversion', () => {
-		// TODO: I have commented out timezone tests because they are difficult to reliably
-		// TODO: test locally and have the same results on a CI server that runs on a different timezone.
+	// TODO: I have commented out timezone tests because they are difficult to reliably
+	// TODO: test locally and have the same results on a CI server that runs on a different timezone.
+	// describe('timezone conversion', () => {
 
 		// it('should preserve absolute time while converting to local timezone', () => {
 		// 	// Create a date at 6pm GMT+9 (15:00 UTC)
@@ -82,33 +82,33 @@ describe('DateTime Component Utils', () => {
 		// 	expect(localHour).toBe(18);
 		// });
 
-		// it('should handle daylight saving time transitions', () => {
-		// 	// Note: Since I'm in GMT+3 which doesn't observe DST, we'll test time consistency
-		// 	const beforeDST = new Date('2024-03-31T01:30:00+03:00');
-		// 	const afterDST = new Date('2024-03-31T02:30:00+03:00');
+		// it('should handle dates across midnight', () => {
+		// 	// Create a date at 23:00 GMT+3
+		// 	const lateDate = new Date('2024-03-15T23:00:00+03:00');
+		// 	const nextDate = new Date('2024-03-16T01:00:00+03:00');
 
-		// 	const localBefore = convertToUserTimezone(beforeDST);
-		// 	const localAfter = convertToUserTimezone(afterDST);
+		// 	const localLate = convertToUserTimezone(lateDate);
+		// 	const localNext = convertToUserTimezone(nextDate);
 
-		// 	// Verify one hour difference
-		// 	expect(localAfter.hour - localBefore.hour).toBe(1);
+		// 	// Verify correct dates
+		// 	expect(localLate.day).toBe(15);
+		// 	expect(localNext.day).toBe(16);
+
+		// 	// Verify hours
+		// 	expect(localLate.hour).toBe(23);
+		// 	expect(localNext.hour).toBe(1);
 		// });
 
-		it('should handle dates across midnight', () => {
-			// Create a date at 23:00 GMT+3
-			const lateDate = new Date('2024-03-15T23:00:00+03:00');
-			const nextDate = new Date('2024-03-16T01:00:00+03:00');
+		it('should handle daylight saving time transitions', () => {
+			// Note: Since I'm in GMT+3 which doesn't observe DST, we'll test time consistency
+			const beforeDST = new Date('2024-03-31T01:30:00+03:00');
+			const afterDST = new Date('2024-03-31T02:30:00+03:00');
 
-			const localLate = convertToUserTimezone(lateDate);
-			const localNext = convertToUserTimezone(nextDate);
+			const localBefore = convertToUserTimezone(beforeDST);
+			const localAfter = convertToUserTimezone(afterDST);
 
-			// Verify correct dates
-			expect(localLate.day).toBe(15);
-			expect(localNext.day).toBe(16);
-
-			// Verify hours
-			expect(localLate.hour).toBe(23);
-			expect(localNext.hour).toBe(1);
+			// Verify one hour difference
+			expect(localAfter.hour - localBefore.hour).toBe(1);
 		});
 	});
 });
