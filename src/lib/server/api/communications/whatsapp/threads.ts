@@ -12,12 +12,10 @@ const log = pino(import.meta.url);
 
 export async function exists({
 	instanceId,
-	threadId,
-	t
+	threadId
 }: {
 	instanceId: number;
 	threadId: number;
-	t: App.Localization;
 }): Promise<boolean> {
 	const cached = await redis.get(redisString(instanceId, threadId));
 	if (cached) {
@@ -87,12 +85,10 @@ export async function create({
 
 export async function read({
 	instanceId,
-	threadId,
-	t
+	threadId
 }: {
 	instanceId: number;
 	threadId: number;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, threadId));
 	if (cached) {
@@ -144,13 +140,11 @@ export async function list({
 export async function update({
 	instanceId,
 	threadId,
-	body,
-	t
+	body
 }: {
 	instanceId: number;
 	threadId: number;
 	body: schema.Update;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const result = await db
