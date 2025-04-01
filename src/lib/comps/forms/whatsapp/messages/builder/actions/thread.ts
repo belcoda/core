@@ -86,3 +86,12 @@ export async function updateThread({
 		throw new Error('Invalid message type');
 	}
 }
+
+export async function deleteThread(threadId: number) {
+	const res = await fetch(`/api/v1/communications/whatsapp/threads/${threadId}`, {
+		method: 'DELETE'
+	});
+	if (!res.ok) {
+		throw new Error(`Failed to delete thread: ${res.statusText}`);
+	}
+}

@@ -72,7 +72,25 @@
 			loading = false;
 		}
 	}
+
+	async function deleteThread() {
+		try {
+			loading = true;
+			await threadActions.deleteThread(data.thread.id);
+			$flash = { type: 'success', message: 'Thread deleted' };
+			goto('/communications/whatsapp');
+		} catch (err) {
+			if (err instanceof Error) {
+				$flash = { type: 'error', message: err.message };
+			} else {
+				$flash = { type: 'error', message: 'An error occurred' };
+			}
+		} finally {
+			loading = false;
+		}
+	}
 	import * as m from '$lib/paraglide/messages';
+	import { goto } from '$app/navigation';
 </script>
 
 <PageHeader title={'Edit thread'}>
@@ -143,6 +161,9 @@
 					loading = false;
 				}}
 			/>
+		</div>
+		<div class="mt-4">
+			<Button variant="destructive" onclick={deleteThread}>{m.fuzzy_chunky_bobcat_glow()}</Button>
 		</div>
 	</div>
 	{#if loading}<div

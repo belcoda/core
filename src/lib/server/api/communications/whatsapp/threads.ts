@@ -185,3 +185,19 @@ export async function _getThreadByStartingMessageId({
 	const parsed = parse(schema.read, selected);
 	return parsed;
 }
+
+export async function del({
+	instanceId,
+	threadId
+}: {
+	instanceId: number;
+	threadId: number;
+}): Promise<void> {
+	await db
+		.update(
+			'communications.whatsapp_threads',
+			{ deleted_at: new Date() },
+			{ instance_id: instanceId, id: threadId }
+		)
+		.run(pool);
+}
