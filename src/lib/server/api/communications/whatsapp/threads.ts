@@ -112,10 +112,12 @@ export async function read({
 
 export async function list({
 	instanceId,
-	url
+	url,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	url: URL;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const { filtered, where, options } = filterQuery(url);
 	if (!filtered) {
@@ -124,11 +126,19 @@ export async function list({
 			return parse(schema.list, cached);
 		}
 	}
+	const whereWithDeleted = {
+		...where,
+		...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+	};
 	const result = await db
-		.select('communications.whatsapp_threads', { instance_id: instanceId, ...where }, options)
+		.select(
+			'communications.whatsapp_threads',
+			{ instance_id: instanceId, ...whereWithDeleted },
+			options
+		)
 		.run(pool);
 	const count = await db
-		.count('communications.whatsapp_threads', { instance_id: instanceId, ...where })
+		.count('communications.whatsapp_threads', { instance_id: instanceId, ...whereWithDeleted })
 		.run(pool);
 	const parsedResult = parse(schema.list, { items: result, count: count });
 	if (!filtered) {
@@ -197,6 +207,9 @@ export async function del({
 			{ instance_id: instanceId, id: threadId }
 		)
 		.run(pool);
+	// clear cache
+	await redis.del(redisString(instanceId, 'all'));
+	await redis.del(redisString(instanceId, threadId));
 }
 
 async function deleteThreadMessages({
