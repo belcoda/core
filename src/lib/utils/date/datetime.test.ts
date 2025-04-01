@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { roundMinutes, convertToUserTimezone, isValidMinuteStep } from './datetime';
+import { roundMinutes, isValidMinuteStep } from './datetime';
 
 describe('DateTime Component Utils', () => {
 	describe('isValidMinuteStep', () => {
@@ -61,54 +61,6 @@ describe('DateTime Component Utils', () => {
 				expect(result.roundedMinutes).toBe(expected);
 				expect(result.wasRounded).toBe(input !== expected);
 			});
-		});
-	});
-
-	// TODO: I have commented out timezone tests because they are difficult to reliably
-	// TODO: test locally and have the same results on a CI server that runs on a different timezone.
-	// describe('timezone conversion', () => {
-
-		// it('should preserve absolute time while converting to local timezone', () => {
-		// 	// Create a date at 6pm GMT+9 (15:00 UTC)
-		// 	const tokyoDate = new Date('2024-03-15T15:00:00Z');
-
-		// 	// Convert to local timezone (GMT+3)
-		// 	const localZoned = convertToUserTimezone(tokyoDate);
-
-		// 	// Get the hour in local time (18:00 in GMT+3)
-		// 	const localHour = localZoned.hour;
-
-		// 	// 15:00 UTC should be 18:00 in GMT+3
-		// 	expect(localHour).toBe(18);
-		// });
-
-		// it('should handle dates across midnight', () => {
-		// 	// Create a date at 23:00 GMT+3
-		// 	const lateDate = new Date('2024-03-15T23:00:00+03:00');
-		// 	const nextDate = new Date('2024-03-16T01:00:00+03:00');
-
-		// 	const localLate = convertToUserTimezone(lateDate);
-		// 	const localNext = convertToUserTimezone(nextDate);
-
-		// 	// Verify correct dates
-		// 	expect(localLate.day).toBe(15);
-		// 	expect(localNext.day).toBe(16);
-
-		// 	// Verify hours
-		// 	expect(localLate.hour).toBe(23);
-		// 	expect(localNext.hour).toBe(1);
-		// });
-
-		it('should handle daylight saving time transitions', () => {
-			// Note: Since I'm in GMT+3 which doesn't observe DST, we'll test time consistency
-			const beforeDST = new Date('2024-03-31T01:30:00+03:00');
-			const afterDST = new Date('2024-03-31T02:30:00+03:00');
-
-			const localBefore = convertToUserTimezone(beforeDST);
-			const localAfter = convertToUserTimezone(afterDST);
-
-			// Verify one hour difference
-			expect(localAfter.hour - localBefore.hour).toBe(1);
 		});
 	});
 });
