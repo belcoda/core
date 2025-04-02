@@ -39,7 +39,7 @@ export async function read({
 	messageId: string;
 	includeDeleted?: boolean;
 }): Promise<schema.Read> {
-	if (threadId) {
+	if (threadId && !includeDeleted) {
 		const cached = await redis.get(redisString(instanceId, threadId));
 		if (cached) {
 			return parse(schema.read, cached);
@@ -76,7 +76,7 @@ export async function list({
 	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const { filtered, options, where } = filterQuery(url);
-	if (!filtered) {
+	if (!filtered && !includeDeleted) {
 		const cached = await redis.get(redisString(instanceId, threadId));
 		if (cached) {
 			return parse(schema.list, cached);
