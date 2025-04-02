@@ -11,7 +11,6 @@ export async function POST(event) {
 		const body = await event.request.json();
 		const parsed = parse(triggerAction, body);
 		const { actions } = await _getByAction({
-			t: event.locals.t,
 			action: parsed.action_id
 		});
 		for (const action of actions) {

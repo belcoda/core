@@ -94,8 +94,7 @@ export async function POST(event) {
 						try {
 							const sentMessageObject = await readMessage({
 								instanceId: event.locals.instance.id,
-								messageId,
-								t: event.locals.t
+								messageId
 							});
 							if (sentMessageObject.thread_id) {
 								const createConversationBody = {
