@@ -54,7 +54,9 @@
 			if (template && templateMessage.type === 'template') {
 				await threadActions.updateThread({
 					templateMessage,
+					templateId,
 					actions,
+					threadId: data.thread.id,
 					templateName: templateMessage.template.name, //template
 					components,
 					messageId: data.thread.template_message_id
@@ -118,6 +120,11 @@
 						actions,
 						templateMessage
 					);
+					if ('template' in templateMessage) {
+						//should always be true
+						templateMessage.template.name = template.message.name;
+						templateId = template.id;
+					}
 					components = output.components;
 					actions = output.actions;
 					await saveThread();
