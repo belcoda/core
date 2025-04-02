@@ -74,6 +74,9 @@
 	}
 
 	async function deleteThread() {
+		if (!window.confirm(`${m.tangy_wild_manatee_walk()}? ${m.sweet_loose_chicken_trip()}.`)) {
+			return;
+		}
 		try {
 			loading = true;
 			await threadActions.deleteThread(data.thread.id);

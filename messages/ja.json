@@ -560,5 +560,7 @@
 	"patient_muddy_llama_work": "デフォルトのインスタンス管理者レコードを削除できません",
 	"low_petty_martin_dazzle": "組織内の管理者のみを削除することはできません。組織アカウント全体を削除する場合は、サポートにお問い合わせください。",
 	"ornate_real_swallow_honor": "管理者レコードの削除中にエラーが発生しました。レコードは削除されませんでした。",
-	"fuzzy_chunky_bobcat_glow": "スレッドを削除"
+	"fuzzy_chunky_bobcat_glow": "スレッドを削除",
+	"sweet_loose_chicken_trip": "この操作は元に戻せません",
+	"tangy_wild_manatee_walk": "このスレッドを削除してもよろしいですか?"
 }
