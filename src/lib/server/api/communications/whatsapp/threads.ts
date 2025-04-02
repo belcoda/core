@@ -95,7 +95,11 @@ export async function read({
 		return parse(schema.read, cached);
 	}
 	const result = await db
-		.selectExactlyOne('communications.whatsapp_threads', { instance_id: instanceId, id: threadId })
+		.selectExactlyOne('communications.whatsapp_threads', {
+			instance_id: instanceId,
+			id: threadId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(
@@ -158,7 +162,11 @@ export async function update({
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const result = await db
-		.update('communications.whatsapp_threads', parsed, { instance_id: instanceId, id: threadId })
+		.update('communications.whatsapp_threads', parsed, {
+			instance_id: instanceId,
+			id: threadId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool);
 	if (result.length !== 1) {
 		throw new BelcodaError(
@@ -183,7 +191,8 @@ export async function _getThreadByStartingMessageId({
 	const selected = await db
 		.selectExactlyOne('communications.whatsapp_threads', {
 			instance_id: instanceId,
-			template_message_id: startingMessageId
+			template_message_id: startingMessageId,
+			deleted_at: db.conditions.isNull
 		})
 		.run(pool);
 	const parsed = parse(schema.read, selected);
