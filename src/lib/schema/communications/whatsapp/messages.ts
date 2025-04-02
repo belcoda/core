@@ -13,7 +13,8 @@ export const base = v.object({
 	on_read_action: v.nullable(uuid),
 	next: v.nullable(uuid),
 	created_at: timestamp,
-	updated_at: timestamp
+	updated_at: timestamp,
+	deleted_at: v.nullable(timestamp)
 });
 
 export const read = v.omit(base, ['instance_id']);

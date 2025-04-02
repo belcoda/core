@@ -30,8 +30,7 @@ export async function POST(event) {
 		}
 		const readMessageResponse = await readMessage({
 			instanceId: event.locals.instance.id,
-			messageId: parsed.message_id,
-			t: event.locals.t
+			messageId: parsed.message_id
 		});
 		//for each messages, create a sent message.
 		for (const sentMessage of parsed.whatsapp_response.messages) {
@@ -63,8 +62,7 @@ export async function POST(event) {
 					});
 					const template = await readTemplate({
 						instanceId: event.locals.instance.id,
-						templateId: thread.template_id,
-						t: event.locals.t
+						templateId: thread.template_id
 					});
 					details = {
 						type: 'outbound_whatsapp',
@@ -97,8 +95,7 @@ export async function POST(event) {
 		if (readMessageResponse.next) {
 			const nextMessage = await readMessage({
 				instanceId: event.locals.instance.id,
-				messageId: readMessageResponse.next,
-				t: event.locals.t
+				messageId: readMessageResponse.next
 			});
 			const toSend = {
 				person_id: parsed.person_id,

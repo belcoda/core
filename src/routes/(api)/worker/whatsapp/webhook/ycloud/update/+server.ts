@@ -41,8 +41,7 @@ export async function POST(event) {
 			log.debug(`person = ${person.id}`);
 			const message = await readMessage({
 				instanceId: event.locals.instance.id,
-				messageId: sentMessage.message_id,
-				t: event.locals.t
+				messageId: sentMessage.message_id
 			});
 			log.debug(`readMessage = ${message.id}`);
 			if (parsed.whatsappMessage.status === 'sent') {

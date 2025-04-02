@@ -28,8 +28,7 @@ export async function POST(event) {
 		});
 		const message = await readMessage({
 			instanceId: event.locals.instance.id,
-			messageId: parsedMessage.message_id,
-			t: event.locals.t
+			messageId: parsedMessage.message_id
 		});
 
 		if (!person.phone_number?.phone_number) {

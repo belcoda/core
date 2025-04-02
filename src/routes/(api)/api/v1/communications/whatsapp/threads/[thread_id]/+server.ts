@@ -40,3 +40,21 @@ export async function PUT(event) {
 		);
 	}
 }
+
+export async function DELETE(event) {
+	try {
+		const itemId = Number(event.params.thread_id);
+		const result = await api.del({
+			threadId: itemId,
+			instanceId: event.locals.instance.id
+		});
+		return json(result);
+	} catch (err) {
+		return error(
+			500,
+			'API:/communications/whatsapp/threads/[thread_id]:DELETE',
+			m.spry_ago_baboon_cure(),
+			err
+		);
+	}
+}

@@ -17,7 +17,6 @@ export async function POST(event) {
 			instanceId: event.locals.instance.id,
 			body: body,
 			adminId: event.locals.admin.id,
-			t: event.locals.t,
 			instanceLanguage: event.locals.instance.language,
 			defaultTemplateId: event.locals.instance.settings.communications.whatsapp.default_template_id
 		});
