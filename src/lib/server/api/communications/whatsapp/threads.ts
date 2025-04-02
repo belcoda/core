@@ -38,20 +38,18 @@ export async function exists({
 export async function create({
 	instanceId,
 	body,
-	t,
 	defaultTemplateId,
 	adminId,
 	instanceLanguage
 }: {
 	instanceId: number;
 	body: schema.Create;
-	t: App.Localization;
 	defaultTemplateId: number;
 	adminId: number;
 	instanceLanguage: SupportedLanguage;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
-	const template = await readTemplate({ instanceId, templateId: defaultTemplateId, t: t });
+	const template = await readTemplate({ instanceId, templateId: defaultTemplateId });
 	const typeTemplate: 'template' = 'template'; //needed to avoid typescript errors due to literal types in validation
 	const languagePolicy: 'deterministic' = 'deterministic'; //needed to avoid typescript errors due to literal types in validation
 	const createdMesaage = await createMessage({

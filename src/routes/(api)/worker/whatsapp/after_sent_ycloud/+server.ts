@@ -59,8 +59,7 @@ export async function POST(event) {
 				});
 				const template = await readTemplate({
 					instanceId: event.locals.instance.id,
-					templateId: thread.template_id,
-					t: event.locals.t
+					templateId: thread.template_id
 				});
 				details = {
 					type: 'outbound_whatsapp',

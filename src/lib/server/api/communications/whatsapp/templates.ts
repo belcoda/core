@@ -26,12 +26,10 @@ export async function create({
 
 export async function read({
 	instanceId,
-	templateId,
-	t
+	templateId
 }: {
 	instanceId: number;
 	templateId: number;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, templateId));
 	if (cached) {
