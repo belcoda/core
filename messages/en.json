@@ -575,8 +575,9 @@
 	"clean_sea_thrush_dial": "Female",
 	"teal_maroon_mantis_scoop": "Other",
 	"awake_topical_rook_jolt": "Not specified",
- 	"wide_male_parrot_enrich": "You can't delete yourself. If you wish to delete the currently signed in admin account, please ask another admin to delete it.",
+	"wide_male_parrot_enrich": "You can't delete yourself. If you wish to delete the currently signed in admin account, please ask another admin to delete it.",
 	"patient_muddy_llama_work": "Unable to delete default instance administrator record",
 	"low_petty_martin_dazzle": "Unable to delete only admin in organization. Please contact support if you wish to delete the entire organization account.",
-	"ornate_real_swallow_honor": "Error deleting admin record. Record was not deleted."
+	"ornate_real_swallow_honor": "Error deleting admin record. Record was not deleted.",
+	"helpful_aware_nuthatch_honor": "No instance found with that phone number id"
 }

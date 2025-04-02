@@ -25,7 +25,7 @@ export const messageBase = v.object({
 	type: type,
 	to: v.string(),
 	from: v.string(),
-	biz_opaque_callback_data: uuid,
+	externalId: uuid, //replaces the biz_opaque_callback_data from the official meta api
 	messaging_product: v.optional(v.literal('whatsapp'), 'whatsapp'),
 	recipient_type: v.optional(v.literal('individual'), 'individual'),
 	context: v.optional(context)

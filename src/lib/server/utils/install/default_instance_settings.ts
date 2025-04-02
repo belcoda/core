@@ -1,5 +1,6 @@
 import type { InstallOptions } from '$lib/server/utils/install/index';
 import { type SettingsInput } from '$lib/schema/core/instance';
+import { PUBLIC_DEFAULT_WHATSAPP_PHONE_NUMBER } from '$env/static/public';
 import { PUBLIC_HOST, PUBLIC_ROOT_DOMAIN } from '$env/static/public';
 import * as m from '$lib/paraglide/messages';
 // ➡️ Removed user-generated templates from the app. See: https://github.com/belcoda/core/tree/feature/improved_templates
@@ -31,7 +32,7 @@ export default function (
 			},
 			whatsapp: {
 				default_template_id: templates?.whatsapp.invitation.id || 999999,
-				phone_number_id: null,
+				phone_number: PUBLIC_DEFAULT_WHATSAPP_PHONE_NUMBER,
 				business_account_id: null
 			}
 		},

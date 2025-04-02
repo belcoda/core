@@ -1,5 +1,5 @@
 import { error, json, pino } from '$lib/server';
-import { getActiveForPerson, read } from '$lib/server/api/communications/whatsapp/conversations';
+import { getActiveForPerson } from '$lib/server/api/communications/whatsapp/conversations';
 import * as m from '$lib/paraglide/messages';
 export async function GET(event) {
 	try {

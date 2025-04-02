@@ -191,7 +191,7 @@ export async function listForPerson({
 }
 
 export async function registerPersonForEventFromWhatsApp(
-	eventId: string,
+	eventId: number,
 	message: WhatsappInboundMessage,
 	adminId: number,
 	t: App.Localization,

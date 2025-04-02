@@ -169,7 +169,7 @@ export async function listForPerson({
 }
 
 export async function signPetition(
-	petitionId: string,
+	petitionId: number,
 	message: WhatsappInboundMessage,
 	adminId: number,
 	t: App.Localization,

@@ -9,8 +9,11 @@ import {
 	shortString,
 	email,
 	longStringNotEmpty,
-	domainName
+	domainName,
+	phoneNumber
 } from '$lib/schema/valibot';
+
+import { PUBLIC_DEFAULT_WHATSAPP_PHONE_NUMBER } from '$env/static/public';
 
 export const settings = v.object({
 	default_admin_id: id,
@@ -35,7 +38,7 @@ export const settings = v.object({
 		}),
 		whatsapp: v.object({
 			default_template_id: id,
-			phone_number_id: v.nullable(shortString),
+			phone_number: v.optional(phoneNumber, PUBLIC_DEFAULT_WHATSAPP_PHONE_NUMBER),
 			business_account_id: v.nullable(shortString)
 		})
 	}),
