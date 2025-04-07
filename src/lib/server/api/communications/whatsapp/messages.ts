@@ -171,13 +171,11 @@ WHERE actions ? ${db.param(action)}`.run(pool);
 export function constructWhatsappNotification({
 	eventType,
 	action,
-	activityTitle,
-	t
+	activityTitle
 }: {
 	eventType: string;
 	action: string;
 	activityTitle: string;
-	t: App.Localization;
 }): Message {
 	let baseText = constructLocalizedNotificationMessageText({
 		eventType,
