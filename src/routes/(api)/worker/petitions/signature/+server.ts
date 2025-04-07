@@ -44,7 +44,8 @@ export async function POST(event) {
 			queue: event.locals.queue,
 			body: {
 				person_id: person.id,
-				send_autoresponse: true
+				send_autoresponse: true,
+				response_channel: parsed.signup.email === null ? 'whatsapp' : 'email'
 			},
 			t: event.locals.t
 		});
