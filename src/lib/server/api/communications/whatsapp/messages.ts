@@ -179,25 +179,12 @@ export function constructWhatsappNotification({
 	activityTitle: string;
 	t: App.Localization;
 }): Message {
-	let baseText;
-	switch (action) {
-		case 'register':
-		case 'sign':
-			baseText = `You have ${eventType === 'event' ? 'been registered for' : 'signed the petition:'} ${activityTitle}`;
-			break;
-		case 'cancel':
-			baseText = `You have cancelled your ${eventType === 'event' ? 'registration for' : 'signature for'} ${activityTitle}`;
-			break;
-		case 'duplicate':
-			baseText = `You have already ${eventType === 'event' ? 'registered for' : 'signed the petition:'} ${activityTitle}`;
-			break;
-		default:
-			throw new BelcodaError(
-				500,
-				'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:GET_BY_EVENT_TYPE_AND_ACTION:01',
-				t.errors.generic()
-			);
-	}
+	let baseText = constructLocalizedNotificationMessageText({
+		eventType,
+		action,
+		activityTitle
+	});
+
 	const message: Message = {
 		text: {
 			body: baseText,
@@ -206,4 +193,55 @@ export function constructWhatsappNotification({
 		type: 'text'
 	};
 	return message;
+}
+
+export function constructLocalizedNotificationMessageText({
+	eventType,
+	action,
+	activityTitle
+}: {
+	eventType: string;
+	action: string;
+	activityTitle: string;
+}): string {
+	switch (eventType) {
+		case 'event': {
+			switch (action) {
+				case 'register':
+					return m.solid_mellow_eel_chop({ activityTitle });
+				case 'cancel':
+					return m.cute_few_giraffe_blend({ activityTitle });
+				case 'duplicate':
+					return m.jumpy_alive_puffin_vent({ activityTitle });
+				default:
+					throw new BelcodaError(
+						500,
+						'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:GET_BY_EVENT_TYPE_AND_ACTION:01',
+						`Unable to construct localized message text for event type ${eventType} and action ${action}`
+					);
+			}
+		}
+		case 'petition':
+			switch (action) {
+				case 'sign':
+					return m.full_tangy_cow_pull({ activityTitle });
+				case 'cancel':
+					return m.dizzy_mellow_otter_clap({ activityTitle });
+				case 'duplicate':
+					return m.east_north_osprey_hurl({ activityTitle });
+				default:
+					throw new BelcodaError(
+						500,
+						'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:GET_BY_EVENT_TYPE_AND_ACTION:02',
+						`Unable to construct localized message text for petition type ${eventType} and action ${action}`
+					);
+			}
+		default: {
+			throw new BelcodaError(
+				500,
+				'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:GET_BY_EVENT_TYPE_AND_ACTION:03',
+				`Misformed petition or event type: ${eventType} and action ${action}`
+			);
+		}
+	}
 }
