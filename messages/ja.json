@@ -561,10 +561,10 @@
 	"ornate_real_swallow_honor": "管理者レコードの削除中にエラーが発生しました。レコードは削除されませんでした。",
 	"helpful_aware_nuthatch_honor": "その電話番号 ID のインスタンスは見つかりませんでした",
 	"antsy_sea_goose_trip": "スペイン",
-	"solid_mellow_eel_chop": "イベント{{activityTitle} } に登録されました。ぜひご参加ください。",
-	"cute_few_giraffe_blend": "イベント{{activityTitle} } への登録をキャンセルしました",
-	"jumpy_alive_puffin_vent": "イベント{{activityTitle} } にすでに登録されています",
-	"full_tangy_cow_pull": "あなたは請願書{{activityTitle} } に署名しました",
-	"dizzy_mellow_otter_clap": "請願書{{activityTitle} } への署名を取り消しました",
-	"east_north_osprey_hurl": "あなたはすでに請願書{{activityTitle} } に署名しています"
+	"solid_mellow_eel_chop": "イベント{activityTitle} に登録されました。ぜひご参加ください。",
+	"cute_few_giraffe_blend": "イベント{activityTitle} への登録をキャンセルしました",
+	"jumpy_alive_puffin_vent": "イベント{activityTitle} にすでに登録されています",
+	"full_tangy_cow_pull": "あなたは請願書{activityTitle} に署名しました",
+	"dizzy_mellow_otter_clap": "請願書{activityTitle} への署名を取り消しました",
+	"east_north_osprey_hurl": "あなたはすでに請願書{activityTitle} に署名しています"
 }

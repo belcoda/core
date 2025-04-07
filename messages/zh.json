@@ -562,10 +562,10 @@
 	"ornate_real_swallow_honor": "删除管理记录时出错。记录未被删除。",
 	"helpful_aware_nuthatch_honor": "未找到具有该电话号码 ID 的实例",
 	"antsy_sea_goose_trip": "西班牙",
-	"solid_mellow_eel_chop": "您已注册参加活动{{activityTitle} }，我们希望在那里见到您！",
-	"cute_few_giraffe_blend": "您已取消活动{{activityTitle} }”的注册",
-	"jumpy_alive_puffin_vent": "您已注册活动{{activityTitle} }",
-	"full_tangy_cow_pull": "您已签署请愿书{{activityTitle} }",
-	"dizzy_mellow_otter_clap": "您已取消对请愿书的签名{{activityTitle} }",
-	"east_north_osprey_hurl": "您已经签署了请愿书{{activityTitle} }"
+	"solid_mellow_eel_chop": "您已注册参加活动{activityTitle}，我们希望在那里见到您！",
+	"cute_few_giraffe_blend": "您已取消活动{activityTitle}”的注册",
+	"jumpy_alive_puffin_vent": "您已注册活动{activityTitle}",
+	"full_tangy_cow_pull": "您已签署请愿书{activityTitle}",
+	"dizzy_mellow_otter_clap": "您已取消对请愿书的签名{activityTitle}",
+	"east_north_osprey_hurl": "您已经签署了请愿书{activityTitle}"
 }

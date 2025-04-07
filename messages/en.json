@@ -580,10 +580,10 @@
 	"ornate_real_swallow_honor": "Error deleting admin record. Record was not deleted.",
 	"helpful_aware_nuthatch_honor": "No instance found with that phone number id",
 	"antsy_sea_goose_trip": "Spain",
-	"solid_mellow_eel_chop": "You have been registered for the event {{activityTitle}}, we hope to see you there!",
-	"cute_few_giraffe_blend": "You have cancelled your registration for the event {{activityTitle}}",
-	"jumpy_alive_puffin_vent": "You have already registered for the event {{activityTitle}}",
-	"full_tangy_cow_pull": "You have signed the petition {{activityTitle}}",
-	"dizzy_mellow_otter_clap": "You have cancelled your signature for the petition {{activityTitle}}",
-	"east_north_osprey_hurl": "You have already signed the petition {{activityTitle}}"
+	"solid_mellow_eel_chop": "You have been registered for the event {activityTitle}, we hope to see you there!",
+	"cute_few_giraffe_blend": "You have cancelled your registration for the event {activityTitle}",
+	"jumpy_alive_puffin_vent": "You have already registered for the event {activityTitle}",
+	"full_tangy_cow_pull": "You have signed the petition {activityTitle}",
+	"dizzy_mellow_otter_clap": "You have cancelled your signature for the petition {activityTitle}",
+	"east_north_osprey_hurl": "You have already signed the petition {activityTitle}"
 }
