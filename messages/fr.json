@@ -560,5 +560,11 @@
 	"low_petty_martin_dazzle": "Impossible de supprimer uniquement le compte administrateur de l'organisation. Veuillez contacter l'assistance si vous souhaitez supprimer l'intégralité du compte de l'organisation.",
 	"ornate_real_swallow_honor": "Erreur lors de la suppression de l'enregistrement administrateur. L'enregistrement n'a pas été supprimé.",
 	"helpful_aware_nuthatch_honor": "Aucune instance trouvée avec cet identifiant de numéro de téléphone",
-	"antsy_sea_goose_trip": "Espagne"
+	"antsy_sea_goose_trip": "Espagne",
+	"solid_mellow_eel_chop": "Vous êtes inscrit à l'événement {{activityTitle} }, nous espérons vous y voir nombreux !",
+	"cute_few_giraffe_blend": "Vous avez annulé votre inscription à l'événement {{activityTitle} }",
+	"jumpy_alive_puffin_vent": "Vous êtes déjà inscrit à l'événement {{activityTitle} }",
+	"full_tangy_cow_pull": "Vous avez signé la pétition {{activityTitle} }",
+	"dizzy_mellow_otter_clap": "Vous avez annulé votre signature pour la pétition {{activityTitle} }",
+	"east_north_osprey_hurl": "Vous avez déjà signé la pétition {{activityTitle} }"
 }

@@ -561,5 +561,11 @@
 	"low_petty_martin_dazzle": "Não é possível excluir apenas o administrador na organização. Entre em contato com o suporte se desejar excluir a conta inteira da organização.",
 	"ornate_real_swallow_honor": "Erro ao excluir registro de administrador. O registro não foi excluído.",
 	"helpful_aware_nuthatch_honor": "Nenhuma instância encontrada com esse número de telefone",
-	"antsy_sea_goose_trip": "Espanha"
+	"antsy_sea_goose_trip": "Espanha",
+	"solid_mellow_eel_chop": "Você foi registrado para o evento {{activityTitle} }, esperamos vê-lo lá!",
+	"cute_few_giraffe_blend": "Você cancelou sua inscrição para o evento {{activityTitle} }",
+	"jumpy_alive_puffin_vent": "Você já se registrou para o evento {{activityTitle} }",
+	"full_tangy_cow_pull": "Você assinou a petição {{activityTitle} }",
+	"dizzy_mellow_otter_clap": "Você cancelou sua assinatura para a petição {{activityTitle} }",
+	"east_north_osprey_hurl": "Você já assinou a petição {{activityTitle} }"
 }
