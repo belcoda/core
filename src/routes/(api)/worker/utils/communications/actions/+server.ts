@@ -5,6 +5,7 @@ import { _getByAction } from '$lib/server/api/communications/whatsapp/messages.j
 import type { WhatsappInboundMessage } from '$lib/schema/communications/whatsapp/webhooks/ycloud';
 import type { Read as Instance } from '$lib/schema/core/instance.js';
 import type { SignupQueueMessage } from '$lib/schema/events/events';
+import * as m from '$lib/paraglide/messages';
 
 export async function POST(event) {
 	try {
@@ -75,12 +76,7 @@ export async function POST(event) {
 		}
 		return json({ success: true });
 	} catch (err) {
-		return error(
-			500,
-			'WORKER:/utils/communications/actions:01',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'WORKER:/utils/communications/actions:01', m.spry_ago_baboon_cure(), err);
 	}
 }
 

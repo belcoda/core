@@ -10,6 +10,7 @@
 		'image/webp',
 		'image/svg+xml'
 	];
+	import * as m from '$lib/paraglide/messages';
 	import Button from '$lib/comps/ui/button/button.svelte';
 	const MAXIMUM_FILE_SIZE: number = 10485760; //~10mb
 	import { cn } from '$lib/utils';
@@ -106,7 +107,7 @@
 			value = uploadedUrl;
 			success = true;
 		} catch (err) {
-			error = err instanceof Error ? err.message : $page.data.t.errors.file_upload.upload_error();
+			error = err instanceof Error ? err.message : m.heavy_true_lark_amaze();
 			console.error(err);
 		} finally {
 			disabled = false;
@@ -169,7 +170,7 @@
 	{#if error}
 		<Alert.Root variant="destructive" class="mt-1">
 			<AlertTriangle class="h-4 w-4" />
-			<Alert.Title>{$page.data.t.errors.generic()}</Alert.Title>
+			<Alert.Title>{m.teary_dizzy_earthworm_urge()}</Alert.Title>
 			<Alert.Description>
 				{error}
 			</Alert.Description>

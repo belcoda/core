@@ -23,9 +23,10 @@
 		'text/x-comma-separated-values',
 		'text/tab-separated-values'
 	];
+	import * as m from '$lib/paraglide/messages';
 </script>
 
-<PageHeader title={$page.data.t.pages.config.settings.admins.new()} />
+<PageHeader title={m.early_royal_rook_hint()} />
 
 <form method="post" use:enhance class="grid grid-cols-1 gap-4 mt-6">
 	<Error error={$message} />
@@ -41,6 +42,6 @@
 		bucketName={PUBLIC_AWS_S3_USER_IMPORT_BUCKET_NAME}
 		siteUploadsUrl="/api/v1/people/imports/link"
 	/>
-	<Button type="submit" class="col-span-2">{$page.data.t.forms.buttons.submit()}</Button>
+	<Button type="submit" class="col-span-2">{m.just_away_horse_urge()}</Button>
 	<Debug data={$formData} />
 </form>

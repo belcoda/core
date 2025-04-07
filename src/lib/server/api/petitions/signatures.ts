@@ -1,5 +1,6 @@
 import { db, pool, redis, pino, BelcodaError, filterQuery } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
+import * as m from '$lib/paraglide/messages';
 import * as schema from '$lib/schema/petitions/signatures';
 import { exists } from '$lib/server/api/petitions/petitions';
 import {
@@ -105,7 +106,12 @@ export async function read({
 		})
 		.run(pool)
 		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:PETITIONS:SIGNATURES:READ:01', t.errors.not_found(), err);
+			throw new BelcodaError(
+				404,
+				'DATA:PETITIONS:SIGNATURES:READ:01',
+				m.pretty_tired_fly_lead(),
+				err
+			);
 		});
 	const parsedResult = parse(schema.read, result);
 	await redis.set(redisString(instanceId, petitionId, personId), parsedResult);

@@ -55,6 +55,8 @@ You should be able to see the login screen at `http://localhost:5173`. You can l
 
 Note that by default, Belcoda will use port 5173. This is hardcoded in some places, so if you are not able to use 5173 please be sure to check and make changes to `ngrok.config.cjs` and `Caddyfile` as required.
 
+To configure the git hooks using Husky, you need to run `npm run prepare`. We use git hooks to ensure code quality.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- RUNNING IN PRODUCTION --><a name="production"></a>

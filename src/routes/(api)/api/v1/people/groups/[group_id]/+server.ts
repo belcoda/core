@@ -1,6 +1,6 @@
 import { json, error } from '$lib/server';
 import * as api from '$lib/server/api/people/groups';
-
+import * as m from '$lib/paraglide/messages';
 export async function GET(event) {
 	try {
 		const bannedParamSet = event.url.searchParams.get('showBanned');
@@ -14,12 +14,7 @@ export async function GET(event) {
 		});
 		return json(list);
 	} catch (err) {
-		return error(
-			500,
-			'API:/people/groups/[group_id]:GET:01',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'API:/people/groups/[group_id]:GET:01', m.spry_ago_baboon_cure(), err);
 	}
 }
 
@@ -35,11 +30,6 @@ export async function PUT(event) {
 		});
 		return json(group, { status: 201 });
 	} catch (err) {
-		return error(
-			500,
-			'API:/people/groups/[group_id]:PUT:01',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'API:/people/groups/[group_id]:PUT:01', m.spry_ago_baboon_cure(), err);
 	}
 }

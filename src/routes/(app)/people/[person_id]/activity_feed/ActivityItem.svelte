@@ -11,12 +11,20 @@
 		person: ReadPerson;
 		children?: Snippet;
 		button?: Snippet;
+		class?: string;
 	};
-	const { interaction, activityMessage, displayUserAvatar, person, children, button }: Props =
-		$props();
+	const {
+		interaction,
+		activityMessage,
+		displayUserAvatar,
+		person,
+		children,
+		button,
+		class: className
+	}: Props = $props();
 </script>
 
-<div class="bg-white rounded-sm shadow-sm border pt-2 pb-3 px-4">
+<div class={`bg-white rounded-sm shadow-sm border pt-2 pb-3 px-4 ${className}`}>
 	<div class="flex items-center gap-4 justify-between">
 		<div class="flex items-center gap-4">
 			<div>

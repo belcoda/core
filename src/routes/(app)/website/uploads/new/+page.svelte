@@ -10,11 +10,12 @@
 	});
 	const { message, form: formData, enhance } = form;
 	import PageHeader from '$lib/comps/layout/PageHeader.svelte';
+	import * as m from '$lib/paraglide/messages';
 </script>
 
-<PageHeader title={data.t.pages.website.uploads.new()}>
+<PageHeader title={m.fine_odd_sparrow_approve()}>
 	{#snippet button()}
-		<HrefButton href="/website/uploads">{data.t.forms.buttons.back()}</HrefButton>
+		<HrefButton href="/website/uploads">{m.super_broad_gopher_hurl()}</HrefButton>
 	{/snippet}
 </PageHeader>
 <form method="post" use:enhance class="mt-6">

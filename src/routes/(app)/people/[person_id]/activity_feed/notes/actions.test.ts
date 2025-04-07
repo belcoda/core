@@ -1,8 +1,6 @@
 import { vi, describe, it, expect } from 'vitest';
 import { updateNotes } from './actions';
 import * as stringUtils from '$lib/utils/text/string';
-import { parse } from '$lib/schema/valibot';
-import { read } from '$lib/schema/people/interactions';
 
 const MOCK_UPDATED_NOTE = {
 	type: 'notes',
@@ -25,7 +23,8 @@ const MOCK_ADMIN = {
 	active: true,
 	has_signed_in: true,
 	created_at: new Date(),
-	updated_at: new Date()
+	updated_at: new Date(),
+	deleted_at: null
 };
 
 const MOCK_RETURNED_INTERACTION = {

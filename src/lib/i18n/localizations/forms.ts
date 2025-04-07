@@ -247,7 +247,7 @@ export default function (locale: SL) {
 					},
 					description: () => {
 						return t(locale, {
-							en: 'Please use only alphanumeric characters and dashes. No spaces or special characters.',
+							en: 'Please use only lowercase alphanumeric characters and underscores. No spaces or special characters.',
 							ja: '英数字とダッシュのみを使用してください。スペースや特殊文字は使用しないでください。',
 							pt: 'Por favor, use apenas caracteres alfanuméricos e traços. Sem espaços ou caracteres especiais.',
 							es: 'Por favor, use solo caracteres alfanuméricos y guiones. No use espacios ni caracteres especiales.',
@@ -1922,7 +1922,7 @@ export default function (locale: SL) {
 						},
 						description: () => {
 							return t(locale, {
-								en: 'Do you want to send an automatic email notification to the user if they cancel their registration?',
+								en: 'Do you want to send an automatic email notification to the user if they cancel their registration? This is separate to the cancellation notification sent if the event itself is cancelled.',
 								ja: 'ユーザーが登録をキャンセルした場合、自動的にメール通知を送信しますか？',
 								pt: 'Você deseja enviar uma notificação por e-mail automática para o usuário se ele cancelar o registro?',
 								es: '¿Desea enviar una notificación por correo electrónico automática al usuario si cancela su registro?',
@@ -2072,7 +2072,7 @@ export default function (locale: SL) {
 						},
 						description: () => {
 							return t(locale, {
-								en: 'A small icon that represents your organization. It will be displayed in the browser tab when users visit your website.',
+								en: 'A small icon or logo that represents your organization. It will be displayed in the browser tab when users visit your website. Should be square and at least 50x50 pixels',
 								ja: '組織を表す小さなアイコンです。ユーザーがウェブサイトを訪れると、ブラウザのタブに表示されます。',
 								pt: 'Um pequeno ícone que representa sua organização. Ele será exibido na guia do navegador quando os usuários visitarem seu site.',
 								es: 'Un pequeño icono que representa a su organización. Se mostrará en la pestaña del navegador cuando los usuarios visiten su sitio web.',
@@ -2823,6 +2823,18 @@ export default function (locale: SL) {
 					zh: '搜索'
 				});
 			},
+			delete: () => {
+				return t(locale, {
+					en: 'Delete',
+					ja: '削除',
+					pt: 'Excluir',
+					es: 'Eliminar',
+					fr: 'Supprimer',
+					sw: 'Futa',
+					th: 'ลบ',
+					zh: '删除'
+				});
+			},
 			filters: {
 				add_filter: () => {
 					return t(locale, {
@@ -3005,6 +3017,20 @@ export default function (locale: SL) {
 					sw: 'Imenakiliwa kwenye ubao',
 					th: 'คัดลอกไปยังคลิปบอร์ด',
 					zh: '已复制到剪贴板'
+				});
+			}
+		},
+		messages: {
+			confirm_delete: () => {
+				return t(locale, {
+					en: 'Are you sure you want to delete this item?',
+					ja: 'この項目を削除してもよろしいですか？',
+					pt: 'Tem certeza que deseja excluir este item?',
+					es: '¿Está seguro de que desea eliminar este elemento?',
+					fr: 'Êtes-vous sûr de vouloir supprimer cet élément?',
+					sw: 'Jewekani kwamba unataka kufuta kipengele hili?',
+					th: 'คุณแน่ใจหรือว่าคุณต้องการลบรายการนี้?',
+					zh: '您确定要删除此项吗？'
 				});
 			}
 		}

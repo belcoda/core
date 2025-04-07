@@ -1,5 +1,6 @@
 import { isBigger } from '$lib/utils/math/number';
 import { humanReadableFileSize } from '$lib/utils/text/file_size';
+import * as m from '$lib/paraglide/messages';
 export function getAndCheckFile({
 	fileInput,
 	t,
@@ -12,7 +13,7 @@ export function getAndCheckFile({
 	allowedTypes: string[];
 }): File {
 	const files = fileInput.files;
-	if (!files) throw new Error(t.errors.file_upload.no_file_selected());
+	if (!files) throw new Error(m.crazy_smug_gull_blink());
 	const file = files[files.length - 1];
 	checkFileSize(file, t, maxFileSize);
 	checkFileType(file, t, allowedTypes);
@@ -21,13 +22,15 @@ export function getAndCheckFile({
 
 export function checkFileSize(file: File, t: App.Localization, maxFileSize: number): void {
 	if (isBigger(file.size, maxFileSize)) {
-		throw new Error(t.errors.file_upload.too_large(humanReadableFileSize(maxFileSize)));
+		throw new Error(
+			m.home_late_crossbill_reside({ maxFileSize: humanReadableFileSize(maxFileSize) })
+		);
 	}
 }
 
 export function checkFileType(file: File, t: App.Localization, allowedTypes: string[]): void {
 	if (!allowedTypes.includes(file.type)) {
-		throw new Error(t.errors.file_upload.unsupported_type(allowedTypes.join(', ')));
+		throw new Error(m.mushy_bright_crossbill_pinch({ supportedTypes: allowedTypes.join(', ') }));
 	}
 }
 import { v4 as uuidv4 } from 'uuid';
@@ -51,13 +54,13 @@ export async function getSignedURL(
 	});
 	if (!push_file_request_response.ok) {
 		console.error(await push_file_request_response.json());
-		throw new Error(t.errors.file_upload.upload_error());
+		throw new Error(m.bad_silly_carp_tickle());
 	}
 	const push_file_request_body = await push_file_request_response.json();
 	const put_url = push_file_request_body.put_url;
 	if (!put_url) {
 		console.error(`No put_url in response: ${push_file_request_body}`);
-		throw new Error(t.errors.file_upload.upload_error());
+		throw new Error(m.bad_silly_carp_tickle());
 	}
 	return put_url;
 }
@@ -80,7 +83,7 @@ export async function uploadToS3({
 	if (!aws_response.ok) {
 		console.error('file upload failed');
 		console.error(await aws_response.text());
-		throw new Error(t.errors.file_upload.upload_error());
+		throw new Error(m.bad_silly_carp_tickle());
 	}
 
 	const awsPath = new URL(aws_response.url).pathname; // Get the path of the uploaded file on AWS that we will add to our bucket URL

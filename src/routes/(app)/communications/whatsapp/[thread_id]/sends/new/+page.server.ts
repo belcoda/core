@@ -2,6 +2,7 @@ import { valibot, superValidate, loadError, formAction, redirect } from '$lib/se
 import { read } from '$lib/schema/communications/whatsapp/threads';
 import { create } from '$lib/schema/communications/whatsapp/sends';
 import { parse } from '$lib/schema/valibot';
+import * as m from '$lib/paraglide/messages';
 export async function load(event) {
 	const form = await superValidate(valibot(create));
 
@@ -29,7 +30,7 @@ export const actions = {
 		if (output.error) return output.output;
 		return redirect(event, {
 			location: `/communications/whatsapp/${event.params.thread_id}/sends`,
-			message: event.locals.t.forms.actions.success()
+			message: m.weak_minor_cowfish_dine()
 		});
 	}
 };

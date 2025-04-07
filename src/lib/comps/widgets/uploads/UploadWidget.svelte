@@ -17,17 +17,15 @@
 	import { debounce } from '$lib/utils';
 	import Separator from '$lib/comps/ui/separator/separator.svelte';
 
+	import * as m from '$lib/paraglide/messages';
+
 	type Props = {
 		onselected?: (upload: Read | null) => void;
 		upload_id?: number | null;
 		label?: string;
 	};
 
-	let {
-		onselected,
-		upload_id = $bindable(),
-		label = $page.data.t.forms.fields.generic.file_select_or_upload.label()
-	}: Props = $props();
+	let { onselected, upload_id = $bindable(), label = m.white_mellow_dog_fear() }: Props = $props();
 
 	let filter: string | null = $state(null);
 	let list: List = $state({ items: [], count: 0 });
@@ -80,13 +78,13 @@
 					upload = uploaded;
 					upload_id = uploaded.id;
 					onselected && onselected(uploaded);
-					$flash = { type: 'success', message: $page.data.t.forms.actions.created() };
+					$flash = { type: 'success', message: m.flat_sleek_millipede_agree() };
 					await reload();
 				} catch (err) {
 					if (err instanceof Error) {
 						$flash = { type: 'error', message: err };
 					} else {
-						$flash = { type: 'error', message: $page.data.t.errors.generic() };
+						$flash = { type: 'error', message: m.teary_dizzy_earthworm_urge() };
 					}
 				}
 			}}
@@ -95,7 +93,7 @@
 		<Separator class="my-4" />
 
 		<Input
-			placeholder={$page.data.t.forms.fields.generic.filter.placeholder()}
+			placeholder={m.proud_kind_sloth_feel()}
 			bind:value={filter}
 			oninput={debounce(reload, 400)}
 		/>
@@ -113,7 +111,7 @@
 									upload = item;
 									upload_id = item.id;
 									onselected && onselected(item);
-								}}>{$page.data.t.forms.buttons.select()}</Button
+								}}>{m.stale_fresh_shad_hurl()}</Button
 							>
 						</div>
 					</RenderUpload>

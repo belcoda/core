@@ -17,6 +17,7 @@
 	import X from 'lucide-svelte/icons/x';
 	import { Grid } from '$lib/comps/ui/forms';
 	import FilterWidget from './FilterWidget.svelte';
+	import * as m from '$lib/paraglide/messages';
 </script>
 
 <div class="bg-background rounded-lg shadow my-6 border">
@@ -61,11 +62,11 @@
 	<div class="flex items-center justify-end gap-2 p-4">
 		<AndOrNot bind:logic={filter.logic} />
 		<!-- <Button onclick={() => filter.groups.push(structuredClone(DEFAULT_FILTER_GROUP))}
-			>{$page.data.t.forms.buttons.filters.add_group()}</Button
+			>{m.misty_fair_hyena_radiate()}</Button
 		> -->
 		<!-- TODO: There's a strange bug here with recursive state triggering multiple group creation -->
 		<Button onclick={() => filter.filters.push(structuredClone(defaultFullName))}
-			>{$page.data.t.forms.buttons.filters.add_filter()}</Button
+			>{m.slimy_ago_fly_tend()}</Button
 		>
 	</div>
 </div>

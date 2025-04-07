@@ -1,7 +1,6 @@
 export { db, pool, type s } from '$lib/server/utils/db/index';
 export { pino } from '$lib/server/utils/logs/pino';
 export * as redis from '$lib/server/utils/redis';
-export type { SL } from '$lib/i18n/index';
 export { json } from '@sveltejs/kit';
 export { filterQuery } from '$lib/server/utils/filters/filter';
 

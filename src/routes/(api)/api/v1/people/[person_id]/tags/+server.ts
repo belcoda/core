@@ -1,5 +1,6 @@
 import { json, error } from '$lib/server';
 import * as api from '$lib/server/api/people/taggings';
+import * as m from '$lib/paraglide/messages';
 export async function GET(event) {
 	try {
 		const listData = await api.list({
@@ -9,11 +10,6 @@ export async function GET(event) {
 		});
 		return json(listData);
 	} catch (err) {
-		return error(
-			500,
-			'API:/api/v1/people/[person_id]/lists:GET',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'API:/api/v1/people/[person_id]/lists:GET', m.spry_ago_baboon_cure(), err);
 	}
 }

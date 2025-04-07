@@ -1,6 +1,6 @@
 import { json, error } from '$lib/server/';
 import * as api from '$lib/server/api/website/content';
-
+import * as m from '$lib/paraglide/messages';
 export async function GET(event) {
 	try {
 		const read = await api.read({
@@ -14,7 +14,7 @@ export async function GET(event) {
 		return error(
 			500,
 			'API:/api/v1/website/content_types/[content_type_id]/content/[content_id]:GET01',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}
@@ -36,7 +36,7 @@ export async function PUT(event) {
 		return error(
 			500,
 			'API:/api/v1/website/content_types/[content_type_id]/content/[content_id]:PUT01',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

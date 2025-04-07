@@ -2,13 +2,13 @@ import { json, error, pino } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 import { yCloudWebhook } from '$lib/schema/communications/whatsapp/webhooks/ycloud';
 const log = pino(import.meta.url);
-
+import * as m from '$lib/paraglide/messages';
 import { create as createReceivedMessage } from '$lib/server/api/communications/whatsapp/received_messages';
 import { create as createInteraction } from '$lib/server/api/people/interactions';
 import { create as createInteractionSchema } from '$lib/schema/people/interactions';
 import { getPersonOrCreatePersonByWhatsappId } from '$lib/server/api/people/people';
 import { triggerAction } from '$lib/schema/communications/actions/actions';
-import { registerPersonForEvent } from '$lib/server/api/events/signups.js';
+import { registerPersonForEventFromWhatsApp } from '$lib/server/api/events/attendees';
 import { signPetition } from '$lib/server/api/petitions/signatures.js';
 
 export async function POST(event) {
@@ -114,7 +114,7 @@ export async function POST(event) {
 				const id = identifier[2]; // The numeric ID
 				switch (action) {
 					case 'SIGNUP':
-						registerPersonForEvent(
+						registerPersonForEventFromWhatsApp(
 							id,
 							message,
 							event.locals.admin.id,
@@ -132,11 +132,6 @@ export async function POST(event) {
 		}
 		return json({ success: true });
 	} catch (err) {
-		return error(
-			500,
-			'WORKER:/webhooks/whatsapp/+server.ts',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'WORKER:/webhooks/whatsapp/+server.ts', m.spry_ago_baboon_cure(), err);
 	}
 }

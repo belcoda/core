@@ -1,6 +1,6 @@
 import { json, error } from '$lib/server/';
 import * as api from '$lib/server/api/website/blocks';
-
+import * as m from '$lib/paraglide/messages';
 export async function GET(event) {
 	try {
 		const readTemplate = await api.read({
@@ -10,12 +10,7 @@ export async function GET(event) {
 		});
 		return json(readTemplate);
 	} catch (err) {
-		return error(
-			500,
-			'API:/api/v1/website/blocks/[block_id]:GET01',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'API:/api/v1/website/blocks/[block_id]:GET01', m.spry_ago_baboon_cure(), err);
 	}
 }
 
@@ -30,11 +25,6 @@ export async function PUT(event) {
 		});
 		return json(updatedTemplate);
 	} catch (err) {
-		return error(
-			500,
-			'API:/api/v1/website/blocks/[block_id]:PUT01',
-			event.locals.t.errors.http[500](),
-			err
-		);
+		return error(500, 'API:/api/v1/website/blocks/[block_id]:PUT01', m.spry_ago_baboon_cure(), err);
 	}
 }

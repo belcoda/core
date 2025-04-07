@@ -1,5 +1,6 @@
 import { error, json } from '$lib/server/';
 import * as api from '$lib/server/api/core/admins';
+import * as m from '$lib/paraglide/messages';
 
 export async function GET(event) {
 	try {
@@ -10,7 +11,7 @@ export async function GET(event) {
 		});
 		return json(read);
 	} catch (err) {
-		return error(500, 'API01:/ADMINS:GET:01', event.locals.t.errors.http[500](), err);
+		return error(500, 'API01:/ADMINS:GET:01', m.spry_ago_baboon_cure(), err);
 	}
 }
 
@@ -23,6 +24,6 @@ export async function POST(event) {
 		});
 		return json(updatedApiKey);
 	} catch (err) {
-		return error(500, 'API01:/ADMINS:POST:01', event.locals.t.errors.http[500](), err);
+		return error(500, 'API01:/ADMINS:POST:01', m.spry_ago_baboon_cure(), err);
 	}
 }

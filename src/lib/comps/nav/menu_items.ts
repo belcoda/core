@@ -48,222 +48,173 @@ import BookKey from 'lucide-svelte/icons/book-key';
 /* import { page as pageStore } from '$app/stores';
 import { get } from 'svelte/store'; */
 import type { Localization } from '$lib/i18n';
+import * as m from '$lib/paraglide/messages';
 /* const page = get(pageStore); */
 
 function menus(t: Localization): { [key: string]: MenuItem } {
 	return {
 		top: {
 			// don't actually need this title, href and icon -- this is just for the top level stuff
-			title: () => t.pages.people.index(),
+			title: () => m.wise_cool_ape_conquer(),
 			href: () => '/people',
 			icon: Users,
 			children: [
 				{
-					title: () => t.pages.people.index(),
+					title: () => m.wise_cool_ape_conquer(),
 					href: () => '/people',
 					icon: Users
 				},
 				{
-					title: () => t.pages.communications.index(),
+					title: () => m.slow_tidy_termite_bubble(),
 					href: () => '/communications',
 					icon: Send
 				},
 				{
-					title: () => t.pages.website.index(),
+					title: () => m.day_teal_otter_flow(),
 					href: () => '/website',
 					icon: Globe
 				},
 				{
-					title: () => t.pages.events.index(),
+					title: () => m.bald_extra_chipmunk_fulfill(),
 					href: () => '/events',
 					icon: CalendarSearch
 				},
 				{
-					title: () => t.pages.actions.petitions.index(),
+					title: () => m.sea_that_raven_trim(),
 					href: () => '/petitions',
 					icon: FilePen
 				}
 			]
 		},
 		people: {
-			title: () => t.pages.people.index(),
+			title: () => m.wise_cool_ape_conquer(),
 			href: () => '/people',
 			icon: Users,
 			children: [
 				{
-					title: () => t.pages.people.index(),
+					title: () => m.wise_cool_ape_conquer(),
 					href: () => '/people',
 					icon: Users
 				},
 				{
-					title: () => t.pages.people.filter(),
+					title: () => m.moving_lazy_jurgen_rise(),
 					href: () => '/people/filter',
 					icon: SlidersHorizontal
 				},
 				{
-					title: () => t.pages.people.groups.index(),
+					title: () => m.known_wise_ray_enrich(),
 					href: () => '/people/groups',
 					icon: Blend
 				},
 				{
-					title: () => t.pages.people.lists.index(),
+					title: () => m.each_fancy_hamster_hurl(),
 					href: () => '/people/lists',
 					icon: List
 				}
 			]
 		},
 		communications: {
-			title: () => t.pages.communications.index(),
+			title: () => m.slow_tidy_termite_bubble(),
 			href: () => '/communications',
 			icon: Send,
 			children: [
-				/* {
-					title: () => t.pages.communications.index(),
-					href: () => '/communications',
-					icon: Dashboard
-				}, */
 				{
-					title: () => t.pages.communications.whatsapp.index(),
+					title: () => m.green_equal_anaconda_read(),
 					href: () => '/communications/whatsapp',
 					icon: WhatsApp
 				},
 				{
-					title: () => t.pages.communications.email.index(),
+					title: () => m.level_arable_pigeon_arise(),
 					href: () => '/communications/email',
 					icon: Envelope
 				}
-				/* {
-					title: () => t.pages.communications.sms(),
-					href: () => '/communications/sms',
-					icon: MessageText
-				} */
 			]
 		},
 		website: {
-			title: () => t.pages.website.index(),
+			title: () => m.day_teal_otter_flow(),
 			href: () => '/website',
 			icon: Globe,
 			children: [
-				/* {
-					title: () => t.pages.website.dashboard(),
-					href: () => '/website',
-					icon: Dashboard
-				}, */
 				{
-					title: () => t.pages.website.pages.index(),
+					title: () => m.ideal_upper_wren_favor(),
 					href: () => '/website/pages',
 					icon: NotePadText
 				},
 				{
-					title: () => t.pages.website.posts.index(),
+					title: () => m.ornate_dirty_parrot_inspire(),
 					href: () => '/website/posts',
 					icon: StickyNote
 				},
 				{
-					title: () => t.pages.website.uploads.index(),
+					title: () => m.patchy_fancy_ocelot_stir(),
 					href: () => '/website/uploads',
 					icon: FileUp
 				}
 			]
 		},
 		events: {
-			title: () => t.pages.events.index(),
+			title: () => m.bald_extra_chipmunk_fulfill(),
 			href: () => '/events',
 			icon: CalendarSearch,
 			children: [
 				{
-					title: () => t.pages.events.index(),
+					title: () => m.bald_extra_chipmunk_fulfill(),
 					href: () => '/events',
 					icon: CalendarSearch
 				}
-				/* {
-					title: () => t.pages.events.my_events(),
-					href: () => '/events/my_events',
-					icon: CalendarClock
-				}, */
-				/* {
-					title: () => t.pages.events.events_map(),
-					href: () => '/events/upcoming',
-					icon: Map
-				}, */
-				/* {
-					title: () => t.pages.events.new_event(),
-					href: () => '/events/new',
-					icon: CalendarPlus
-				} */
 			]
 		},
 		actions: {
-			title: () => t.pages.actions.index(),
+			title: () => m.loud_watery_beetle_offer(),
 			href: () => '/actions',
 			icon: Dashboard,
 			children: [
-				/* {
-					title: () => t.pages.actions.dashboard(),
-					href: () => '/actions',
-					icon: Dashboard
-				}, */
 				{
-					title: () => t.pages.actions.petitions.index(),
+					title: () => m.sea_that_raven_trim(),
 					href: () => '/petitions',
 					icon: FilePen
 				}
-				/* {
-					title: () => t.pages.actions.surveys(),
-					href: () => '/surveys',
-					icon: MessageCircleQuestion
-				}, */
-				/* {
-					title: () => t.pages.actions.fundraising(),
-					href: () => '/fundraising',
-					icon: HandCoins
-				}, */
-				/* {
-					title: () => t.pages.actions.contact_campaigns(),
-					href: () => '/contact_campaigns',
-					icon: MailWarning
-				} */
 			]
 		},
 		settings: {
-			title: () => t.pages.config.settings.index(),
+			title: () => m.aqua_dirty_opossum_flip(),
 			href: () => '/settings',
 			icon: Cog,
 			children: [
 				{
-					title: () => t.pages.config.settings.index(),
+					title: () => m.aqua_dirty_opossum_flip(),
 					href: () => '/settings',
 					icon: Cog
 				},
 				{
-					title: () => t.pages.config.settings.admins.index(),
+					title: () => m.few_clean_hornet_fall(),
 					href: () => '/settings/admins',
 					icon: Users
 				},
 				{
-					title: () => t.pages.config.settings.communications.index(),
+					title: () => m.yummy_inclusive_pony_explore(),
 					href: () => '/settings/communications',
 					icon: Megaphone
 				},
 				{
-					title: () => t.pages.config.settings.website.index(),
+					title: () => m.long_great_dachshund_favor(),
 					href: () => '/settings/website',
 					icon: Globe
 				},
 				{
-					title: () => t.pages.config.settings.secrets.index(),
+					title: () => m.tough_slow_liger_walk(),
 					href: () => '/settings/secrets',
 					icon: BookKey
 				}
 			]
 		},
 		tasks: {
-			title: () => t.pages.tasks.index(),
+			title: () => m.jumpy_every_ray_fond(),
 			href: () => '/tasks',
 			icon: Dashboard,
 			children: [
 				{
-					title: () => t.pages.tasks.index(),
+					title: () => m.mean_caring_manatee_charm(),
 					href: () => '/tasks',
 					icon: Dashboard
 				}

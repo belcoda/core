@@ -3,6 +3,7 @@ import { generateHtmlMetatags } from '$lib/server/utils/openai/schemas/HTMLMeta'
 import { htmlMetatags } from '$lib/schema/utils/openai';
 import { parse, htmlMetatags as htmlMetaTagSchema } from '$lib/schema/valibot';
 import { read as readEvent, update as updateEvent } from '$lib/server/api/events/events';
+import * as m from '$lib/paraglide/messages';
 import {
 	read as readPetition,
 	update as updatePetition
@@ -100,7 +101,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'WORKER:/worker/utils/openai/generate_html_meta/+server.ts',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

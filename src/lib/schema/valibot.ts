@@ -124,6 +124,9 @@ export type TimestampNoDefault = v.InferOutput<typeof timestampNoDefault>;
 export const isoTimestamp = v.pipe(v.string(), v.isoTimestamp(m.bad_actual_mouse_bless()));
 export type ISOTimestamp = v.InferOutput<typeof isoTimestamp>;
 
+export const date = v.pipe(v.string(), v.isoDate()); //yyyy-mm-dd
+export type Date = v.InferOutput<typeof date>;
+
 export const language = v.picklist(
 	SUPPORTED_LANGUAGES,
 	m.super_tired_giraffe_clasp({ supportedLanguages: SUPPORTED_LANGUAGES.join(', ') })

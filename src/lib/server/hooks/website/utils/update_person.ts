@@ -54,6 +54,7 @@ export default async function ({
 		phone_number: signupInfo.phone_number,
 		whatsapp_id: signupInfo.phone_number,
 		country: country,
+		strict: false, //this is to allow international signups. Eventually this code needs to be refactored.
 		subscribed: signupInfo.opt_in
 	});
 

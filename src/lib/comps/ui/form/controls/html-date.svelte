@@ -15,7 +15,7 @@
 	// Everything above this can be copied
 
 	import DateInput from '$lib/comps/ui/custom/date/date.svelte';
-	export let value: Date;
+	export let value: string;
 	export let type: string = 'text';
 </script>
 

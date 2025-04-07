@@ -13,12 +13,12 @@
 			<Menubar.Trigger>{menu_items[key].title()}</Menubar.Trigger>
 			<Menubar.Content>
 				{#each menu_items[key].children as item}
-					<Menubar.Item>
-						<a href={item.href({ ...$page.params })} class="flex items-center gap-2">
+					<a href={item.href({ ...$page.params })}>
+						<Menubar.Item class="flex items-center gap-2 cursor-pointer">
 							<svelte:component this={item.icon} class="h-4" strokeWidth={2} />
 							{item.title()}
-						</a>
-					</Menubar.Item>
+						</Menubar.Item>
+					</a>
 				{/each}
 			</Menubar.Content>
 		</Menubar.Menu>

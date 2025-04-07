@@ -3,6 +3,7 @@ import { whatsappNumberForVerification } from '$lib/schema/people/channels/chann
 import { parse } from '$lib/schema/valibot';
 import { getContactMetadata } from '$lib/server/utils/whapi/contacts';
 import { read, update } from '$lib/server/api/people/people';
+import * as m from '$lib/paraglide/messages';
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
@@ -16,7 +17,7 @@ export async function POST(event) {
 			return error(
 				400,
 				'WORKER:/whatsapp/whapi/get_contact_metadata:02',
-				event.locals.t.errors.http[400](),
+				m.stock_minor_barbel_zip(),
 				'User does not have a whapi_id registered'
 			);
 		}
@@ -36,7 +37,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'WORKER:/whatsapp/whapi/get_contact_metadata:01',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

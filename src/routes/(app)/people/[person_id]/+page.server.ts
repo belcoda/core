@@ -15,9 +15,17 @@ export async function load(event) {
 		? parse(formattedPhoneNumber, parsed.phone_number)
 		: null;
 
-	const interactions = await event.fetch(
-		filter(`/api/v1/people/${event.params.person_id}/interactions?display=activity`, event.url)
+	const interactionsUrl = new URL(
+		`/api/v1/people/${event.params.person_id}/interactions`,
+		event.url
 	);
+	const page = event.url.searchParams.get('page');
+	if (page) {
+		interactionsUrl.searchParams.set('page', page);
+	}
+	interactionsUrl.searchParams.set('display', 'activity');
+
+	const interactions = await event.fetch(filter(interactionsUrl.toString(), event.url));
 	if (!result.ok) loadError(interactions);
 	const interactionsBody = await interactions.json();
 	const parsedInteractions = parse(listInteractions, interactionsBody);

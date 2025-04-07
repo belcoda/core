@@ -33,7 +33,8 @@ export const base = v.object({
 	has_signed_in: v.boolean(),
 	api_key: uuid,
 	created_at: timestamp,
-	updated_at: timestamp
+	updated_at: timestamp,
+	deleted_at: v.nullable(timestamp)
 });
 
 export type Base = v.InferOutput<typeof base>;
@@ -63,14 +64,15 @@ export const read = v.pick(base, [
 	'active',
 	'has_signed_in',
 	'created_at',
-	'updated_at'
+	'updated_at',
+	'deleted_at'
 ]);
 
 export type Read = v.InferOutput<typeof read>;
 
 export const list = v.object({
 	count: integer,
-	items: v.array(read)
+	items: v.array(v.omit(read, ['deleted_at']))
 });
 
 export type List = v.InferOutput<typeof list>;
@@ -89,3 +91,10 @@ export type GetAdminByApiKey = v.InferOutput<typeof getAdminByApiKey>;
 export const update = v.partial(v.pick(base, ['full_name', 'profile_picture_url', 'active']));
 
 export type Update = v.InferOutput<typeof update>;
+
+export const reassignAdminResources = v.object({
+	admin_id: id,
+	new_admin_id: v.optional(id)
+});
+
+export type ReassignAdminResources = v.InferOutput<typeof reassignAdminResources>;

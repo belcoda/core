@@ -57,7 +57,7 @@ export const actions = {
 		if (!response.ok) return loadError(response);
 		return redirect(event, {
 			location: `/events/${event.params.event_id}`,
-			message: event.locals.t.forms.actions.saved()
+			message: m.livid_that_worm_drip()
 		});
 	}
 };

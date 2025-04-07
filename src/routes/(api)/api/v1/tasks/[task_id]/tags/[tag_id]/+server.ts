@@ -1,6 +1,6 @@
 import { json, error } from '$lib/server';
 import * as api from '$lib/server/api/core/task_taggings';
-
+import * as m from '$lib/paraglide/messages';
 export async function POST(event) {
 	try {
 		const tagId = Number(event.params.tag_id);
@@ -17,7 +17,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'API:/api/v1/tasks/[task_id]/tags/[tag_id]:POST',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}
@@ -39,7 +39,7 @@ export async function DELETE(event) {
 		return error(
 			500,
 			'API:/api/v1/tasks/[task_id]/tags/[tag_id]:DELETE',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

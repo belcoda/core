@@ -2,6 +2,7 @@ import { json, error } from '$lib/server';
 import { generateEmailPreview } from '$lib/server/utils/openai/schemas/emailPreview';
 import { emailPreviewOptions } from '$lib/schema/utils/openai';
 import { parse } from '$lib/schema/valibot';
+import * as m from '$lib/paraglide/messages';
 import {
 	read as readMessage,
 	update as updateMessage
@@ -29,7 +30,7 @@ export async function POST(event) {
 		return error(
 			500,
 			'WORKER:/worker/utils/openai/generate_html_meta/+server.ts',
-			event.locals.t.errors.http[500](),
+			m.spry_ago_baboon_cure(),
 			err
 		);
 	}

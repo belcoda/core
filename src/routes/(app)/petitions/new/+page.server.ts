@@ -9,7 +9,7 @@ import {
 	BelcodaError,
 	returnMessage
 } from '$lib/server';
-
+import * as m from '$lib/paraglide/messages';
 import { create, read } from '$lib/schema/petitions/petitions';
 import { parse } from '$lib/schema/valibot';
 const log = pino(import.meta.url);
@@ -34,7 +34,7 @@ export const actions = {
 		const parsed = parse(read, output.output);
 		return redirect(event, {
 			location: `/petitions/${parsed.id}`,
-			message: event.locals.t.forms.actions.created()
+			message: m.flat_sleek_millipede_agree()
 		});
 	}
 };

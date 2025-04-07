@@ -1,4 +1,5 @@
 import type { Read as Petition } from '$lib/schema/petitions/petitions';
+import { admin as mockAdmin } from './admin.mock';
 
 const mockEmailMessage = {
 	id: 1,
@@ -35,17 +36,7 @@ export const mockPetition: Petition = {
 	feature_image_upload_id: null,
 	feature_image: null,
 	send_autoresponse_email: true,
-	point_person: {
-		id: 1,
-		email: 'admin@test.com',
-		full_name: 'Test Admin',
-		active: true,
-		created_at: new Date('2024-03-19T10:00:00Z'),
-		updated_at: new Date('2024-03-19T10:00:00Z'),
-		profile_picture_url: null,
-		permissions: ['all'],
-		has_signed_in: false
-	},
+	point_person: mockAdmin,
 	autoresponse_email: mockEmailMessage,
 	signatures: 0,
 	custom_code: {
@@ -74,7 +65,6 @@ export const mockPetition: Petition = {
 			card: null
 		}
 	},
-	template_id: 1,
 	active: true,
 	created_at: new Date('2024-03-19T10:00:00Z'),
 	updated_at: new Date('2024-03-19T10:00:00Z'),

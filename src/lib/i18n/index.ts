@@ -12,7 +12,8 @@ export const SUPPORTED_COUNTRIES = [
 	'lr',
 	'ng',
 	'tz',
-	'sc'
+	'sc',
+	'es'
 ] as const;
 export const DEFAULT_COUNTRY = 'us' as const;
 

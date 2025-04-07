@@ -1,6 +1,8 @@
 import { db, pool, redis, pino, filterQuery, BelcodaError } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 
+import * as m from '$lib/paraglide/messages';
+
 import * as schema from '$lib/schema/communications/whatsapp/sent_whatsapp_messages';
 import { exists as personExists } from '$lib/server/api/people/people';
 
@@ -51,7 +53,7 @@ export async function read({
 			throw new BelcodaError(
 				404,
 				'DATA:COMMUNICATIONS:WHATSAPP:SENT_MESSAGES:READ:01',
-				t.errors.not_found(),
+				m.pretty_tired_fly_lead(),
 				err
 			);
 		});
@@ -115,7 +117,7 @@ export async function update({
 		throw new BelcodaError(
 			404,
 			'DATA:COMMUNICATIONS:WHATSAPP:SENT_MESSAGES:UPDATE:01',
-			t.errors.not_found()
+			m.pretty_tired_fly_lead()
 		);
 	}
 	const parsedResult = parse(schema.read, result[0]);
