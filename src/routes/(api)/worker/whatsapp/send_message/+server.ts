@@ -88,18 +88,17 @@ export async function POST(event) {
 				m.teary_dizzy_earthworm_urge()
 			);
 		}
-
+		//using the ycloud api
+		const externalId = randomUUID();
 		const messageBody: MessageWithBase = {
 			to: parsedPhoneNumberTo.number.e164.replace('+', ''), //whatsapp only accepts without the +
 			from: PHONE_NUMBER_ID, //we don't need to do any parsing of the instance phone number. It should be set correctly in the settings.
-			biz_opaque_callback_data: parsedMessage.message_id,
+			biz_opaque_callback_data: externalId,
 			messaging_product: 'whatsapp',
 			recipient_type: 'individual',
 			...messageObj.message
 		};
 
-		//using the ycloud api
-		const externalId = randomUUID();
 		const response = await fetch(`https://api.ycloud.com/v2/whatsapp/messages`, {
 			method: 'POST',
 			headers: {
