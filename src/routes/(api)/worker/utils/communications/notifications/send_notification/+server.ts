@@ -1,9 +1,11 @@
-import { json, error } from '$lib/server';
+import { json, error, pino } from '$lib/server';
 import { eventNotification } from '$lib/schema/utils/notification.js';
 import { parse } from '$lib/schema/valibot';
 import { read as readEvent } from '$lib/server/api/events/events.js';
 import { read as readPetition } from '$lib/server/api/petitions/petitions.js';
 import { constructWhatsappNotification } from '$lib/server/api/communications/whatsapp/messages.js';
+
+const log = pino(import.meta.url);
 
 export async function POST(event) {
 	try {
@@ -11,6 +13,7 @@ export async function POST(event) {
 		const parsed = parse(eventNotification, body);
 		let activity;
 		let activityTitle = '';
+		log.debug(parsed, `Parsed notification`);
 		switch (parsed.event_type) {
 			case 'event':
 				activity = await readEvent({
@@ -18,7 +21,7 @@ export async function POST(event) {
 					eventId: parsed.activity_id,
 					t: event.locals.t
 				});
-				activityTitle = activity.name;
+				activityTitle = activity.heading;
 				break;
 			case 'petition':
 				activity = await readPetition({
@@ -26,19 +29,22 @@ export async function POST(event) {
 					petitionId: parsed.activity_id,
 					t: event.locals.t
 				});
-				activityTitle = activity.name;
+				activityTitle = activity.heading;
 				break;
 			// TODO: Other activity types
 			default:
 				throw new Error('Invalid event type');
 		}
 
+		log.debug(activityTitle, `Activity title`);
+
 		const message = constructWhatsappNotification({
 			eventType: parsed.event_type,
 			action: parsed.action,
-			activityTitle,
-			t: event.locals.t
+			activityTitle
 		});
+
+		log.debug(message, `Constructed message`);
 		// Send message
 		await event.locals.queue(
 			'/whatsapp/send_message',
