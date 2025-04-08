@@ -37,16 +37,51 @@ export async function create({
 	const parsed = parse(schema.create, body);
 
 	await exists({ instanceId, eventId, t });
-	const result = await db.insert('events.attendees', { event_id: eventId, ...parsed }).run(pool);
+	const notificationPayload = {
+		activity_id: eventId,
+		person_id: parsed.person_id,
+		event_type: 'event',
+		action: 'register'
+	};
+	const existingAttendee = await db
+		.selectOne('events.attendees', {
+			person_id: parsed.person_id,
+			event_id: eventId
+		})
+		.run(pool);
+	if (existingAttendee) {
+		log.debug(`Attendee already exists for event ${eventId} and person ${parsed.person_id}`);
+		notificationPayload.action = 'duplicate';
+	} else {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { response_channel, ...dbData } = parsed;
+		const result = await db.insert('events.attendees', { event_id: eventId, ...dbData }).run(pool);
+		notificationPayload.person_id = result.person_id;
+		notificationPayload.action = 'register';
+	}
 	await redis.del(redisString(instanceId, eventId, 'all'));
-	const readResult = await read({ instanceId, eventId, personId: result.person_id, t });
-	await redis.set(redisString(instanceId, eventId, result.person_id), readResult);
+	const readResult = await read({
+		instanceId,
+		eventId,
+		personId: notificationPayload.person_id,
+		t
+	});
+	await redis.set(redisString(instanceId, eventId, notificationPayload.person_id), readResult);
 
 	if (parsed.send_notifications) {
-		await queue('utils/email/events/send_registration_email', instanceId, {
-			event_id: eventId,
-			person_id: result.person_id
-		});
+		if (parsed.response_channel === 'whatsapp') {
+			await queue(
+				'utils/communications/notifications/send_notification',
+				instanceId,
+				notificationPayload
+			);
+		} else {
+			// Default to email
+			await queue('utils/email/events/send_registration_email', instanceId, {
+				event_id: eventId,
+				person_id: notificationPayload.person_id
+			});
+		}
 	}
 
 	return readResult;

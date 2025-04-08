@@ -23,6 +23,8 @@ export function renderLocalizedCountryName(countryCode: SupportedCountry): strin
 			return m.active_left_tern_sway();
 		case 'us':
 			return m.active_mean_donkey_chop();
+		case 'es':
+			return m.antsy_sea_goose_trip();
 		default:
 			return countryCode;
 	}
@@ -50,6 +52,8 @@ export function renderFlags(countryCode: SupportedCountry): string {
 			return '🇬🇧';
 		case 'us':
 			return '🇺🇸';
+		case 'es':
+			return '🇪🇸';
 		default:
 			return '🏳️';
 	}

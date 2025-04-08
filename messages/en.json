@@ -584,5 +584,13 @@
 	"moving_acidic_crow_imagine": "Are you sure you want to delete this record. This action cannot be undone?",
 	"fuzzy_chunky_bobcat_glow": "Delete thread",
 	"sweet_loose_chicken_trip": "This action cannot be undone",
-	"tangy_wild_manatee_walk": "Are you sure you want to delete this thread"
+	"tangy_wild_manatee_walk": "Are you sure you want to delete this thread",
+	"helpful_aware_nuthatch_honor": "No instance found with that phone number id",
+	"antsy_sea_goose_trip": "Spain",
+	"solid_mellow_eel_chop": "You have been registered for the event {activityTitle}, we hope to see you there!",
+	"cute_few_giraffe_blend": "You have cancelled your registration for the event {activityTitle}",
+	"jumpy_alive_puffin_vent": "You have already registered for the event {activityTitle}",
+	"full_tangy_cow_pull": "You have signed the petition {activityTitle}",
+	"dizzy_mellow_otter_clap": "You have cancelled your signature for the petition {activityTitle}",
+	"east_north_osprey_hurl": "You have already signed the petition {activityTitle}"
 }

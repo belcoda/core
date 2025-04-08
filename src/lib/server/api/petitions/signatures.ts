@@ -31,18 +31,53 @@ export async function create({
 	const parsed = parse(schema.create, body);
 
 	await exists({ instanceId, petitionId, t });
-	const result = await db
-		.insert('petitions.signatures', { petition_id: petitionId, ...parsed })
+	const notificationPayload = {
+		activity_id: petitionId,
+		person_id: parsed.person_id,
+		event_type: 'petition',
+		action: 'sign'
+	};
+	const existingAttendee = await db
+		.selectOne('petitions.signatures', {
+			person_id: parsed.person_id,
+			petition_id: petitionId
+		})
 		.run(pool);
+	if (existingAttendee) {
+		log.debug(`Signature already exists for petition ${petitionId} and person ${parsed.person_id}`);
+		notificationPayload.action = 'duplicate';
+	} else {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { response_channel, ...dbData } = parsed;
+		const result = await db
+			.insert('petitions.signatures', { petition_id: petitionId, ...dbData })
+			.run(pool);
+		notificationPayload.person_id = result.person_id;
+		notificationPayload.action = 'sign';
+	}
 	await redis.del(redisString(instanceId, petitionId, 'all'));
-	const readResult = await read({ instanceId, petitionId, personId: result.person_id, t });
-	await redis.set(redisString(instanceId, petitionId, result.person_id), readResult);
+	const readResult = await read({
+		instanceId,
+		petitionId,
+		personId: notificationPayload.person_id,
+		t
+	});
+	await redis.set(redisString(instanceId, petitionId, notificationPayload.person_id), readResult);
 
 	if (parsed.send_autoresponse) {
-		await queue('utils/email/send_petition_autoresponse', instanceId, {
-			petition_id: petitionId,
-			person_id: result.person_id
-		});
+		if (parsed.response_channel === 'whatsapp') {
+			await queue(
+				'utils/communications/notifications/send_notification',
+				instanceId,
+				notificationPayload
+			);
+		} else {
+			// Default to email
+			await queue('utils/email/petitions/send_autoresponse', instanceId, {
+				petition_id: petitionId,
+				person_id: notificationPayload.person_id
+			});
+		}
 	}
 
 	return readResult;

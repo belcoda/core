@@ -566,5 +566,13 @@
 	"moving_acidic_crow_imagine": "คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้ การดำเนินการนี้ไม่สามารถย้อนกลับได้?",
 	"fuzzy_chunky_bobcat_glow": "ลบกระทู้",
 	"sweet_loose_chicken_trip": "การดำเนินการนี้ไม่สามารถย้อนกลับได้",
-	"tangy_wild_manatee_walk": "คุณแน่ใจหรือไม่ว่าต้องการลบกระทู้นี้"
+	"tangy_wild_manatee_walk": "คุณแน่ใจหรือไม่ว่าต้องการลบกระทู้นี้",
+	"helpful_aware_nuthatch_honor": "ไม่พบอินสแตนซ์ที่มีรหัสหมายเลขโทรศัพท์นั้น",
+	"antsy_sea_goose_trip": "สเปน",
+	"solid_mellow_eel_chop": "คุณได้ลงทะเบียนเข้าร่วมกิจกรรม {activityTitle} แล้ว หวังว่าจะได้พบคุณที่นั่น!",
+	"cute_few_giraffe_blend": "คุณได้ยกเลิกการลงทะเบียนสำหรับกิจกรรม {activityTitle}",
+	"jumpy_alive_puffin_vent": "คุณได้ลงทะเบียนเข้าร่วมกิจกรรมแล้ว {activityTitle}",
+	"full_tangy_cow_pull": "คุณได้ลงนามในคำร้อง {activityTitle}",
+	"dizzy_mellow_otter_clap": "คุณได้ยกเลิกการลงนามในคำร้อง {activityTitle}",
+	"east_north_osprey_hurl": "คุณได้ลงนามในคำร้องแล้ว {activityTitle}"
 }

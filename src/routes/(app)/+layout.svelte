@@ -12,11 +12,12 @@
 	} from '$lib/comps/nav/breadcrumbs/breadcrumbs';
 	import { getLocale } from '$lib/paraglide/runtime';
 	import { PUBLIC_UMAMI_WEBSITE_ID } from '$env/static/public';
+	import { PUBLIC_SENTRY_DSN } from '$env/static/public';
 	import * as Sentry from '@sentry/sveltekit';
-	import { browser } from '$app/environment';
-	if (browser) {
+	import { browser, dev } from '$app/environment';
+	if (browser && !dev) {
 		Sentry.init({
-			dsn: 'https://8b4cdb05d7907fe3f9b43aec4a060811@o4508220361342976.ingest.de.sentry.io/4508220380282960',
+			dsn: PUBLIC_SENTRY_DSN,
 			integrations: [
 				Sentry.feedbackIntegration({
 					// Additional SDK configuration goes in here, for example:
