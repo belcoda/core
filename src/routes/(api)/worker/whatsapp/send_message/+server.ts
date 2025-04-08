@@ -40,8 +40,7 @@ export async function POST(event) {
 
 				messageObj = await readMessage({
 					instanceId: event.locals.instance.id,
-					messageId: messageId,
-					t: event.locals.t
+					messageId: messageId
 				});
 			} catch (err) {
 				throw new BelcodaError(
@@ -59,12 +58,12 @@ export async function POST(event) {
 		const PHONE_NUMBER_ID = event.locals.instance.settings.communications.whatsapp.phone_number_id;
 		const person = await read({
 			instance_id: event.locals.instance.id,
-			person_id: parsedMessage.person_id,
+			person_id: personId,
 			t: event.locals.t
 		});
-		const message = await readMessage({
+		await readMessage({
 			instanceId: event.locals.instance.id,
-			messageId: parsedMessage.message_id
+			messageId: messageId
 		});
 
 		if (!person.phone_number?.phone_number) {
