@@ -47,12 +47,21 @@ export const base = v.object({
 
 	point_person_id: id,
 	created_at: timestamp,
-	updated_at: timestamp
+	updated_at: timestamp,
+	deleted_at: v.nullable(timestamp)
 });
 
 export const create = v.object({
 	...v.partial(
-		v.omit(base, ['id', 'full_name', 'created_at', 'updated_at', 'instance_id', 'unique_id'])
+		v.omit(base, [
+			'id',
+			'full_name',
+			'created_at',
+			'updated_at',
+			'instance_id',
+			'unique_id',
+			'deleted_at'
+		])
 	).entries,
 	full_name: base.entries.full_name,
 	country: v.optional(base.entries.country, DEFAULT_COUNTRY) //full_name is required

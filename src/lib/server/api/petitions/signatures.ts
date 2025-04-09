@@ -215,7 +215,6 @@ export async function signPetition(
 		instance.id,
 		message.from,
 		message,
-		t,
 		queue
 	);
 

@@ -11,7 +11,10 @@ import { id, parse } from '$lib/schema/valibot';
 const log = pino(import.meta.url);
 
 export function generateSqlFromFilterArray(instanceId: number, filter: FilterType): string {
-	let sql = format(`SELECT id FROM people.people WHERE instance_id = %L AND id IN `, instanceId);
+	let sql = format(
+		`SELECT id FROM people.people WHERE deleted_at IS NULL AND instance_id = %L AND id IN `,
+		instanceId
+	);
 
 	switch (filter.type) {
 		case 'address':
@@ -60,7 +63,10 @@ export function generateSqlFromFilterArray(instanceId: number, filter: FilterTyp
 }
 
 export function generateSqlFromFilterGroup(instanceId: number, input: FilterGroup): string {
-	let sql = format(`SELECT id FROM people.people WHERE instance_id = %L AND `, instanceId);
+	let sql = format(
+		`SELECT id FROM people.people WHERE deleted_at IS NULL AND instance_id = %L AND `,
+		instanceId
+	);
 	sql += `id ${input.logic === 'NOT' ? 'NOT IN' : 'IN'} `;
 	input.groups.forEach((group, i) => {
 		if (i !== 0) {
@@ -106,7 +112,7 @@ export async function outputFilterResults(
 	const selected = await db
 		.select(
 			'people.people',
-			{ instance_id: instanceId, id: idConditional },
+			{ instance_id: instanceId, id: idConditional, deleted_at: db.conditions.isNull },
 			{
 				...options,
 				lateral: {
@@ -140,7 +146,8 @@ export async function outputFilterResults(
 	const count = await db
 		.count('people.people', {
 			id: idConditional,
-			instance_id: instanceId
+			instance_id: instanceId,
+			deleted_at: db.conditions.isNull
 		})
 		.run(pool);
 	const parsedOutput = parse(listPeople, { items: selected, count: count });

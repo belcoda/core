@@ -15,8 +15,7 @@ export async function POST(event) {
 		const parsed = parse(sendEmailSchema, body); //because we want to allow custom fields to be passed through to the function
 		const person = await read({
 			instance_id: event.locals.instance.id,
-			person_id: parsed.person_id,
-			t: event.locals.t
+			person_id: parsed.person_id
 		});
 		if (!person.email || !person.email.email)
 			throw new BelcodaError(

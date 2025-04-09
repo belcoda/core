@@ -58,8 +58,7 @@ export async function POST(event) {
 		const PHONE_NUMBER_ID = event.locals.instance.settings.communications.whatsapp.phone_number_id;
 		const person = await read({
 			instance_id: event.locals.instance.id,
-			person_id: personId,
-			t: event.locals.t
+			person_id: personId
 		});
 		await readMessage({
 			instanceId: event.locals.instance.id,

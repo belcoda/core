@@ -76,7 +76,7 @@ export async function create({
 	t: App.Localization;
 }): Promise<Read> {
 	const parsed = parse(createSchema, body);
-	await personExists({ instanceId, personId: parsed.person_id, t });
+	await personExists({ instanceId, personId: parsed.person_id });
 	await adminExists({ instanceId, adminId: parsed.admin_id, t });
 	const result = await db
 		.insert('people.interactions', { instance_id: instanceId, ...parsed })

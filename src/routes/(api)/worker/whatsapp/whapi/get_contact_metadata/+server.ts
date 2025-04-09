@@ -10,8 +10,7 @@ export async function POST(event) {
 		const parsed = parse(whatsappNumberForVerification, body);
 		const person = await read({
 			instance_id: event.locals.instance.id,
-			person_id: parsed.person_id,
-			t: event.locals.t
+			person_id: parsed.person_id
 		});
 		if (!person.phone_number?.whapi_id) {
 			return error(
@@ -26,7 +25,6 @@ export async function POST(event) {
 			instance_id: event.locals.instance.id,
 			person_id: parsed.person_id,
 			body: { whatsapp: contactMetadata },
-			t: event.locals.t,
 			queue: event.locals.queue,
 			admin_id: event.locals.admin.id,
 			options: { skipWhatsappCheck: true } //IMPORTANT: Otherwise we will get in an infinite loop of checking whatsapp
