@@ -39,7 +39,7 @@ export async function POST(event) {
 			wamid: parsed.whatsapp_response.wamid || 'NO_WAMID_PROVIDED'
 		};
 
-		//TODO: Handle situations where message.message_status is not 'accepted', but rather sent for quality evaulation. The sent message should make that v.clear
+		//TODO: Handle situations where message.message_status is not 'accepted', but rather sent for quality evaulation. The sent message should make that very clear
 		const sentMessageResponse = await createSentMessage({
 			instanceId: event.locals.instance.id,
 			body: sentMessageBody,

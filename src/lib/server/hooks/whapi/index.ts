@@ -1,5 +1,5 @@
-import type { MaybePromise, RequestEvent, ResolveOptions } from '@sveltejs/kit';
-type Resolve = (event: RequestEvent, opts?: ResolveOptions | undefined) => MaybePromise<Response>;
+import type { RequestEvent, ResolveOptions } from '@sveltejs/kit';
+type Resolve = (event: RequestEvent, opts?: ResolveOptions | undefined) => Promise<Response>;
 import type { HandlerResponse } from '$lib/server/hooks/handlers';
 import { incomingWebhook } from '$lib/schema/communications/whatsapp/whapi/incoming';
 import { parse } from '$lib/schema/valibot';

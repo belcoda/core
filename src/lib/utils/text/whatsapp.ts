@@ -7,7 +7,7 @@ export function renderRegistrationLink(
 	instance: Instance,
 	event: Event | Petition
 ): { text: string; url: string } {
-	const whatsappPhoneNumberId = instance.settings.communications.whatsapp.phone_number_id?.replace(
+	const whatsappPhoneNumberId = instance.settings.communications.whatsapp.phone_number?.replace(
 		'+',
 		''
 	);

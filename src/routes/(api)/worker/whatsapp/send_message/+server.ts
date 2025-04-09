@@ -55,7 +55,7 @@ export async function POST(event) {
 		const { WHATSAPP_ACCESS_KEY } = await _readSecretsUnsafe({
 			instanceId: event.locals.instance.id
 		});
-		const PHONE_NUMBER_ID = event.locals.instance.settings.communications.whatsapp.phone_number_id;
+		const PHONE_NUMBER = event.locals.instance.settings.communications.whatsapp.phone_number;
 		const person = await read({
 			instance_id: event.locals.instance.id,
 			person_id: personId,
@@ -84,23 +84,25 @@ export async function POST(event) {
 			);
 		}
 
-		if (!PHONE_NUMBER_ID) {
+		if (!PHONE_NUMBER) {
 			throw new BelcodaError(
 				400,
 				'DATA:/whatsapp/send_message/+server.ts:03',
 				m.teary_dizzy_earthworm_urge()
 			);
 		}
-		//using the ycloud api
-		const externalId = randomUUID();
+		const sentMessageId = randomUUID();
+
 		const messageBody: MessageWithBase = {
 			to: parsedPhoneNumberTo.number.e164.replace('+', ''), //whatsapp only accepts without the +
-			from: PHONE_NUMBER_ID, //we don't need to do any parsing of the instance phone number. It should be set correctly in the settings.
-			biz_opaque_callback_data: externalId,
+			from: PHONE_NUMBER, //we don't need to do any parsing of the instance phone number. It should be set correctly in the settings.
+			externalId: sentMessageId,
 			messaging_product: 'whatsapp',
 			recipient_type: 'individual',
 			...messageObj.message
 		};
+
+		//using the ycloud api
 
 		const response = await fetch(`https://api.ycloud.com/v2/whatsapp/messages`, {
 			method: 'POST',
@@ -110,7 +112,6 @@ export async function POST(event) {
 				'X-API-Key': WHATSAPP_ACCESS_KEY
 			},
 			body: JSON.stringify({
-				externalId,
 				...messageBody
 			})
 		});
@@ -122,11 +123,11 @@ export async function POST(event) {
 			const parsed = parse(successfulYCloudResponse, responseBody);
 
 			const afterSendBody: AfterSend = {
-				message_id: messageId,
-				sent_by_id: fromAdminId,
-				person_id: personId,
-				message: messageObj.message,
-				uniqueId: externalId,
+				message_id: parsedMessage.message_id,
+				sent_by_id: parsedMessage.from_admin_id,
+				person_id: parsedMessage.person_id,
+				message: message.message,
+				uniqueId: sentMessageId,
 				whatsapp_response: parsed
 			};
 			await event.locals.queue(

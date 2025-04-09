@@ -5507,7 +5507,7 @@ declare module 'zapatos/schema' {
         */
         whatsapp?: c.PgWhatsapp | db.Parameter<c.PgWhatsapp> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, c.PgWhatsapp | db.Parameter<c.PgWhatsapp> | null | db.DefaultType | db.SQLFragment>;
       }
-      export type UniqueIndex = 'people_pkey';
+      export type UniqueIndex = 'people_pkey' | 'unique_instance_email' | 'unique_instance_phone';
       export type Column = keyof Selectable;
       export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
       export type SQLExpression = Table | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Whereable | Column | db.ParentColumn | db.GenericSQLExpression;

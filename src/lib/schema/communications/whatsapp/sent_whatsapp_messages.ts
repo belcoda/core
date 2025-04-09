@@ -38,6 +38,6 @@ export const create = v.object({
 export type Create = v.InferInput<typeof create>;
 
 export const update = v.partial(
-	v.pick(create, ['delivered', 'read', 'reacted', 'stale', 'reacted_emoji'])
+	v.pick(create, ['delivered', 'read', 'reacted', 'stale', 'reacted_emoji', 'wamid'])
 );
 export type Update = v.InferOutput<typeof update>;

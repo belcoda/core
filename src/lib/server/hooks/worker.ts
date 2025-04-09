@@ -1,4 +1,4 @@
-import type { MaybePromise, RequestEvent, ResolveOptions } from '@sveltejs/kit';
+import type { RequestEvent, ResolveOptions } from '@sveltejs/kit';
 import { pino } from '$lib/server';
 const log = pino(import.meta.url);
 import { buildAdminInstance } from '$lib/server/hooks/build_locals';
@@ -25,7 +25,7 @@ export type HandlerResponse =
 			response: Response;
 	  };
 
-type Resolve = (event: RequestEvent, opts?: ResolveOptions | undefined) => MaybePromise<Response>;
+type Resolve = (event: RequestEvent, opts?: ResolveOptions | undefined) => Promise<Response>;
 
 export default async function (event: RequestEvent, resolve: Resolve): Promise<HandlerResponse> {
 	if (event.url.pathname.startsWith('/worker')) {

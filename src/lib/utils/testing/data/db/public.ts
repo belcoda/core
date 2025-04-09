@@ -43,7 +43,7 @@ export const instances = {
 				default_from_name: 'Test Instance <belcoda-test@localhost:5173>',
 				default_template_id: 1
 			},
-			whatsapp: { phone_number_id: null, business_account_id: null, default_template_id: 1 }
+			whatsapp: { phone_number: null, business_account_id: null, default_template_id: 1 }
 		},
 		default_admin_id: 1
 	},
