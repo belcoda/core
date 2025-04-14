@@ -9,7 +9,6 @@ export async function GET(event) {
 			instanceId: event.locals.instance.id,
 			groupId: Number(event.params.group_id),
 			url: event.url,
-			t: event.locals.t,
 			banned
 		});
 		return json(list);
@@ -25,7 +24,6 @@ export async function PUT(event) {
 			instanceId: event.locals.instance.id,
 			groupId: Number(event.params.group_id),
 			body: body,
-			t: event.locals.t,
 			url: event.url
 		});
 		return json(group, { status: 201 });

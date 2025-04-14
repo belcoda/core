@@ -34,8 +34,7 @@ export async function POST(event) {
 		//get group by chat ID...
 		const group = await _getGroupByWhatsappId({
 			instanceId: event.locals.instance.id,
-			whatsappId: message.chat_id,
-			t: event.locals.t
+			whatsappId: message.chat_id
 		});
 		log.debug(group.id);
 		//get person by phone number or whatsapp ID...
