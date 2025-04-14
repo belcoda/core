@@ -574,5 +574,6 @@
 	"jumpy_alive_puffin_vent": "Ya te has registrado para el evento {activityTitle}",
 	"full_tangy_cow_pull": "Has firmado la petición {activityTitle}",
 	"dizzy_mellow_otter_clap": "Has cancelado tu firma para la petición {activityTitle}",
-	"east_north_osprey_hurl": "Ya has firmado la petición {activityTitle}"
+	"east_north_osprey_hurl": "Ya has firmado la petición {activityTitle}",
+	"keen_agent_shell_mop": "No se pudo eliminar el registro"
 }
