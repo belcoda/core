@@ -1,8 +1,15 @@
 <script lang="ts">
-	export let data;
+	const { data } = $props();
 	import { update } from '$lib/schema/communications/email/messages';
 	import * as m from '$lib/paraglide/messages';
-	import { Debug, Button, superForm, Grid, valibotClient, Error } from '$lib/comps/ui/forms';
+	import {
+		Debug,
+		Button,
+		superForm,
+		Grid,
+		valibotClient,
+		Error as FormError
+	} from '$lib/comps/ui/forms';
 	import PageHeader from '$lib/comps/layout/PageHeader.svelte';
 	import EditMessageForm from '$lib/comps/forms/EditEmailMessageForm.svelte';
 	const form = superForm(data.form, {
@@ -15,12 +22,46 @@
 	import Badge from '$lib/comps/ui/badge/badge.svelte';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 
-	import { invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { browser } from '$app/environment';
+
+	import { getFlash } from 'sveltekit-flash-message';
+	import { page } from '$app/state';
+	const flash = getFlash(page);
+
+	let loading: boolean = $state(false);
+
 	if (data.send.started_at && !data.send.completed_at && browser) {
 		setTimeout(() => {
 			invalidateAll();
 		}, 10000);
+	}
+
+	async function deleteMessage() {
+		if (!window.confirm(m.moving_acidic_crow_imagine())) {
+			return;
+		}
+
+		try {
+			loading = true;
+			const response = await fetch(`/api/v1/communications/email/messages/${data.message.id}`, {
+				method: 'DELETE'
+			});
+			if (!response.ok) {
+				throw new Error(m.keen_agent_shell_mop());
+			}
+			loading = false;
+			$flash = { type: 'success', message: m.dizzy_actual_elephant_evoke() };
+			goto(`/communications/email`);
+		} catch (error) {
+			if (error instanceof Error) {
+				$flash = { type: 'error', message: error.message };
+			} else {
+				$flash = { type: 'error', message: 'An error occurred' };
+			}
+		} finally {
+			loading = false;
+		}
 	}
 </script>
 
@@ -64,7 +105,7 @@
 
 <form use:enhance method="post" action="?message_id={data.message.id}">
 	<Grid cols={1} class="mt-6">
-		<Error error={$message} />
+		<FormError error={$message} />
 		<EditMessageForm
 			{form}
 			{disabled}
@@ -80,7 +121,19 @@
 			html="html"
 			text="text"
 		/>
-		<Button {disabled} type="submit">{m.empty_warm_squirrel_chop()}</Button>
+		<div class="flex gap-2 justify-end">
+			<Button {disabled} type="submit">{m.empty_warm_squirrel_chop()}</Button>
+			<Button
+				type="button"
+				variant="destructive"
+				onclick={() => {
+					deleteMessage();
+				}}
+			>
+				{m.wide_major_pig_swim()}
+			</Button>
+		</div>
+
 		<Debug data={formData} />
 	</Grid>
 </form>
