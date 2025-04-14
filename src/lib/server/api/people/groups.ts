@@ -11,18 +11,10 @@ function redisString(instanceId: number, groupId: number | 'all', banned?: boole
 	return `i:${instanceId}:groups:${groupId}${bannedSuffix}`;
 }
 
-export async function exists({
-	instanceId,
-	groupId,
-	t
-}: {
-	instanceId: number;
-	groupId: number;
-	t: App.Localization;
-}) {
+export async function exists({ instanceId, groupId }: { instanceId: number; groupId: number }) {
 	const cached = await redis.get(redisString(instanceId, groupId));
 	if (cached) return true;
-	const exists = await db
+	await db
 		.selectExactlyOne('people.groups', { instance_id: instanceId, id: groupId })
 		.run(pool)
 		.catch((err) => {
@@ -322,4 +314,19 @@ export async function _getInstanceIdByWhatsappGroupChatId({
 			);
 		});
 	return group.instance_id;
+}
+
+export async function del({
+	instanceId,
+	groupId
+}: {
+	instanceId: number;
+	groupId: number;
+}): Promise<void> {
+	if (!(await exists({ instanceId, groupId }))) {
+		throw new BelcodaError(404, 'DATA:PEOPLE:GROUPS:DELETE:01', m.pretty_tired_fly_lead());
+	}
+	await db
+		.update('people.groups', { deleted_at: new Date() }, { instance_id: instanceId, id: groupId })
+		.run(pool);
 }

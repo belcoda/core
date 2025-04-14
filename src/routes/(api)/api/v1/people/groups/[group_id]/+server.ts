@@ -33,3 +33,15 @@ export async function PUT(event) {
 		return error(500, 'API:/people/groups/[group_id]:PUT:01', m.spry_ago_baboon_cure(), err);
 	}
 }
+
+export async function DELETE(event) {
+	try {
+		const group = await api.del({
+			instanceId: event.locals.instance.id,
+			groupId: Number(event.params.group_id)
+		});
+		return json(group, { status: 200 });
+	} catch (err) {
+		return error(500, 'API:/people/groups/[group_id]:DELETE:01', m.spry_ago_baboon_cure(), err);
+	}
+}
