@@ -573,5 +573,6 @@
 	"jumpy_alive_puffin_vent": "Vous êtes déjà inscrit à l'événement {activityTitle}",
 	"full_tangy_cow_pull": "Vous avez signé la pétition {activityTitle}",
 	"dizzy_mellow_otter_clap": "Vous avez annulé votre signature pour la pétition {activityTitle}",
-	"east_north_osprey_hurl": "Vous avez déjà signé la pétition {activityTitle}"
+	"east_north_osprey_hurl": "Vous avez déjà signé la pétition {activityTitle}",
+	"keen_agent_shell_mop": "Échec de la suppression de l'enregistrement"
 }

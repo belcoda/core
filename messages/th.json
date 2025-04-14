@@ -574,5 +574,6 @@
 	"jumpy_alive_puffin_vent": "คุณได้ลงทะเบียนเข้าร่วมกิจกรรมแล้ว {activityTitle}",
 	"full_tangy_cow_pull": "คุณได้ลงนามในคำร้อง {activityTitle}",
 	"dizzy_mellow_otter_clap": "คุณได้ยกเลิกการลงนามในคำร้อง {activityTitle}",
-	"east_north_osprey_hurl": "คุณได้ลงนามในคำร้องแล้ว {activityTitle}"
+	"east_north_osprey_hurl": "คุณได้ลงนามในคำร้องแล้ว {activityTitle}",
+	"keen_agent_shell_mop": "ไม่สามารถลบข้อมูลได้"
 }
