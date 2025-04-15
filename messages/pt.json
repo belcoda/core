@@ -575,5 +575,6 @@
 	"full_tangy_cow_pull": "Você assinou a petição {activityTitle}",
 	"dizzy_mellow_otter_clap": "Você cancelou sua assinatura para a petição {activityTitle}",
 	"east_north_osprey_hurl": "Você já assinou a petição {activityTitle}",
-	"keen_agent_shell_mop": "Falha ao excluir o registro"
+	"keen_agent_shell_mop": "Falha ao excluir o registro",
+	"dizzy_actual_elephant_evoke": "Registro excluído com sucesso"
 }
