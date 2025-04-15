@@ -15,7 +15,11 @@ export async function exists({ instanceId, groupId }: { instanceId: number; grou
 	const cached = await redis.get(redisString(instanceId, groupId));
 	if (cached) return true;
 	await db
-		.selectExactlyOne('people.groups', { instance_id: instanceId, id: groupId })
+		.selectExactlyOne('people.groups', {
+			instance_id: instanceId,
+			id: groupId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(404, 'DATA:PEOPLE:GROUPS:EXISTS:01', m.pretty_tired_fly_lead(), err);
@@ -66,15 +70,17 @@ export async function read({
 	instanceId,
 	groupId,
 	url,
-	banned = false
+	banned = false,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	groupId: number;
 	url: URL;
 	banned?: boolean;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, groupId, banned));
-	if (cached) {
+	if (!includeDeleted && cached) {
 		return parse(schema.read, cached);
 	}
 	const statusCondition = banned
@@ -83,7 +89,11 @@ export async function read({
 	const read = await db
 		.selectExactlyOne(
 			'people.groups',
-			{ instance_id: instanceId, id: groupId },
+			{
+				instance_id: instanceId,
+				id: groupId,
+				...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+			},
 			{
 				lateral: {
 					count: db.count('people.group_members', {
@@ -113,7 +123,11 @@ export async function update({
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const updated = await db
-		.update('people.groups', parsed, { instance_id: instanceId, id: groupId })
+		.update('people.groups', parsed, {
+			instance_id: instanceId,
+			id: groupId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool);
 	if (updated.length !== 1) {
 		throw new BelcodaError(404, 'DATA:PEOPLE:GROUPS:UPDATE:01', m.pretty_tired_fly_lead());
@@ -128,22 +142,28 @@ export async function update({
 
 export async function list({
 	instanceId,
-	url
+	url,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	url: URL;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const { where, options, filtered } = filterQuery(url);
-	if (!filtered) {
+	if (!filtered && !includeDeleted) {
 		const cached = await redis.get(redisString(instanceId, 'all'));
 		if (cached) {
 			return parse(schema.list, cached);
 		}
 	}
+	const whereWithDeleted = {
+		...where,
+		...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+	};
 	const list = await db
 		.select(
 			'people.groups',
-			{ instance_id: instanceId, ...where },
+			{ instance_id: instanceId, ...whereWithDeleted },
 			{
 				...options,
 				lateral: {
@@ -152,7 +172,9 @@ export async function list({
 			}
 		)
 		.run(pool);
-	const count = await db.count('people.groups', { instance_id: instanceId, ...where }).run(pool);
+	const count = await db
+		.count('people.groups', { instance_id: instanceId, ...whereWithDeleted })
+		.run(pool);
 	const parsed = parse(schema.list, { count: count, items: list });
 	await redis.set(redisString(instanceId, 'all'), parsed);
 	return parsed;
@@ -255,7 +277,11 @@ export async function _getGroupByWhatsappId({
 	whatsappId: string;
 }): Promise<schema.Read> {
 	const group = await db
-		.selectExactlyOne('people.groups', { instance_id: instanceId, whatsapp_id: whatsappId })
+		.selectExactlyOne('people.groups', {
+			instance_id: instanceId,
+			whatsapp_id: whatsappId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(
@@ -274,7 +300,10 @@ export async function _getInstanceIdByWhatsappGroupChatId({
 	whatsappId: string;
 }): Promise<number> {
 	const group = await db
-		.selectExactlyOne('people.groups', { whatsapp_id: whatsappId })
+		.selectExactlyOne('people.groups', {
+			whatsapp_id: whatsappId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(
@@ -300,4 +329,7 @@ export async function del({
 	await db
 		.update('people.groups', { deleted_at: new Date() }, { instance_id: instanceId, id: groupId })
 		.run(pool);
+
+	await redis.del(redisString(instanceId, 'all'));
+	await redis.del(redisString(instanceId, groupId));
 }

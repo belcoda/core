@@ -87,12 +87,5 @@
 </DataGrid>
 
 <div class="flex items-center justify-end mt-4">
-	<Button
-		variant="destructive"
-		onclick={() => {
-			if (!window.confirm(m.moving_acidic_crow_imagine())) {
-				return;
-			}
-		}}>{m.wide_major_pig_swim()}</Button
-	>
+	<Button variant="destructive" onclick={deleteGroup}>{m.wide_major_pig_swim()}</Button>
 </div>
