@@ -593,5 +593,6 @@
 	"full_tangy_cow_pull": "You have signed the petition {activityTitle}",
 	"dizzy_mellow_otter_clap": "You have cancelled your signature for the petition {activityTitle}",
 	"east_north_osprey_hurl": "You have already signed the petition {activityTitle}",
-	"keen_agent_shell_mop": "Failed to delete record"
+	"keen_agent_shell_mop": "Failed to delete record",
+	"dizzy_actual_elephant_evoke": "Record deleted successfully"
 }
