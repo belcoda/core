@@ -23,8 +23,8 @@ export async function create({
 	body: schema.Create;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
-	await exists({ instanceId, groupId, t });
-	await personExists({ groupId, personId, t });
+	await exists({ instanceId, groupId });
+	await personExists({ groupId, personId });
 
 	const result = await db
 		.insert('communications.received_whatsapp_group_messages', {

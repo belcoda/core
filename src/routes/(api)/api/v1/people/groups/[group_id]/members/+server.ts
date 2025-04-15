@@ -9,13 +9,11 @@ export async function POST(event) {
 		const groupMember = await api.addMember({
 			instanceId: event.locals.instance.id,
 			groupId: Number(event.params.group_id),
-			t: event.locals.t,
 			body
 		});
 		const group = await readGroup({
 			instanceId: event.locals.instance.id,
 			groupId: Number(event.params.group_id),
-			t: event.locals.t,
 			url: event.url
 		});
 		await queueInteraction({

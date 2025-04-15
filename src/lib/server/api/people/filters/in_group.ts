@@ -7,7 +7,6 @@ export async function list({
 	instance_id,
 	url,
 	groupId,
-	t,
 	notPaged,
 	banned = false,
 	includeDeleted = false
@@ -15,12 +14,11 @@ export async function list({
 	instance_id: number;
 	url: URL;
 	groupId: number;
-	t: App.Localization;
 	notPaged?: boolean;
 	banned?: boolean;
 	includeDeleted?: boolean;
 }): Promise<schema.List> {
-	await exists({ instanceId: instance_id, groupId, t });
+	await exists({ instanceId: instance_id, groupId });
 	const query = filterQuery(url, { search_key: 'full_name', notPaged });
 	const statusCondition = banned
 		? db.conditions.isIn(['banned'])

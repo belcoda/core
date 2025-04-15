@@ -23,7 +23,11 @@ export async function POST(event) {
 			.update(
 				'people.groups',
 				{ point_person_id: new_admin_id },
-				{ instance_id: event.locals.instance.id, point_person_id: parsed.admin_id }
+				{
+					instance_id: event.locals.instance.id,
+					point_person_id: parsed.admin_id,
+					deleted_at: db.conditions.isNull
+				}
 			)
 			.run(pool);
 

@@ -157,7 +157,6 @@ export default async function ({
 	await createGroup({
 		instanceId: instance.id,
 		body: { name: 'Test group' },
-		t: t,
 		adminId: admin.id,
 		url: new URL(PUBLIC_HOST)
 	});

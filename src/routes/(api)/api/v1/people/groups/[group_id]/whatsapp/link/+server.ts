@@ -11,7 +11,6 @@ export async function PUT(event) {
 			instanceId: event.locals.instance.id,
 			groupId: Number(event.params.group_id),
 			body: parsed,
-			t: event.locals.t,
 			url: event.url
 		});
 		return json(updated);

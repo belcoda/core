@@ -9,7 +9,6 @@ export async function PUT(event) {
 		const list = await api.updateMember({
 			instanceId: event.locals.instance.id,
 			groupId: Number(event.params.group_id),
-			t: event.locals.t,
 			personId: Number(event.params.person_id),
 			body
 		});
@@ -29,13 +28,11 @@ export async function DELETE(event) {
 		const groupMember = await api.removeMember({
 			instanceId: event.locals.instance.id,
 			groupId: Number(event.params.group_id),
-			t: event.locals.t,
 			personId: Number(event.params.person_id)
 		});
 		const group = await readGroup({
 			instanceId: event.locals.instance.id,
 			groupId: Number(event.params.group_id),
-			t: event.locals.t,
 			url: event.url
 		});
 		await queueInteraction({

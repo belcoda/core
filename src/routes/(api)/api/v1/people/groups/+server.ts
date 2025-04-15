@@ -5,8 +5,7 @@ export async function GET(event) {
 	try {
 		const list = await api.list({
 			instanceId: event.locals.instance.id,
-			url: event.url,
-			t: event.locals.t
+			url: event.url
 		});
 		return json(list);
 	} catch (err) {
@@ -21,8 +20,7 @@ export async function POST(event) {
 			instanceId: event.locals.instance.id,
 			adminId: event.locals.admin.id,
 			body: body,
-			url: event.url,
-			t: event.locals.t
+			url: event.url
 		});
 		return json(group, { status: 201 });
 	} catch (err) {

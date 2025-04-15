@@ -9,7 +9,6 @@ export async function GET(event) {
 			instanceId: event.locals.instance.id,
 			groupId: Number(event.params.group_id),
 			url: event.url,
-			t: event.locals.t,
 			banned
 		});
 		return json(list);
@@ -25,11 +24,22 @@ export async function PUT(event) {
 			instanceId: event.locals.instance.id,
 			groupId: Number(event.params.group_id),
 			body: body,
-			t: event.locals.t,
 			url: event.url
 		});
 		return json(group, { status: 201 });
 	} catch (err) {
 		return error(500, 'API:/people/groups/[group_id]:PUT:01', m.spry_ago_baboon_cure(), err);
+	}
+}
+
+export async function DELETE(event) {
+	try {
+		const group = await api.del({
+			instanceId: event.locals.instance.id,
+			groupId: Number(event.params.group_id)
+		});
+		return json(group, { status: 200 });
+	} catch (err) {
+		return error(500, 'API:/people/groups/[group_id]:DELETE:01', m.spry_ago_baboon_cure(), err);
 	}
 }
