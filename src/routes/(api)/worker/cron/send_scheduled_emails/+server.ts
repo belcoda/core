@@ -58,7 +58,6 @@ async function queueEmailsToAttendees({
 			instanceId: eventObject.instance_id,
 			eventId: eventObject.id,
 			body: updateBody,
-			t: t,
 			queue: queue,
 			skipMetaGeneration: true
 		});

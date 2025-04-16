@@ -70,7 +70,6 @@ export default async function ({
 		instanceId: instance.id,
 		body: onlineEventBody,
 		adminId: admin.id,
-		t: t,
 		defaultEmailTemplateId: instance.settings.events.default_email_template_id,
 		queue: queue
 	});
@@ -96,7 +95,6 @@ export default async function ({
 		instanceId: instance.id,
 		body: inPersonEventBody,
 		adminId: admin.id,
-		t: t,
 		defaultEmailTemplateId: instance.settings.events.default_email_template_id,
 		queue: queue
 	});

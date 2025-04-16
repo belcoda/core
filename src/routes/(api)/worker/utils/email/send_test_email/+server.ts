@@ -35,8 +35,7 @@ export async function POST(event) {
 	if (parsed.context.event_id) {
 		const selected = await readEvent({
 			instanceId: event.locals.instance.id,
-			eventId: parsed.context.event_id,
-			t: event.locals.t
+			eventId: parsed.context.event_id
 		});
 		eventObject = selected;
 	}

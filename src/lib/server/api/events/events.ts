@@ -24,12 +24,10 @@ export function redisStringSlug(instanceId: number, slug: string) {
 
 export async function exists({
 	instanceId,
-	eventId,
-	t
+	eventId
 }: {
 	instanceId: number;
 	eventId: number;
-	t: App.Localization;
 }): Promise<boolean> {
 	const cached = await redis.get(redisString(instanceId, eventId));
 	if (cached) {
@@ -51,14 +49,12 @@ export async function exists({
 export async function create({
 	instanceId,
 	body,
-	t,
 	defaultEmailTemplateId,
 	adminId,
 	queue
 }: {
 	instanceId: number;
 	body: schema.Create;
-	t: App.Localization;
 	defaultEmailTemplateId: number;
 	adminId: number;
 	queue: App.Queue;
@@ -75,8 +71,7 @@ export async function create({
 			defaultEmailTemplateId,
 			type: 'followup',
 			body: parsed,
-			queue,
-			t
+			queue
 		}),
 		registration_email: await createEventEmailNotification({
 			instance,
@@ -85,8 +80,7 @@ export async function create({
 			defaultEmailTemplateId,
 			type: 'registration',
 			body: parsed,
-			queue,
-			t
+			queue
 		}),
 		reminder_email: await createEventEmailNotification({
 			instance,
@@ -95,8 +89,7 @@ export async function create({
 			defaultEmailTemplateId,
 			type: 'reminder',
 			body: parsed,
-			queue,
-			t
+			queue
 		}),
 		cancellation_email: await createEventEmailNotification({
 			instance,
@@ -105,8 +98,7 @@ export async function create({
 			defaultEmailTemplateId,
 			type: 'cancellation',
 			body: parsed,
-			queue,
-			t
+			queue
 		}),
 		point_person_id: parsed.point_person_id || adminId,
 		country: parsed.country || instance.country || DEFAULT_COUNTRY,
@@ -158,14 +150,12 @@ export async function update({
 	eventId,
 	body,
 	queue,
-	t,
 	skipMetaGeneration = false
 }: {
 	instanceId: number;
 	eventId: number;
 	body: schema.Update;
 	queue: App.Queue;
-	t: App.Localization;
 	skipMetaGeneration?: boolean;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
@@ -181,7 +171,7 @@ export async function update({
 	}
 	await redis.del(redisString(instanceId, eventId));
 	await redis.del(redisString(instanceId, 'all'));
-	const returned = await read({ instanceId, eventId, t });
+	const returned = await read({ instanceId, eventId });
 	await redis.del(redisStringSlug(instanceId, returned.slug));
 	const htmlMeta: EventHTMLMetaTags = { type: 'event', eventId: eventId };
 	if (skipMetaGeneration !== true) {
@@ -409,8 +399,7 @@ async function createEventEmailNotification({
 	adminId,
 	instance,
 	defaultEmailTemplateId,
-	queue,
-	t
+	queue
 }: {
 	type: 'registration' | 'reminder' | 'cancellation' | 'followup';
 	body: schema.Create;
@@ -419,7 +408,6 @@ async function createEventEmailNotification({
 	instance: ReadInstance;
 	defaultEmailTemplateId: number;
 	queue: App.Queue;
-	t: App.Localization;
 }): Promise<number> {
 	const { htmlEmail, textEmail } = returnHtmlTextEmails(type);
 	const registrationEmail = await createEmailMessage({

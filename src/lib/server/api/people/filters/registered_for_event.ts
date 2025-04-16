@@ -19,7 +19,7 @@ export async function list({
 	notPaged?: boolean;
 	includeDeleted?: boolean;
 }): Promise<schema.List> {
-	await exists({ instanceId: instance_id, eventId, t });
+	await exists({ instanceId: instance_id, eventId });
 	const query = filterQuery(url, { search_key: 'full_name', notPaged });
 	const eventWhere = status === 'any' ? {} : { status };
 	const selected = await db
