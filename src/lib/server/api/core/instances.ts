@@ -106,7 +106,7 @@ export async function _getInstanceByWhatsappBAId({
 
 export async function _getInstanceIdByEventId(eventId: string): Promise<schema.Read> {
 	const response =
-		await db.sql`SELECT instance_id from events.events WHERE id = ${db.param(eventId)} limit 1`.run(
+		await db.sql`SELECT instance_id from events.events WHERE id = ${db.param(eventId)} AND deleted_at IS NULL limit 1`.run(
 			pool
 		);
 	if (response.length !== 1)

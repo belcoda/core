@@ -36,7 +36,7 @@ export async function create({
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
 
-	await exists({ instanceId, eventId, t });
+	await exists({ instanceId, eventId });
 	const notificationPayload = {
 		activity_id: eventId,
 		person_id: parsed.person_id,
@@ -102,7 +102,7 @@ export async function read({
 	if (cached) {
 		return parse(schema.read, cached);
 	}
-	await exists({ instanceId, eventId, t });
+	await exists({ instanceId, eventId });
 	const result = await db
 		.selectExactlyOne('events.event_attendees_view', { event_id: eventId, person_id: personId })
 		.run(pool)
@@ -130,7 +130,7 @@ export async function update({
 	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
-	await exists({ instanceId, eventId, t });
+	await exists({ instanceId, eventId });
 	await db.update('events.attendees', parsed, { event_id: eventId, person_id: personId }).run(pool);
 	await redis.del(redisString(instanceId, eventId, 'all'));
 	await redis.del(redisString(instanceId, eventId, personId));
@@ -188,7 +188,7 @@ export async function listForEvent({
 			return parse(schema.list, cached);
 		}
 	}
-	await exists({ instanceId, eventId, t });
+	await exists({ instanceId, eventId });
 	const result = await db
 		.select('events.event_attendees_view', { event_id: eventId, ...filter.where }, filter.options) //pagination only
 		.run(pool);

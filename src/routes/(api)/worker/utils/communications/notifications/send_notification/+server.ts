@@ -18,8 +18,7 @@ export async function POST(event) {
 			case 'event':
 				activity = await readEvent({
 					instanceId: event.locals.instance.id,
-					eventId: parsed.activity_id,
-					t: event.locals.t
+					eventId: parsed.activity_id
 				});
 				activityTitle = activity.heading;
 				break;

@@ -16,8 +16,7 @@ export async function POST(event) {
 		});
 		const eventObject = await readEvent({
 			instanceId: event.locals.instance.id,
-			eventId: parsed.event_id,
-			t: event.locals.t
+			eventId: parsed.event_id
 		});
 		const person = await updatePerson({
 			instanceId: event.locals.instance.id,

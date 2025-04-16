@@ -34,8 +34,7 @@ export async function POST(event) {
 		});
 		const eventObject = await readEvent({
 			instanceId: event.locals.instance.id,
-			eventId: Number(event.params.event_id),
-			t: event.locals.t
+			eventId: Number(event.params.event_id)
 		});
 		await queueInteraction({
 			instanceId: event.locals.instance.id,

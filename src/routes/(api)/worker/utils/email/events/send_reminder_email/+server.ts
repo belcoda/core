@@ -15,8 +15,7 @@ export async function POST(event) {
 		const parsed = parse(triggerEventMessage, body);
 		const eventResponse = await readEvent({
 			instanceId: event.locals.instance.id,
-			eventId: parsed.event_id,
-			t: event.locals.t
+			eventId: parsed.event_id
 		});
 
 		if (eventResponse.send_reminder_email === false) {
