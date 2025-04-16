@@ -39,7 +39,7 @@
 	"heavy_true_lark_amaze": "Se produjo un error al cargar el archivo. Inténtalo de nuevo.",
 	"teary_dizzy_earthworm_urge": "Se ha producido un error. Inténtalo de nuevo.",
 	"mushy_bright_crossbill_pinch": "Tipo de archivo no compatible. Los tipos compatibles son $ {supportedTypes}",
-	"home_late_crossbill_reside": "El archivo es demasiado grande. El tamaño máximo es $ {maxFileSize}",
+	"home_late_crossbill_reside": "El archivo es demasiado grande. El tamaño máximo es ${maxFileSize}",
 	"crazy_smug_gull_blink": "No hay ningún archivo seleccionado",
 	"bad_silly_carp_tickle": "Se produjo un error al cargar el archivo. Inténtalo de nuevo.",
 	"spry_ago_baboon_cure": "Error Interno del Servidor",
