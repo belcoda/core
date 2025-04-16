@@ -36,7 +36,11 @@ export async function exists({
 		return true;
 	}
 	await db
-		.selectExactlyOne('events.events', { instance_id: instanceId, id: eventId })
+		.selectExactlyOne('events.events', {
+			instance_id: instanceId,
+			id: eventId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(404, 'DATA:EVENTS:EXISTS:01', m.pretty_tired_fly_lead(), err);
@@ -119,7 +123,7 @@ export async function create({
 		let counter = 1;
 		while (true) {
 			const exists =
-				await db.sql`SELECT id FROM events.events WHERE instance_id = ${db.param(instanceId)} AND (name = ${db.param(uniqueName)} OR slug = ${db.param(uniqueSlug)})`.run(
+				await db.sql`SELECT id FROM events.events WHERE instance_id = ${db.param(instanceId)} AND (name = ${db.param(uniqueName)} OR slug = ${db.param(uniqueSlug)}) AND deleted_at IS NULL`.run(
 					txnClient
 				);
 
@@ -143,7 +147,7 @@ export async function create({
 	});
 
 	await redis.del(redisString(instanceId, 'all'));
-	const returned = await read({ instanceId, eventId: result.id, t });
+	const returned = await read({ instanceId, eventId: result.id });
 	const htmlMeta: EventHTMLMetaTags = { type: 'event', eventId: returned.id };
 	await queue('/utils/openai/generate_html_meta', instanceId, htmlMeta);
 	return returned;
@@ -166,7 +170,11 @@ export async function update({
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const result = await db
-		.update('events.events', parsed, { instance_id: instanceId, id: eventId })
+		.update('events.events', parsed, {
+			instance_id: instanceId,
+			id: eventId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool);
 	if (result.length !== 1) {
 		throw new BelcodaError(404, 'DATA:EVENTS:UPDATE:01', m.pretty_tired_fly_lead());
@@ -185,20 +193,24 @@ export async function update({
 export async function read({
 	instanceId,
 	eventId,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	eventId: number;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, eventId));
-	if (cached) {
+	if (!includeDeleted && cached) {
 		return parse(schema.read, cached);
 	}
 	const result = await db
 		.selectExactlyOne(
 			'events.events',
-			{ instance_id: instanceId, id: eventId },
+			{
+				instance_id: instanceId,
+				id: eventId,
+				...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+			},
 			{
 				lateral: {
 					feature_image: db.selectOne('website.uploads', {
@@ -259,7 +271,7 @@ export async function readBySlug({
 	const result = await db
 		.selectExactlyOne(
 			'events.events',
-			{ instance_id: instanceId, slug },
+			{ instance_id: instanceId, slug, deleted_at: db.conditions.isNull },
 			{
 				lateral: {
 					point_person: db.selectExactlyOne('admins', { id: db.parent('point_person_id') }),
@@ -309,23 +321,27 @@ export async function readBySlug({
 export async function list({
 	instanceId,
 	url,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	url: URL;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const filter = filterQuery(url);
 	if (filter.filtered !== true) {
 		const cached = await redis.get(redisString(instanceId, 'all'));
-		if (cached) {
+		if (!includeDeleted && cached) {
 			return parse(schema.list, cached);
 		}
 	}
 	const result = await db
 		.select(
 			'events.events',
-			{ instance_id: instanceId, ...filter.where },
+			{
+				instance_id: instanceId,
+				...filter.where,
+				...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+			},
 			{
 				lateral: {
 					point_person: db.selectExactlyOne('admins', { id: db.parent('point_person_id') }),
@@ -351,7 +367,11 @@ export async function list({
 		)
 		.run(pool);
 	const count = await db
-		.count('events.events', { instance_id: instanceId, ...filter.where })
+		.count('events.events', {
+			instance_id: instanceId,
+			...filter.where,
+			...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+		})
 		.run(pool);
 	const parsedResult = parse(schema.list, { items: result, count: count });
 
@@ -430,13 +450,13 @@ export async function selectEventsForReminderFollowupEmail(): Promise<{
 	const reminders = await db.sql<
 		s.events.events.SQL,
 		s.events.events.Selectable[]
-	>`SELECT ${'id'}, ${'instance_id'}, ${'point_person_id'} FROM events.events WHERE send_reminder_email = true AND reminder_sent_at IS NULL AND starts_at < NOW() AND starts_at > NOW() - INTERVAL '1 hour' * send_reminder_hours_before_start`.run(
+	>`SELECT ${'id'}, ${'instance_id'}, ${'point_person_id'} FROM events.events WHERE deleted_at IS NULL AND send_reminder_email = true AND reminder_sent_at IS NULL AND starts_at < NOW() AND starts_at > NOW() - INTERVAL '1 hour' * send_reminder_hours_before_start`.run(
 		pool
 	);
 	const followups = await db.sql<
 		s.events.events.SQL,
 		s.events.events.Selectable[]
-	>`SELECT ${'id'}, ${'instance_id'}, ${'point_person_id'}  FROM ${'events.events'} WHERE ${'send_followup_email'} = ${db.param(true)} AND ${'followup_sent_at'} IS NULL AND ${'ends_at'} < NOW() AND ${'ends_at'} > NOW() - INTERVAL '1 hour' * ${'send_followup_hours_after_end'}`.run(
+	>`SELECT ${'id'}, ${'instance_id'}, ${'point_person_id'}  FROM ${'events.events'} WHERE deleted_at IS NULL AND ${'send_followup_email'} = ${db.param(true)} AND ${'followup_sent_at'} IS NULL AND ${'ends_at'} < NOW() AND ${'ends_at'} > NOW() - INTERVAL '1 hour' * ${'send_followup_hours_after_end'}`.run(
 		pool
 	);
 	return {
