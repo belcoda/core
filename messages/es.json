@@ -96,7 +96,7 @@
 	"ideal_tired_elephant_reside": "No se encontró contenido",
 	"tasty_busy_crossbill_buzz": "No se encontró contenido",
 	"zippy_honest_mole_amaze": "Dado de baja",
-	"new_empty_badger_spur": "La dirección de correo electrónico <span class=\"font-bold\">$ {email || 'that you requested'}</span> ha sido cancelada de nuestra lista de correo.",
+	"new_empty_badger_spur": "La dirección de correo electrónico <span class=\"font-bold\">$ {email || 'that you requested'}</span> ha sido desuscrita de nuestra lista de correo.",
 	"agent_lime_puma_trip": "Hogar",
 	"wise_cozy_warbler_grow": "Eventos",
 	"suave_frail_bee_cook": "Esta dirección de correo electrónico debe tener una cuenta de Google activa. El administrador iniciará sesión en la aplicación a través de Google con esta dirección de correo electrónico.",
