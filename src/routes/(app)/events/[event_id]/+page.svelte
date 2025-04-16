@@ -12,10 +12,9 @@
 	import Link from 'lucide-svelte/icons/link';
 	import CopyButton from '$lib/comps/ui/copy-button/copy-button.svelte';
 	import { PUBLIC_HOST } from '$env/static/public';
-	import { page } from '$app/stores';
 
 	const url = new URL(PUBLIC_HOST);
-	const previewUrl = `${url.protocol}//${$page.data.instance.slug}.${url.host}/events/${data.event.slug}`;
+	const previewUrl = `${url.protocol}//${data.instance.slug}.${url.host}/events/${data.event.slug}`;
 	import EditRegistrationForm from './EditRegistrationForm.svelte';
 	import Tags from '$lib/comps/widgets/tags/Tags.svelte';
 	import PointPerson from '$lib/comps/widgets/point_person/PointPerson.svelte';
@@ -23,7 +22,7 @@
 	import { renderRegistrationLink } from '$lib/utils/text/whatsapp';
 	import { getFlash } from 'sveltekit-flash-message';
 	import { goto } from '$app/navigation';
-
+	import { page } from '$app/state';
 	const flash = getFlash(page);
 	let copied = $state(false);
 	const attendanceStatus: ['registered', 'attended', 'cancelled', 'noshow'] = [
