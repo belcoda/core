@@ -444,3 +444,21 @@ export async function selectEventsForReminderFollowupEmail(): Promise<{
 		followups
 	};
 }
+
+export async function del({
+	instanceId,
+	eventId
+}: {
+	instanceId: number;
+	eventId: number;
+}): Promise<void> {
+	if (!(await exists({ instanceId, eventId }))) {
+		throw new BelcodaError(404, 'DATA:EVENTS:DEL:01', m.pretty_tired_fly_lead());
+	}
+	await db
+		.update('events.events', { deleted_at: new Date() }, { instance_id: instanceId, id: eventId })
+		.run(pool);
+
+	await redis.del(redisString(instanceId, eventId));
+	await redis.del(redisString(instanceId, 'all'));
+}
