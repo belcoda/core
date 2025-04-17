@@ -9,8 +9,7 @@ export async function GET(event) {
 	try {
 		const response = await api.read({
 			instanceId: event.locals.instance.id,
-			petitionId: Number(event.params.petition_id),
-			t: event.locals.t
+			petitionId: Number(event.params.petition_id)
 		});
 		return json(response);
 	} catch (err) {
@@ -25,7 +24,6 @@ export async function PUT(event) {
 			instanceId: event.locals.instance.id,
 			petitionId: Number(event.params.petition_id),
 			body: body,
-			t: event.locals.t,
 			queue: event.locals.queue
 		});
 		return json(response);

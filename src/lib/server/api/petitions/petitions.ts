@@ -23,12 +23,10 @@ export function redisStringSlug(instanceId: number, slug: string) {
 
 export async function exists({
 	instanceId,
-	petitionId,
-	t
+	petitionId
 }: {
 	instanceId: number;
 	petitionId: number;
-	t: App.Localization;
 }): Promise<boolean> {
 	const cached = await redis.get(redisString(instanceId, petitionId));
 	if (cached) {
@@ -52,13 +50,11 @@ export async function create({
 	instanceId,
 	adminId,
 	body,
-	t,
 	queue
 }: {
 	instanceId: number;
 	adminId: number;
 	body: schema.Create;
-	t: App.Localization;
 	queue: App.Queue;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
@@ -68,7 +64,6 @@ export async function create({
 		queue,
 		instanceId,
 		adminId,
-		t,
 		instance,
 		defaultEmailTemplateId: instance.settings.communications.email.default_template_id
 	});
@@ -111,7 +106,7 @@ export async function create({
 
 	await redis.del(redisString(instanceId, adminId));
 	await redis.del(redisString(instanceId, 'all'));
-	const returned = await read({ instanceId, petitionId: inserted.id, t: t });
+	const returned = await read({ instanceId, petitionId: inserted.id });
 	const htmlMeta: PetitionHTMLMetaTags = { type: 'petition', petitionId: returned.id };
 	await queue('/utils/openai/generate_html_meta', instanceId, htmlMeta);
 	return returned;
@@ -119,14 +114,12 @@ export async function create({
 
 export async function update({
 	instanceId,
-	t,
 	petitionId,
 	body,
 	queue,
 	skipMetaGeneration = false
 }: {
 	instanceId: number;
-	t: App.Localization;
 	petitionId: number;
 	body: schema.Update;
 	queue: App.Queue;
@@ -148,7 +141,7 @@ export async function update({
 		throw new BelcodaError(404, 'DATA:PETITIONS:PETITIONS:UPDATE:02', m.pretty_tired_fly_lead());
 	await redis.del(redisString(instanceId, 'all'));
 	await redis.del(redisString(instanceId, petitionId));
-	const returned = await read({ instanceId, petitionId: petitionId, t: t });
+	const returned = await read({ instanceId, petitionId: petitionId });
 	await redis.del(redisStringSlug(instanceId, returned.slug));
 	const htmlMeta: PetitionHTMLMetaTags = { type: 'petition', petitionId: petitionId };
 	if (skipMetaGeneration !== true) {
@@ -159,12 +152,10 @@ export async function update({
 
 export async function read({
 	instanceId,
-	petitionId,
-	t
+	petitionId
 }: {
 	instanceId: number;
 	petitionId: number;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, petitionId));
 	if (cached) {
@@ -242,12 +233,10 @@ export async function readBySlug({
 
 export async function list({
 	instanceId,
-	url,
-	t
+	url
 }: {
 	instanceId: number;
 	url: URL;
-	t: App.Localization;
 }): Promise<schema.List> {
 	const filter = filterQuery(url);
 	if (filter.filtered !== true) {
@@ -289,7 +278,6 @@ async function createPetitionEmail({
 	instanceId,
 	adminId,
 	instance,
-	t,
 	defaultEmailTemplateId,
 	queue
 }: {
@@ -297,14 +285,12 @@ async function createPetitionEmail({
 	instanceId: number;
 	adminId: number;
 	instance: ReadInstance;
-	t: App.Localization;
 	defaultEmailTemplateId: number;
 	queue: App.Queue;
 }): Promise<number> {
 	const registrationEmail = await createEmailMessage({
 		instanceId,
 		queue,
-		t,
 		body: {
 			name: randomUUID(),
 			point_person_id: adminId,
