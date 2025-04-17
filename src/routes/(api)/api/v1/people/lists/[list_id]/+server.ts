@@ -45,3 +45,14 @@ export async function PUT(event) {
 		return error(500, 'API:/api/v1/people/lists/[list_id]:PUT', m.spry_ago_baboon_cure(), err);
 	}
 }
+
+export async function DELETE(event) {
+	try {
+		const listId = Number(event.params.list_id);
+		const instanceId = event.locals.instance.id;
+		const list = await api.del({ instanceId, listId });
+		return json(list);
+	} catch (err) {
+		return error(500, 'API:/api/v1/people/lists/[list_id]:DELETE', m.spry_ago_baboon_cure(), err);
+	}
+}

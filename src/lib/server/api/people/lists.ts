@@ -191,3 +191,20 @@ export async function getAllPersonIds({
 	const ids = result.map((item) => item.person_id);
 	return ids;
 }
+
+export async function del({
+	instanceId,
+	listId
+}: {
+	instanceId: number;
+	listId: number;
+}): Promise<void> {
+	if (!(await exists({ instanceId, listId }))) {
+		throw new BelcodaError(404, 'DATA:PEOPLE:LISTS:DEL:01', m.pretty_tired_fly_lead());
+	}
+	await db
+		.update('people.lists', { deleted_at: new Date() }, { instance_id: instanceId, id: listId })
+		.run(pool);
+	await redis.del(redisString(instanceId, listId));
+	await redis.del(redisString(instanceId, 'all'));
+}
