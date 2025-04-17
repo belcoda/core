@@ -321,3 +321,21 @@ async function createPetitionEmail({
 	});
 	return registrationEmail.id;
 }
+
+export async function del({
+	instanceId,
+	petitionId
+}: {
+	instanceId: number;
+	petitionId: number;
+}): Promise<void> {
+	await db
+		.update(
+			'petitions.petitions',
+			{ deleted_at: new Date() },
+			{ instance_id: instanceId, id: petitionId }
+		)
+		.run(pool);
+	await redis.del(redisString(instanceId, petitionId));
+	await redis.del(redisString(instanceId, 'all'));
+}

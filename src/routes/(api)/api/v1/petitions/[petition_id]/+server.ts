@@ -33,3 +33,15 @@ export async function PUT(event) {
 		return error(500, 'API:/api/v1/petitions/[petition_id]:PUT', m.spry_ago_baboon_cure(), err);
 	}
 }
+
+export async function DELETE(event) {
+	try {
+		const response = await api.del({
+			instanceId: event.locals.instance.id,
+			petitionId: Number(event.params.petition_id)
+		});
+		return json(response);
+	} catch (err) {
+		return error(500, 'API:/api/v1/petitions/[petition_id]:DELETE', m.spry_ago_baboon_cure(), err);
+	}
+}
