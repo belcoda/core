@@ -19,7 +19,11 @@ export async function exists({
 		return true;
 	}
 	const fetched = await db
-		.selectExactlyOne('people.list_view', { instance_id: instanceId, id: listId })
+		.selectExactlyOne('people.list_view', {
+			instance_id: instanceId,
+			id: listId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(404, 'DATA:PEOPLE:LISTS:READ:01', m.ago_bad_lemur_commend(), err);
@@ -29,17 +33,23 @@ export async function exists({
 
 export async function read({
 	instanceId,
-	listId
+	listId,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	listId: number;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, listId));
-	if (cached) {
+	if (!includeDeleted && cached) {
 		return parse(schema.read, cached);
 	}
 	const fetched = await db
-		.selectExactlyOne('people.list_view', { instance_id: instanceId, id: listId })
+		.selectExactlyOne('people.list_view', {
+			instance_id: instanceId,
+			id: listId,
+			...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(404, 'DATA:PEOPLE:LISTS:READ:01', m.that_tasty_dove_pop(), err);
@@ -77,7 +87,11 @@ export async function update({
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const updated = await db
-		.update('people.lists', { ...parsed }, { instance_id: instanceId, id: listId })
+		.update(
+			'people.lists',
+			{ ...parsed },
+			{ instance_id: instanceId, id: listId, deleted_at: db.conditions.isNull }
+		)
 		.run(pool);
 	if (updated.length !== 1) {
 		throw new BelcodaError(404, 'DATA:PEOPLE:LISTS:UPDATE:01', m.that_tasty_dove_pop());
@@ -90,24 +104,29 @@ export async function update({
 
 export async function list({
 	instanceId,
-	url
+	url,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	url: URL;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const filter = filterQuery(url);
-	if (filter.filtered === false) {
+	if (filter.filtered === false && !includeDeleted) {
 		const cached = await redis.get(redisString(instanceId, 'all'));
 		if (cached) {
 			return parse(schema.list, cached);
 		}
 	}
+
+	const where = {
+		...filter.where,
+		...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+	};
 	const fetched = await db
-		.select('people.list_view', { instance_id: instanceId, ...filter.where }, filter.options)
+		.select('people.list_view', { instance_id: instanceId, ...where }, filter.options)
 		.run(pool);
-	const count = await db
-		.count('people.list_view', { instance_id: instanceId, ...filter.where })
-		.run(pool);
+	const count = await db.count('people.list_view', { instance_id: instanceId, ...where }).run(pool);
 	const parsedFetched = parse(schema.list, { items: fetched, count: count });
 	if (filter.filtered === false) await redis.set(redisString(instanceId, 'all'), parsedFetched);
 	return parsedFetched;
