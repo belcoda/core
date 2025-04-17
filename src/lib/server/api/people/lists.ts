@@ -9,12 +9,10 @@ function redisString(instanceId: number, listId: number | 'all') {
 
 export async function exists({
 	instanceId,
-	listId,
-	t
+	listId
 }: {
 	instanceId: number;
 	listId: number;
-	t: App.Localization;
 }): Promise<true> {
 	const cached = await redis.get(redisString(instanceId, listId));
 	if (cached) {
@@ -31,12 +29,10 @@ export async function exists({
 
 export async function read({
 	instanceId,
-	listId,
-	t
+	listId
 }: {
 	instanceId: number;
 	listId: number;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, listId));
 	if (cached) {
@@ -55,18 +51,16 @@ export async function read({
 
 export async function create({
 	instanceId,
-	body,
-	t
+	body
 }: {
 	instanceId: number;
 	body: schema.Create;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
 	const inserted = await db
 		.insert('people.lists', { instance_id: instanceId, ...parsed })
 		.run(pool);
-	const readInserted = await read({ instanceId, listId: inserted.id, t });
+	const readInserted = await read({ instanceId, listId: inserted.id });
 	await redis.set(redisString(instanceId, readInserted.id), readInserted);
 	await redis.del(redisString(instanceId, 'all'));
 	return readInserted;
@@ -75,13 +69,11 @@ export async function create({
 export async function update({
 	instanceId,
 	listId,
-	body,
-	t
+	body
 }: {
 	instanceId: number;
 	listId: number;
 	body: schema.Update;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const updated = await db
@@ -92,7 +84,7 @@ export async function update({
 	}
 	await redis.del(redisString(instanceId, listId));
 	await redis.del(redisString(instanceId, 'all'));
-	const readUpdated = await read({ instanceId, listId, t });
+	const readUpdated = await read({ instanceId, listId });
 	return readUpdated;
 }
 
@@ -125,16 +117,14 @@ export async function list({
 export async function addPersonToList({
 	instanceId,
 	listId,
-	personId,
-	t
+	personId
 }: {
 	instanceId: number;
 	listId: number;
 	personId: number;
-	t: App.Localization;
 }): Promise<schema.AddPersonToList> {
 	await personExists({ instanceId, personId });
-	await exists({ instanceId, listId, t });
+	await exists({ instanceId, listId });
 	const inserted = await db
 		.insert('people.list_people', { list_id: listId, person_id: personId })
 		.run(pool)
@@ -157,15 +147,13 @@ export async function addPersonToList({
 export async function removePersonFromList({
 	instanceId,
 	listId,
-	personId,
-	t
+	personId
 }: {
 	instanceId: number;
 	listId: number;
 	personId: number;
-	t: App.Localization;
 }): Promise<schema.RemovePersonFromList> {
-	await exists({ instanceId, listId, t });
+	await exists({ instanceId, listId });
 	await personExists({ instanceId, personId });
 	await db.deletes('people.list_people', { list_id: listId, person_id: personId }).run(pool);
 	await redis.del(redisString(instanceId, listId));
@@ -176,14 +164,12 @@ export async function removePersonFromList({
 
 export async function getAllPersonIds({
 	instanceId,
-	listId,
-	t
+	listId
 }: {
 	instanceId: number;
 	listId: number;
-	t: App.Localization;
 }): Promise<number[]> {
-	await exists({ instanceId, listId, t });
+	await exists({ instanceId, listId });
 	const result = await db
 		.select('people.list_people', { list_id: listId }, { columns: ['person_id'] })
 		.run(pool);

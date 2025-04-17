@@ -15,7 +15,7 @@ export async function GET(event) {
 			listId,
 			t: event.locals.t
 		});
-		const list = await api.read({ instanceId, listId, t: event.locals.t });
+		const list = await api.read({ instanceId, listId });
 		const parsed = parse(schema.readListWithPeople, { people: listPeople, ...list });
 		return json(parsed);
 	} catch (err) {
@@ -37,8 +37,7 @@ export async function PUT(event) {
 		const list = await api.update({
 			instanceId,
 			listId,
-			body: parsed,
-			t: event.locals.t
+			body: parsed
 		});
 		return json(list);
 	} catch (err) {
