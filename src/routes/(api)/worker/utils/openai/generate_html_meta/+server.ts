@@ -44,8 +44,7 @@ export async function POST(event) {
 			case 'petition': {
 				const petitionObject = await readPetition({
 					instanceId: event.locals.instance.id,
-					petitionId: parsed.petitionId,
-					t: event.locals.t
+					petitionId: parsed.petitionId
 				});
 				if (petitionObject.html_metatags.isManuallySet === false) {
 					const output = await generateHtmlMetatags(petitionObject.heading, petitionObject.html);
@@ -60,7 +59,6 @@ export async function POST(event) {
 							}
 						},
 						queue: event.locals.queue,
-						t: event.locals.t,
 						// if we don't skip meta generation, this same queued job will be triggered again which will cause an infite loop
 						skipMetaGeneration: true
 					});

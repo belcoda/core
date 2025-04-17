@@ -26,8 +26,7 @@ export async function POST(event) {
 			case 'petition':
 				activity = await readPetition({
 					instanceId: event.locals.instance.id,
-					petitionId: parsed.activity_id,
-					t: event.locals.t
+					petitionId: parsed.activity_id
 				});
 				activityTitle = activity.heading;
 				break;

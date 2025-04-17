@@ -43,8 +43,7 @@ export async function create({
 		instanceId,
 		defaultTemplateId,
 		body: messageBody,
-		queue: queue,
-		t
+		queue: queue
 	});
 	const toInsert = {
 		instance_id: instanceId,

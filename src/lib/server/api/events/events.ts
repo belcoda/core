@@ -416,7 +416,6 @@ async function createEventEmailNotification({
 			use_html_for_plaintext: true,
 			template_id: defaultEmailTemplateId
 		},
-		t,
 		queue: queue,
 		defaultTemplateId: defaultEmailTemplateId
 	});

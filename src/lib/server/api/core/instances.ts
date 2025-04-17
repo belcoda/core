@@ -120,7 +120,7 @@ export async function _getInstanceIdByEventId(eventId: string): Promise<schema.R
 
 export async function _getInstanceIdByPetitionId(petitionId: string): Promise<schema.Read> {
 	const response =
-		await db.sql`SELECT instance_id from petitions.petitions WHERE id = ${db.param(petitionId)} limit 1`.run(
+		await db.sql`SELECT instance_id from petitions.petitions WHERE id = ${db.param(petitionId)} AND deleted_at IS NULL limit 1`.run(
 			pool
 		);
 	if (response.length !== 1)

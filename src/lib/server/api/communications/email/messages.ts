@@ -40,14 +40,12 @@ export async function create({
 	instanceId,
 	defaultTemplateId,
 	body,
-	queue,
-	t
+	queue
 }: {
 	instanceId: number;
 	defaultTemplateId: number;
 	body: schema.Create;
 	queue: App.Queue;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
 	const toInsert = {
