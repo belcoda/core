@@ -151,8 +151,7 @@ export default async function ({
 
 	await createList({
 		instanceId: instance.id,
-		body: { name: 'Test list' },
-		t: t
+		body: { name: 'Test list' }
 	});
 	await createGroup({
 		instanceId: instance.id,

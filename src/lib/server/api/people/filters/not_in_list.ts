@@ -17,7 +17,7 @@ export async function list({
 	notPaged?: boolean;
 	includeDeleted?: boolean;
 }): Promise<schema.List> {
-	await exists({ instanceId: instance_id, listId, t });
+	await exists({ instanceId: instance_id, listId });
 	const query = filterQuery(url, { search_key: 'full_name', notPaged });
 	const selectList = await db
 		.select('people.list_people', { list_id: listId }, { columns: ['person_id'] })

@@ -8,8 +8,7 @@ export async function POST(event) {
 	await addPersonToList({
 		instanceId: event.locals.instance.id,
 		listId: parsed.list_id,
-		personId: parsed.person_id,
-		t: event.locals.t
+		personId: parsed.person_id
 	});
 	return json({ success: true });
 }

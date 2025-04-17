@@ -9,19 +9,21 @@ function redisString(instanceId: number, listId: number | 'all') {
 
 export async function exists({
 	instanceId,
-	listId,
-	t
+	listId
 }: {
 	instanceId: number;
 	listId: number;
-	t: App.Localization;
 }): Promise<true> {
 	const cached = await redis.get(redisString(instanceId, listId));
 	if (cached) {
 		return true;
 	}
 	const fetched = await db
-		.selectExactlyOne('people.list_view', { instance_id: instanceId, id: listId })
+		.selectExactlyOne('people.list_view', {
+			instance_id: instanceId,
+			id: listId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(404, 'DATA:PEOPLE:LISTS:READ:01', m.ago_bad_lemur_commend(), err);
@@ -32,18 +34,22 @@ export async function exists({
 export async function read({
 	instanceId,
 	listId,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	listId: number;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, listId));
-	if (cached) {
+	if (!includeDeleted && cached) {
 		return parse(schema.read, cached);
 	}
 	const fetched = await db
-		.selectExactlyOne('people.list_view', { instance_id: instanceId, id: listId })
+		.selectExactlyOne('people.list_view', {
+			instance_id: instanceId,
+			id: listId,
+			...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(404, 'DATA:PEOPLE:LISTS:READ:01', m.that_tasty_dove_pop(), err);
@@ -55,18 +61,16 @@ export async function read({
 
 export async function create({
 	instanceId,
-	body,
-	t
+	body
 }: {
 	instanceId: number;
 	body: schema.Create;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
 	const inserted = await db
 		.insert('people.lists', { instance_id: instanceId, ...parsed })
 		.run(pool);
-	const readInserted = await read({ instanceId, listId: inserted.id, t });
+	const readInserted = await read({ instanceId, listId: inserted.id });
 	await redis.set(redisString(instanceId, readInserted.id), readInserted);
 	await redis.del(redisString(instanceId, 'all'));
 	return readInserted;
@@ -75,47 +79,54 @@ export async function create({
 export async function update({
 	instanceId,
 	listId,
-	body,
-	t
+	body
 }: {
 	instanceId: number;
 	listId: number;
 	body: schema.Update;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const updated = await db
-		.update('people.lists', { ...parsed }, { instance_id: instanceId, id: listId })
+		.update(
+			'people.lists',
+			{ ...parsed },
+			{ instance_id: instanceId, id: listId, deleted_at: db.conditions.isNull }
+		)
 		.run(pool);
 	if (updated.length !== 1) {
 		throw new BelcodaError(404, 'DATA:PEOPLE:LISTS:UPDATE:01', m.that_tasty_dove_pop());
 	}
 	await redis.del(redisString(instanceId, listId));
 	await redis.del(redisString(instanceId, 'all'));
-	const readUpdated = await read({ instanceId, listId, t });
+	const readUpdated = await read({ instanceId, listId });
 	return readUpdated;
 }
 
 export async function list({
 	instanceId,
-	url
+	url,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	url: URL;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const filter = filterQuery(url);
-	if (filter.filtered === false) {
+	if (filter.filtered === false && !includeDeleted) {
 		const cached = await redis.get(redisString(instanceId, 'all'));
 		if (cached) {
 			return parse(schema.list, cached);
 		}
 	}
+
+	const where = {
+		...filter.where,
+		...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+	};
 	const fetched = await db
-		.select('people.list_view', { instance_id: instanceId, ...filter.where }, filter.options)
+		.select('people.list_view', { instance_id: instanceId, ...where }, filter.options)
 		.run(pool);
-	const count = await db
-		.count('people.list_view', { instance_id: instanceId, ...filter.where })
-		.run(pool);
+	const count = await db.count('people.list_view', { instance_id: instanceId, ...where }).run(pool);
 	const parsedFetched = parse(schema.list, { items: fetched, count: count });
 	if (filter.filtered === false) await redis.set(redisString(instanceId, 'all'), parsedFetched);
 	return parsedFetched;
@@ -125,16 +136,14 @@ export async function list({
 export async function addPersonToList({
 	instanceId,
 	listId,
-	personId,
-	t
+	personId
 }: {
 	instanceId: number;
 	listId: number;
 	personId: number;
-	t: App.Localization;
 }): Promise<schema.AddPersonToList> {
 	await personExists({ instanceId, personId });
-	await exists({ instanceId, listId, t });
+	await exists({ instanceId, listId });
 	const inserted = await db
 		.insert('people.list_people', { list_id: listId, person_id: personId })
 		.run(pool)
@@ -157,15 +166,13 @@ export async function addPersonToList({
 export async function removePersonFromList({
 	instanceId,
 	listId,
-	personId,
-	t
+	personId
 }: {
 	instanceId: number;
 	listId: number;
 	personId: number;
-	t: App.Localization;
 }): Promise<schema.RemovePersonFromList> {
-	await exists({ instanceId, listId, t });
+	await exists({ instanceId, listId });
 	await personExists({ instanceId, personId });
 	await db.deletes('people.list_people', { list_id: listId, person_id: personId }).run(pool);
 	await redis.del(redisString(instanceId, listId));
@@ -176,18 +183,33 @@ export async function removePersonFromList({
 
 export async function getAllPersonIds({
 	instanceId,
-	listId,
-	t
+	listId
 }: {
 	instanceId: number;
 	listId: number;
-	t: App.Localization;
 }): Promise<number[]> {
-	await exists({ instanceId, listId, t });
+	await exists({ instanceId, listId });
 	const result = await db
 		.select('people.list_people', { list_id: listId }, { columns: ['person_id'] })
 		.run(pool);
 
 	const ids = result.map((item) => item.person_id);
 	return ids;
+}
+
+export async function del({
+	instanceId,
+	listId
+}: {
+	instanceId: number;
+	listId: number;
+}): Promise<void> {
+	if (!(await exists({ instanceId, listId }))) {
+		throw new BelcodaError(404, 'DATA:PEOPLE:LISTS:DEL:01', m.pretty_tired_fly_lead());
+	}
+	await db
+		.update('people.lists', { deleted_at: new Date() }, { instance_id: instanceId, id: listId })
+		.run(pool);
+	await redis.del(redisString(instanceId, listId));
+	await redis.del(redisString(instanceId, 'all'));
 }
