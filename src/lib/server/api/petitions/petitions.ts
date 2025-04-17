@@ -33,7 +33,11 @@ export async function exists({
 		return true;
 	}
 	await db
-		.selectExactlyOne('petitions.petitions', { instance_id: instanceId, id: petitionId })
+		.selectExactlyOne('petitions.petitions', {
+			instance_id: instanceId,
+			id: petitionId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(
@@ -78,7 +82,7 @@ export async function create({
 		let counter = 1;
 		while (true) {
 			const exists =
-				await db.sql`SELECT id FROM petitions.petitions WHERE instance_id = ${db.param(instanceId)} AND (name = ${db.param(uniqueName)} OR slug = ${db.param(uniqueSlug)})`.run(
+				await db.sql`SELECT id FROM petitions.petitions WHERE deleted_at IS NULL AND instance_id = ${db.param(instanceId)} AND (name = ${db.param(uniqueName)} OR slug = ${db.param(uniqueSlug)})`.run(
 					txnClient
 				);
 
@@ -127,7 +131,11 @@ export async function update({
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const updated = await db
-		.update('petitions.petitions', parsed, { instance_id: instanceId, id: petitionId })
+		.update('petitions.petitions', parsed, {
+			instance_id: instanceId,
+			id: petitionId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(
@@ -152,10 +160,12 @@ export async function update({
 
 export async function read({
 	instanceId,
-	petitionId
+	petitionId,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	petitionId: number;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, petitionId));
 	if (cached) {
@@ -164,7 +174,11 @@ export async function read({
 	const result = await db
 		.selectExactlyOne(
 			'petitions.petitions',
-			{ instance_id: instanceId, id: petitionId },
+			{
+				instance_id: instanceId,
+				id: petitionId,
+				...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+			},
 			{
 				lateral: {
 					feature_image: db.selectOne('website.uploads', {
@@ -203,7 +217,7 @@ export async function readBySlug({
 	const result = await db
 		.selectExactlyOne(
 			'petitions.petitions',
-			{ instance_id: instanceId, slug },
+			{ instance_id: instanceId, slug, deleted_at: db.conditions.isNull },
 			{
 				lateral: {
 					signatures: db.count('petitions.signatures', { petition_id: db.parent('id') }),
@@ -233,10 +247,12 @@ export async function readBySlug({
 
 export async function list({
 	instanceId,
-	url
+	url,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	url: URL;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const filter = filterQuery(url);
 	if (filter.filtered !== true) {
@@ -245,10 +261,14 @@ export async function list({
 			return parse(schema.list, cached);
 		}
 	}
+	const where = {
+		...filter.where,
+		...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+	};
 	const result = await db
 		.select(
 			'petitions.petitions',
-			{ instance_id: instanceId, ...filter.where },
+			{ instance_id: instanceId, ...where },
 			{
 				lateral: {
 					point_person: db.selectExactlyOne('admins', { id: db.parent('point_person_id') }),
@@ -261,7 +281,7 @@ export async function list({
 		)
 		.run(pool);
 	const count = await db
-		.count('petitions.petitions', { instance_id: instanceId, ...filter.where })
+		.count('petitions.petitions', { instance_id: instanceId, ...where })
 		.run(pool);
 	const parsedResult = parse(schema.list, { items: result, count: count });
 
