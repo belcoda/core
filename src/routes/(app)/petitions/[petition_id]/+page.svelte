@@ -17,7 +17,7 @@
 	const signatureIds = $derived(data.signatures.items.map((signature) => signature.person_id));
 	import { page } from '$app/state';
 	import { getFlash } from 'sveltekit-flash-message';
-	import { invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import Plus from 'lucide-svelte/icons/plus';
 
 	const flash = getFlash(page);
@@ -69,6 +69,7 @@
 				$flash = { type: 'error', message: m.teary_dizzy_earthworm_urge() };
 			}
 		}
+		goto('/petitions');
 	}
 </script>
 
