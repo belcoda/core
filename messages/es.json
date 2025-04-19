@@ -158,6 +158,8 @@
 	"upper_flaky_pug_edit": "Eliminado de <a href=\"/people/lists/{listId}\">{listName}</a>",
 	"quaint_shy_stingray_ask": "Etiqueta añadida",
 	"misty_top_moth_loop": "Etiqueta eliminada",
+	"grand_formal_jackdaw_buy": "Añadido a <a href=\"/people/groups/{groupId}\">{groupName}</a>",
+	"every_away_lemming_kick": "Eliminado de <a href=\"/people/groups/{groupId}\">{groupName}</a>",
 	"low_basic_dolphin_dream": "Bloques",
 	"vivid_these_manatee_roam": "Nuevo bloque",
 	"smart_super_peacock_explore": "Panel",
