@@ -154,7 +154,7 @@
 	"ago_noisy_ray_inspire": "Registration for <a href={eventUrl}>{eventName}</a> cancelled by {adminName}",
 	"stout_formal_jay_snap": "{personName} cancelled their registration for <a href={eventUrl}>{eventName}</a>",
 	"round_long_weasel_forgive": "{personName} attended <a href={eventUrl}>{eventName}</a>",
-	"male_ornate_orangutan_roar": "Marked as noshow for <a href={eventUrl}>{eventName}</a> by {adminName}",
+	"male_ornate_orangutan_roar": "Marked as no show for <a href={eventUrl}>{eventName}</a> by {adminName}",
 	"weak_mad_shad_promise": "Received <a href=\"/communications/email/messages/{messageId}\">follow-up email</a> for <a href=\"/events/{eventId}\">{eventName}</a>",
 	"sea_cute_nils_rise": "Received <a href=\"/communications/email/messages/{messageId}\">reminder email</a> for <a href=\"/events/{eventId}\">{eventName}</a>",
 	"sad_due_canary_slurp": "Received <a href=\"/communications/email/messages/{messageId}\">cancellation email</a> for <a href=\"/events/{eventId}\">{eventName}</a>",
