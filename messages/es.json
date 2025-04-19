@@ -150,6 +150,7 @@
 	"great_heavy_donkey_care": "{personName} se registró en <a href={eventUrl}>{eventName}</a>",
 	"brave_long_iguana_nurture": "Registrado en <a href=\"{eventUrl}\">{eventName}</a> by {adminName}",
 	"ago_noisy_ray_inspire": "Registro en <a href={eventUrl}>{eventName}</a> cancelado por {adminName}",
+	"stout_formal_jay_snap": "{personName} canceló su registro en <a href={eventUrl}>{eventName}</a>",
 	"giant_watery_camel_mix": "Número de WhatsApp verificado: {phoneNumber}",
 	"quaint_shy_stingray_ask": "Etiqueta añadida",
 	"misty_top_moth_loop": "Etiqueta eliminada",
