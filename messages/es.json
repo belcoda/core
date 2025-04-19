@@ -155,7 +155,7 @@
 	"male_ornate_orangutan_roar": "Marcado como \"no se presentó\" en <a href={eventUrl}>{eventName}</a> by {adminName}",
 	"giant_watery_camel_mix": "Número de WhatsApp verificado: {phoneNumber}",
 	"dizzy_factual_vole_heal": "Añadido a <a href=\"/people/lists/{listId}\">{listName}</a>",
-	"upper_flaky_pug_edit": "Removido de <a href=\"/people/lists/{listId}\">{listName}</a>",
+	"upper_flaky_pug_edit": "Eliminado de <a href=\"/people/lists/{listId}\">{listName}</a>",
 	"quaint_shy_stingray_ask": "Etiqueta añadida",
 	"misty_top_moth_loop": "Etiqueta eliminada",
 	"low_basic_dolphin_dream": "Bloques",
