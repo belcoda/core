@@ -14,8 +14,7 @@ export async function PUT(event) {
 			instanceId: event.locals.instance.id,
 			body: {
 				name: m.lazy_happy_bullock_cry({ dateString, randomString: generateUniqueString() })
-			},
-			t: event.locals.t
+			}
 		});
 		const parsed = parse(filterGroup, body);
 		await event.locals.queue(

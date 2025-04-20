@@ -51,14 +51,17 @@ export async function read({
 	if (cached) {
 		return parse(schema.read, cached);
 	}
-	const thread = await readThread({ instanceId, threadId, t });
+	const thread = await readThread({ instanceId, threadId });
 	const selected = await db
 		.selectExactlyOne(
 			'communications.whatsapp_sends',
 			{ id: sendId, thread_id: threadId },
 			{
 				lateral: {
-					list: db.selectExactlyOne('people.lists', { id: db.parent('list_id') }),
+					list: db.selectExactlyOne('people.lists', {
+						id: db.parent('list_id'),
+						deleted_at: db.conditions.isNull
+					}),
 					delivered: db.count('communications.sent_whatsapp_messages', {
 						message_id: thread.template_message_id,
 						delivered: true
@@ -97,7 +100,7 @@ export async function update({
 	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
-	await exists({ instanceId, threadId, t });
+	await exists({ instanceId, threadId });
 	const updated = await db
 		.update('communications.whatsapp_sends', parsed, { id: sendId, thread_id: threadId })
 		.run(pool);
@@ -132,7 +135,7 @@ export async function listForThread({
 			return parse(schema.list, cached);
 		}
 	}
-	const thread = await readThread({ instanceId, threadId, t });
+	const thread = await readThread({ instanceId, threadId });
 	const selected = await db
 		.select(
 			'communications.whatsapp_sends',
@@ -141,7 +144,10 @@ export async function listForThread({
 				limit: query.options.limit,
 				offset: query.options.offset,
 				lateral: {
-					list: db.selectExactlyOne('people.lists', { id: db.parent('list_id') }),
+					list: db.selectExactlyOne('people.lists', {
+						id: db.parent('list_id'),
+						deleted_at: db.conditions.isNull
+					}),
 					delivered: db.count('communications.sent_whatsapp_messages', {
 						message_id: thread.template_message_id,
 						delivered: true
