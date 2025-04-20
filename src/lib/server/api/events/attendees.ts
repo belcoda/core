@@ -239,7 +239,6 @@ export async function registerPersonForEventFromWhatsApp(
 		instance.id,
 		message.from,
 		message,
-		t,
 		queue
 	);
 
