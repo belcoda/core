@@ -211,7 +211,7 @@ export async function signPetition(
 	t: App.Localization,
 	queue: App.Queue
 ) {
-	const instance = await _getInstanceIdByPetitionId(petitionId);
+	const instance = await _getInstanceIdByPetitionId(petitionId); //will not return deleted petitions
 	const person = await getPersonOrCreatePersonByWhatsappId(
 		instance.id,
 		message.from,
