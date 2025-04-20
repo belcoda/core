@@ -82,7 +82,7 @@ export async function create({
 		let counter = 1;
 		while (true) {
 			const exists =
-				await db.sql`SELECT id FROM petitions.petitions WHERE deleted_at IS NULL AND instance_id = ${db.param(instanceId)} AND (name = ${db.param(uniqueName)} OR slug = ${db.param(uniqueSlug)})`.run(
+				await db.sql`SELECT id FROM petitions.petitions WHERE instance_id = ${db.param(instanceId)} AND (name = ${db.param(uniqueName)} OR slug = ${db.param(uniqueSlug)})`.run(
 					txnClient
 				);
 
