@@ -172,6 +172,7 @@ export async function listForPetition({
 	return parsedResult;
 }
 
+// TODO: Figure out a way to make this not return signatures on deleted petitions
 export async function listForPerson({
 	instanceId,
 	personId,
