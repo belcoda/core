@@ -189,6 +189,7 @@ export async function listForEvent({
 		}
 	}
 	await exists({ instanceId, eventId });
+	//todo: decide if we want this to not return details for people that are deleted...
 	const result = await db
 		.select('events.event_attendees_view', { event_id: eventId, ...filter.where }, filter.options) //pagination only
 		.run(pool);
@@ -215,6 +216,7 @@ export async function listForPerson({
 }): Promise<schema.List> {
 	await personExists({ instanceId, personId });
 	const filter = filterQuery(url);
+	//todo: decide if we want this to not return details for events that are deleted...
 	const result = await db
 		.select('events.attendees', { person_id: personId, ...filter.where }, filter.options) //pagination only
 		.run(pool);
