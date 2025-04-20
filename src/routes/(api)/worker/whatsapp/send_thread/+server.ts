@@ -15,14 +15,12 @@ export async function POST(event) {
 
 		const list = await getAllPersonIds({
 			instanceId: event.locals.instance.id,
-			listId: parsed.list.id,
-			t: event.locals.t
+			listId: parsed.list.id
 		});
 
 		const thread = await readThread({
 			instanceId: event.locals.instance.id,
-			threadId: parsed.thread_id,
-			t: event.locals.t
+			threadId: parsed.thread_id
 		});
 
 		for (let index = 0; index < list.length; index++) {
