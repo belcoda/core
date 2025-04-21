@@ -14,7 +14,10 @@ import { parse } from '$lib/schema/valibot';
 const log = pino(import.meta.url);
 export async function load(event) {
 	const form = await superValidate(
-		{ ...event.locals.instance.settings.events.default_event_info_settings },
+		{
+			...event.locals.instance.settings.events.default_event_info_settings,
+			country: event.locals.instance.country
+		},
 		valibot(create),
 		{ errors: false } //does not set errors on form load (tainted/dirty fields with errors will still display, though)
 	);
