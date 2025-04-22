@@ -39,7 +39,7 @@ export async function create({
 		let counter = 1;
 		while (true) {
 			const exists =
-				await db.sql`SELECT id FROM website.content WHERE content_type_id = ${db.param(contentTypeId)} AND (name = ${db.param(uniqueName)} OR slug = ${db.param(uniqueSlug)})`.run(
+				await db.sql`SELECT id FROM website.content WHERE deleted_at = ${db.conditions.isNull} AND content_type_id = ${db.param(contentTypeId)} AND (name = ${db.param(uniqueName)} OR slug = ${db.param(uniqueSlug)})`.run(
 					txnClient
 				);
 
@@ -75,21 +75,27 @@ export async function create({
 export async function read({
 	instanceId,
 	contentTypeId,
-	contentId
+	contentId,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	contentTypeId: number;
 	contentId: number;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, contentTypeId, contentId));
-	if (cached) {
+	if (cached && !includeDeleted) {
 		return parse(schema.read, cached);
 	}
 	await exists({ instanceId, contentTypeId });
 	const result = await db
 		.selectExactlyOne(
 			'website.content',
-			{ id: contentId, content_type_id: contentTypeId },
+			{
+				id: contentId,
+				content_type_id: contentTypeId,
+				...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+			},
 			{
 				lateral: {
 					feature_image: db.selectOne('website.uploads', {
@@ -110,21 +116,27 @@ export async function read({
 export async function readBySlug({
 	instanceId,
 	slug,
-	contentTypeId
+	contentTypeId,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	slug: string;
 	contentTypeId: number;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisStringSlug(instanceId, contentTypeId, slug));
-	if (cached) {
+	if (cached && !includeDeleted) {
 		const contentId = parse(id, cached);
 		return read({ instanceId, contentTypeId, contentId });
 	}
 	const result = await db
 		.selectExactlyOne(
 			'website.content',
-			{ slug, content_type_id: contentTypeId },
+			{
+				slug,
+				content_type_id: contentTypeId,
+				...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+			},
 			{
 				columns: ['id'],
 				lateral: {
@@ -151,26 +163,32 @@ export async function readBySlug({
 export async function list({
 	instanceId,
 	contentTypeId,
-	url
+	url,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	contentTypeId: number;
 	url: URL;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const filter = filterQuery(url);
-	if (filter.filtered !== true) {
+	if (!includeDeleted && filter.filtered !== true) {
 		const cached = await redis.get(redisString(instanceId, contentTypeId, 'all'));
 		if (cached) {
 			return parse(schema.list, cached);
 		}
 	}
 	await exists({ instanceId, contentTypeId });
+	const where = {
+		...filter.where,
+		...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+	};
 	const result = await db
-		.select('website.content', { content_type_id: contentTypeId, ...filter.where }, filter.options)
+		.select('website.content', { content_type_id: contentTypeId, ...where }, filter.options)
 		.run(pool);
 
 	const count = await db
-		.count('website.content', { content_type_id: contentTypeId, ...filter.where })
+		.count('website.content', { content_type_id: contentTypeId, ...where })
 		.run(pool);
 	const parsedResult = parse(schema.list, { count: count, items: result });
 	await redis.set(redisString(instanceId, contentTypeId, 'all'), parsedResult);
@@ -194,7 +212,11 @@ export async function update({
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const result = await db
-		.update('website.content', parsed, { id: contentId, content_type_id: contentTypeId })
+		.update('website.content', parsed, {
+			id: contentId,
+			content_type_id: contentTypeId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool);
 	if (result.length !== 1) {
 		throw new BelcodaError(404, 'DATA:WEBSITE:CONTENT:UPDATE:01', m.pretty_tired_fly_lead());
