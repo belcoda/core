@@ -222,3 +222,26 @@ export async function update({
 	}
 	return returned;
 }
+
+export async function del({
+	instanceId,
+	contentTypeId,
+	contentId
+}: {
+	instanceId: number;
+	contentTypeId: number;
+	contentId: number;
+}): Promise<void> {
+	await db
+		.update(
+			'website.content',
+			{ deleted_at: new Date() },
+			{ id: contentId, content_type_id: contentTypeId }
+		)
+		.run(pool)
+		.catch((err) => {
+			throw new BelcodaError(404, 'DATA:WEBSITE:CONTENT:DEL:01', m.pretty_tired_fly_lead(), err);
+		});
+	await redis.del(redisString(instanceId, contentTypeId, contentId));
+	await redis.del(redisString(instanceId, contentTypeId, 'all'));
+}
