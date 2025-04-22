@@ -19,17 +19,15 @@ export async function create({
 	instanceId,
 	contentTypeId,
 	body,
-	t,
 	queue
 }: {
 	instanceId: number;
 	contentTypeId: number;
 	body: schema.Create;
-	t: App.Localization;
 	queue: App.Queue;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
-	const contentType = await readContentType({ instanceId, contentTypeId, t });
+	const contentType = await readContentType({ instanceId, contentTypeId });
 	// function to insert a guaranteed unique name and slug based on the heading
 	// after checking to ensure the name and slug are unique, it inserts the item
 
@@ -64,7 +62,7 @@ export async function create({
 			.run(txnClient);
 	});
 	await redis.del(redisString(instanceId, contentTypeId, 'all'));
-	const returned = await read({ instanceId, contentTypeId, contentId: result.id, t }); //this already sets the cache
+	const returned = await read({ instanceId, contentTypeId, contentId: result.id }); //this already sets the cache
 	const htmlMeta: ContentHTMLMetaTags = {
 		type: 'content',
 		contentId: returned.id,
@@ -77,19 +75,17 @@ export async function create({
 export async function read({
 	instanceId,
 	contentTypeId,
-	contentId,
-	t
+	contentId
 }: {
 	instanceId: number;
 	contentTypeId: number;
 	contentId: number;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, contentTypeId, contentId));
 	if (cached) {
 		return parse(schema.read, cached);
 	}
-	await exists({ instanceId, contentTypeId, t });
+	await exists({ instanceId, contentTypeId });
 	const result = await db
 		.selectExactlyOne(
 			'website.content',
@@ -114,18 +110,16 @@ export async function read({
 export async function readBySlug({
 	instanceId,
 	slug,
-	contentTypeId,
-	t
+	contentTypeId
 }: {
 	instanceId: number;
 	slug: string;
 	contentTypeId: number;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisStringSlug(instanceId, contentTypeId, slug));
 	if (cached) {
 		const contentId = parse(id, cached);
-		return read({ instanceId, contentTypeId, contentId, t });
+		return read({ instanceId, contentTypeId, contentId });
 	}
 	const result = await db
 		.selectExactlyOne(
@@ -151,19 +145,17 @@ export async function readBySlug({
 		});
 	const contentId = parse(id, result.id);
 	await redis.set(redisStringSlug(instanceId, contentTypeId, slug), contentId);
-	return await read({ instanceId, contentTypeId, contentId, t });
+	return await read({ instanceId, contentTypeId, contentId });
 }
 
 export async function list({
 	instanceId,
 	contentTypeId,
-	url,
-	t
+	url
 }: {
 	instanceId: number;
 	contentTypeId: number;
 	url: URL;
-	t: App.Localization;
 }): Promise<schema.List> {
 	const filter = filterQuery(url);
 	if (filter.filtered !== true) {
@@ -172,7 +164,7 @@ export async function list({
 			return parse(schema.list, cached);
 		}
 	}
-	await exists({ instanceId, contentTypeId, t });
+	await exists({ instanceId, contentTypeId });
 	const result = await db
 		.select('website.content', { content_type_id: contentTypeId, ...filter.where }, filter.options)
 		.run(pool);
@@ -190,14 +182,12 @@ export async function update({
 	contentTypeId,
 	contentId,
 	body,
-	t,
 	queue,
 	skipMetaGeneration = false
 }: {
 	instanceId: number;
 	contentTypeId: number;
 	contentId: number;
-	t: App.Localization;
 	body: schema.Update;
 	queue: App.Queue;
 	skipMetaGeneration?: boolean;
@@ -211,7 +201,7 @@ export async function update({
 	}
 	await redis.del(redisString(instanceId, contentTypeId, contentId));
 	await redis.del(redisString(instanceId, contentTypeId, 'all'));
-	const returned = await read({ instanceId, contentTypeId, contentId, t }); //update the cache with the new updated object
+	const returned = await read({ instanceId, contentTypeId, contentId }); //update the cache with the new updated object
 	const htmlMeta: ContentHTMLMetaTags = {
 		type: 'content',
 		contentId: returned.id,

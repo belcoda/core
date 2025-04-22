@@ -5,7 +5,6 @@ export async function GET(event) {
 	try {
 		const read = await api.read({
 			instanceId: event.locals.instance.id,
-			t: event.locals.t,
 			contentTypeId: Number(event.params.content_type_id),
 			contentId: Number(event.params.content_id)
 		});
@@ -27,7 +26,6 @@ export async function PUT(event) {
 			instanceId: event.locals.instance.id,
 			contentTypeId: Number(event.params.content_type_id),
 			contentId: Number(event.params.content_id),
-			t: event.locals.t,
 			body,
 			queue: event.locals.queue
 		});
