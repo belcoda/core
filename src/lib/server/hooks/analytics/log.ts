@@ -9,8 +9,8 @@ export default async function (event: RequestEvent): Promise<void> {
 		const payload = {
 			hostname: event.url.hostname,
 			language: event.locals.language,
-			referrer: event.request.headers.get('referer'),
 			domain: event.url.hostname,
+			referrer: event.request.headers.get('referer') || '',
 			domain: PUBLIC_ROOT_DOMAIN,
 			screen: 'N/A',
 			title: 'N/A',
