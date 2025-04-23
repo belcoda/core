@@ -1,5 +1,5 @@
 import { UMAMI_API_KEY } from '$env/static/private';
-import { PUBLIC_UMAMI_WEBSITE_ID } from '$env/static/public';
+import { PUBLIC_UMAMI_WEBSITE_ID, PUBLIC_ROOT_DOMAIN } from '$env/static/public';
 import { type RequestEvent } from '@sveltejs/kit';
 import { pino } from '$lib/server';
 const log = pino(import.meta.url);
@@ -10,9 +10,11 @@ export default async function (event: RequestEvent): Promise<void> {
 			language: event.locals.language,
 			referrer: event.request.headers.get('referer'),
 			domain: event.url.hostname,
+			domain: PUBLIC_ROOT_DOMAIN,
 			screen: 'N/A',
 			title: 'N/A',
 			url: event.url.href,
+			url: `${event.url.href}`,
 			name: `${event.request.method}`,
 			website: PUBLIC_UMAMI_WEBSITE_ID,
 			data: {
