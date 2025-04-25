@@ -16,17 +16,25 @@
 	import { PUBLIC_SENTRY_DSN } from '$env/static/public';
 	import * as Sentry from '@sentry/sveltekit';
 	import { browser, dev } from '$app/environment';
-	if (browser && !dev) {
-		Sentry.init({
-			dsn: PUBLIC_SENTRY_DSN,
-			integrations: [
-				Sentry.feedbackIntegration({
-					// Additional SDK configuration goes in here, for example:
-					colorScheme: 'auto'
-				})
-			]
-		});
-	}
+	import { onMount } from 'svelte';
+	onMount(() => {
+		if (browser && !dev) {
+			Sentry.init({
+				dsn: PUBLIC_SENTRY_DSN,
+				integrations: [
+					Sentry.feedbackIntegration({
+						colorScheme: 'auto',
+						autoInject: false //stops Sentry from automatically rendering the button in bottom right corner
+					})
+				]
+			});
+			const feedback = Sentry.getFeedback(); //gets the feedback instance
+			feedback?.attachTo(document.querySelector('#sentry-widget') as HTMLElement, {
+				formTitle: 'Report a Bug or give feedback'
+			});
+		}
+	});
+
 	const breadcrumbs = $state(breadcrumbsConstructor(page.data.t));
 
 	const pageTitle = $derived.by(() => {
