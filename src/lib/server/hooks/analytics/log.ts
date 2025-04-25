@@ -1,5 +1,9 @@
 import { UMAMI_API_KEY } from '$env/static/private';
-import { PUBLIC_UMAMI_WEBSITE_ID, PUBLIC_ROOT_DOMAIN } from '$env/static/public';
+import {
+	PUBLIC_UMAMI_WEBSITE_ID,
+	PUBLIC_ROOT_DOMAIN,
+	PUBLIC_UMAMI_REFERRER_ID
+} from '$env/static/public';
 import { type RequestEvent } from '@sveltejs/kit';
 import { pino } from '$lib/server';
 import { dev } from '$app/environment';
@@ -9,7 +13,7 @@ export default async function (event: RequestEvent): Promise<void> {
 		const payload = {
 			hostname: event.url.hostname,
 			language: event.locals.language,
-			referrer: event.request.headers.get('referer') || '',
+			referrer: event.request.headers.get('referer') || PUBLIC_UMAMI_REFERRER_ID,
 			domain: PUBLIC_ROOT_DOMAIN,
 			screen: 'N/A',
 			title: 'N/A',
@@ -21,7 +25,7 @@ export default async function (event: RequestEvent): Promise<void> {
 				id: event.locals.admin?.id || 'UNKNOWN'
 			}
 		};
-		if (!dev) {
+		if (dev) {
 			const headers = {
 				'Content-Type': 'application/json',
 				'x-umami-api-key': UMAMI_API_KEY,
