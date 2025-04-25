@@ -25,7 +25,7 @@ export default async function (event: RequestEvent): Promise<void> {
 				id: event.locals.admin?.id || 'UNKNOWN'
 			}
 		};
-		if (dev) {
+		if (!dev) {
 			const headers = {
 				'Content-Type': 'application/json',
 				'x-umami-api-key': UMAMI_API_KEY,
