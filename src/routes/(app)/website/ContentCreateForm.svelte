@@ -14,8 +14,17 @@
 	import * as m from '$lib/paraglide/messages';
 	import UploadWidget from '$lib/comps/widgets/uploads/UploadWidget.svelte';
 	import { create, update } from '$lib/schema/website/content';
-	const { isCreate, contentTypeSlug = 'pages' }: { isCreate: boolean; contentTypeSlug: string } =
-		$props();
+	const {
+		isCreate,
+		contentTypeSlug = 'pages',
+		showDeleteButton = false,
+		onDelete = () => {}
+	}: {
+		isCreate: boolean;
+		contentTypeSlug: string;
+		showDeleteButton?: boolean;
+		onDelete?: () => void;
+	} = $props();
 	const form = superForm($page.data.form, {
 		validators: valibotClient(isCreate ? create : update),
 		dataType: 'json'
@@ -50,7 +59,15 @@
 				if (upload === null) $formData.feature_image_upload_id = null;
 			}}
 		/>
-		<Button></Button>
+		<div class="flex justify-end gap-2">
+			<Button></Button>
+			{#if showDeleteButton}
+				<Button type="button" variant="destructive" onclick={onDelete}
+					>{m.wide_major_pig_swim()}</Button
+				>
+			{/if}
+		</div>
+
 		<Debug data={$formData} />
 	</Grid>
 </form>

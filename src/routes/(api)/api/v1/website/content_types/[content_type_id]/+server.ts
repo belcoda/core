@@ -5,7 +5,6 @@ export async function GET(event) {
 	try {
 		const read = await api.read({
 			instanceId: event.locals.instance.id,
-			t: event.locals.t,
 			contentTypeId: Number(event.params.content_type_id)
 		});
 		return json(read);

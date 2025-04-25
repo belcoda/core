@@ -5,7 +5,6 @@ export async function GET(event) {
 	try {
 		const read = await api.read({
 			instanceId: event.locals.instance.id,
-			t: event.locals.t,
 			contentTypeId: Number(event.params.content_type_id),
 			contentId: Number(event.params.content_id)
 		});
@@ -27,7 +26,6 @@ export async function PUT(event) {
 			instanceId: event.locals.instance.id,
 			contentTypeId: Number(event.params.content_type_id),
 			contentId: Number(event.params.content_id),
-			t: event.locals.t,
 			body,
 			queue: event.locals.queue
 		});
@@ -36,6 +34,24 @@ export async function PUT(event) {
 		return error(
 			500,
 			'API:/api/v1/website/content_types/[content_type_id]/content/[content_id]:PUT01',
+			m.spry_ago_baboon_cure(),
+			err
+		);
+	}
+}
+
+export async function DELETE(event) {
+	try {
+		const response = await api.del({
+			instanceId: event.locals.instance.id,
+			contentTypeId: Number(event.params.content_type_id),
+			contentId: Number(event.params.content_id)
+		});
+		return json(response);
+	} catch (err) {
+		return error(
+			500,
+			'API:/api/v1/website/content_types/[content_type_id]/content/[content_id]:DELETE01',
 			m.spry_ago_baboon_cure(),
 			err
 		);
