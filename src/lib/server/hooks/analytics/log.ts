@@ -13,7 +13,7 @@ export default async function (event: RequestEvent): Promise<void> {
 		const payload = {
 			hostname: event.url.hostname,
 			language: event.locals.language,
-			referrer: event.request.headers.get('referer') || PUBLIC_UMAMI_REFERRER_ID,
+			referrer: event.request.headers.get('referer') || PUBLIC_UMAMI_REFERRER_ID || '',
 			domain: PUBLIC_ROOT_DOMAIN,
 			screen: 'N/A',
 			title: 'N/A',
