@@ -239,7 +239,8 @@ async function addPersonToEvent({
 				person_id: personId,
 				status: 'attended',
 				send_notifications: false,
-				notes: `import:${importId}`
+				notes: `import:${importId}`,
+				response_channel: 'none'
 			},
 			t,
 			queue
