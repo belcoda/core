@@ -11,6 +11,7 @@
 		renderBreadcrumb
 	} from '$lib/comps/nav/breadcrumbs/breadcrumbs';
 	import { getLocale } from '$lib/paraglide/runtime';
+	import Button from '$lib/comps/ui/button/button.svelte';
 	import { PUBLIC_UMAMI_WEBSITE_ID } from '$env/static/public';
 	import { PUBLIC_SENTRY_DSN } from '$env/static/public';
 	import * as Sentry from '@sentry/sveltekit';
@@ -86,7 +87,7 @@
 			<div class="hidden lg:block lg:col-span-3 xl:col-span-2">
 				{#key page.url.pathname}<Sidebar />{/key}
 			</div>
-			<div class="col-span-12 lg:col-span-9 xl:col-span-10 mb-24 lg:mb-0">
+			<div class="col-span-12 lg:col-span-9 xl:col-span-10 lg:mb-0">
 				{#key page.url.pathname}<Breadcrumb />{/key}
 				{@render children()}
 			</div>
@@ -94,8 +95,13 @@
 		<div class="block lg:hidden">
 			{#key page.url.pathname}<BottomNav />{/key}
 		</div>
-		<footer class="hidden lg:block">
+		<footer class="block lg:mb-0">
 			<Footer />
 		</footer>
+		<div class="w-full flex justify-center mb-20 lg:mb-12">
+			<Button variant="ghost" size="sm" id="sentry-widget" class="text-muted-foreground text-xs"
+				>Report a bug</Button
+			>
+		</div>
 	</div>
 {/key}
