@@ -421,7 +421,7 @@
 	"fuzzy_many_puffin_propel": "Es posible que no necesite cambiar esta configuración. La configuración predeterminada es correcta en la mayoría de los casos, y realizar cambios puede interrumpir la gestión automática de las respuestas por correo electrónico y otras funciones. Lea la documentación completa antes de realizar cambios.",
 	"dry_smart_pigeon_propel": "De",
 	"major_suave_stork_renew": "Responder a",
-	"basic_teal_termite_lend": "Se enviará la dirección a la que se responde este correo electrónico. Si la cambia, no recibirá respuestas automáticamente en Belcoda.",
+	"basic_teal_termite_lend": "Las respuestas a este correo se enviarán a esta dirección. Si la cambias, dejarás de recibir respuestas automáticamente dentro de Belcoda.",
 	"honest_sour_giraffe_seek": "Vista previa del texto",
 	"weird_whole_mallard_play": "Este es el texto que aparece en la vista previa del cliente de correo electrónico. Si no lo modifica, se generará automáticamente una vista previa basada en el asunto y el cuerpo del correo electrónico.",
 	"tense_basic_grizzly_walk": "Utilice el formato \"Nombre<email@example.com> \"",
