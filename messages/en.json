@@ -433,7 +433,7 @@
 	"weird_whole_mallard_play": "This is the text that appears in the email client preview. If you don't make changes to this text, a preview will be automatically generated based on the email subject and body.",
 	"tense_basic_grizzly_walk": "Use the format \"Name <email@example.com>\"",
 	"suave_brief_jackdaw_aim": "If checked, a plain-text version will be generated and sent to users who cannot receive HTML emails.",
-	"each_topical_hawk_hack": "Use HTML as Plain Text",
+	"each_topical_hawk_hack": "Use HTML as plain text",
 	"upper_giant_kitten_dart": "Send Test Email",
 	"known_ornate_parrot_clip": "Template",
 	"watery_bad_mouse_breathe": "Select a template to use for the email. Templates can be managed in the \"Email Templates\" section.",
