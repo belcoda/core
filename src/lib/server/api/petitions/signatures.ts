@@ -30,7 +30,7 @@ export async function create({
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
 
-	await exists({ instanceId, petitionId, t });
+	await exists({ instanceId, petitionId });
 	const notificationPayload = {
 		activity_id: petitionId,
 		person_id: parsed.person_id,
@@ -98,7 +98,7 @@ export async function read({
 	if (cached) {
 		return parse(schema.read, cached);
 	}
-	await exists({ instanceId, petitionId, t });
+	await exists({ instanceId, petitionId });
 	const result = await db
 		.selectExactlyOne('petitions.petition_signatures_view', {
 			petition_id: petitionId,
@@ -150,7 +150,7 @@ export async function listForPetition({
 			return parse(schema.list, cached);
 		}
 	}
-	await exists({ instanceId, petitionId, t });
+	await exists({ instanceId, petitionId });
 	const result = await db
 		.select(
 			'petitions.petition_signatures_view',
@@ -172,6 +172,7 @@ export async function listForPetition({
 	return parsedResult;
 }
 
+// TODO: Figure out a way to make this not return signatures on deleted petitions
 export async function listForPerson({
 	instanceId,
 	personId,
@@ -183,7 +184,7 @@ export async function listForPerson({
 	url: URL;
 	t: App.Localization;
 }): Promise<schema.List> {
-	await personExists({ instanceId, personId, t });
+	await personExists({ instanceId, personId });
 	const filter = filterQuery(url, { order_by: 'created_at' });
 	const result = await db
 		.select(
@@ -210,7 +211,7 @@ export async function signPetition(
 	t: App.Localization,
 	queue: App.Queue
 ) {
-	const instance = await _getInstanceIdByPetitionId(petitionId);
+	const instance = await _getInstanceIdByPetitionId(petitionId); //will not return deleted petitions
 	const person = await getPersonOrCreatePersonByWhatsappId(
 		instance.id,
 		message.from,

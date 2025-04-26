@@ -18,8 +18,7 @@ export async function POST(event) {
 			case 'event': {
 				const eventObject = await readEvent({
 					eventId: parsed.eventId,
-					instanceId: event.locals.instance.id,
-					t: event.locals.t
+					instanceId: event.locals.instance.id
 				});
 				if (eventObject.html_metatags.isManuallySet === false) {
 					const output = await generateHtmlMetatags(eventObject.heading, eventObject.html);
@@ -34,7 +33,6 @@ export async function POST(event) {
 							}
 						},
 						queue: event.locals.queue,
-						t: event.locals.t,
 						// if we don't skip meta generation, this same queued job will be triggered again which will cause an infite loop
 						skipMetaGeneration: true
 					});
@@ -44,8 +42,7 @@ export async function POST(event) {
 			case 'petition': {
 				const petitionObject = await readPetition({
 					instanceId: event.locals.instance.id,
-					petitionId: parsed.petitionId,
-					t: event.locals.t
+					petitionId: parsed.petitionId
 				});
 				if (petitionObject.html_metatags.isManuallySet === false) {
 					const output = await generateHtmlMetatags(petitionObject.heading, petitionObject.html);
@@ -60,7 +57,6 @@ export async function POST(event) {
 							}
 						},
 						queue: event.locals.queue,
-						t: event.locals.t,
 						// if we don't skip meta generation, this same queued job will be triggered again which will cause an infite loop
 						skipMetaGeneration: true
 					});
@@ -71,8 +67,7 @@ export async function POST(event) {
 				const contentObject = await readContent({
 					instanceId: event.locals.instance.id,
 					contentId: parsed.contentId,
-					contentTypeId: parsed.contentTypeId,
-					t: event.locals.t
+					contentTypeId: parsed.contentTypeId
 				});
 				if (contentObject.html_metatags.isManuallySet === false) {
 					const output = await generateHtmlMetatags(contentObject.heading, contentObject.html);
@@ -88,7 +83,6 @@ export async function POST(event) {
 							}
 						},
 						queue: event.locals.queue,
-						t: event.locals.t,
 						// if we don't skip meta generation, this same queued job will be triggered again which will cause an infite loop
 						skipMetaGeneration: true
 					});

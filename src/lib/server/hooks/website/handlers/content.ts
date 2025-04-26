@@ -68,8 +68,7 @@ export default async function ({
 	const content = await readContentBySlug({
 		instanceId: instance.id,
 		slug: content_slug,
-		contentTypeId: contentType.id,
-		t: t
+		contentTypeId: contentType.id
 	}).catch((err) => {
 		log.error('Error reading content');
 		log.error(err);

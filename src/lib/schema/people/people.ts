@@ -1,7 +1,6 @@
 import {
 	v,
 	id,
-	language,
 	count,
 	address,
 	timestamp,
@@ -9,6 +8,7 @@ import {
 	uuid,
 	date,
 	mediumString,
+	isoLanguage,
 	longString,
 	mediumStringNotEmpty,
 	DEFAULT_COUNTRY
@@ -37,7 +37,7 @@ export const base = v.object({
 
 	details: v.nullable(longString),
 	do_not_contact: v.boolean(),
-	preferred_language: language,
+	preferred_language: isoLanguage, // ISO 639-1  code
 
 	...address.entries,
 

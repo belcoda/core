@@ -6,6 +6,11 @@ COPY ./svelte.config.js ./
 COPY ./vite.config.ts ./
 COPY ./.env.production ./.env
 COPY ./project.inlang ./project.inlang
+COPY ./ca-certificate.crt ./
+COPY ./knexfile.cjs ./
+COPY ./db ./db
+RUN npm install knex
+RUN npm run knex:migrate:production
 RUN npm install
 COPY . .
 ENV NODE_OPTIONS=--max_old_space_size=4096

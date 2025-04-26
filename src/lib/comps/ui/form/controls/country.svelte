@@ -1,78 +1,119 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	type T = Record<string, unknown>;
 </script>
 
 <script lang="ts" generics="T extends Record<string, unknown>">
-	import { page } from '$app/stores';
 	import { type SuperForm, type FormPath } from 'sveltekit-superforms';
-	export let form: SuperForm<T>;
-	export let name: FormPath<T>;
+	type Props = {
+		name: FormPath<T>;
+		form: SuperForm<T>;
+		value: string;
+		label?: string | null;
+		description?: string | null;
+		class?: string;
+		placeholder?: string;
+	};
+
+	let {
+		value = $bindable(),
+		form,
+		name,
+		label,
+		description,
+		class: className,
+		placeholder = m.gross_royal_nuthatch_rise()
+	}: Props = $props();
+
 	import * as Form from '$lib/comps/ui/form';
-	export let label: string | null;
-	export let description: string | null = null;
 	import { cn } from '$lib/utils';
-	let className = '';
-	import { renderLocalizedCountryName, renderFlags } from '$lib/i18n/countries';
-	export { className as class };
+	import { renderLocalizedCountryName, countryList } from '$lib/i18n/countries';
 	// Everything above this can be copied
 
 	import * as m from '$lib/paraglide/messages';
 
 	import * as Select from '$lib/comps/ui/select';
-	export let value: string;
-	export let placeholder: string = m.gross_royal_nuthatch_rise();
-	import { SUPPORTED_COUNTRIES, type SupportedCountry } from '$lib/i18n';
+	import { SUPPORTED_COUNTRIES } from '$lib/i18n';
 
-	const options = SUPPORTED_COUNTRIES.map((country) => ({
-		value: country,
-		label: renderLocalizedCountryName(country)
+	import { getLocale } from '$lib/paraglide/runtime';
+	import { tick } from 'svelte';
+
+	import * as Popover from '$lib/comps/ui/popover';
+	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
+	import Check from 'lucide-svelte/icons/check';
+	import * as Command from '$lib/comps/ui/command';
+	import Button from '$lib/comps/ui/button/button.svelte';
+
+	const locale = getLocale();
+
+	const options = countryList.map((country) => ({
+		value: country.code,
+		label: `${country.flag} ${renderLocalizedCountryName(country.code, locale)}`
 	}));
 
-	$: selectedItem = SUPPORTED_COUNTRIES.includes(value as (typeof SUPPORTED_COUNTRIES)[number])
-		? {
-				label: renderLocalizedCountryName(value as (typeof SUPPORTED_COUNTRIES)[number]), //this is fine, because we're already checking...
-				value: value
-			}
-		: undefined;
+	let open = $state(false);
+	let triggerRef = $state<HTMLButtonElement>(null!);
+
+	const selectedValue = $derived(options.find((f) => f.value === value)?.label);
+
+	// We want to refocus the trigger button when the user selects
+	// an item from the list so users can continue navigating the
+	// rest of the form with the keyboard.
+	function closeAndFocusTrigger() {
+		open = false;
+		tick().then(() => {
+			triggerRef.focus();
+		});
+	}
 </script>
 
 <Form.Field {form} {name}>
 	<Form.Control>
 		{#snippet children({ props })}
-			<!-- Start form control block -->
-			<div class="flex flex-col gap-2">
+			<div class={cn('flex flex-col gap-2', className)}>
 				{#if label}<Form.Label>{label}</Form.Label>{/if}
-				<Select.Root type="single" bind:value name={props.name}>
-					<Select.Trigger {...props} class={cn('focus-visible:border-2 ', className)}>
-						{#if selectedItem}
-							<div class="flex items-center gap-2 justify-start">
-								{renderFlags(value as (typeof SUPPORTED_COUNTRIES)[number])}
-								{selectedItem.label}
-							</div>
-						{:else}
-							{placeholder}
-						{/if}
-					</Select.Trigger>
-					<Select.Content>
-						{#each options as option}
-							<Select.Item
-								value={option.value}
-								label={option.label}
-								class="flex items-center gap-1"
+				<Popover.Root bind:open>
+					<Popover.Trigger bind:ref={triggerRef}>
+						{#snippet child({ props })}
+							<Button
+								variant="outline"
+								class="w-[200px] justify-between"
+								{...props}
+								role="combobox"
+								aria-expanded={open}
 							>
-								<div>
-									{renderFlags(option.value as (typeof SUPPORTED_COUNTRIES)[number])}
-								</div>
-								<div>{option.label}</div>
-							</Select.Item>
-						{/each}
-					</Select.Content>
-				</Select.Root>
+								{selectedValue || 'Select a framework...'}
+								<ChevronsUpDown class="opacity-50" />
+							</Button>
+						{/snippet}
+					</Popover.Trigger>
+					<Popover.Content class="w-[200px] p-0">
+						<Command.Root>
+							<Command.Input {placeholder} />
+							<Command.List>
+								<Command.Empty>{m.tidy_cuddly_pelican_evoke()}</Command.Empty>
+								<Command.Group>
+									{#each countryList as country}
+										<Command.Item
+											keywords={[renderLocalizedCountryName(country.code, locale)]}
+											value={country.code}
+											onSelect={() => {
+												value = country.code;
+												closeAndFocusTrigger();
+											}}
+										>
+											<Check class={cn(value !== country.code && 'text-transparent')} />
+											{`${country.flag} ${renderLocalizedCountryName(country.code, locale)}`}
+										</Command.Item>
+									{/each}
+								</Command.Group>
+							</Command.List>
+						</Command.Root>
+					</Popover.Content>
+				</Popover.Root>
+				{#if description}<Form.Description>{description}</Form.Description>{/if}
 				<input hidden bind:value name={props.name} />
 			</div>
-			{#if description}<Form.Description>{description}</Form.Description>{/if}
-			<!-- End control block -->
-			<Form.FieldErrors />
 		{/snippet}
 	</Form.Control>
+	<Form.FieldErrors />
 </Form.Field>

@@ -23,19 +23,21 @@ export function redisStringSlug(instanceId: number, slug: string) {
 
 export async function exists({
 	instanceId,
-	petitionId,
-	t
+	petitionId
 }: {
 	instanceId: number;
 	petitionId: number;
-	t: App.Localization;
 }): Promise<boolean> {
 	const cached = await redis.get(redisString(instanceId, petitionId));
 	if (cached) {
 		return true;
 	}
 	await db
-		.selectExactlyOne('petitions.petitions', { instance_id: instanceId, id: petitionId })
+		.selectExactlyOne('petitions.petitions', {
+			instance_id: instanceId,
+			id: petitionId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(
@@ -52,13 +54,11 @@ export async function create({
 	instanceId,
 	adminId,
 	body,
-	t,
 	queue
 }: {
 	instanceId: number;
 	adminId: number;
 	body: schema.Create;
-	t: App.Localization;
 	queue: App.Queue;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
@@ -68,7 +68,6 @@ export async function create({
 		queue,
 		instanceId,
 		adminId,
-		t,
 		instance,
 		defaultEmailTemplateId: instance.settings.communications.email.default_template_id
 	});
@@ -111,7 +110,7 @@ export async function create({
 
 	await redis.del(redisString(instanceId, adminId));
 	await redis.del(redisString(instanceId, 'all'));
-	const returned = await read({ instanceId, petitionId: inserted.id, t: t });
+	const returned = await read({ instanceId, petitionId: inserted.id });
 	const htmlMeta: PetitionHTMLMetaTags = { type: 'petition', petitionId: returned.id };
 	await queue('/utils/openai/generate_html_meta', instanceId, htmlMeta);
 	return returned;
@@ -119,14 +118,12 @@ export async function create({
 
 export async function update({
 	instanceId,
-	t,
 	petitionId,
 	body,
 	queue,
 	skipMetaGeneration = false
 }: {
 	instanceId: number;
-	t: App.Localization;
 	petitionId: number;
 	body: schema.Update;
 	queue: App.Queue;
@@ -134,7 +131,11 @@ export async function update({
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const updated = await db
-		.update('petitions.petitions', parsed, { instance_id: instanceId, id: petitionId })
+		.update('petitions.petitions', parsed, {
+			instance_id: instanceId,
+			id: petitionId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(
@@ -148,7 +149,7 @@ export async function update({
 		throw new BelcodaError(404, 'DATA:PETITIONS:PETITIONS:UPDATE:02', m.pretty_tired_fly_lead());
 	await redis.del(redisString(instanceId, 'all'));
 	await redis.del(redisString(instanceId, petitionId));
-	const returned = await read({ instanceId, petitionId: petitionId, t: t });
+	const returned = await read({ instanceId, petitionId: petitionId });
 	await redis.del(redisStringSlug(instanceId, returned.slug));
 	const htmlMeta: PetitionHTMLMetaTags = { type: 'petition', petitionId: petitionId };
 	if (skipMetaGeneration !== true) {
@@ -160,11 +161,11 @@ export async function update({
 export async function read({
 	instanceId,
 	petitionId,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	petitionId: number;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, petitionId));
 	if (cached) {
@@ -173,7 +174,11 @@ export async function read({
 	const result = await db
 		.selectExactlyOne(
 			'petitions.petitions',
-			{ instance_id: instanceId, id: petitionId },
+			{
+				instance_id: instanceId,
+				id: petitionId,
+				...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+			},
 			{
 				lateral: {
 					feature_image: db.selectOne('website.uploads', {
@@ -212,7 +217,7 @@ export async function readBySlug({
 	const result = await db
 		.selectExactlyOne(
 			'petitions.petitions',
-			{ instance_id: instanceId, slug },
+			{ instance_id: instanceId, slug, deleted_at: db.conditions.isNull },
 			{
 				lateral: {
 					signatures: db.count('petitions.signatures', { petition_id: db.parent('id') }),
@@ -243,11 +248,11 @@ export async function readBySlug({
 export async function list({
 	instanceId,
 	url,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	url: URL;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const filter = filterQuery(url);
 	if (filter.filtered !== true) {
@@ -256,10 +261,14 @@ export async function list({
 			return parse(schema.list, cached);
 		}
 	}
+	const where = {
+		...filter.where,
+		...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+	};
 	const result = await db
 		.select(
 			'petitions.petitions',
-			{ instance_id: instanceId, ...filter.where },
+			{ instance_id: instanceId, ...where },
 			{
 				lateral: {
 					point_person: db.selectExactlyOne('admins', { id: db.parent('point_person_id') }),
@@ -272,7 +281,7 @@ export async function list({
 		)
 		.run(pool);
 	const count = await db
-		.count('petitions.petitions', { instance_id: instanceId, ...filter.where })
+		.count('petitions.petitions', { instance_id: instanceId, ...where })
 		.run(pool);
 	const parsedResult = parse(schema.list, { items: result, count: count });
 
@@ -289,7 +298,6 @@ async function createPetitionEmail({
 	instanceId,
 	adminId,
 	instance,
-	t,
 	defaultEmailTemplateId,
 	queue
 }: {
@@ -297,14 +305,12 @@ async function createPetitionEmail({
 	instanceId: number;
 	adminId: number;
 	instance: ReadInstance;
-	t: App.Localization;
 	defaultEmailTemplateId: number;
 	queue: App.Queue;
 }): Promise<number> {
 	const registrationEmail = await createEmailMessage({
 		instanceId,
 		queue,
-		t,
 		body: {
 			name: randomUUID(),
 			point_person_id: adminId,
@@ -320,4 +326,22 @@ async function createPetitionEmail({
 		defaultTemplateId: defaultEmailTemplateId
 	});
 	return registrationEmail.id;
+}
+
+export async function del({
+	instanceId,
+	petitionId
+}: {
+	instanceId: number;
+	petitionId: number;
+}): Promise<void> {
+	await db
+		.update(
+			'petitions.petitions',
+			{ deleted_at: new Date() },
+			{ instance_id: instanceId, id: petitionId }
+		)
+		.run(pool);
+	await redis.del(redisString(instanceId, petitionId));
+	await redis.del(redisString(instanceId, 'all'));
 }

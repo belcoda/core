@@ -70,7 +70,6 @@ export default async function ({
 		instanceId: instance.id,
 		body: onlineEventBody,
 		adminId: admin.id,
-		t: t,
 		defaultEmailTemplateId: instance.settings.events.default_email_template_id,
 		queue: queue
 	});
@@ -96,7 +95,6 @@ export default async function ({
 		instanceId: instance.id,
 		body: inPersonEventBody,
 		adminId: admin.id,
-		t: t,
 		defaultEmailTemplateId: instance.settings.events.default_email_template_id,
 		queue: queue
 	});
@@ -118,7 +116,6 @@ export default async function ({
 		instanceId: instance.id,
 		body: petitionBody,
 		adminId: admin.id,
-		t: t,
 		queue
 	});
 
@@ -151,13 +148,11 @@ export default async function ({
 
 	await createList({
 		instanceId: instance.id,
-		body: { name: 'Test list' },
-		t: t
+		body: { name: 'Test list' }
 	});
 	await createGroup({
 		instanceId: instance.id,
 		body: { name: 'Test group' },
-		t: t,
 		adminId: admin.id,
 		url: new URL(PUBLIC_HOST)
 	});
