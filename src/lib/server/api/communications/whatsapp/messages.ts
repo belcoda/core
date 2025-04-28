@@ -284,80 +284,80 @@ export async function _getInstanceIdByActionUuidUnsafe({
 		);
 	}
 	return result[0].instance_id;
+}
 
-	export function constructWhatsappNotification({
+export function constructWhatsappNotification({
+	eventType,
+	action,
+	activityTitle
+}: {
+	eventType: string;
+	action: string;
+	activityTitle: string;
+}): Message {
+	let baseText = constructLocalizedNotificationMessageText({
 		eventType,
 		action,
 		activityTitle
-	}: {
-		eventType: string;
-		action: string;
-		activityTitle: string;
-	}): Message {
-		let baseText = constructLocalizedNotificationMessageText({
-			eventType,
-			action,
-			activityTitle
-		});
+	});
 
-		const message: Message = {
-			text: {
-				body: baseText,
-				preview_url: true
-			},
-			type: 'text'
-		};
-		return message;
-	}
+	const message: Message = {
+		text: {
+			body: baseText,
+			preview_url: true
+		},
+		type: 'text'
+	};
+	return message;
+}
 
-	export function constructLocalizedNotificationMessageText({
-		eventType,
-		action,
-		activityTitle
-	}: {
-		eventType: string;
-		action: string;
-		activityTitle: string;
-	}): string {
-		switch (eventType) {
-			case 'event': {
-				switch (action) {
-					case 'register':
-						return m.solid_mellow_eel_chop({ activityTitle });
-					case 'cancel':
-						return m.cute_few_giraffe_blend({ activityTitle });
-					case 'duplicate':
-						return m.jumpy_alive_puffin_vent({ activityTitle });
-					default:
-						throw new BelcodaError(
-							500,
-							'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:GET_BY_EVENT_TYPE_AND_ACTION:01',
-							`Unable to construct localized message text for event type ${eventType} and action ${action}`
-						);
-				}
+export function constructLocalizedNotificationMessageText({
+	eventType,
+	action,
+	activityTitle
+}: {
+	eventType: string;
+	action: string;
+	activityTitle: string;
+}): string {
+	switch (eventType) {
+		case 'event': {
+			switch (action) {
+				case 'register':
+					return m.solid_mellow_eel_chop({ activityTitle });
+				case 'cancel':
+					return m.cute_few_giraffe_blend({ activityTitle });
+				case 'duplicate':
+					return m.jumpy_alive_puffin_vent({ activityTitle });
+				default:
+					throw new BelcodaError(
+						500,
+						'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:GET_BY_EVENT_TYPE_AND_ACTION:01',
+						`Unable to construct localized message text for event type ${eventType} and action ${action}`
+					);
 			}
-			case 'petition':
-				switch (action) {
-					case 'sign':
-						return m.full_tangy_cow_pull({ activityTitle });
-					case 'cancel':
-						return m.dizzy_mellow_otter_clap({ activityTitle });
-					case 'duplicate':
-						return m.east_north_osprey_hurl({ activityTitle });
-					default:
-						throw new BelcodaError(
-							500,
-							'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:GET_BY_EVENT_TYPE_AND_ACTION:02',
-							`Unable to construct localized message text for petition type ${eventType} and action ${action}`
-						);
-				}
-			default: {
-				throw new BelcodaError(
-					500,
-					'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:GET_BY_EVENT_TYPE_AND_ACTION:03',
-					`Misformed petition or event type: ${eventType} and action ${action}`
-				);
+		}
+		case 'petition':
+			switch (action) {
+				case 'sign':
+					return m.full_tangy_cow_pull({ activityTitle });
+				case 'cancel':
+					return m.dizzy_mellow_otter_clap({ activityTitle });
+				case 'duplicate':
+					return m.east_north_osprey_hurl({ activityTitle });
+				default:
+					throw new BelcodaError(
+						500,
+						'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:GET_BY_EVENT_TYPE_AND_ACTION:02',
+						`Unable to construct localized message text for petition type ${eventType} and action ${action}`
+					);
 			}
+		default: {
+			throw new BelcodaError(
+				500,
+				'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:GET_BY_EVENT_TYPE_AND_ACTION:03',
+				`Misformed petition or event type: ${eventType} and action ${action}`
+			);
 		}
 	}
 }
