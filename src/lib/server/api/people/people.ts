@@ -659,5 +659,5 @@ export async function _getPersonByEmail({
 			m.every_formal_jellyfish_stop()
 		);
 	}
-	return await read({ instance_id: instanceId, person_id: person[0].id, t });
+	return await read({ instance_id: instanceId, person_id: person[0].id });
 }
