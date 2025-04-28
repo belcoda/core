@@ -649,7 +649,7 @@ export async function _getPersonByEmail({
 	t: App.Localization;
 }): Promise<schema.Read> {
 	const person =
-		await db.sql`SELECT id FROM ${'people.people'} WHERE (email->>'email' = ${db.param(email)}) AND instance_id = ${db.param(instanceId)} LIMIT 1`.run(
+		await db.sql`SELECT id FROM ${'people.people'} WHERE (email->>'email' = ${db.param(email)}) AND instance_id = ${db.param(instanceId)} AND deleted_at IS NULL LIMIT 1`.run(
 			pool
 		);
 	if (person.length !== 1) {
