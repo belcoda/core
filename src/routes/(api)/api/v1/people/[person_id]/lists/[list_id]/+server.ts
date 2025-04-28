@@ -10,13 +10,11 @@ export async function POST(event) {
 		const list = await api.addPersonToList({
 			instanceId: event.locals.instance.id,
 			personId,
-			listId,
-			t: event.locals.t
+			listId
 		});
 		const listObject = await readList({
 			instanceId: event.locals.instance.id,
-			listId,
-			t: event.locals.t
+			listId
 		});
 		await queueInteraction({
 			instanceId: event.locals.instance.id,
@@ -47,13 +45,11 @@ export async function DELETE(event) {
 		const deleted = await api.removePersonFromList({
 			instanceId: event.locals.instance.id,
 			personId,
-			listId,
-			t: event.locals.t
+			listId
 		});
 		const listObject = await readList({
 			instanceId: event.locals.instance.id,
-			listId,
-			t: event.locals.t
+			listId
 		});
 		await queueInteraction({
 			instanceId: event.locals.instance.id,

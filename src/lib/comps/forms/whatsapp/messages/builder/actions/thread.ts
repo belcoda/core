@@ -51,13 +51,17 @@ export async function updateThread({
 	messageId,
 	actions,
 	templateName,
-	components
+	components,
+	templateId,
+	threadId
 }: {
 	templateMessage: UpdateMessage['message'];
 	messageId: string;
 	templateName: string;
 	actions: UpdateMessage['actions'];
 	components: TemplateForComponents['components'];
+	templateId: number;
+	threadId: number;
 }): Promise<ReadMessage> {
 	if (templateMessage && templateMessage.type === 'template') {
 		const updateThreadBody: UpdateMessage = {
@@ -71,18 +75,39 @@ export async function updateThread({
 				}
 			}
 		};
+
+		const threadResponse = await fetch(`/api/v1/communications/whatsapp/threads/${threadId}`, {
+			method: 'PUT',
+			body: JSON.stringify({
+				template_id: templateId
+			})
+		});
+		if (!threadResponse.ok) {
+			throw new Error('Failed to update thread');
+		}
+		const parsedThread = parse(readThread, await threadResponse.json());
+
 		const parsedUpdateThreadBody = parse(updateMessage, updateThreadBody);
-		console.log(parsedUpdateThreadBody);
 		const messageRes = await fetch(`/api/v1/communications/whatsapp/messages/${messageId}`, {
 			method: 'PUT',
 			body: JSON.stringify(parsedUpdateThreadBody)
 		});
 		if (!messageRes.ok) {
-			console.error('Failed to update message', messageRes);
+			throw new Error('Failed to update message');
 		}
 		const parsed = parse(readMessage, await messageRes.json());
+
 		return parsed;
 	} else {
 		throw new Error('Invalid message type');
+	}
+}
+
+export async function deleteThread(threadId: number) {
+	const res = await fetch(`/api/v1/communications/whatsapp/threads/${threadId}`, {
+		method: 'DELETE'
+	});
+	if (!res.ok) {
+		throw new Error(`Failed to delete thread: ${res.statusText}`);
 	}
 }

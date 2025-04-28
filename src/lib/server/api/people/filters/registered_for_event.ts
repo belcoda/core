@@ -8,7 +8,8 @@ export async function list({
 	eventId,
 	status,
 	t,
-	notPaged
+	notPaged,
+	includeDeleted = false
 }: {
 	instance_id: number;
 	url: URL;
@@ -16,8 +17,9 @@ export async function list({
 	status: 'registered' | 'attended' | 'cancelled' | 'noshow' | 'any';
 	t: App.Localization;
 	notPaged?: boolean;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
-	await exists({ instanceId: instance_id, eventId, t });
+	await exists({ instanceId: instance_id, eventId });
 	const query = filterQuery(url, { search_key: 'full_name', notPaged });
 	const eventWhere = status === 'any' ? {} : { status };
 	const selected = await db
@@ -28,7 +30,12 @@ export async function list({
 				lateral: {
 					person: db.selectExactlyOne(
 						'people.people',
-						{ id: db.parent('person_id'), instance_id: instance_id, ...query.where },
+						{
+							id: db.parent('person_id'),
+							instance_id: instance_id,
+							...query.where,
+							...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+						},
 						{
 							...query.options,
 							lateral: {
@@ -72,7 +79,8 @@ export async function list({
 					person: db.selectExactlyOne('people.people', {
 						id: db.parent('person_id'),
 						instance_id: instance_id,
-						...query.where
+						...query.where,
+						...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
 					})
 				}
 			}

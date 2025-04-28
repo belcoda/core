@@ -5,8 +5,7 @@ export async function GET(event) {
 	try {
 		const result = await api.read({
 			instanceId: event.locals.instance.id,
-			messageId: event.params.message_id,
-			t: event.locals.t
+			messageId: event.params.message_id
 		});
 		return json(result);
 	} catch (err) {
@@ -26,8 +25,7 @@ export async function PUT(event) {
 		const result = await api.update({
 			instanceId: event.locals.instance.id,
 			messageId: messageId,
-			body,
-			t: event.locals.t
+			body
 		});
 		return json(result);
 	} catch (err) {

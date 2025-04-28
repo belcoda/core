@@ -1,7 +1,6 @@
 import {
 	v,
 	id,
-	language,
 	count,
 	address,
 	timestamp,
@@ -9,6 +8,7 @@ import {
 	uuid,
 	date,
 	mediumString,
+	isoLanguage,
 	longString,
 	mediumStringNotEmpty,
 	DEFAULT_COUNTRY
@@ -37,7 +37,7 @@ export const base = v.object({
 
 	details: v.nullable(longString),
 	do_not_contact: v.boolean(),
-	preferred_language: language,
+	preferred_language: isoLanguage, // ISO 639-1  code
 
 	...address.entries,
 
@@ -47,12 +47,21 @@ export const base = v.object({
 
 	point_person_id: id,
 	created_at: timestamp,
-	updated_at: timestamp
+	updated_at: timestamp,
+	deleted_at: v.nullable(timestamp)
 });
 
 export const create = v.object({
 	...v.partial(
-		v.omit(base, ['id', 'full_name', 'created_at', 'updated_at', 'instance_id', 'unique_id'])
+		v.omit(base, [
+			'id',
+			'full_name',
+			'created_at',
+			'updated_at',
+			'instance_id',
+			'unique_id',
+			'deleted_at'
+		])
 	).entries,
 	full_name: base.entries.full_name,
 	country: v.optional(base.entries.country, DEFAULT_COUNTRY) //full_name is required

@@ -14,7 +14,7 @@ export function filter({
 	const search = partial ? sqlWildcardify(searchString) : searchString;
 	const subscribed = mustBeSubscribed ? ` AND email->>'subscribed' = true` : '';
 	const query = format(
-		`(SELECT id FROM people.people WHERE instance_id = %L AND email->>'email' ILIKE %L)${subscribed}`,
+		`(SELECT id FROM people.people WHERE instance_id = %L AND deleted_at IS NULL AND email->>'email' ILIKE %L)${subscribed}`,
 		instanceId,
 		search
 	);

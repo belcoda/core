@@ -1,6 +1,5 @@
 import { BelcodaError, json, error, pino } from '$lib/server';
 import { signUpQueueMessage } from '$lib/schema/events/events';
-import { triggerEventMessage } from '$lib/schema/utils/email';
 import { parse } from '$lib/schema/valibot';
 import updatePerson from '$lib/server/hooks/website/utils/update_person';
 import { create } from '$lib/server/api/events/attendees.js';
@@ -17,8 +16,7 @@ export async function POST(event) {
 		});
 		const eventObject = await readEvent({
 			instanceId: event.locals.instance.id,
-			eventId: parsed.event_id,
-			t: event.locals.t
+			eventId: parsed.event_id
 		});
 		const person = await updatePerson({
 			instanceId: event.locals.instance.id,
@@ -48,7 +46,8 @@ export async function POST(event) {
 			body: {
 				person_id: person.id,
 				send_notifications: true,
-				status: 'registered'
+				status: 'registered',
+				response_channel: person.email ? 'email' : 'whatsapp' //TODO: use a criteria to determine what channel to send to
 			},
 			t: event.locals.t
 		});

@@ -12,12 +12,10 @@ const log = pino(import.meta.url);
 
 export async function exists({
 	instanceId,
-	threadId,
-	t
+	threadId
 }: {
 	instanceId: number;
 	threadId: number;
-	t: App.Localization;
 }): Promise<boolean> {
 	const cached = await redis.get(redisString(instanceId, threadId));
 	if (cached) {
@@ -40,20 +38,18 @@ export async function exists({
 export async function create({
 	instanceId,
 	body,
-	t,
 	defaultTemplateId,
 	adminId,
 	instanceLanguage
 }: {
 	instanceId: number;
 	body: schema.Create;
-	t: App.Localization;
 	defaultTemplateId: number;
 	adminId: number;
 	instanceLanguage: SupportedLanguage;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
-	const template = await readTemplate({ instanceId, templateId: defaultTemplateId, t: t });
+	const template = await readTemplate({ instanceId, templateId: defaultTemplateId });
 	const typeTemplate: 'template' = 'template'; //needed to avoid typescript errors due to literal types in validation
 	const languagePolicy: 'deterministic' = 'deterministic'; //needed to avoid typescript errors due to literal types in validation
 	const createdMesaage = await createMessage({
@@ -87,19 +83,21 @@ export async function create({
 
 export async function read({
 	instanceId,
-	threadId,
-	t
+	threadId
 }: {
 	instanceId: number;
 	threadId: number;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, threadId));
 	if (cached) {
 		return parse(schema.read, cached);
 	}
 	const result = await db
-		.selectExactlyOne('communications.whatsapp_threads', { instance_id: instanceId, id: threadId })
+		.selectExactlyOne('communications.whatsapp_threads', {
+			instance_id: instanceId,
+			id: threadId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(
@@ -116,10 +114,12 @@ export async function read({
 
 export async function list({
 	instanceId,
-	url
+	url,
+	includeDeleted = false
 }: {
 	instanceId: number;
 	url: URL;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const { filtered, where, options } = filterQuery(url);
 	if (!filtered) {
@@ -128,11 +128,19 @@ export async function list({
 			return parse(schema.list, cached);
 		}
 	}
+	const whereWithDeleted = {
+		...where,
+		...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+	};
 	const result = await db
-		.select('communications.whatsapp_threads', { instance_id: instanceId, ...where }, options)
+		.select(
+			'communications.whatsapp_threads',
+			{ instance_id: instanceId, ...whereWithDeleted },
+			options
+		)
 		.run(pool);
 	const count = await db
-		.count('communications.whatsapp_threads', { instance_id: instanceId, ...where })
+		.count('communications.whatsapp_threads', { instance_id: instanceId, ...whereWithDeleted })
 		.run(pool);
 	const parsedResult = parse(schema.list, { items: result, count: count });
 	if (!filtered) {
@@ -144,17 +152,19 @@ export async function list({
 export async function update({
 	instanceId,
 	threadId,
-	body,
-	t
+	body
 }: {
 	instanceId: number;
 	threadId: number;
 	body: schema.Update;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const result = await db
-		.update('communications.whatsapp_threads', parsed, { instance_id: instanceId, id: threadId })
+		.update('communications.whatsapp_threads', parsed, {
+			instance_id: instanceId,
+			id: threadId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool);
 	if (result.length !== 1) {
 		throw new BelcodaError(
@@ -179,9 +189,48 @@ export async function _getThreadByStartingMessageId({
 	const selected = await db
 		.selectExactlyOne('communications.whatsapp_threads', {
 			instance_id: instanceId,
-			template_message_id: startingMessageId
+			template_message_id: startingMessageId,
+			deleted_at: db.conditions.isNull
 		})
 		.run(pool);
 	const parsed = parse(schema.read, selected);
 	return parsed;
+}
+
+export async function del({
+	instanceId,
+	threadId
+}: {
+	instanceId: number;
+	threadId: number;
+}): Promise<void> {
+	// delete thread messages
+	await deleteThreadMessages({ instanceId, threadId });
+	// then delete thread
+	await db
+		.update(
+			'communications.whatsapp_threads',
+			{ deleted_at: new Date() },
+			{ instance_id: instanceId, id: threadId }
+		)
+		.run(pool);
+	// clear cache
+	await redis.del(redisString(instanceId, 'all'));
+	await redis.del(redisString(instanceId, threadId));
+}
+
+async function deleteThreadMessages({
+	instanceId,
+	threadId
+}: {
+	instanceId: number;
+	threadId: number;
+}): Promise<void> {
+	await db
+		.update(
+			'communications.whatsapp_messages',
+			{ deleted_at: new Date() },
+			{ instance_id: instanceId, thread_id: threadId }
+		)
+		.run(pool);
 }

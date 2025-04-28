@@ -14,8 +14,7 @@ export async function POST(event) {
 		const parsed = parse(signatureQueueMessage, body);
 		const petition = await readPetition({
 			instanceId: event.locals.instance.id,
-			petitionId: parsed.petition_id,
-			t: event.locals.t
+			petitionId: parsed.petition_id
 		});
 		const person = await updatePerson({
 			instanceId: event.locals.instance.id,
@@ -44,7 +43,8 @@ export async function POST(event) {
 			queue: event.locals.queue,
 			body: {
 				person_id: person.id,
-				send_autoresponse: true
+				send_autoresponse: true,
+				response_channel: parsed.signup.email === null ? 'whatsapp' : 'email'
 			},
 			t: event.locals.t
 		});

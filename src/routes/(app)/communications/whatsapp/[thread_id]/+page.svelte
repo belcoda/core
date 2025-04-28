@@ -54,7 +54,9 @@
 			if (template && templateMessage.type === 'template') {
 				await threadActions.updateThread({
 					templateMessage,
+					templateId,
 					actions,
+					threadId: data.thread.id,
 					templateName: templateMessage.template.name, //template
 					components,
 					messageId: data.thread.template_message_id
@@ -72,7 +74,28 @@
 			loading = false;
 		}
 	}
+
+	async function deleteThread() {
+		if (!window.confirm(`${m.tangy_wild_manatee_walk()}? ${m.sweet_loose_chicken_trip()}.`)) {
+			return;
+		}
+		try {
+			loading = true;
+			await threadActions.deleteThread(data.thread.id);
+			$flash = { type: 'success', message: 'Thread deleted' };
+			goto('/communications/whatsapp');
+		} catch (err) {
+			if (err instanceof Error) {
+				$flash = { type: 'error', message: err.message };
+			} else {
+				$flash = { type: 'error', message: 'An error occurred' };
+			}
+		} finally {
+			loading = false;
+		}
+	}
 	import * as m from '$lib/paraglide/messages';
+	import { goto } from '$app/navigation';
 </script>
 
 <PageHeader title={'Edit thread'}>
@@ -97,6 +120,11 @@
 						actions,
 						templateMessage
 					);
+					if ('template' in templateMessage) {
+						//should always be true
+						templateMessage.template.name = template.message.name;
+						templateId = template.id;
+					}
 					components = output.components;
 					actions = output.actions;
 					await saveThread();
@@ -143,6 +171,10 @@
 					loading = false;
 				}}
 			/>
+		</div>
+		<hr class="my-4" />
+		<div class="mt-4">
+			<Button variant="destructive" onclick={deleteThread}>{m.fuzzy_chunky_bobcat_glow()}</Button>
 		</div>
 	</div>
 	{#if loading}<div

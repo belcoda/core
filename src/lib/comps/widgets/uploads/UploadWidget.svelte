@@ -90,15 +90,13 @@
 			}}
 		/>
 
-		<Separator class="my-4" />
-
-		<Input
-			placeholder={m.proud_kind_sloth_feel()}
-			bind:value={filter}
-			oninput={debounce(reload, 400)}
-		/>
-
 		{#if list.count > 0}
+			<Separator class="my-4" />
+			<Input
+				placeholder={m.proud_kind_sloth_feel()}
+				bind:value={filter}
+				oninput={debounce(reload, 400)}
+			/>
 			<div
 				class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 mt-4"
 			>

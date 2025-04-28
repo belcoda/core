@@ -31,9 +31,11 @@ export async function buildAdminInstance({ event }: { event: RequestEvent }): Pr
 			await logToAnalytics(event);
 			return { authenticated: true, event, jsonResponse: false };
 		} catch (err) {
-			log.trace(err);
+			log.debug(
+				`Unable to  autheticate API route with session cookie, trying API key. Route is ${event.url.pathname}`
+			);
 			try {
-				// the API key didn't work, but maybe there's a session cookie
+				// the session cookie didn't work, but maybe there's a API key cookie
 				const { admin, instance } = await getApiKey(event);
 				event.locals.admin = admin;
 				event.locals.instance = instance;
@@ -42,7 +44,9 @@ export async function buildAdminInstance({ event }: { event: RequestEvent }): Pr
 				await logToAnalytics(event);
 				return { authenticated: true, event, jsonResponse: false };
 			} catch (err) {
-				log.error(err);
+				log.debug(
+					`Unable to autheticate API route with API key either. Route is ${event.url.pathname}`
+				);
 				// no session cookie either
 				if (err instanceof Error) {
 					return {
@@ -70,7 +74,9 @@ export async function buildAdminInstance({ event }: { event: RequestEvent }): Pr
 		//event.locals.language = instance.language; //don't overwrite user selected language with instance default
 		return { authenticated: true, event, jsonResponse: false };
 	} catch (err) {
-		log.error(err);
+		log.debug(
+			`Unable to authenticate non-API route with session cookie. Route is ${event.url.pathname}`
+		);
 		return { authenticated: false, event, jsonResponse: false };
 	}
 }

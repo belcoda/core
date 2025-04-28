@@ -26,7 +26,7 @@ export async function create({
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
 	await threadExists({ instanceId, threadId: parsed.thread_id, t: t });
-	await personExists({ instanceId, personId: parsed.person_id, t: t });
+	await personExists({ instanceId, personId: parsed.person_id });
 	const result = await db.insert('communications.whatsapp_conversations', parsed).run(pool);
 	const parsedResult = parse(schema.read, result);
 	await redis.del(redisStringThread(instanceId, parsed.thread_id));
@@ -95,7 +95,7 @@ export async function read({
 		});
 	const parsedResult = parse(schema.read, result);
 
-	await personExists({ instanceId, personId: parsedResult.person_id, t: t });
+	await personExists({ instanceId, personId: parsedResult.person_id });
 	//await threadExists({ instanceId, threadId: parsedResult.thread_id, t: t });
 
 	return parsedResult;
@@ -112,7 +112,7 @@ export async function listForPerson({
 	url: URL;
 	t: App.Localization;
 }): Promise<schema.List> {
-	await personExists({ instanceId, personId, t: t });
+	await personExists({ instanceId, personId });
 	const { options, filtered } = filterQuery(url);
 	if (!filtered) {
 		const cached = await redis.get(redisStringPerson(instanceId, personId));
@@ -193,7 +193,7 @@ export async function update({
 			m.royal_aware_jay_build()
 		);
 	if (threadId) await threadExists({ instanceId, threadId, t: t });
-	if (personId) await personExists({ instanceId, personId, t: t });
+	if (personId) await personExists({ instanceId, personId });
 	const result = await db
 		.update('communications.whatsapp_conversations', { id: conversationId }, parsed)
 		.run(pool);
@@ -235,7 +235,7 @@ export async function getActiveForPerson({
 	personId: number;
 	t: App.Localization;
 }): Promise<boolean> {
-	await personExists({ instanceId, personId, t });
+	await personExists({ instanceId, personId });
 	const result = await db
 		.select('communications.whatsapp_conversations', {
 			person_id: personId,

@@ -6,12 +6,12 @@ import type { WhatsappInboundMessage } from '$lib/schema/communications/whatsapp
 import type { Read as Instance } from '$lib/schema/core/instance.js';
 import type { SignupQueueMessage } from '$lib/schema/events/events';
 import * as m from '$lib/paraglide/messages';
+
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
 		const parsed = parse(triggerAction, body);
 		const { actions } = await _getByAction({
-			t: event.locals.t,
 			action: parsed.action_id
 		});
 		for (const action of actions) {

@@ -11,20 +11,30 @@
 		renderBreadcrumb
 	} from '$lib/comps/nav/breadcrumbs/breadcrumbs';
 	import { getLocale } from '$lib/paraglide/runtime';
+	import Button from '$lib/comps/ui/button/button.svelte';
 	import { PUBLIC_UMAMI_WEBSITE_ID } from '$env/static/public';
+	import { PUBLIC_SENTRY_DSN } from '$env/static/public';
 	import * as Sentry from '@sentry/sveltekit';
-	import { browser } from '$app/environment';
-	if (browser) {
-		Sentry.init({
-			dsn: 'https://8b4cdb05d7907fe3f9b43aec4a060811@o4508220361342976.ingest.de.sentry.io/4508220380282960',
-			integrations: [
-				Sentry.feedbackIntegration({
-					// Additional SDK configuration goes in here, for example:
-					colorScheme: 'auto'
-				})
-			]
-		});
-	}
+	import { browser, dev } from '$app/environment';
+	import { onMount } from 'svelte';
+	onMount(() => {
+		if (browser && !dev) {
+			Sentry.init({
+				dsn: PUBLIC_SENTRY_DSN,
+				integrations: [
+					Sentry.feedbackIntegration({
+						colorScheme: 'auto',
+						autoInject: false //stops Sentry from automatically rendering the button in bottom right corner
+					})
+				]
+			});
+			const feedback = Sentry.getFeedback(); //gets the feedback instance
+			feedback?.attachTo(document.querySelector('#sentry-widget') as HTMLElement, {
+				formTitle: 'Report a Bug or give feedback'
+			});
+		}
+	});
+
 	const breadcrumbs = $state(breadcrumbsConstructor(page.data.t));
 
 	const pageTitle = $derived.by(() => {
@@ -85,7 +95,7 @@
 			<div class="hidden lg:block lg:col-span-3 xl:col-span-2">
 				{#key page.url.pathname}<Sidebar />{/key}
 			</div>
-			<div class="col-span-12 lg:col-span-9 xl:col-span-10 mb-24 lg:mb-0">
+			<div class="col-span-12 lg:col-span-9 xl:col-span-10 lg:mb-0">
 				{#key page.url.pathname}<Breadcrumb />{/key}
 				{@render children()}
 			</div>
@@ -93,8 +103,13 @@
 		<div class="block lg:hidden">
 			{#key page.url.pathname}<BottomNav />{/key}
 		</div>
-		<footer class="hidden lg:block">
+		<footer class="block lg:mb-0">
 			<Footer />
 		</footer>
+		<div class="w-full flex justify-center mb-20 lg:mb-12">
+			<Button variant="ghost" size="sm" id="sentry-widget" class="text-muted-foreground text-xs"
+				>Report a bug</Button
+			>
+		</div>
 	</div>
 {/key}

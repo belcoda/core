@@ -127,8 +127,7 @@ export async function POST(event) {
 						const createdPerson = await createPerson({
 							instance_id: event.locals.instance.id,
 							admin_id: event.locals.admin.id,
-							body: strippedPerson,
-							t: event.locals.t,
+							body: parsedItem,
 							queue: event.locals.queue,
 							method: 'import'
 						});
@@ -240,7 +239,8 @@ async function addPersonToEvent({
 				person_id: personId,
 				status: 'attended',
 				send_notifications: false,
-				notes: `import:${importId}`
+				notes: `import:${importId}`,
+				response_channel: 'none'
 			},
 			t,
 			queue

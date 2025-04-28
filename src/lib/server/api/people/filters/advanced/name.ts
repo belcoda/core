@@ -11,7 +11,7 @@ export function filter({
 }) {
 	const search = partial ? sqlWildcardify(searchString) : searchString;
 	const query = format(
-		`(SELECT id FROM people.people WHERE instance_id = %L AND full_name ILIKE %L)`,
+		`(SELECT id FROM people.people WHERE instance_id = %L AND deleted_at IS NULL AND full_name ILIKE %L)`,
 		instanceId,
 		search
 	);

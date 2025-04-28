@@ -89,7 +89,6 @@
 			label={m.maroon_less_canary_roar()}
 		/>
 		<Country
-			onchange={onCountryChange}
 			label={m.fluffy_fair_gecko_arrive()}
 			{form}
 			name={country}

@@ -36,17 +36,52 @@ export async function create({
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
 
-	await exists({ instanceId, eventId, t });
-	const result = await db.insert('events.attendees', { event_id: eventId, ...parsed }).run(pool);
+	await exists({ instanceId, eventId });
+	const notificationPayload = {
+		activity_id: eventId,
+		person_id: parsed.person_id,
+		event_type: 'event',
+		action: 'register'
+	};
+	const existingAttendee = await db
+		.selectOne('events.attendees', {
+			person_id: parsed.person_id,
+			event_id: eventId
+		})
+		.run(pool);
+	if (existingAttendee) {
+		log.debug(`Attendee already exists for event ${eventId} and person ${parsed.person_id}`);
+		notificationPayload.action = 'duplicate';
+	} else {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { response_channel, ...dbData } = parsed;
+		const result = await db.insert('events.attendees', { event_id: eventId, ...dbData }).run(pool);
+		notificationPayload.person_id = result.person_id;
+		notificationPayload.action = 'register';
+	}
 	await redis.del(redisString(instanceId, eventId, 'all'));
-	const readResult = await read({ instanceId, eventId, personId: result.person_id, t });
-	await redis.set(redisString(instanceId, eventId, result.person_id), readResult);
+	const readResult = await read({
+		instanceId,
+		eventId,
+		personId: notificationPayload.person_id,
+		t
+	});
+	await redis.set(redisString(instanceId, eventId, notificationPayload.person_id), readResult);
 
 	if (parsed.send_notifications) {
-		await queue('utils/email/events/send_registration_email', instanceId, {
-			event_id: eventId,
-			person_id: result.person_id
-		});
+		if (parsed.response_channel === 'whatsapp') {
+			await queue(
+				'utils/communications/notifications/send_notification',
+				instanceId,
+				notificationPayload
+			);
+		} else {
+			// Default to email
+			await queue('utils/email/events/send_registration_email', instanceId, {
+				event_id: eventId,
+				person_id: notificationPayload.person_id
+			});
+		}
 	}
 
 	return readResult;
@@ -67,7 +102,7 @@ export async function read({
 	if (cached) {
 		return parse(schema.read, cached);
 	}
-	await exists({ instanceId, eventId, t });
+	await exists({ instanceId, eventId });
 	const result = await db
 		.selectExactlyOne('events.event_attendees_view', { event_id: eventId, person_id: personId })
 		.run(pool)
@@ -95,7 +130,7 @@ export async function update({
 	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
-	await exists({ instanceId, eventId, t });
+	await exists({ instanceId, eventId });
 	await db.update('events.attendees', parsed, { event_id: eventId, person_id: personId }).run(pool);
 	await redis.del(redisString(instanceId, eventId, 'all'));
 	await redis.del(redisString(instanceId, eventId, personId));
@@ -153,7 +188,8 @@ export async function listForEvent({
 			return parse(schema.list, cached);
 		}
 	}
-	await exists({ instanceId, eventId, t });
+	await exists({ instanceId, eventId });
+	//todo: decide if we want this to not return details for people that are deleted...
 	const result = await db
 		.select('events.event_attendees_view', { event_id: eventId, ...filter.where }, filter.options) //pagination only
 		.run(pool);
@@ -178,8 +214,9 @@ export async function listForPerson({
 	url: URL;
 	t: App.Localization;
 }): Promise<schema.List> {
-	await personExists({ instanceId, personId, t });
+	await personExists({ instanceId, personId });
 	const filter = filterQuery(url);
+	//todo: decide if we want this to not return details for events that are deleted...
 	const result = await db
 		.select('events.attendees', { person_id: personId, ...filter.where }, filter.options) //pagination only
 		.run(pool);
@@ -202,7 +239,6 @@ export async function registerPersonForEventFromWhatsApp(
 		instance.id,
 		message.from,
 		message,
-		t,
 		queue
 	);
 

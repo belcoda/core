@@ -12,17 +12,17 @@
 	import Link from 'lucide-svelte/icons/link';
 	import CopyButton from '$lib/comps/ui/copy-button/copy-button.svelte';
 	import { PUBLIC_HOST } from '$env/static/public';
-	import { page } from '$app/stores';
 
 	const url = new URL(PUBLIC_HOST);
-	const previewUrl = `${url.protocol}//${$page.data.instance.slug}.${url.host}/events/${data.event.slug}`;
+	const previewUrl = `${url.protocol}//${data.instance.slug}.${url.host}/events/${data.event.slug}`;
 	import EditRegistrationForm from './EditRegistrationForm.svelte';
 	import Tags from '$lib/comps/widgets/tags/Tags.svelte';
 	import PointPerson from '$lib/comps/widgets/point_person/PointPerson.svelte';
 	import Whatsapp from '$lib/comps/icons/whatsapp.svelte';
 	import { renderRegistrationLink } from '$lib/utils/text/whatsapp';
 	import { getFlash } from 'sveltekit-flash-message';
-
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	const flash = getFlash(page);
 	let copied = $state(false);
 	const attendanceStatus: ['registered', 'attended', 'cancelled', 'noshow'] = [
@@ -52,6 +52,29 @@
 			value: status,
 			label: attendanceStatusValues[status]
 		};
+	}
+
+	async function deleteEvent() {
+		if (!confirm(m.moving_acidic_crow_imagine())) {
+			return;
+		}
+
+		try {
+			const response = await fetch(`/api/v1/events/${data.event.id}`, {
+				method: 'DELETE'
+			});
+			if (!response.ok) {
+				throw new Error(m.keen_agent_shell_mop());
+			}
+			$flash = { type: 'success', message: m.dizzy_actual_elephant_evoke() };
+		} catch (error) {
+			if (error instanceof Error) {
+				$flash = { type: 'error', message: error.message };
+			} else {
+				$flash = { type: 'error', message: m.teary_dizzy_earthworm_urge() };
+			}
+		}
+		goto(`/events`);
 	}
 </script>
 
@@ -138,4 +161,7 @@
 			</div>
 		{/snippet}
 	</DataGrid>
+	<div class="flex justify-end mt-4">
+		<Button variant="destructive" onclick={deleteEvent}>{m.wide_major_pig_swim()}</Button>
+	</div>
 </div>

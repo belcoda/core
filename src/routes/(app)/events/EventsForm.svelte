@@ -17,6 +17,7 @@
 		Grid,
 		Switch,
 		Debug,
+		Country,
 		superForm,
 		valibotClient
 	} from '$lib/comps/ui/forms';
@@ -151,6 +152,12 @@
 					name="postcode"
 					label={m.swift_white_hornet_dig()}
 					bind:value={$formData.postcode as string}
+				/>
+				<Country
+					{form}
+					name="country"
+					label={m.fluffy_fair_gecko_arrive()}
+					bind:value={$formData.country as string}
 				/>
 			</Grid>
 		{/if}

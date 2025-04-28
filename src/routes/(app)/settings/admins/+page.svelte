@@ -17,11 +17,11 @@
 			});
 			if (!response.ok) throw new Error('Failed to delete admin');
 
-			$flash = { type: 'success', message: data.t.forms.actions.success() };
+			$flash = { type: 'success', message: m.elegant_whole_mayfly_zap() };
 			goto('/settings/admins', { invalidateAll: true });
 		} catch (error) {
 			console.error('Error deleting admin: ', error);
-			$flash = { type: 'error', message: data.t.forms.actions.failed() };
+			$flash = { type: 'error', message: m.happy_inclusive_hyena_cuddle() };
 		}
 	}
 </script>
@@ -66,12 +66,12 @@
 					size="sm"
 					variant="destructive"
 					on:click={() => {
-						if (window.confirm(data.t.forms.messages.confirm_delete())) {
+						if (window.confirm(m.moving_acidic_crow_imagine())) {
 							deleteAdmin(admin.id);
 						}
 					}}
 				>
-					{data.t.forms.buttons.delete()}
+					{m.wide_major_pig_swim()}
 				</Button>
 			</div>
 		</div>

@@ -19,17 +19,15 @@ export async function create({
 	instanceId,
 	contentTypeId,
 	body,
-	t,
 	queue
 }: {
 	instanceId: number;
 	contentTypeId: number;
 	body: schema.Create;
-	t: App.Localization;
 	queue: App.Queue;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
-	const contentType = await readContentType({ instanceId, contentTypeId, t });
+	const contentType = await readContentType({ instanceId, contentTypeId });
 	// function to insert a guaranteed unique name and slug based on the heading
 	// after checking to ensure the name and slug are unique, it inserts the item
 
@@ -41,7 +39,7 @@ export async function create({
 		let counter = 1;
 		while (true) {
 			const exists =
-				await db.sql`SELECT id FROM website.content WHERE content_type_id = ${db.param(contentTypeId)} AND (name = ${db.param(uniqueName)} OR slug = ${db.param(uniqueSlug)})`.run(
+				await db.sql`SELECT id FROM website.content WHERE deleted_at = ${db.conditions.isNull} AND content_type_id = ${db.param(contentTypeId)} AND (name = ${db.param(uniqueName)} OR slug = ${db.param(uniqueSlug)})`.run(
 					txnClient
 				);
 
@@ -64,7 +62,7 @@ export async function create({
 			.run(txnClient);
 	});
 	await redis.del(redisString(instanceId, contentTypeId, 'all'));
-	const returned = await read({ instanceId, contentTypeId, contentId: result.id, t }); //this already sets the cache
+	const returned = await read({ instanceId, contentTypeId, contentId: result.id }); //this already sets the cache
 	const htmlMeta: ContentHTMLMetaTags = {
 		type: 'content',
 		contentId: returned.id,
@@ -78,22 +76,26 @@ export async function read({
 	instanceId,
 	contentTypeId,
 	contentId,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	contentTypeId: number;
 	contentId: number;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, contentTypeId, contentId));
-	if (cached) {
+	if (cached && !includeDeleted) {
 		return parse(schema.read, cached);
 	}
-	await exists({ instanceId, contentTypeId, t });
+	await exists({ instanceId, contentTypeId });
 	const result = await db
 		.selectExactlyOne(
 			'website.content',
-			{ id: contentId, content_type_id: contentTypeId },
+			{
+				id: contentId,
+				content_type_id: contentTypeId,
+				...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+			},
 			{
 				lateral: {
 					feature_image: db.selectOne('website.uploads', {
@@ -115,22 +117,26 @@ export async function readBySlug({
 	instanceId,
 	slug,
 	contentTypeId,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	slug: string;
 	contentTypeId: number;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisStringSlug(instanceId, contentTypeId, slug));
-	if (cached) {
+	if (cached && !includeDeleted) {
 		const contentId = parse(id, cached);
-		return read({ instanceId, contentTypeId, contentId, t });
+		return read({ instanceId, contentTypeId, contentId });
 	}
 	const result = await db
 		.selectExactlyOne(
 			'website.content',
-			{ slug, content_type_id: contentTypeId },
+			{
+				slug,
+				content_type_id: contentTypeId,
+				...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+			},
 			{
 				columns: ['id'],
 				lateral: {
@@ -151,34 +157,38 @@ export async function readBySlug({
 		});
 	const contentId = parse(id, result.id);
 	await redis.set(redisStringSlug(instanceId, contentTypeId, slug), contentId);
-	return await read({ instanceId, contentTypeId, contentId, t });
+	return await read({ instanceId, contentTypeId, contentId });
 }
 
 export async function list({
 	instanceId,
 	contentTypeId,
 	url,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	contentTypeId: number;
 	url: URL;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const filter = filterQuery(url);
-	if (filter.filtered !== true) {
+	if (!includeDeleted && filter.filtered !== true) {
 		const cached = await redis.get(redisString(instanceId, contentTypeId, 'all'));
 		if (cached) {
 			return parse(schema.list, cached);
 		}
 	}
-	await exists({ instanceId, contentTypeId, t });
+	await exists({ instanceId, contentTypeId });
+	const where = {
+		...filter.where,
+		...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+	};
 	const result = await db
-		.select('website.content', { content_type_id: contentTypeId, ...filter.where }, filter.options)
+		.select('website.content', { content_type_id: contentTypeId, ...where }, filter.options)
 		.run(pool);
 
 	const count = await db
-		.count('website.content', { content_type_id: contentTypeId, ...filter.where })
+		.count('website.content', { content_type_id: contentTypeId, ...where })
 		.run(pool);
 	const parsedResult = parse(schema.list, { count: count, items: result });
 	await redis.set(redisString(instanceId, contentTypeId, 'all'), parsedResult);
@@ -190,28 +200,30 @@ export async function update({
 	contentTypeId,
 	contentId,
 	body,
-	t,
 	queue,
 	skipMetaGeneration = false
 }: {
 	instanceId: number;
 	contentTypeId: number;
 	contentId: number;
-	t: App.Localization;
 	body: schema.Update;
 	queue: App.Queue;
 	skipMetaGeneration?: boolean;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const result = await db
-		.update('website.content', parsed, { id: contentId, content_type_id: contentTypeId })
+		.update('website.content', parsed, {
+			id: contentId,
+			content_type_id: contentTypeId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool);
 	if (result.length !== 1) {
 		throw new BelcodaError(404, 'DATA:WEBSITE:CONTENT:UPDATE:01', m.pretty_tired_fly_lead());
 	}
 	await redis.del(redisString(instanceId, contentTypeId, contentId));
 	await redis.del(redisString(instanceId, contentTypeId, 'all'));
-	const returned = await read({ instanceId, contentTypeId, contentId, t }); //update the cache with the new updated object
+	const returned = await read({ instanceId, contentTypeId, contentId }); //update the cache with the new updated object
 	const htmlMeta: ContentHTMLMetaTags = {
 		type: 'content',
 		contentId: returned.id,
@@ -221,4 +233,27 @@ export async function update({
 		await queue('/utils/openai/generate_html_meta', instanceId, htmlMeta);
 	}
 	return returned;
+}
+
+export async function del({
+	instanceId,
+	contentTypeId,
+	contentId
+}: {
+	instanceId: number;
+	contentTypeId: number;
+	contentId: number;
+}): Promise<void> {
+	await db
+		.update(
+			'website.content',
+			{ deleted_at: new Date() },
+			{ id: contentId, content_type_id: contentTypeId }
+		)
+		.run(pool)
+		.catch((err) => {
+			throw new BelcodaError(404, 'DATA:WEBSITE:CONTENT:DEL:01', m.pretty_tired_fly_lead(), err);
+		});
+	await redis.del(redisString(instanceId, contentTypeId, contentId));
+	await redis.del(redisString(instanceId, contentTypeId, 'all'));
 }

@@ -41,14 +41,12 @@ export async function POST(event) {
 
 		const person = await readPerson({
 			instance_id: event.locals.instance.id,
-			person_id: parsedMessage.person_id,
-			t: event.locals.t
+			person_id: parsedMessage.person_id
 		});
 
 		const message = await readMessage({
 			instanceId: event.locals.instance.id,
-			messageId: parsedMessage.message_id,
-			t: event.locals.t
+			messageId: parsedMessage.message_id
 		});
 
 		const sentMessageId = randomUUID();
@@ -129,8 +127,7 @@ async function sendNextMessageIfExists({
 	log.debug(`Ready to queue sending next message ${nextMessage}`);
 	const nextMessageResponse = await readMessage({
 		instanceId: instanceId,
-		messageId: nextMessage,
-		t
+		messageId: nextMessage
 	});
 	if (!nextMessageResponse) {
 		log.error(`Next message ${nextMessage} not found`);
@@ -231,8 +228,7 @@ async function readTemplateMessage({
 	});
 	const template = await readTemplate({
 		instanceId: instanceId,
-		templateId: thread.template_id,
-		t: t
+		templateId: thread.template_id
 	});
 	return template;
 }

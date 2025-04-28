@@ -6,6 +6,7 @@ import { parse } from '$lib/schema/valibot';
 import { COOKIE_SESSION_NAME } from '$env/static/private';
 import { Localization } from '$lib/i18n';
 import { BelcodaError } from '$lib/server';
+import { dev } from '$app/environment';
 import * as m from '$lib/paraglide/messages';
 export const POST = async function (event) {
 	try {
@@ -24,7 +25,18 @@ export const POST = async function (event) {
 			t: new Localization(event.locals.language),
 			body: parsedSignInDetails
 		});
-		event.cookies.set(COOKIE_SESSION_NAME, session, { path: '/' });
+
+		// Set the session cookie to expire in 2 weeks
+		const today = new Date();
+		const expires = new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000);
+
+		event.cookies.set(COOKIE_SESSION_NAME, session, {
+			path: '/',
+			expires: expires,
+			httpOnly: true,
+			secure: dev ? false : true,
+			sameSite: 'strict'
+		});
 		return redirect(302, continueUrl ? continueUrl : '/');
 	} catch (err) {
 		if (err instanceof Error) {

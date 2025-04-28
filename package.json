@@ -19,14 +19,17 @@
 		"ngrok": "node ngrok.config.cjs",
 		"queue": "node queue.cjs",
 		"knex:reset": "npx knex migrate:rollback --all --knexfile ./knexfile.cjs && npx knex migrate:latest --knexfile ./knexfile.cjs",
-		"knex:migrate": "npx knex migrate:latest --knexfile ./knexfile.cjs",
-		"knex:rollback": "npx knex migrate:rollback --knexfile ./knexfile.cjs",
+		"knex:migrate": "npx knex migrate:latest --knexfile ./knexfile.cjs && npm run zapatos",
+		"knex:rollback": "npx knex migrate:rollback --knexfile ./knexfile.cjs  && npm run zapatos",
 		"knex:migrate:production": "npx knex migrate:latest --env production --knexfile ./knexfile.cjs",
 		"postinstall": "npx @inlang/paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide",
 		"inlang:lint": "npx @inlang/cli lint --project ./project.inlang",
 		"inlang:translate": "npx @inlang/cli machine translate --project ./project.inlang",
 		"prepare": "husky",
-		"check-console-logs": "node scripts/check-console-logs.mjs"
+		"check-console-logs": "node scripts/check-console-logs.mjs",
+		"prettier:format": "prettier --config .prettierrc . --write",
+		"prettier:check": "prettier --config .prettierrc --check \"src/**/*.{js,ts,css,html}\"",
+		"prettier:inlang": "prettier --config .prettierrc --check --write \"messages/*\""
 	},
 	"devDependencies": {
 		"@inlang/paraglide-js": "^2.0.0-beta.11",
@@ -49,6 +52,7 @@
 		"eslint-plugin-svelte": "^2.43.0-next.13",
 		"formsnap": "^2.0.0-next.1",
 		"globals": "^15.0.0",
+		"lint-staged": "^15.5.0",
 		"lucide-svelte": "^0.468.0",
 		"mode-watcher": "^0.5.0",
 		"postcss": "^8.4.38",
@@ -107,5 +111,10 @@
 		"tsconfig-paths": "^4.2.0",
 		"valibot": "^1.0.0-beta.3",
 		"zapatos": "^6.4.0"
+	},
+	"lint-staged": {
+		"*.{js,ts,css,html,svelte}": [
+			"prettier --config .prettierrc --write"
+		]
 	}
 }
