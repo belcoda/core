@@ -5,12 +5,11 @@ import type { HandlerResponse } from '$lib/server/hooks/handlers';
 import { YCLOUD_VERIFY_TOKEN } from '$env/static/private';
 import { PUBLIC_DEFAULT_WHATSAPP_PHONE_NUMBER } from '$env/static/public';
 
-import { pino } from '$lib/server';
+import { pino } from '$lib/server/utils/logs/pino';
 const log = pino(import.meta.url);
 
 import { parse } from '$lib/schema/valibot';
 import {
-	whatsappInboundMessage,
 	yCloudWebhook,
 	type YCloudWebhook
 } from '$lib/schema/communications/whatsapp/webhooks/ycloud';
@@ -18,9 +17,10 @@ import { type Read as Instance } from '$lib/schema/core/instance';
 
 import {
 	_getInstanceByWhatsappPhoneNumber,
-	_getInstanceIdByEventId,
-	_getInstanceIdByPetitionId
+	_getInstanceByEventId,
+	_getInstanceByPetitionId
 } from '$lib/server/api/core/instances';
+
 import {
 	_getInstanceIdBySentMessageIdUnsafe,
 	_getInstanceIdByWamidUnsafe,
@@ -238,10 +238,10 @@ export async function getInstanceFromMessageIdentifier({
 }): Promise<Instance> {
 	switch (action) {
 		case 'SIGNUP': {
-			return await _getInstanceIdByEventId(id);
+			return await _getInstanceByEventId(id);
 		}
 		case 'PETITION': {
-			return await _getInstanceIdByPetitionId(id);
+			return await _getInstanceByPetitionId(id);
 		}
 		default: {
 			throw new Error('Unknown action type');

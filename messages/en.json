@@ -592,7 +592,6 @@
 	"jumpy_alive_puffin_vent": "You have already registered for the event {activityTitle}",
 	"full_tangy_cow_pull": "You have signed the petition {activityTitle}",
 	"dizzy_mellow_otter_clap": "You have cancelled your signature for the petition {activityTitle}",
-	"east_north_osprey_hurl": "You have already signed the petition {activityTitle}",
 	"keen_agent_shell_mop": "Failed to delete record",
 	"dizzy_actual_elephant_evoke": "Record deleted successfully",
 	"whole_still_macaw_bless": "Welcome to {instanceName}",
@@ -660,5 +659,6 @@
 	"warm_wild_grebe_gasp": "View event page",
 	"just_patient_finch_mix": "Your registration was cancelled. We won't be expecting you.",
 	"tidy_cuddly_pelican_evoke": "No matching country found.",
-	"light_next_wasp_belong": "Must be a valid ISO 639-1 language code (eg: 'en' for English)"
+	"light_next_wasp_belong": "Must be a valid ISO 639-1 language code (eg: 'en' for English)",
+	"east_north_osprey_hurl": "You have already signed the petition {activityTitle}"
 }

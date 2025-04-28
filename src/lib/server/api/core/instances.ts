@@ -113,7 +113,7 @@ export async function _getInstanceByWhatsappBAId({
 	return await read({ instance_id: response[0].id });
 }
 
-export async function _getInstanceIdByEventId(eventId: number): Promise<schema.Read> {
+export async function _getInstanceByEventId(eventId: number): Promise<schema.Read> {
 	const response =
 		await db.sql`SELECT instance_id from events.events WHERE id = ${db.param(eventId)} AND deleted_at IS NULL limit 1`.run(
 			pool
@@ -127,7 +127,7 @@ export async function _getInstanceIdByEventId(eventId: number): Promise<schema.R
 	return await read({ instance_id: response[0].instance_id });
 }
 
-export async function _getInstanceIdByPetitionId(petitionId: number): Promise<schema.Read> {
+export async function _getInstanceByPetitionId(petitionId: number): Promise<schema.Read> {
 	const response =
 		await db.sql`SELECT instance_id from petitions.petitions WHERE id = ${db.param(petitionId)} AND deleted_at IS NULL limit 1`.run(
 			pool

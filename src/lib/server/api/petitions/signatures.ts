@@ -8,7 +8,7 @@ import {
 	exists as personExists
 } from '$lib/server/api/people/people';
 import type { WhatsappInboundMessage } from '$lib/schema/communications/whatsapp/webhooks/ycloud';
-import { _getInstanceIdByPetitionId } from '../core/instances';
+import { _getInstanceByPetitionId } from '../core/instances';
 import { signatureQueueMessage } from '$lib/schema/petitions/petitions';
 const log = pino(import.meta.url);
 function redisString(instanceId: number, petitionId: number, personId: number | 'all') {
@@ -211,7 +211,7 @@ export async function signPetition(
 	t: App.Localization,
 	queue: App.Queue
 ) {
-	const instance = await _getInstanceIdByPetitionId(petitionId); //will not return deleted petitions
+	const instance = await _getInstanceByPetitionId(petitionId); //will not return deleted petitions
 	const person = await getPersonOrCreatePersonByWhatsappId(
 		instance.id,
 		message.from,

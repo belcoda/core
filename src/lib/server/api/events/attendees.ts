@@ -12,7 +12,7 @@ import {
 } from '$lib/server/api/people/people';
 import type { WhatsappInboundMessage } from '$lib/schema/communications/whatsapp/webhooks/ycloud';
 // import type { RequestEvent } from './$types.js';
-import { _getInstanceIdByEventId } from '../core/instances';
+import { _getInstanceByEventId } from '../core/instances';
 import { signUpQueueMessage } from '$lib/schema/events/events.js';
 
 const log = pino(import.meta.url);
@@ -234,7 +234,7 @@ export async function registerPersonForEventFromWhatsApp(
 	t: App.Localization,
 	queue: App.Queue
 ) {
-	const instance = await _getInstanceIdByEventId(eventId);
+	const instance = await _getInstanceByEventId(eventId);
 	const person = await getPersonOrCreatePersonByWhatsappId(
 		instance.id,
 		message.from,
