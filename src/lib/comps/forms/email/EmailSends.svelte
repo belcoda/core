@@ -27,7 +27,7 @@
 			{#if sends.count > 0}
 				{#each sends.items as send}
 					Sent to <a href="/people/lists/{send.list_id}">list</a>
-					{page.data.timeAgo.format(send.created_at)} ago
+					{page.data.timeAgo.format(send.created_at)}
 				{/each}
 			{:else}
 				<div class="flex justify-end">
