@@ -6,7 +6,6 @@ export async function GET(event) {
 		const templates = await api.list({
 			instanceId: event.locals.instance.id,
 			url: event.url,
-			t: event.locals.t,
 			contentTypeId: Number(event.params.content_type_id)
 		});
 		return json(templates);
@@ -27,7 +26,6 @@ export async function POST(event) {
 			instanceId: event.locals.instance.id,
 			contentTypeId: Number(event.params.content_type_id),
 			body,
-			t: event.locals.t,
 			queue: event.locals.queue
 		});
 		return json(createdTemplate);

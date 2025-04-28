@@ -8,6 +8,8 @@ import {
 	DEFAULT_LANGUAGE
 } from '$lib/i18n';
 
+import { languageCodes } from '$lib/i18n/languages';
+
 export const SHORT_STRING_MAX_LENGTH = 100;
 export const MEDIUM_STRING_MAX_LENGTH = 1000;
 export const LONG_STRING_MAX_LENGTH = 100000;
@@ -132,6 +134,9 @@ export const language = v.picklist(
 	m.super_tired_giraffe_clasp({ supportedLanguages: SUPPORTED_LANGUAGES.join(', ') })
 );
 export type Language = v.InferOutput<typeof language>;
+
+export const isoLanguage = v.picklist(languageCodes, m.light_next_wasp_belong());
+export type IsoLanguage = v.InferOutput<typeof isoLanguage>;
 
 export const country = v.picklist(
 	SUPPORTED_COUNTRIES,
