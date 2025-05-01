@@ -634,7 +634,7 @@
 	"male_lucky_panther_promise": "An error occurred while sending the email. Please try again.",
 	"bad_tidy_antelope_boil": "Unable to duplicate email message. Please try again later.",
 	"slow_clear_nuthatch_tickle": "Duplicate of {oldMessageName}",
-	"alert_best_samuel_adore": "Unable to semd email message.",
+	"alert_best_samuel_adore": "Unable to send email message.",
 	"east_blue_mallard_lift": "Received a reminder email for <a href=\"/events/{eventId}\">{eventName}</a>",
 	"flat_mushy_boar_shine": "Received a cancellation email for <a href=\"/events/{eventId}\">{eventName}</a>",
 	"any_great_mouse_agree": "Received a registration email for <a href=\"/events/{eventId}\">{eventName}</a>",
