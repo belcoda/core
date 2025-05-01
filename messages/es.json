@@ -640,7 +640,7 @@
 	"real_front_finch_emerge": "No se pudo enviar el correo electrónico. Inténtalo de nuevo.",
 	"cozy_agent_sloth_slide": "Recordatorio de evento: {eventTitle}",
 	"close_lucky_gull_hurl": "Recordatorio",
-	"day_wise_newt_promise": "Registro confirmado: {eventTitle}",
+	"day_wise_newt_promise": "Inscripción confirmada: {eventTitle}",
 	"orange_sound_beaver_fear": "Inscripción confirmada",
 	"jolly_lofty_chicken_work": "Esta es una notificación de que su registro para asistir <strong>{eventTitle}</strong> ( {dateTime} ) ha sido cancelado.",
 	"gross_raw_gazelle_fetch": "Esta es una notificación de que su registro para asistir a ** {eventTitle} ** ( {dateTime} ) ha sido cancelado.",
