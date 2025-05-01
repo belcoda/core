@@ -642,7 +642,7 @@
 	"close_lucky_gull_hurl": "Recordatorio",
 	"day_wise_newt_promise": "Inscripción confirmada: {eventTitle}",
 	"orange_sound_beaver_fear": "Inscripción confirmada",
-	"jolly_lofty_chicken_work": "Esta es una notificación de que su registro para asistir <strong>{eventTitle}</strong> ( {dateTime} ) ha sido cancelado.",
+	"jolly_lofty_chicken_work": "Esta es una notificación de que su inscripción para asistir a <strong>{eventTitle}</strong> ( {dateTime} ) ha sido cancelado.",
 	"gross_raw_gazelle_fetch": "Esta es una notificación de que su registro para asistir a ** {eventTitle} ** ( {dateTime} ) ha sido cancelado.",
 	"factual_heavy_shrike_thrive": "Cancelado: {eventTitle}",
 	"super_curly_boar_hug": "Invitación: Únase a {instanceName} en Belcoda",
