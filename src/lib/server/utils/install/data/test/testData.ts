@@ -126,9 +126,7 @@ export default async function ({
 		instanceId: instance.id,
 		body: emailSendBody,
 		adminId: admin.id,
-		defaultTemplateId: instance.settings.communications.email.default_template_id,
-		t: t,
-		queue
+		t: t
 	});
 
 	await createTag({ instanceId: instance.id, body: { name: 'topic:energy' } });

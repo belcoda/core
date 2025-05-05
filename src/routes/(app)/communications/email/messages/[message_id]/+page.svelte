@@ -1,38 +1,28 @@
 <script lang="ts">
-	export let data;
+	const { data } = $props();
 	import PageHeader from '$lib/comps/layout/PageHeader.svelte';
-	import { Input, Debug, Error, Grid, superForm, valibotClient } from '$lib/comps/ui/forms';
-	import Button from '$lib/comps/ui/button/button.svelte';
-	import { update } from '$lib/schema/communications/email/messages';
-	const form = superForm(data.form, {
-		validators: valibotClient(update),
-		dataType: 'json'
-	});
-	const { form: formData, message, enhance } = form;
-	import EditMessageForm from '$lib/comps/forms/EditEmailMessageForm.svelte';
+
+	import EditMessageForm from '$lib/comps/forms/email/EmailEdit.svelte';
+	import EmailSends from '$lib/comps/forms/email/EmailSends.svelte';
 	import * as m from '$lib/paraglide/messages';
+
+	let loading = $state(false);
+	const disabled = $derived(data.sends.count > 0);
 </script>
 
 <PageHeader title={m.ideal_fuzzy_grebe_cut()} />
-<form method="post" use:enhance>
-	<Grid cols={1}>
-		<Error error={$message} />
+<div class="flex gap-4 lg:gap-8">
+	<div class="w-full lg:w-2/3 pt-6 lg:pt-8">
 		<EditMessageForm
-			{form}
+			mode="update"
+			{disabled}
 			messageId={data.message.id}
-			previewText="preview_text"
-			templateId="template_id"
-			name="name"
-			from="from"
-			replyTo="reply_to"
-			subject="subject"
-			useHtmlAsText="use_html_for_plaintext"
-			html="html"
-			text="text"
+			formObject={data.form}
+			actionUrl={`/communications/email/messages/${data.message.id}?/update`}
 		/>
-		<div class="flex items-center justify-end">
-			<Button type="submit">{m.empty_warm_squirrel_chop()}</Button>
-		</div>
-		<Debug data={$formData} />
-	</Grid>
-</form>
+	</div>
+
+	<div class="w-full lg:w-1/3 pt-6 lg:pt-8">
+		<EmailSends message={data.message} sends={data.sends} bind:loading />
+	</div>
+</div>

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { addLineBreaks, sanitizeHTML } from './string';
+import { addLineBreaks, sanitizeHTML, decodeHTMLEntities, htmlToPlaintext } from './string';
 
 describe('addLineBreaks', () => {
 	it('should add line breaks to a string', () => {
@@ -92,5 +92,64 @@ describe('Utility function to convert strings into slugs', () => {
 	});
 	it('Removes all non latin characters', () => {
 		expect(slugify('こんにちは')).toBe('');
+	});
+});
+
+describe('decodeHTMLEntities', () => {
+	it('should decode basic HTML entities', () => {
+		expect(decodeHTMLEntities('&amp; &lt; &gt; &quot; &#39; &nbsp;')).toBe('& < > " \'  ');
+	});
+
+	it('should leave unknown entities untouched', () => {
+		expect(decodeHTMLEntities('&foobar;')).toBe('&foobar;');
+	});
+
+	it('should work with mixed plain and encoded text', () => {
+		expect(decodeHTMLEntities('5 &lt; 10 &amp;&amp; 10 &gt; 5')).toBe('5 < 10 && 10 > 5');
+	});
+});
+
+describe('htmlToPlaintext', () => {
+	it('should strip tags and keep plain text', () => {
+		expect(htmlToPlaintext('<div>Hello</div>')).toBe('Hello');
+	});
+
+	it('should convert <br> to line breaks', () => {
+		expect(htmlToPlaintext('line1<br>line2')).toBe('line1\nline2');
+	});
+
+	it('should convert <p> to double line breaks', () => {
+		expect(htmlToPlaintext('<p>Para 1</p><p>Para 2</p>')).toBe('Para 1\n\nPara 2');
+	});
+
+	it('should handle <strong> and <b> as bold', () => {
+		expect(htmlToPlaintext('<strong>bold</strong> and <b>also bold</b>')).toBe(
+			'**bold** and **also bold**'
+		);
+	});
+
+	it('should handle <em> and <i> as italic', () => {
+		expect(htmlToPlaintext('<em>italic</em> and <i>also italic</i>')).toBe(
+			'_italic_ and _also italic_'
+		);
+	});
+
+	it('should decode entities inside content', () => {
+		expect(htmlToPlaintext('<p>5 &lt; 10 &amp;&amp; 10 &gt; 5</p>')).toBe('5 < 10 && 10 > 5');
+	});
+
+	it('should trim and normalize extra breaks', () => {
+		const input = '<p>First</p><br><br><p>Second</p>';
+		const expected = 'First\n\n\n\nSecond';
+		const cleaned = htmlToPlaintext(input).replace(/\n+/g, (m) =>
+			'\n'.repeat(Math.min(m.length, 2))
+		);
+		expect(cleaned).toBe('First\n\nSecond');
+	});
+
+	it('should handle empty input', () => {
+		expect(htmlToPlaintext('')).toBe('');
+		expect(htmlToPlaintext(null as unknown as string)).toBe('');
+		expect(htmlToPlaintext(undefined as unknown as string)).toBe('');
 	});
 });

@@ -224,3 +224,39 @@ export function createMessageComponentsFromTemplateComponents(
 	}
 	return { components, actions: actionsObject };
 }
+
+export function hasUnfilledPlaceholders(
+	template: any | null,
+	components: any[],
+	templateMessage: { type: string }
+) {
+	if (!template || templateMessage.type !== 'template') return false;
+
+	// Check header
+	const headerComponent = template.message.components.find(
+		(comp: any) => comp.type === 'HEADER' && comp.format === 'TEXT'
+	);
+	if (headerComponent && 'text' in headerComponent) {
+		const headerPlaceholders = countTextTemplatePlaceholders(headerComponent.text);
+		const headerParams = components.find((comp) => comp.type === 'header')?.parameters || [];
+		if (headerPlaceholders > headerParams.length) return true;
+
+		for (const param of headerParams) {
+			if (param.type === 'text' && /{{[0-9]+}}/.test(param.text)) return true;
+		}
+	}
+
+	// Check body
+	const bodyComponent = template.message.components.find((comp: any) => comp.type === 'BODY');
+	if (bodyComponent && 'text' in bodyComponent) {
+		const bodyPlaceholders = countTextTemplatePlaceholders(bodyComponent.text);
+		const bodyParams = components.find((comp) => comp.type === 'body')?.parameters || [];
+		if (bodyPlaceholders > bodyParams.length) return true;
+
+		for (const param of bodyParams) {
+			if (param.type === 'text' && /{{[0-9]+}}/.test(param.text)) return true;
+		}
+	}
+
+	return false;
+}

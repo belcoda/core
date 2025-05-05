@@ -638,3 +638,26 @@ export async function getPersonOrCreatePersonByWhatsappId(
 		}
 	}
 }
+
+export async function _getPersonByEmail({
+	instanceId,
+	email,
+	t
+}: {
+	instanceId: number;
+	email: string;
+	t: App.Localization;
+}): Promise<schema.Read> {
+	const person =
+		await db.sql`SELECT id FROM ${'people.people'} WHERE (email->>'email' = ${db.param(email)}) AND instance_id = ${db.param(instanceId)} AND deleted_at IS NULL LIMIT 1`.run(
+			pool
+		);
+	if (person.length !== 1) {
+		throw new BelcodaError(
+			404,
+			'DATA:PEOPLE:PEOPLE:GET_PERSON_BY_EMAIL:01',
+			m.every_formal_jellyfish_stop()
+		);
+	}
+	return await read({ instance_id: instanceId, person_id: person[0].id });
+}

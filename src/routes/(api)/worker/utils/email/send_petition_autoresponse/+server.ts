@@ -4,21 +4,22 @@ import {
 	triggerPetitionMessage,
 	type SendEmailMessage
 } from '$lib/schema/utils/email';
-import renderEmail from '$lib/server/utils/handlebars/render_email';
+import { type EmailTemplateMessage } from '$lib/schema/communications/email/messages';
 import { read as readPetition } from '$lib/server/api/petitions/petitions';
 import { read as readPerson } from '$lib/server/api/people/people';
-import { read as readTemplate } from '$lib/server/api/communications/email/templates';
-import { read as readMessage } from '$lib/server/api/communications/email/messages';
 const log = pino(import.meta.url);
-import { randomUUID } from 'crypto';
 import * as m from '$lib/paraglide/messages';
-import { id, parse } from '$lib/schema/valibot';
+import { parse } from '$lib/schema/valibot';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
+
+import { basePetitionOptions } from '$lib/server/utils/email/context/petition';
 
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
 		const parsed = parse(triggerPetitionMessage, body);
+
+		log.debug(parsed, 'Send autoresponse email initiated');
 
 		const petition = await readPetition({
 			instanceId: event.locals.instance.id,
@@ -26,61 +27,39 @@ export async function POST(event) {
 		});
 
 		if (petition.send_autoresponse_email === false) {
+			log.debug('No autoresponse email required');
 			return json({ success: true, outcome: 'No autoresponse email required' });
 		}
-
-		const message = await readMessage({
-			instanceId: event.locals.instance.id,
-			messageId: petition.autoresponse_email.id,
-			t: event.locals.t
-		});
-
-		const template = await readTemplate({
-			instanceId: event.locals.instance.id,
-			templateId: message.template_id,
-			t: event.locals.t
-		});
 
 		const person = await readPerson({
 			instance_id: event.locals.instance.id,
 			person_id: parsed.person_id
 		});
 
-		const sentEmailId = randomUUID();
-
-		// handlebars the templates...
-
-		const renderedHtml = await renderEmail({
-			emailUnsubscribeToken: sentEmailId,
-			messageTemplate: message.html,
-			templateTemplate: template.html,
-			instanceId: event.locals.instance.id,
-			context: { petition, person, instance: event.locals.instance },
-			t: event.locals.t
+		const context = basePetitionOptions({
+			instance: event.locals.instance,
+			petition: petition,
+			language: person.preferred_language || event.locals.instance.language
 		});
-		const renderedText = message.use_html_for_plaintext
-			? renderedHtml
-			: await renderEmail({
-					emailUnsubscribeToken: sentEmailId,
-					messageTemplate: message.text,
-					templateTemplate: template.text,
-					instanceId: event.locals.instance.id,
-					context: { petition, person, instance: event.locals.instance },
-					t: event.locals.t
-				});
-		const sendToQueue: SendEmailMessage = {
-			person_id: person.id,
-			email: { ...message, html: renderedHtml, text: renderedText },
-			sent_email_id: sentEmailId,
-			email_message_id: message.id
+
+		const sendToQueue: EmailTemplateMessage = {
+			context,
+			person_id: parsed.person_id,
+			reply_to: null,
+			template: 'transactional',
+			send_details: {
+				type: 'petition_signature',
+				petition_id: petition.id
+			}
 		};
-		const parsedSendToQueue = parse(sendEmailMessage, sendToQueue);
 		await event.locals.queue(
-			'utils/email/send_email',
+			'utils/email/send_email/template',
 			event.locals.instance.id,
-			parsedSendToQueue,
+			sendToQueue,
 			event.locals.admin.id
 		);
+
+		log.debug(sendToQueue, 'Sent autoresponse email to queue with these details');
 
 		await queueInteraction({
 			instanceId: event.locals.instance.id,
@@ -89,8 +68,7 @@ export async function POST(event) {
 			details: {
 				type: 'received_petition_autoresponse_email',
 				petition_id: petition.id,
-				petition_name: petition.name,
-				message_id: message.id
+				petition_name: petition.name
 			},
 			queue: event.locals.queue
 		});

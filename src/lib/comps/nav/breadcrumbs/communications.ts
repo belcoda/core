@@ -116,7 +116,7 @@ export default function (t: Localization) {
 					`/communications/whatsapp/${pageParams?.thread_id}/sends/new`
 			}
 		],
-		'/(app)/communications/email': [
+		'/(app)/communications/email/messages': [
 			{
 				title: () => t.pages.home.index(),
 				href: () => '/'
@@ -127,10 +127,10 @@ export default function (t: Localization) {
 			},
 			{
 				title: () => t.pages.communications.email.index(),
-				href: () => '/communications/email'
+				href: () => '/communications/email/messages'
 			}
 		],
-		'/(app)/communications/email/new': [
+		'/(app)/communications/email/messages/new': [
 			{
 				title: () => t.pages.home.index(),
 				href: () => '/'
@@ -141,14 +141,14 @@ export default function (t: Localization) {
 			},
 			{
 				title: () => t.pages.communications.email.index(),
-				href: () => '/communications/email'
+				href: () => '/communications/email/messages'
 			},
 			{
 				title: () => t.pages.communications.email.new(),
-				href: () => '/communications/email/new'
+				href: () => '/communications/email/messages/new'
 			}
 		],
-		'/(app)/communications/email/[send_id]': [
+		'/(app)/communications/email/messages/[message_id]': [
 			{
 				title: () => t.pages.home.index(),
 				href: () => '/'
@@ -159,57 +159,15 @@ export default function (t: Localization) {
 			},
 			{
 				title: () => t.pages.communications.email.index(),
-				href: () => '/communications/email'
+				href: () => '/communications/email/messages'
 			},
 			{
 				title: () => t.pages.communications.email.view(),
-				href: (params?: Record<string, unknown>) => `/communications/email/${params?.send_id}`
+				href: (params?: Record<string, unknown>) =>
+					`/communications/email/messages/${params?.message_id}`
 			}
 		],
-		'/(app)/communications/email/[send_id]/edit': [
-			{
-				title: () => t.pages.home.index(),
-				href: () => '/'
-			},
-			{
-				title: () => t.pages.communications.index(),
-				href: () => '/communications'
-			},
-			{
-				title: () => t.pages.communications.email.index(),
-				href: () => '/communications/email'
-			},
-			{
-				title: () => t.pages.communications.email.view(),
-				href: (params?: Record<string, unknown>) => `/communications/email/${params?.send_id}`
-			},
-			{
-				title: () => t.pages.communications.email.edit(),
-				href: (params?: Record<string, unknown>) => `/communications/email/${params?.send_id}/edit`
-			}
-		],
-		'/(app)/communications/email/[send_id]/send': [
-			{
-				title: () => t.pages.home.index(),
-				href: () => '/'
-			},
-			{
-				title: () => t.pages.communications.index(),
-				href: () => '/communications'
-			},
-			{
-				title: () => t.pages.communications.email.index(),
-				href: () => '/communications/email'
-			},
-			{
-				title: () => t.pages.communications.email.view(),
-				href: (params?: Record<string, unknown>) => `/communications/email/${params?.send_id}`
-			},
-			{
-				title: () => t.pages.communications.email.send(),
-				href: (params?: Record<string, unknown>) => `/communications/email/${params?.send_id}/send`
-			}
-		],
+
 		'/(app)/communications/sms': [
 			{
 				title: () => t.pages.home.index(),

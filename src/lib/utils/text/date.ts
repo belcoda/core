@@ -1,6 +1,7 @@
 import { DateFormatter } from '@internationalized/date';
 
 import { getLocale } from '$lib/paraglide/runtime';
+import type { SupportedLanguage } from '$lib/i18n';
 
 const df = new DateFormatter('en-US', {
 	dateStyle: 'long'
@@ -17,8 +18,12 @@ export function formatDateOnly(date: Date): string {
 	return `${df.format(date)} `;
 }
 
-export function formatDateTimeRange(startDate: Date, endDate: Date): string {
-	const locale = getLocale();
+export function formatDateTimeRange(
+	startDate: Date,
+	endDate: Date,
+	locale?: SupportedLanguage
+): string {
+	const language = locale || getLocale();
 	const formatted = new Intl.DateTimeFormat(locale, {
 		timeZoneName: 'long'
 	}).formatToParts(startDate);
