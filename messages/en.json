@@ -24,7 +24,7 @@
 	"actual_early_anteater_endure": "Please provide a valid email address",
 	"suave_weird_meerkat_imagine": "Invalid UUID",
 	"spare_great_cowfish_jolt": "Latitude and longitude must be numbers between -180 and 180",
-	"extra_large_marlin_dream": "Must choose a twitter card type from {cardList}",
+	"extra_large_marlin_dream": "Must choose a Twitter card type from {cardList}",
 	"dark_small_deer_win": "Phone number must be between 5 and 30 characters and contain only numbers, spaces, '+', '(', ')', '-', '.' and '/'",
 	"trite_loose_mammoth_devour": "Error at {path}: {message}",
 	"cozy_shy_jackal_revive": "Validation Error: ",
