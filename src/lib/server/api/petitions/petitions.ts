@@ -2,16 +2,9 @@ import { db, pool, redis, type s, BelcodaError, filterQuery, pino } from '$lib/s
 import * as m from '$lib/paraglide/messages';
 import { parse } from '$lib/schema/valibot';
 import * as schema from '$lib/schema/petitions/petitions';
-import type { Read as ReadInstance } from '$lib/schema/core/instance';
-
-import { randomUUID } from 'crypto';
-
-import htmlEmail from '$lib/utils/templates/email/petitions/petition_autoresponse_html.handlebars?raw';
-import textEmail from '$lib/utils/templates/email/petitions/petition_autoresponse_text.handlebars?raw';
 import { type PetitionHTMLMetaTags } from '$lib/schema/utils/openai';
 
 import { read as readInstance } from '$lib/server/api/core/instances';
-import { create as createEmailMessage } from '$lib/server/api/communications/email/messages';
 import { slugify } from '$lib/utils/text/string';
 
 export function redisString(instanceId: number, petitionId: number | 'all') {
@@ -63,15 +56,6 @@ export async function create({
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
 	const instance = await readInstance({ instance_id: instanceId });
-	const emailMessage = await createPetitionEmail({
-		body: parsed,
-		queue,
-		instanceId,
-		adminId,
-		instance,
-		defaultEmailTemplateId: instance.settings.communications.email.default_template_id
-	});
-
 	// function to insert a guaranteed unique name and slug based on the heading
 	// after checking to ensure the name and slug are unique, it inserts the item
 	const inserted = await db.transaction(pool, db.IsolationLevel.Serializable, async (txnClient) => {
@@ -100,7 +84,6 @@ export async function create({
 			.insert('petitions.petitions', {
 				instance_id: instanceId,
 				point_person_id: adminId,
-				autoresponse_email: emailMessage,
 				...parsed,
 				name: parsed.name || uniqueName,
 				slug: parsed.slug || uniqueSlug
@@ -185,9 +168,6 @@ export async function read({
 						id: db.parent('feature_image_upload_id')
 					}),
 					point_person: db.selectExactlyOne('admins', { id: db.parent('point_person_id') }),
-					autoresponse_email: db.selectExactlyOne('communications.email_messages', {
-						id: db.parent('autoresponse_email')
-					}),
 					signatures: db.count('petitions.signatures', {
 						petition_id: db.parent('id')
 					})
@@ -221,9 +201,6 @@ export async function readBySlug({
 			{
 				lateral: {
 					signatures: db.count('petitions.signatures', { petition_id: db.parent('id') }),
-					autoresponse_email: db.selectExactlyOne('communications.email_messages', {
-						id: db.parent('autoresponse_email')
-					}),
 					feature_image: db.selectOne('website.uploads', {
 						id: db.parent('feature_image_upload_id')
 					}),
@@ -289,59 +266,4 @@ export async function list({
 		await redis.set(redisString(instanceId, 'all'), parsedResult);
 	}
 	return parsedResult;
-}
-
-/// Helper functions
-
-async function createPetitionEmail({
-	body,
-	instanceId,
-	adminId,
-	instance,
-	defaultEmailTemplateId,
-	queue
-}: {
-	body: schema.Create;
-	instanceId: number;
-	adminId: number;
-	instance: ReadInstance;
-	defaultEmailTemplateId: number;
-	queue: App.Queue;
-}): Promise<number> {
-	const registrationEmail = await createEmailMessage({
-		instanceId,
-		queue,
-		body: {
-			name: randomUUID(),
-			point_person_id: adminId,
-			from: `${instance.name} <${instance.slug}@belcoda.com>`,
-			reply_to: `${instance.slug}@belcoda.com`,
-			subject: `${body.heading}`,
-			html: htmlEmail,
-			text: textEmail,
-			preview_text: `Thank you for signing {{petition.heading}}`,
-			use_html_for_plaintext: true,
-			template_id: defaultEmailTemplateId
-		},
-		defaultTemplateId: defaultEmailTemplateId
-	});
-	return registrationEmail.id;
-}
-
-export async function del({
-	instanceId,
-	petitionId
-}: {
-	instanceId: number;
-	petitionId: number;
-}): Promise<void> {
-	await db
-		.update(
-			'petitions.petitions',
-			{ deleted_at: new Date() },
-			{ instance_id: instanceId, id: petitionId }
-		)
-		.run(pool);
-	await redis.del(redisString(instanceId, petitionId));
-	await redis.del(redisString(instanceId, 'all'));
 }

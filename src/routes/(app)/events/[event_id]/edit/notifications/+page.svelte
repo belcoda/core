@@ -4,7 +4,7 @@
 	import { Switch, Debug, Error, Input, Grid, superForm, valibotClient } from '$lib/comps/ui/forms';
 	import PageHeader from '$lib/comps/layout/PageHeader.svelte';
 	import Button from '$lib/comps/ui/button/button.svelte';
-
+	import MessagesDropdown from '$lib/comps/widgets/communications/email/MessagesDropdown.svelte';
 	import { update } from '$lib/schema/events/events';
 	const form = superForm(data.form, {
 		validators: valibotClient(update),
@@ -51,11 +51,6 @@
 				description={m.teary_salty_duck_mop()}
 				bind:checked={$formData.send_registration_email as boolean}
 			/>
-
-			{@render editPreviewButtons(
-				data.event.registration_email.id,
-				$formData.send_registration_email as boolean
-			)}
 		</Grid>
 		<Grid cols={1} class="border rounded-lg p-4">
 			<Switch
@@ -63,12 +58,12 @@
 				{form}
 				name="send_reminder_email"
 				label={m.main_plane_lemur_bless()}
-				description={$formData.followup_sent_at
+				description={data.event.reminder_sent_at
 					? m.stale_direct_sawfish_grip({
-							renderedTimeAgo: data.timeAgo.format($formData.followup_sent_at)
+							renderedTimeAgo: data.timeAgo.format(data.event.reminder_sent_at)
 						})
 					: m.dull_less_lynx_heart()}
-				disabled={$formData.reminder_sent_at !== null}
+				disabled={data.event.reminder_sent_at !== null}
 				bind:checked={$formData.send_reminder_email as boolean}
 			/>
 
@@ -79,10 +74,6 @@
 				label={m.mellow_key_kudu_pinch()}
 				bind:value={$formData.send_reminder_hours_before_start as number}
 			/>
-			{@render editPreviewButtons(
-				data.event.reminder_email.id,
-				$formData.send_reminder_email as boolean
-			)}
 		</Grid>
 		<Grid cols={1} class="border rounded-lg p-4">
 			<Switch
@@ -93,11 +84,6 @@
 				description={m.careful_fresh_insect_boil()}
 				bind:checked={$formData.send_cancellation_email as boolean}
 			/>
-
-			{@render editPreviewButtons(
-				data.event.cancellation_email.id,
-				$formData.send_cancellation_email as boolean
-			)}
 		</Grid>
 		<Grid cols={1} class="border rounded-lg p-4">
 			<Switch
@@ -105,12 +91,12 @@
 				{form}
 				name="send_followup_email"
 				label={m.true_inner_jay_quell()}
-				description={$formData.followup_sent_at
+				description={data.event.followup_sent_at
 					? m.lost_noble_crow_transform({
-							renderedTimeAgo: data.timeAgo.format($formData.followup_sent_at)
+							renderedTimeAgo: data.timeAgo.format(data.event.followup_sent_at)
 						})
 					: m.bright_lost_millipede_grasp()}
-				disabled={$formData.followup_sent_at !== null}
+				disabled={data.event.followup_sent_at !== null}
 				bind:checked={$formData.send_followup_email as boolean}
 			/>
 
@@ -121,10 +107,12 @@
 				label={m.deft_grassy_pug_hike()}
 				bind:value={$formData.send_followup_hours_after_end as number}
 			/>
-			{@render editPreviewButtons(
-				data.event.followup_email.id,
-				$formData.send_followup_email as boolean
-			)}
+			<MessagesDropdown
+				bind:value={$formData.followup_email as number}
+				onselect={(msg) => {
+					$formData.followup_email = msg.id;
+				}}
+			/>
 		</Grid>
 
 		<div class="flex justify-end">
