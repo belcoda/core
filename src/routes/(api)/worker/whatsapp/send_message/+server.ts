@@ -123,10 +123,10 @@ export async function POST(event) {
 			const parsed = parse(successfulYCloudResponse, responseBody);
 
 			const afterSendBody: AfterSend = {
-				message_id: parsedMessage.message_id,
-				sent_by_id: parsedMessage.from_admin_id,
-				person_id: parsedMessage.person_id,
-				message: message.message,
+				message_id: messageId,
+				sent_by_id: fromAdminId,
+				person_id: personId,
+				message: messageObj.message,
 				uniqueId: sentMessageId,
 				whatsapp_response: parsed
 			};
