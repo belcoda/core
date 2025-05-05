@@ -17,7 +17,7 @@ export function filter({
 	const subscribed = mustBeSubscribed ? ` AND phone_number->>'subscribed' = true` : '';
 	const whatsapp = mustBeWhatsapp ? ` AND phone_number->>'whatsapp' = true` : '';
 	const query = format(
-		`(SELECT id FROM people.people WHERE instance_id = %L AND phone_number->>'phone_number' ILIKE %L)${subscribed}${whatsapp}`,
+		`(SELECT id FROM people.people WHERE instance_id = %L AND deleted_at IS NULL AND phone_number->>'phone_number' ILIKE %L)${subscribed}${whatsapp}`,
 		instanceId,
 		search
 	);

@@ -15,14 +15,15 @@
 	import { PUBLIC_HOST } from '$env/static/public';
 
 	const signatureIds = $derived(data.signatures.items.map((signature) => signature.person_id));
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { getFlash } from 'sveltekit-flash-message';
-	import { invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
+	import Plus from 'lucide-svelte/icons/plus';
 
-	let flash = getFlash(page);
+	const flash = getFlash(page);
 
 	const url = new URL(PUBLIC_HOST);
-	const previewUrl = `${url.protocol}//${$page.data.instance.slug}.${url.host}/petitions/${data.petition.slug}`;
+	const previewUrl = `${url.protocol}//${data.instance.slug}.${url.host}/petitions/${data.petition.slug}`;
 
 	async function addPerson(person: _ListWithSearch['items'][number]) {
 		try {
@@ -47,7 +48,29 @@
 			}
 		}
 	}
-	import Plus from 'lucide-svelte/icons/plus';
+
+	async function deletePetition() {
+		if (!confirm(m.moving_acidic_crow_imagine())) {
+			return;
+		}
+
+		try {
+			const response = await fetch(`/api/v1/petitions/${data.petition.id}`, {
+				method: 'DELETE'
+			});
+			if (!response.ok) {
+				throw new Error(m.keen_agent_shell_mop());
+			}
+			$flash = { type: 'success', message: m.dizzy_actual_elephant_evoke() };
+		} catch (error) {
+			if (error instanceof Error) {
+				$flash = { type: 'error', message: error.message };
+			} else {
+				$flash = { type: 'error', message: m.teary_dizzy_earthworm_urge() };
+			}
+		}
+		goto('/petitions');
+	}
 </script>
 
 <PageHeader title={data.petition.name} separator={false}>
@@ -94,4 +117,8 @@
 			</div>
 		{/snippet}
 	</DataGrid>
+
+	<div class="flex justify-end mt-4">
+		<Button variant="destructive" onclick={deletePetition}>{m.wide_major_pig_swim()}</Button>
+	</div>
 </div>

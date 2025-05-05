@@ -6,7 +6,8 @@ import {
 	extractComponents,
 	countTextTemplatePlaceholders,
 	extractTemplateMessageComponents,
-	createMessageComponentsFromTemplateComponents
+	createMessageComponentsFromTemplateComponents,
+	hasUnfilledPlaceholders
 } from '$lib/comps/forms/whatsapp/messages/builder/actions/components';
 
 // Sample test data
@@ -202,5 +203,127 @@ describe('createMessageComponentsFromTemplateComponents', () => {
 			threadMessage
 		);
 		expect(result.components.length).toBe(0);
+	});
+});
+
+describe('hasUnfilledPlaceholders', () => {
+	it('should return false when template is null', () => {
+		expect(hasUnfilledPlaceholders(null, [], { type: 'template' })).toBe(false);
+	});
+
+	it('should return false when message is not template type', () => {
+		expect(hasUnfilledPlaceholders({}, [], { type: 'text' })).toBe(false);
+	});
+
+	it('should return true when header has unfilled placeholders', () => {
+		const template = {
+			message: {
+				components: [
+					{
+						type: 'HEADER',
+						format: 'TEXT',
+						text: 'Hello {{1}}'
+					}
+				]
+			}
+		};
+		const components = [
+			{
+				type: 'header',
+				parameters: []
+			}
+		];
+		expect(hasUnfilledPlaceholders(template, components, { type: 'template' })).toBe(true);
+	});
+
+	it('should return true when body has unfilled placeholders', () => {
+		const template = {
+			message: {
+				components: [
+					{
+						type: 'BODY',
+						format: 'TEXT',
+						text: 'Message {{1}}'
+					}
+				]
+			}
+		};
+		const components = [
+			{
+				type: 'body',
+				parameters: []
+			}
+		];
+		expect(hasUnfilledPlaceholders(template, components, { type: 'template' })).toBe(true);
+	});
+
+	it('should return true when placeholder text still exists in parameters', () => {
+		const template = {
+			message: {
+				components: [
+					{
+						type: 'BODY',
+						format: 'TEXT',
+						text: 'Message {{1}}'
+					}
+				]
+			}
+		};
+		const components = [
+			{
+				type: 'body',
+				parameters: [
+					{
+						type: 'text',
+						text: '{{1}}'
+					}
+				]
+			}
+		];
+		expect(hasUnfilledPlaceholders(template, components, { type: 'template' })).toBe(true);
+	});
+
+	it('should return false when all placeholders are filled', () => {
+		const template = {
+			message: {
+				components: [
+					{
+						type: 'HEADER',
+						format: 'TEXT',
+						text: 'Hello {{1}}'
+					},
+					{
+						type: 'BODY',
+						format: 'TEXT',
+						text: 'Message {{1}} and {{2}}'
+					}
+				]
+			}
+		};
+		const components = [
+			{
+				type: 'header',
+				parameters: [
+					{
+						type: 'text',
+						text: 'John'
+					}
+				]
+			},
+			{
+				type: 'body',
+				parameters: [
+					{
+						type: 'text',
+						text: 'John'
+					},
+					{
+						type: 'text',
+						text: 'Doe'
+					}
+				]
+			}
+		];
+		expect(hasUnfilledPlaceholders(template, components, { type: 'template' })).toBe(false);
 	});
 });

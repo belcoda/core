@@ -22,8 +22,7 @@ export async function POST(event) {
 
 		const petition = await readPetition({
 			instanceId: event.locals.instance.id,
-			petitionId: parsed.petition_id,
-			t: event.locals.t
+			petitionId: parsed.petition_id
 		});
 
 		if (petition.send_autoresponse_email === false) {
@@ -44,8 +43,7 @@ export async function POST(event) {
 
 		const person = await readPerson({
 			instance_id: event.locals.instance.id,
-			person_id: parsed.person_id,
-			t: event.locals.t
+			person_id: parsed.person_id
 		});
 
 		const sentEmailId = randomUUID();

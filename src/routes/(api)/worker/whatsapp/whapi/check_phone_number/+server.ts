@@ -12,8 +12,7 @@ export async function POST(event) {
 		log.debug(parsed);
 		const person = await read({
 			instance_id: event.locals.instance.id,
-			person_id: parsed.person_id,
-			t: event.locals.t
+			person_id: parsed.person_id
 		});
 		if (!person.phone_number) {
 			return error(
@@ -30,11 +29,10 @@ export async function POST(event) {
 				whatsapp: true,
 				whapi_id: contactStatus.wa_id
 			};
-			const updated = await update({
+			await update({
 				instance_id: event.locals.instance.id,
 				person_id: parsed.person_id,
 				body: { phone_number: newPhoneNumber },
-				t: event.locals.t,
 				queue: event.locals.queue,
 				admin_id: event.locals.admin.id,
 				options: { skipWhatsappCheck: true } //IMPORTANT: Otherwise we will get in an infinite loop of checking whatsapp

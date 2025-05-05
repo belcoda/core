@@ -38,8 +38,7 @@ export async function POST(event) {
 		});
 		const petition = await readPetition({
 			instanceId: event.locals.instance.id,
-			petitionId: Number(event.params.petition_id),
-			t: event.locals.t
+			petitionId: Number(event.params.petition_id)
 		});
 		await queueInteraction({
 			instanceId: event.locals.instance.id,

@@ -40,3 +40,17 @@ export async function load(event) {
 		pageTitle: [{ key: 'PERSONNAME', title: parsed.full_name }]
 	};
 }
+
+export const actions = {
+	delete: async ({ params, fetch }) => {
+		const response = await fetch(`/api/v1/people/${params.person_id}`, {
+			method: 'DELETE'
+		});
+
+		if (!response.ok) {
+			return loadError(response);
+		}
+
+		return { success: true };
+	}
+};

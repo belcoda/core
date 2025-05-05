@@ -7,7 +7,6 @@ export async function GET(event) {
 		const person = await api.read({
 			instance_id: event.locals.instance.id,
 			person_id: Number(event.params.person_id),
-			t: event.locals.t,
 			url: event.url
 		});
 		return json(person);
@@ -23,7 +22,6 @@ export async function PUT(event) {
 			person_id: Number(event.params.person_id),
 			body: await event.request.json(),
 			admin_id: event.locals.admin.id,
-			t: event.locals.t,
 			queue: event.locals.queue
 		});
 		await queueInteraction({
@@ -39,5 +37,19 @@ export async function PUT(event) {
 		return json(updatedPerson);
 	} catch (err) {
 		return error(500, 'API:/people/:person_id:PUT:01', m.spry_ago_baboon_cure(), err);
+	}
+}
+
+export async function DELETE(event) {
+	try {
+		const deletedPerson = await api.del({
+			instance_id: event.locals.instance.id,
+			person_id: Number(event.params.person_id),
+			admin_id: event.locals.admin.id,
+			queue: event.locals.queue
+		});
+		return json(deletedPerson);
+	} catch (err) {
+		return error(500, 'API:/people/:person_id:DELETE:01', m.spry_ago_baboon_cure(), err);
 	}
 }

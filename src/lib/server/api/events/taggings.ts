@@ -15,7 +15,7 @@ export async function create({
 	tagId: number;
 	t: App.Localization;
 }): Promise<schema.Read> {
-	await exists({ instanceId: instanceId, eventId, t });
+	await exists({ instanceId: instanceId, eventId });
 	const inserted = await db
 		.insert('events.taggings', { event_id: eventId, tag_id: tagId })
 		.run(pool)
@@ -64,7 +64,7 @@ export async function list({
 	eventId: number;
 	t: App.Localization;
 }): Promise<schema.List> {
-	await exists({ instanceId: instanceId, eventId, t });
+	await exists({ instanceId: instanceId, eventId });
 	const fetched = await db
 		.select(
 			'events.taggings',
@@ -90,7 +90,7 @@ export async function del({
 	tagId: number;
 	t: App.Localization;
 }): Promise<schema.Del> {
-	await exists({ instanceId: instanceId, eventId, t });
+	await exists({ instanceId: instanceId, eventId });
 	await db.deletes('events.taggings', { event_id: eventId, tag_id: tagId }).run(pool);
 	const parsed = parse(schema.del, { success: true });
 	await redis.del(redisString(instanceId, eventId));

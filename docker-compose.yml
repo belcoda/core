@@ -16,6 +16,8 @@ services:
     app:
         container_name: app
         restart: unless-stopped
+        dns: 
+          - 8.8.8.8
         build:
           context: ./
         depends_on:

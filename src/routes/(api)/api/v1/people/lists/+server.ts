@@ -18,8 +18,7 @@ export async function POST(event) {
 		const parsed = parse(schema.create, body);
 		const list = await api.create({
 			instanceId: event.locals.instance.id,
-			body: parsed,
-			t: event.locals.t
+			body: parsed
 		});
 		return json(list, { status: 201 });
 	} catch (err) {

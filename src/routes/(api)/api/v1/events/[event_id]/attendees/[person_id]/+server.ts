@@ -41,8 +41,7 @@ export async function PUT(event) {
 		});
 		const eventObject = await readEvent({
 			instanceId: event.locals.instance.id,
-			eventId: Number(event.params.event_id),
-			t: event.locals.t
+			eventId: Number(event.params.event_id)
 		});
 		if (response.status === 'cancelled') {
 			await queueInteraction({

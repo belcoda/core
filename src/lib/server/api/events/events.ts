@@ -24,19 +24,21 @@ export function redisStringSlug(instanceId: number, slug: string) {
 
 export async function exists({
 	instanceId,
-	eventId,
-	t
+	eventId
 }: {
 	instanceId: number;
 	eventId: number;
-	t: App.Localization;
 }): Promise<boolean> {
 	const cached = await redis.get(redisString(instanceId, eventId));
 	if (cached) {
 		return true;
 	}
 	await db
-		.selectExactlyOne('events.events', { instance_id: instanceId, id: eventId })
+		.selectExactlyOne('events.events', {
+			instance_id: instanceId,
+			id: eventId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(404, 'DATA:EVENTS:EXISTS:01', m.pretty_tired_fly_lead(), err);
@@ -47,14 +49,12 @@ export async function exists({
 export async function create({
 	instanceId,
 	body,
-	t,
 	defaultEmailTemplateId,
 	adminId,
 	queue
 }: {
 	instanceId: number;
 	body: schema.Create;
-	t: App.Localization;
 	defaultEmailTemplateId: number;
 	adminId: number;
 	queue: App.Queue;
@@ -71,8 +71,7 @@ export async function create({
 			defaultEmailTemplateId,
 			type: 'followup',
 			body: parsed,
-			queue,
-			t
+			queue
 		}),
 		registration_email: await createEventEmailNotification({
 			instance,
@@ -81,8 +80,7 @@ export async function create({
 			defaultEmailTemplateId,
 			type: 'registration',
 			body: parsed,
-			queue,
-			t
+			queue
 		}),
 		reminder_email: await createEventEmailNotification({
 			instance,
@@ -91,8 +89,7 @@ export async function create({
 			defaultEmailTemplateId,
 			type: 'reminder',
 			body: parsed,
-			queue,
-			t
+			queue
 		}),
 		cancellation_email: await createEventEmailNotification({
 			instance,
@@ -101,8 +98,7 @@ export async function create({
 			defaultEmailTemplateId,
 			type: 'cancellation',
 			body: parsed,
-			queue,
-			t
+			queue
 		}),
 		point_person_id: parsed.point_person_id || adminId,
 		country: parsed.country || instance.country || DEFAULT_COUNTRY,
@@ -143,7 +139,7 @@ export async function create({
 	});
 
 	await redis.del(redisString(instanceId, 'all'));
-	const returned = await read({ instanceId, eventId: result.id, t });
+	const returned = await read({ instanceId, eventId: result.id });
 	const htmlMeta: EventHTMLMetaTags = { type: 'event', eventId: returned.id };
 	await queue('/utils/openai/generate_html_meta', instanceId, htmlMeta);
 	return returned;
@@ -154,26 +150,28 @@ export async function update({
 	eventId,
 	body,
 	queue,
-	t,
 	skipMetaGeneration = false
 }: {
 	instanceId: number;
 	eventId: number;
 	body: schema.Update;
 	queue: App.Queue;
-	t: App.Localization;
 	skipMetaGeneration?: boolean;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const result = await db
-		.update('events.events', parsed, { instance_id: instanceId, id: eventId })
+		.update('events.events', parsed, {
+			instance_id: instanceId,
+			id: eventId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool);
 	if (result.length !== 1) {
 		throw new BelcodaError(404, 'DATA:EVENTS:UPDATE:01', m.pretty_tired_fly_lead());
 	}
 	await redis.del(redisString(instanceId, eventId));
 	await redis.del(redisString(instanceId, 'all'));
-	const returned = await read({ instanceId, eventId, t });
+	const returned = await read({ instanceId, eventId });
 	await redis.del(redisStringSlug(instanceId, returned.slug));
 	const htmlMeta: EventHTMLMetaTags = { type: 'event', eventId: eventId };
 	if (skipMetaGeneration !== true) {
@@ -185,20 +183,24 @@ export async function update({
 export async function read({
 	instanceId,
 	eventId,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	eventId: number;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, eventId));
-	if (cached) {
+	if (!includeDeleted && cached) {
 		return parse(schema.read, cached);
 	}
 	const result = await db
 		.selectExactlyOne(
 			'events.events',
-			{ instance_id: instanceId, id: eventId },
+			{
+				instance_id: instanceId,
+				id: eventId,
+				...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+			},
 			{
 				lateral: {
 					feature_image: db.selectOne('website.uploads', {
@@ -259,7 +261,7 @@ export async function readBySlug({
 	const result = await db
 		.selectExactlyOne(
 			'events.events',
-			{ instance_id: instanceId, slug },
+			{ instance_id: instanceId, slug, deleted_at: db.conditions.isNull },
 			{
 				lateral: {
 					point_person: db.selectExactlyOne('admins', { id: db.parent('point_person_id') }),
@@ -309,23 +311,27 @@ export async function readBySlug({
 export async function list({
 	instanceId,
 	url,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	url: URL;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const filter = filterQuery(url);
 	if (filter.filtered !== true) {
 		const cached = await redis.get(redisString(instanceId, 'all'));
-		if (cached) {
+		if (!includeDeleted && cached) {
 			return parse(schema.list, cached);
 		}
 	}
 	const result = await db
 		.select(
 			'events.events',
-			{ instance_id: instanceId, ...filter.where },
+			{
+				instance_id: instanceId,
+				...filter.where,
+				...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+			},
 			{
 				lateral: {
 					point_person: db.selectExactlyOne('admins', { id: db.parent('point_person_id') }),
@@ -351,7 +357,11 @@ export async function list({
 		)
 		.run(pool);
 	const count = await db
-		.count('events.events', { instance_id: instanceId, ...filter.where })
+		.count('events.events', {
+			instance_id: instanceId,
+			...filter.where,
+			...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+		})
 		.run(pool);
 	const parsedResult = parse(schema.list, { items: result, count: count });
 
@@ -389,8 +399,7 @@ async function createEventEmailNotification({
 	adminId,
 	instance,
 	defaultEmailTemplateId,
-	queue,
-	t
+	queue
 }: {
 	type: 'registration' | 'reminder' | 'cancellation' | 'followup';
 	body: schema.Create;
@@ -399,7 +408,6 @@ async function createEventEmailNotification({
 	instance: ReadInstance;
 	defaultEmailTemplateId: number;
 	queue: App.Queue;
-	t: App.Localization;
 }): Promise<number> {
 	const { htmlEmail, textEmail } = returnHtmlTextEmails(type);
 	const registrationEmail = await createEmailMessage({
@@ -416,7 +424,6 @@ async function createEventEmailNotification({
 			use_html_for_plaintext: true,
 			template_id: defaultEmailTemplateId
 		},
-		t,
 		queue: queue,
 		defaultTemplateId: defaultEmailTemplateId
 	});
@@ -430,17 +437,35 @@ export async function selectEventsForReminderFollowupEmail(): Promise<{
 	const reminders = await db.sql<
 		s.events.events.SQL,
 		s.events.events.Selectable[]
-	>`SELECT ${'id'}, ${'instance_id'}, ${'point_person_id'} FROM events.events WHERE send_reminder_email = true AND reminder_sent_at IS NULL AND starts_at < NOW() AND starts_at > NOW() - INTERVAL '1 hour' * send_reminder_hours_before_start`.run(
+	>`SELECT ${'id'}, ${'instance_id'}, ${'point_person_id'} FROM events.events WHERE deleted_at IS NULL AND send_reminder_email = true AND reminder_sent_at IS NULL AND starts_at < NOW() AND starts_at > NOW() - INTERVAL '1 hour' * send_reminder_hours_before_start`.run(
 		pool
 	);
 	const followups = await db.sql<
 		s.events.events.SQL,
 		s.events.events.Selectable[]
-	>`SELECT ${'id'}, ${'instance_id'}, ${'point_person_id'}  FROM ${'events.events'} WHERE ${'send_followup_email'} = ${db.param(true)} AND ${'followup_sent_at'} IS NULL AND ${'ends_at'} < NOW() AND ${'ends_at'} > NOW() - INTERVAL '1 hour' * ${'send_followup_hours_after_end'}`.run(
+	>`SELECT ${'id'}, ${'instance_id'}, ${'point_person_id'}  FROM ${'events.events'} WHERE deleted_at IS NULL AND ${'send_followup_email'} = ${db.param(true)} AND ${'followup_sent_at'} IS NULL AND ${'ends_at'} < NOW() AND ${'ends_at'} > NOW() - INTERVAL '1 hour' * ${'send_followup_hours_after_end'}`.run(
 		pool
 	);
 	return {
 		reminders,
 		followups
 	};
+}
+
+export async function del({
+	instanceId,
+	eventId
+}: {
+	instanceId: number;
+	eventId: number;
+}): Promise<void> {
+	if (!(await exists({ instanceId, eventId }))) {
+		throw new BelcodaError(404, 'DATA:EVENTS:DEL:01', m.pretty_tired_fly_lead());
+	}
+	await db
+		.update('events.events', { deleted_at: new Date() }, { instance_id: instanceId, id: eventId })
+		.run(pool);
+
+	await redis.del(redisString(instanceId, eventId));
+	await redis.del(redisString(instanceId, 'all'));
 }

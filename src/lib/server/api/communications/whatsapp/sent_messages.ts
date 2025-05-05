@@ -42,7 +42,7 @@ export async function read({
 	if (cached) {
 		return parse(schema.read, cached);
 	}
-	await personExists({ instanceId, personId, t: t });
+	await personExists({ instanceId, personId });
 	const result = await db
 		.selectExactlyOne('communications.sent_whatsapp_messages', {
 			person_id: personId,
@@ -80,7 +80,7 @@ export async function list({
 			return parse(schema.list, cached);
 		}
 	}
-	await personExists({ instanceId, personId, t });
+	await personExists({ instanceId, personId });
 	const result = await db
 		.select('communications.sent_whatsapp_messages', { person_id: personId }, options)
 		.run(pool);
@@ -106,7 +106,7 @@ export async function update({
 	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
-	await personExists({ instanceId, personId, t });
+	await personExists({ instanceId, personId });
 	const result = await db
 		.update('communications.sent_whatsapp_messages', parsed, {
 			person_id: personId,

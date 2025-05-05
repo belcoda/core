@@ -17,7 +17,7 @@ export async function list({
 	t: App.Localization;
 	notPaged?: boolean;
 }): Promise<schema.List> {
-	await exists({ instanceId: instance_id, eventId, t });
+	await exists({ instanceId: instance_id, eventId });
 	const query = filterQuery(url, { search_key: 'search', notPaged });
 	const eventWhere = status === 'any' ? {} : { status };
 

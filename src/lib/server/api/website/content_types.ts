@@ -13,12 +13,10 @@ function redisStringSlug(instanceId: number, slug: string) {
 
 export async function exists({
 	instanceId,
-	contentTypeId,
-	t
+	contentTypeId
 }: {
 	instanceId: number;
 	contentTypeId: number;
-	t: App.Localization;
 }): Promise<boolean> {
 	const cached = await redis.get(redisString(instanceId, contentTypeId));
 	if (cached) {
@@ -76,12 +74,10 @@ export async function update({
 
 export async function read({
 	instanceId,
-	contentTypeId,
-	t
+	contentTypeId
 }: {
 	instanceId: number;
 	contentTypeId: number;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, contentTypeId));
 	if (cached) {
@@ -115,7 +111,7 @@ export async function readBySlug({
 	const cached = await redis.get(redisStringSlug(instanceId, slug));
 	if (cached) {
 		const cachedId = parse(id, cached);
-		return read({ instanceId, contentTypeId: cachedId, t });
+		return read({ instanceId, contentTypeId: cachedId });
 	}
 	const result = await db
 		.selectExactlyOne(
@@ -134,7 +130,7 @@ export async function readBySlug({
 		});
 	const parsedId = parse(id, result.id);
 	await redis.set(redisStringSlug(instanceId, slug), parsedId);
-	return await read({ instanceId, contentTypeId: parsedId, t });
+	return await read({ instanceId, contentTypeId: parsedId });
 }
 
 export async function list({

@@ -24,7 +24,6 @@ export async function POST(event) {
 				//const contact = value.contacts[index];
 				//TODO: need to fix phone number matching, because at the moment everyone's phone number is stored in the database in a non-normalized format.
 				const person = await _getPersonByWhatsappId({
-					t: event.locals.t,
 					instanceId: event.locals.instance.id,
 					whatsappId: message.from
 				});
@@ -85,7 +84,6 @@ export async function POST(event) {
 			for (const status of value.statuses) {
 				const messageId = status.biz_opaque_callback_data || 'null'; //TODO: Figure out what to do when it's not a response or status to one of our messages with a biz_opaque_callback_data
 				const person = await _getPersonByWhatsappId({
-					t: event.locals.t,
 					instanceId: event.locals.instance.id,
 					whatsappId: status.recipient_id
 				});

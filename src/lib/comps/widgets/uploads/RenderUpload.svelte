@@ -4,15 +4,24 @@
 	const {
 		upload,
 		showCopyButton = false,
+		showDeleteButton = false,
+		onDelete = () => {},
 		children
-	}: { upload: List['items'][number]; showCopyButton: boolean; children?: Snippet } = $props();
+	}: {
+		upload: List['items'][number];
+		showCopyButton: boolean;
+		showDeleteButton?: boolean;
+		onDelete?: (id: number) => void;
+		children?: Snippet;
+	} = $props();
 	import { humanReadableFileSize } from '$lib/utils/text/file_size';
 	import Button from '$lib/comps/ui/button/button.svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { getFlash } from 'sveltekit-flash-message';
 	import Badge from '$lib/comps/ui/badge/badge.svelte';
 	const flash = getFlash(page);
 	import * as m from '$lib/paraglide/messages';
+	import { Trash2Icon } from 'lucide-svelte';
 
 	function copy() {
 		navigator.clipboard.writeText(upload.url);
@@ -31,8 +40,20 @@
 			<div><Badge variant="secondary">{humanReadableFileSize(upload.size, true)}</Badge></div>
 		</div>
 		{#if children}{@render children()}{/if}
-		{#if showCopyButton}<div class="flex justify-center mt-3">
+		<div class="flex justify-center mt-3 gap-2">
+			{#if showCopyButton}
 				<Button variant="outline" size="sm" onclick={copy}>{m.loud_spicy_wombat_reside()}</Button>
-			</div>{/if}
+			{/if}
+			{#if showDeleteButton}
+				<Button
+					variant="destructive"
+					size="sm"
+					onclick={() => onDelete(upload.id)}
+					title={m.wide_major_pig_swim()}
+				>
+					<Trash2Icon class="w-4 h-4" />
+				</Button>
+			{/if}
+		</div>
 	</div>
 </div>

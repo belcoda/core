@@ -7,15 +7,17 @@ export async function list({
 	url,
 	listId,
 	t,
-	notPaged
+	notPaged,
+	includeDeleted = false
 }: {
 	instance_id: number;
 	url: URL;
 	listId: number;
 	t: App.Localization;
 	notPaged?: boolean;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
-	await exists({ instanceId: instance_id, listId, t });
+	await exists({ instanceId: instance_id, listId });
 	const query = filterQuery(url, { search_key: 'full_name', notPaged });
 	const selectList = await db
 		.select('people.list_people', { list_id: listId }, { columns: ['person_id'] })
@@ -24,7 +26,12 @@ export async function list({
 	const selected = await db
 		.select(
 			'people.people',
-			{ instance_id, id: db.conditions.isNotIn(peopleIds), ...query.where },
+			{
+				instance_id,
+				id: db.conditions.isNotIn(peopleIds),
+				...query.where,
+				...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+			},
 			{
 				lateral: {
 					custom_fields: db.select(
@@ -58,7 +65,8 @@ export async function list({
 		.count('people.people', {
 			id: db.conditions.isNotIn(peopleIds),
 			instance_id: instance_id,
-			...query.where
+			...query.where,
+			...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
 		})
 		.run(pool);
 	const parsed = parse(schema.list, { items: selected, count: count });

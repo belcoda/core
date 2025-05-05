@@ -8,8 +8,7 @@ export async function GET(event) {
 	try {
 		const response = await api.list({
 			instanceId: event.locals.instance.id,
-			url: event.url,
-			t: event.locals.t
+			url: event.url
 		});
 		return json(response);
 	} catch (err) {
@@ -25,7 +24,6 @@ export async function POST(event) {
 		const response = await api.create({
 			instanceId: event.locals.instance.id,
 			body: parsed,
-			t: event.locals.t,
 			adminId: event.locals.admin.id,
 			defaultEmailTemplateId: event.locals.instance.settings.events.default_email_template_id,
 			queue: event.locals.queue
