@@ -3,7 +3,7 @@ import { type TriggerEventMessage } from '$lib/schema/utils/email';
 import { type Update as UpdateEventSchema } from '$lib/schema/events/events';
 import {
 	selectEventsForReminderFollowupEmail,
-	update as updateEvent
+	setEventReminderFollowupEmailSent
 } from '$lib/server/api/events/events';
 import { unsafeListAllForEvent } from '$lib/server/api/events/attendees';
 import * as m from '$lib/paraglide/messages';
@@ -50,36 +50,38 @@ async function queueEmailsToAttendees({
 }) {
 	for (let index = 0; index < eventObjects.length; index++) {
 		const eventObject = eventObjects[index];
-		const updateBody: UpdateEventSchema =
-			type === 'reminder'
-				? { reminder_sent_at: new Date(Date.now()) }
-				: { followup_sent_at: new Date(Date.now()) };
-		await updateEvent({
-			instanceId: eventObject.instance_id,
-			eventId: eventObject.id,
-			body: updateBody,
-			queue: queue,
-			skipMetaGeneration: true
-		});
 		const attendees = await unsafeListAllForEvent({
 			instanceId: eventObject.instance_id,
 			eventId: eventObject.id
 		});
 		for (let index = 0; index < attendees.length; index++) {
 			const attendee = attendees[index];
-			if (attendee.send_notifications && attendee.status === 'registered') {
-				const sendToQueue: TriggerEventMessage = {
-					person_id: attendee.person_id,
-					event_id: eventObject.id
-				};
-				const urlForQueue = type === 'reminder' ? 'send_reminder_email' : 'send_followup_email';
-				await queue(
-					`utils/email/events/${urlForQueue}`,
-					eventObject.instance_id,
-					sendToQueue,
-					eventObject.point_person_id
+			try {
+				if (attendee.send_notifications && attendee.status === 'registered') {
+					const sendToQueue: TriggerEventMessage = {
+						person_id: attendee.person_id,
+						event_id: eventObject.id
+					};
+					const urlForQueue = type === 'reminder' ? 'send_reminder_email' : 'send_followup_email';
+					await queue(
+						`utils/email/events/${urlForQueue}`,
+						eventObject.instance_id,
+						sendToQueue,
+						eventObject.point_person_id
+					);
+				}
+			} catch (err) {
+				log.error(err, 'Error sending email to attendee');
+				log.debug(
+					{ attendee, eventId: eventObject.id, type, index },
+					'Error sending email to attendee [details]'
 				);
 			}
 		}
+		await setEventReminderFollowupEmailSent({
+			instanceId: eventObject.instance_id,
+			eventId: eventObject.id,
+			type
+		});
 	}
 }

@@ -174,26 +174,22 @@ export const interactionTypes = {
 	}),
 	received_event_reminder_email: v.object({
 		type: v.literal('received_event_reminder_email'),
-		message_id: id,
 		event_id: id,
 		event_name: shortStringNotEmpty
 	}),
 	received_event_cancellation_email: v.object({
 		type: v.literal('received_event_cancellation_email'),
-		message_id: id,
 		event_id: id,
 		event_name: shortStringNotEmpty
 	}),
 	received_event_registration_email: v.object({
 		type: v.literal('received_event_registration_email'),
-		message_id: id,
 		event_id: id,
 		event_name: shortStringNotEmpty
 	}),
 	received_petition_autoresponse_email: v.object({
 		type: v.literal('received_petition_autoresponse_email'),
 		petition_name: shortStringNotEmpty,
-		message_id: id,
 		petition_id: id
 	}),
 	whatsapp_verified: v.object({

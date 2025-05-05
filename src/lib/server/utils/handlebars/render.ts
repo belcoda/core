@@ -2,7 +2,6 @@ import Handlebars from 'handlebars';
 import register_helpers from '$lib/server/hooks/website/register_helpers';
 import { form, input } from '$lib/server/hooks/website/partials';
 import { listAllForInstance } from '$lib/server/api/website/blocks';
-import { PUBLIC_HOST } from '$env/static/public';
 import { read as readInstance } from '$lib/server/api/core/instances';
 export default async function ({
 	template,

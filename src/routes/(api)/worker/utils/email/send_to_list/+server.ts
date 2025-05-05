@@ -1,51 +1,60 @@
 import { json, error, pino, BelcodaError } from '$lib/server';
-import {
-	sendEventEmailMessage,
-	sendEmailMessage,
-	type SendEmailMessage,
-	sendEmailToListSchema
-} from '$lib/schema/utils/email';
+import { sendEmailToListSchema } from '$lib/schema/utils/email';
+import { type EmailTemplateMessage } from '$lib/schema/communications/email/messages';
 const log = pino(import.meta.url);
 import { getAllPersonIds } from '$lib/server/api/people/lists';
-import { markAsStarted } from '$lib/server/api/communications/email/sends';
+import { markAsStarted, markAsComplete } from '$lib/server/api/communications/email/sends';
 import { randomUUID } from 'crypto';
 import { read as readMessage } from '$lib/server/api/communications/email/messages';
-import { read as readTemplate } from '$lib/server/api/communications/email/templates';
 import { read as readPerson } from '$lib/server/api/people/people';
-import renderEmail from '$lib/server/utils/handlebars/render_email';
+import render from '$lib/server/utils/handlebars/render';
+
 import * as m from '$lib/paraglide/messages';
 
 import { parse } from '$lib/schema/valibot';
+import { mainEmailOptions } from '$lib/server/utils/email/context/main.js';
 
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
 		const parsed = parse(sendEmailToListSchema, body);
+
 		const send = await markAsStarted({
 			instanceId: event.locals.instance.id,
 			sendId: parsed.send_id,
+			messageId: parsed.message_id,
 			t: event.locals.t
 		});
+
 		const message = await readMessage({
 			instanceId: event.locals.instance.id,
-			messageId: send.message_id,
+			messageId: parsed.message_id,
 			t: event.locals.t
 		});
-		const template = await readTemplate({
-			instanceId: event.locals.instance.id,
-			templateId: message.template_id,
-			t: event.locals.t
-		});
-		if (!send.list_id)
+
+		if (!send.list_id) {
+			log.debug({ send, parsed, body }, 'No list_id found in send');
 			throw new BelcodaError(
 				400,
 				'WORKER:/utils/email/send_to_list:01',
 				m.teary_dizzy_earthworm_urge()
 			);
+		}
+
+		if (send.message_id !== message.id) {
+			log.debug({ send, message }, 'Message ID does not match');
+			throw new BelcodaError(
+				400,
+				'WORKER:/utils/email/send_to_list:02',
+				m.teary_dizzy_earthworm_urge()
+			);
+		}
 		const ids = await getAllPersonIds({
 			instanceId: event.locals.instance.id,
 			listId: send.list_id
 		});
+
+		//main loop to queue sending emails to the list
 		for (let index = 0; index < ids.length; index++) {
 			const id = ids[index];
 			const uuid = randomUUID();
@@ -54,48 +63,52 @@ export async function POST(event) {
 				person_id: id
 			});
 
-			const renderedHtml = await renderEmail({
-				emailUnsubscribeToken: uuid,
-				messageTemplate: message.html,
-				templateTemplate: template.html,
+			const templateContext = {
+				person: person,
+				instance: event.locals.instance
+			};
+
+			const renderedHtml = await render({
+				context: templateContext,
+				template: message.html,
 				instanceId: event.locals.instance.id,
-				context: { person: person, instance: event.locals.instance },
 				t: event.locals.t
 			});
-			const renderedText = message.use_html_for_plaintext
-				? renderedHtml
-				: await renderEmail({
-						emailUnsubscribeToken: uuid,
-						messageTemplate: message.text,
-						templateTemplate: template.text,
-						instanceId: event.locals.instance.id,
-						context: { person: person, instance: event.locals.instance },
-						t: event.locals.t
-					});
-			//if it's the last message to send, we want to mark the send as finished...
-			const sendToQueue: SendEmailMessage =
-				index === ids.length - 1
-					? {
-							person_id: person.id,
-							email: { ...message, html: renderedHtml, text: renderedText },
-							sent_email_id: uuid,
-							email_message_id: message.id,
-							finish_send_id: send.id
-						}
-					: {
-							person_id: person.id,
-							email: { ...message, html: renderedHtml, text: renderedText },
-							sent_email_id: uuid,
-							email_message_id: message.id
-						};
-			const parsedSendToQueue = parse(sendEmailMessage, sendToQueue);
+
+			const context = mainEmailOptions({
+				instance: event.locals.instance,
+				body: renderedHtml,
+				previewText: message.preview_text,
+				subject: message.subject,
+				language: person.preferred_language ?? event.locals.instance.language
+			});
+
+			const sendToQueue: EmailTemplateMessage = {
+				person_id: person.id,
+				send_id: send.id,
+				template: message.template_name,
+				context: context,
+				from: message.from,
+				reply_to: message.reply_to,
+				send_details: {
+					type: 'send_to_list'
+				}
+			};
+
 			await event.locals.queue(
-				'utils/email/send_email',
+				'utils/email/send_email/template',
 				event.locals.instance.id,
-				parsedSendToQueue,
+				sendToQueue,
 				event.locals.admin.id
 			);
 		}
+
+		await markAsComplete({
+			instanceId: event.locals.instance.id,
+			sendId: parsed.send_id,
+			messageId: parsed.message_id,
+			t: event.locals.t
+		});
 
 		return json({ success: true });
 	} catch (err) {

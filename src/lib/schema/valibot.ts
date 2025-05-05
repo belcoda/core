@@ -245,6 +245,42 @@ export const emailMessage = v.object({
 });
 export type EmailMessage = v.InferOutput<typeof emailMessage>;
 
+export type JsonSchema =
+	| string
+	| number
+	| boolean
+	| null
+	| { [key: string]: JsonSchema }
+	| JsonSchema[];
+
+export const jsonSchema: v.GenericSchema<JsonSchema> = v.lazy(() =>
+	v.union([
+		v.string(),
+		v.number(),
+		v.boolean(),
+		v.null(),
+		v.record(v.string(), jsonSchema),
+		v.array(jsonSchema)
+	])
+);
+
+export type JsonSchemaObject = { [key: string]: JsonSchema };
+export const jsonSchemaObject: v.GenericSchema<JsonSchemaObject> = v.record(v.string(), jsonSchema);
+
+export type EmailTemplateContext = {
+	[key: string]: string | null | number | EmailTemplateContext;
+};
+
+export const emailAttachments = v.object({
+	name: shortStringNotEmpty, //Name in Postmark API
+	content: v.pipe(
+		//Content in Postmark API
+		v.string(),
+		v.maxBytes(10 * 1024 * 1024, m.proud_house_thrush_shine({ maxLength: 10 * 1024 * 1024 }))
+	),
+	type: shortStringNotEmpty //ContentType in Postmark API
+});
+
 export const htmlMetatags = v.object({
 	isManuallySet: v.optional(v.boolean(), false),
 	title: v.optional(v.nullable(mediumString), null),

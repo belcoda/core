@@ -46,7 +46,6 @@ export const base = v.object({
 	...petitionUserInfoSettings.entries,
 	feature_image_upload_id: v.nullable(id),
 
-	autoresponse_email: id,
 	send_autoresponse_email: v.boolean(),
 
 	point_person_id: id,
@@ -60,18 +59,15 @@ export const base = v.object({
 });
 import { read as readUpload } from '$lib/schema/website/uploads';
 export const read = v.object({
-	...v.omit(base, ['instance_id', 'point_person_id', 'autoresponse_email']).entries,
+	...v.omit(base, ['instance_id', 'point_person_id']).entries,
 	point_person: readAdmin,
-	autoresponse_email: readEmailMessage,
 	signatures: count,
 	feature_image: v.nullable(readUpload)
 });
 export type Read = v.InferOutput<typeof read>;
 
 export const list = v.object({
-	items: v.array(
-		v.omit(read, ['html', 'custom_code', 'html_metatags', 'autoresponse_email', 'feature_image'])
-	),
+	items: v.array(v.omit(read, ['html', 'custom_code', 'html_metatags', 'feature_image'])),
 	count: count
 });
 export type List = v.InferOutput<typeof list>;
@@ -85,7 +81,6 @@ export const create = v.object({
 	petition_text: base.entries.petition_text,
 	...v.partial(petitionUserInfoSettings).entries,
 
-	autoresponse_email: v.optional(base.entries.autoresponse_email),
 	send_autoresponse_email: v.optional(base.entries.send_autoresponse_email),
 	feature_image_upload_id: v.optional(base.entries.feature_image_upload_id),
 
@@ -96,7 +91,7 @@ export const create = v.object({
 });
 export type Create = v.InferOutput<typeof create>;
 
-export const update = v.partial(v.omit(create, ['autoresponse_email']));
+export const update = v.partial(create);
 export type Update = v.InferOutput<typeof update>;
 
 export const petitionSignature = v.object({
