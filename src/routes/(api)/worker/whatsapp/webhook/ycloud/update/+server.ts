@@ -2,22 +2,21 @@ import { json, error, pino, BelcodaError } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 import { yCloudWebhook } from '$lib/schema/communications/whatsapp/webhooks/ycloud';
 const log = pino(import.meta.url);
+
 import * as m from '$lib/paraglide/messages';
-import { create as createReceivedMessage } from '$lib/server/api/communications/whatsapp/received_messages';
-import { create as createInteraction } from '$lib/server/api/people/interactions';
-import { create as createInteractionSchema } from '$lib/schema/people/interactions';
+
 import { read as readPerson } from '$lib/server/api/people/people';
-import { triggerAction } from '$lib/schema/communications/actions/actions';
-import { _getByAction } from '$lib/server/api/communications/whatsapp/messages.js';
+import {
+	_getByAction,
+	read as readMessage
+} from '$lib/server/api/communications/whatsapp/messages.js';
 import { _idempotentUpdateExpiryTime } from '$lib/server/api/communications/whatsapp/conversations.js';
 
 import {
 	update as updateSentMessage,
-	read as readSentMessage,
 	_getSentWhatsappMessageById
 } from '$lib/server/api/communications/whatsapp/sent_messages';
-import { create as createConversation } from '$lib/server/api/communications/whatsapp/conversations';
-import { read as readMessage } from '$lib/server/api/communications/whatsapp/messages';
+
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
@@ -49,7 +48,8 @@ export async function POST(event) {
 						parsed.whatsappMessage.conversation &&
 						parsed.whatsappMessage.conversation.expiration_timestamp
 					) {
-						if (message.thread_id) {
+						// For now we don't need to worry about conversations.
+						/* if (message.thread_id) {
 							const createConversationBody = {
 								thread_id: message.thread_id,
 								person_id: person.id,
@@ -64,7 +64,7 @@ export async function POST(event) {
 								body: createConversationBody,
 								t: event.locals.t
 							});
-						}
+						} */
 					}
 				} catch (err) {
 					//we'd expect this to err sometimes
@@ -98,6 +98,11 @@ export async function POST(event) {
 			return json({ success: true });
 		}
 	} catch (err) {
-		return error(500, 'WORKER:/webhooks/whatsapp/+server.ts', m.spry_ago_baboon_cure(), err);
+		return error(
+			500,
+			'WORKER:/whatsapp/webhook/ycloud/update/+server.ts',
+			m.spry_ago_baboon_cure(),
+			err
+		);
 	}
 }

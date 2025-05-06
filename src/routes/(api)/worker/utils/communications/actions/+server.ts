@@ -38,7 +38,7 @@ export async function POST(event) {
 						from_admin_id: event.locals.admin.id,
 						signup: getSignupQueueMessage(
 							action.event_id,
-							parsed.data as WhatsappInboundMessage,
+							parsed.data as WhatsappInboundMessage, //this is not very typesafe, and we should refactor it to make sure the validation is correct
 							event.locals.instance
 						)
 					};
@@ -55,7 +55,7 @@ export async function POST(event) {
 						petition_id: action.petition_id,
 						signup: getSignupQueueMessage(
 							action.petition_id,
-							parsed.data as WhatsappInboundMessage,
+							parsed.data as WhatsappInboundMessage, //this is not very typesafe, and we should refactor it to make sure the validation is correct
 							event.locals.instance
 						)
 					};

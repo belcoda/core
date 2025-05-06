@@ -177,6 +177,114 @@ WHERE actions ? ${db.param(action)} AND deleted_at = ${db.conditions.isNull}`.ru
 	const parsed = parse(actionArray, result[0].action);
 	return { messageId: result[0].id, actions: parsed };
 }
+export async function _getInstanceIdBySentMessageIdUnsafe({
+	sentMessageId
+}: {
+	sentMessageId: string;
+}): Promise<number> {
+	const result = await db
+		.selectExactlyOne(
+			'communications.sent_whatsapp_messages',
+			{ id: sentMessageId },
+			{
+				lateral: {
+					message: db.selectExactlyOne('communications.whatsapp_messages', {
+						id: db.parent('message_id')
+					})
+				}
+			}
+		)
+		.run(pool)
+		.catch((err) => {
+			throw new BelcodaError(
+				404,
+				'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:READ:01',
+				m.pretty_tired_fly_lead(),
+				err
+			);
+		});
+	return result.message.instance_id;
+}
+
+export async function readMessageBySentMessageId({
+	instanceId,
+	sentMessageId
+}: {
+	instanceId: number;
+	sentMessageId: string;
+}): Promise<schema.Read> {
+	const result = await db
+		.selectExactlyOne(
+			'communications.sent_whatsapp_messages',
+			{ id: sentMessageId },
+			{
+				lateral: {
+					message: db.selectExactlyOne('communications.whatsapp_messages', {
+						id: db.parent('message_id')
+					})
+				}
+			}
+		)
+		.run(pool)
+		.catch((err) => {
+			throw new BelcodaError(
+				404,
+				'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:READ:01',
+				m.pretty_tired_fly_lead(),
+				err
+			);
+		});
+	const message = result.message;
+	if (message.instance_id !== instanceId) {
+		throw new BelcodaError(
+			404,
+			'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:READ:01',
+			m.pretty_tired_fly_lead()
+		);
+	}
+	return parse(schema.read, message);
+}
+
+export async function _getInstanceIdByWamidUnsafe({ wamid }: { wamid: string }): Promise<number> {
+	const result = await db
+		.selectExactlyOne('communications.whatsapp_messages', { wamid })
+		.run(pool)
+		.catch((err) => {
+			throw new BelcodaError(
+				404,
+				'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:READ:01',
+				m.pretty_tired_fly_lead(),
+				err
+			);
+		});
+	return result.instance_id;
+}
+
+export async function _getInstanceIdByActionUuidUnsafe({
+	actionUuid
+}: {
+	actionUuid: string;
+}): Promise<number> {
+	const result =
+		await db.sql`SELECT instance_id FROM communications.whatsapp_messages WHERE actions ? ${db.param(actionUuid)} LIMIT 1`
+			.run(pool)
+			.catch((err) => {
+				throw new BelcodaError(
+					404,
+					'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:READ:01',
+					m.pretty_tired_fly_lead(),
+					err
+				);
+			});
+	if (result.length !== 1) {
+		throw new BelcodaError(
+			404,
+			'DATA:COMMUNICATIONS:WHATSAPP:MESSAGES:READ:01',
+			m.pretty_tired_fly_lead()
+		);
+	}
+	return result[0].instance_id;
+}
 
 export function constructWhatsappNotification({
 	eventType,

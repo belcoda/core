@@ -18,7 +18,7 @@ export const conversation_category = v.picklist([
 
 export const metadata = v.object({
 	display_phone_number: mediumString,
-	phone_number_id: mediumString
+	phone_number_id: mediumString //this reference to phone_number_id is for the meta whatsapp api and not relevant for ycloud
 });
 
 export const whatsappApiConversation = v.object({

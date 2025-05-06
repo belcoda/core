@@ -68,21 +68,30 @@ export async function _readSecretsUnsafe({
 	return parsed;
 }
 
-export async function _getInstanceByWhatsappPhoneNumberId({
-	whatsappPhoneNumberId
+export async function _getInstanceByWhatsappPhoneNumber({
+	whatsappPhoneNumber
 }: {
-	whatsappPhoneNumberId: string;
+	whatsappPhoneNumber: string;
 }): Promise<schema.Read> {
 	const response =
-		await db.sql`SELECT id FROM instances WHERE settings->'communications'->'whatsapp'->>'phone_number_id' = ${db.param(whatsappPhoneNumberId)} limit 1`.run(
+		await db.sql`SELECT id FROM instances WHERE settings->'communications'->'whatsapp'->>'phone_number' = ${db.param(whatsappPhoneNumber)}`.run(
 			pool
 		);
-	if (response.length !== 1)
+	if (response.length === 0) {
+		throw new BelcodaError(
+			404,
+			'DATA:INSTANCES:GET_BY_WHATSAPP_PHONE_NUMBER:01',
+			m.helpful_aware_nuthatch_honor()
+		);
+	}
+	if (response.length > 1) {
 		throw new BelcodaError(
 			400,
-			'DATA:INSTANCES:GET_BY_WHATSAPP_PHONE_NUMBER_ID:01',
-			'No instance found with that phone number id'
+			'DATA:INSTANCES:GET_BY_WHATSAPP_PHONE_NUMBER:02',
+			m.pretty_tired_fly_lead()
 		);
+	}
+
 	return await read({ instance_id: response[0].id });
 }
 
@@ -104,7 +113,7 @@ export async function _getInstanceByWhatsappBAId({
 	return await read({ instance_id: response[0].id });
 }
 
-export async function _getInstanceIdByEventId(eventId: string): Promise<schema.Read> {
+export async function _getInstanceByEventId(eventId: number): Promise<schema.Read> {
 	const response =
 		await db.sql`SELECT instance_id from events.events WHERE id = ${db.param(eventId)} AND deleted_at IS NULL limit 1`.run(
 			pool
@@ -118,7 +127,7 @@ export async function _getInstanceIdByEventId(eventId: string): Promise<schema.R
 	return await read({ instance_id: response[0].instance_id });
 }
 
-export async function _getInstanceIdByPetitionId(petitionId: string): Promise<schema.Read> {
+export async function _getInstanceByPetitionId(petitionId: number): Promise<schema.Read> {
 	const response =
 		await db.sql`SELECT instance_id from petitions.petitions WHERE id = ${db.param(petitionId)} AND deleted_at IS NULL limit 1`.run(
 			pool
