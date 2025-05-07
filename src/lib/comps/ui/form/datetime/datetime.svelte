@@ -24,6 +24,7 @@
 	import Input from '$lib/comps/ui/input/input.svelte';
 	import { onMount } from 'svelte';
 	import * as m from '$lib/paraglide/messages';
+	import Timezone from '../controls/timezone.svelte';
 
 	// Format for displaying date
 	const df = new DateFormatter('en-US', {
@@ -53,6 +54,8 @@
 		use24HourTime?: boolean;
 		placeholder?: string;
 		dateFormat?: string;
+		timezone?: string;
+		timezoneEditable?: boolean;
 	};
 
 	let {
@@ -66,7 +69,9 @@
 		dateOnly = false,
 		use24HourTime = false,
 		placeholder = '',
-		dateFormat = 'yyyy-MM-dd'
+		dateFormat = 'yyyy-MM-dd',
+		timezone = '',
+		timezoneEditable = false
 	}: Props = $props();
 
 	// Validate minuteSteps to ensure it's a valid divisor of 60
@@ -324,6 +329,9 @@
 			const now = new Date();
 			value = now;
 		}
+		if (!timezone) {
+			timezone = getLocalTimeZone();
+		}
 	});
 </script>
 
@@ -447,11 +455,15 @@
 							/>
 						</div>
 
-						<div
-							class="text-xs px-4 py-0.5 flex items-center justify-center text-muted-foreground gap-1 opacity-60"
-						>
-							{getLocalTimeZone()}
-						</div>
+						{#if timezoneEditable}
+							<Timezone {form} name="timezone" label="Timezone" bind:value={timezone} />
+						{:else}
+							<div
+								class="text-xs px-4 py-0.5 flex items-center justify-center text-muted-foreground gap-1 opacity-60"
+							>
+								{getLocalTimeZone()}
+							</div>
+						{/if}
 					</Popover.Content>
 				</Popover.Root>
 			</div>
