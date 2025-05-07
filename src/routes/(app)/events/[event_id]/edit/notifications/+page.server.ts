@@ -21,26 +21,17 @@ export async function load(event) {
 	if (!response.ok) return loadError(response);
 	const body = await response.json();
 	const parsed = parse(read, body);
-	const form = await superValidate(parsed, valibot(update));
-	const messageForms = {
-		reminder: await superValidate(parsed.reminder_email, valibot(updateEmailMessage), {
-			id: 'reminder'
-		}),
-		registration: await superValidate(parsed.registration_email, valibot(updateEmailMessage), {
-			id: 'registration'
-		}),
-		cancellation: await superValidate(parsed.cancellation_email, valibot(updateEmailMessage), {
-			id: 'cancellation'
-		}),
-		followup: await superValidate(parsed.followup_email, valibot(updateEmailMessage), {
-			id: 'followup'
-		})
+
+	//the follow up message on the read schema is a message object, but we need to send the id of the message in the update schema
+	const parsedEventForUpdating = {
+		...parsed,
+		followup_email: parsed.followup_email ? parsed.followup_email.id : null
 	};
+	const form = await superValidate(parsedEventForUpdating, valibot(update));
 
 	return {
 		form,
 		event: parsed,
-		messageForms,
 		pageTitle: [{ key: 'EVENTNAME', title: parsed.name }]
 	};
 }

@@ -21,7 +21,6 @@ type AddressIncludingObject = {
 
 export function renderAddress(
 	object: AddressIncludingObject,
-	t: App.Localization,
 	instanceCountry: SupportedCountry = DEFAULT_COUNTRY
 ): { url: string; text: string } {
 	const text = [

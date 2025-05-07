@@ -1,13 +1,17 @@
-import { v, id, emailMessage, uuid } from '$lib/schema/valibot';
+import { v, id, uuid } from '$lib/schema/valibot';
 import { read as readEvent } from '$lib/schema/events/events';
 import { read as readPerson } from '$lib/schema/people/people';
 import { read as readInstance } from '$lib/schema/core/instance';
-import { read as readMessage } from '$lib/schema/communications/email/messages';
-import { read as readPetition } from '$lib/schema/petitions/petitions';
-
+import {
+	read as readMessage,
+	emailTemplateNameEvent
+} from '$lib/schema/communications/email/messages';
+import { sendDetailForEmail } from '$lib/schema/communications/email/sent_emails';
 export const sendEmailToListSchema = v.object({
-	send_id: id
+	send_id: id,
+	message_id: id
 });
+export type SendEmailToListSchema = v.InferOutput<typeof sendEmailToListSchema>;
 
 export const sendEmailMessage = v.object({
 	email: readMessage,
@@ -31,8 +35,10 @@ export const triggerPetitionMessage = v.object({
 export type TriggerPetitionMessage = v.InferOutput<typeof triggerPetitionMessage>;
 
 export const sendEventEmailMessage = v.object({
-	email: readMessage,
 	event: readEvent,
 	person: readPerson,
-	instance: readInstance
+	instance: readInstance,
+	details: sendDetailForEmail,
+	template: emailTemplateNameEvent
 });
+export type SendEventEmailMessage = v.InferOutput<typeof sendEventEmailMessage>;

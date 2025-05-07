@@ -1,7 +1,0 @@
-{{event.heading}} - Reminder
-
-WHEN: {{render_event_time event}}
-{{#unless event.online}}WHERE: {{address event}}{{/unless}}
-
-{{#if event.online}}ONLINE LINK: {{event.online_url}} {{#if
-event.online_instructions}}({{event.online_instructions}}){{/if}}{{/if}}

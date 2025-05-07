@@ -54,7 +54,6 @@ export const actionTriggerType = v.picklist(['whatsapp_message']);
 
 export const triggerAction = v.object({
 	type: actionTriggerType,
-	received_whatsapp_message_id: uuid,
 	person_id: id,
 	action_id: uuid,
 	data: v.optional(v.record(v.string(), v.any())) // Specify object with any string keys and values

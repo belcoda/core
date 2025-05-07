@@ -32,10 +32,10 @@ export default function (
 		return new Date(date).toLocaleTimeString();
 	});
 	hb.registerHelper('address', function (itemBody: EventRead) {
-		return renderAddress(itemBody, t, instance.country).text;
+		return renderAddress(itemBody, instance.country).text;
 	});
 	hb.registerHelper('google_maps_url', function (itemBody: EventRead) {
-		return renderAddress(itemBody, t).url;
+		return renderAddress(itemBody).url;
 	});
 	hb.registerHelper(
 		'whatsapp_registration_url',

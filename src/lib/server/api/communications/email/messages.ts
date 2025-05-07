@@ -5,7 +5,9 @@ import { type EmailPreviewOptions } from '$lib/schema/utils/openai';
 function redisString(instanceId: number, messageId: number | 'all') {
 	return `i:${instanceId}:email_messages:${messageId}`;
 }
-import { read as readTemplate } from '$lib/server/api/communications/email/templates';
+import { type EmailTemplateName } from '$lib/schema/communications/email/messages';
+
+import { read as readInstance } from '$lib/server/api/core/instances';
 
 import * as m from '$lib/paraglide/messages';
 
@@ -38,20 +40,21 @@ export async function exists({
 
 export async function create({
 	instanceId,
-	defaultTemplateId,
 	body,
 	queue
 }: {
 	instanceId: number;
-	defaultTemplateId: number;
 	body: schema.Create;
 	queue: App.Queue;
 }): Promise<schema.Read> {
+	const instance = await readInstance({ instance_id: instanceId });
 	const parsed = parse(schema.create, body);
 	const toInsert = {
 		instance_id: instanceId,
-		template_id: parsed.template_id || defaultTemplateId,
-		...parsed
+		...parsed,
+		template_name:
+			parsed.template_name || instance.settings.communications.email.default_template_name,
+		from: parsed.from || instance.settings.communications.email.default_from_name
 	};
 
 	const inserted = await db.insert('communications.email_messages', toInsert).run(pool);
@@ -59,10 +62,9 @@ export async function create({
 	await redis.del(redisString(instanceId, 'all'));
 	await redis.set(redisString(instanceId, parsedInserted.id), parsedInserted);
 
-	// if the preview text is the same as the template preview text, then we know we are safe to autogenerate the preview
-	const template = await readTemplate({ instanceId, templateId: toInsert.template_id, t: t });
-	if (parsedInserted.preview_text === template.preview_text) {
-		// but, on the contrary, if the preview text is different, that means it was manually set and we should not autogenerate the preview
+	// if the preview text is the default (ie: an empty string), then we know we are safe to autogenerate the preview
+	if (parsed.preview_text === '') {
+		// but, on the contrary, if the preview text was explictly manually set, that means it was manually set and we should not autogenerate the preview
 		const sendToQueue: EmailPreviewOptions = {
 			emailMessageId: parsedInserted.id
 		};
@@ -175,7 +177,11 @@ export async function list({
 			query.options
 		)
 		.run(pool);
-	const parsedList = parse(schema.list, list);
+
+	const count = await db
+		.count('communications.email_messages', { instance_id: instanceId, ...query.where })
+		.run(pool);
+	const parsedList = parse(schema.list, { items: list, count: count });
 	await redis.set(redisString(instanceId, 'all'), parsedList);
 	return parsedList;
 }

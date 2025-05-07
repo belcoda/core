@@ -17,11 +17,11 @@
 </script>
 
 <div class="text-muted-foreground space-y-2 mt-3">
-	{#if renderAddress(person, $page.data.t, $page.data.country).text.length > 0}
+	{#if renderAddress(person, $page.data.country).text.length > 0}
 		<div class="flex items-center gap-1.5">
 			<MapPin size={18} />
-			<a href={renderAddress(person, $page.data.t, $page.data.instance.country).url} target="_blank"
-				>{renderAddress(person, $page.data.t, $page.data.instance.country).text}</a
+			<a href={renderAddress(person, $page.data.instance.country).url} target="_blank"
+				>{renderAddress(person, $page.data.instance.country).text}</a
 			>
 		</div>
 	{/if}

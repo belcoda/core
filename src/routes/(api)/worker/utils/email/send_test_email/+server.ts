@@ -1,75 +1,64 @@
+import { json, pino } from '$lib/server';
 import { sendTestEmail } from '$lib/schema/communications/email/messages';
-import { read } from '$lib/server/api/communications/email/templates';
-import { list as listPeople, read as readPerson } from '$lib/server/api/people/people';
-import { read as readEvent } from '$lib/server/api/events/events';
-import renderEmail from '$lib/server/utils/handlebars/render_email';
-import sendEmail from '$lib/server/utils/email/send_email_postmark';
+import { _getPersonByEmail, list as listPeople } from '$lib/server/api/people/people';
+
+import sendEmail from '$lib/server/utils/email/send_template_email_postmark';
+import { _getPersonByWhatsappId } from '$lib/server/api/people/people';
 import { parse } from '$lib/schema/valibot';
 import { randomUUID } from 'crypto';
-import { json } from '@sveltejs/kit';
+import { mainEmailOptions } from '$lib/server/utils/email/context/main.js';
+import render from '$lib/server/utils/handlebars/render';
+
+const log = pino(import.meta.url);
+
 export async function POST(event) {
-	const newUUID = randomUUID();
-	const parsed = parse(sendTestEmail, await event.request.json());
-	const template = await read({
-		instanceId: event.locals.instance.id,
-		templateId: parsed.message.template_id,
-		t: event.locals.t
-	});
-
-	let person;
-	if (parsed.context.person_id) {
-		const selected = await readPerson({
-			instance_id: event.locals.instance.id,
-			person_id: parsed.context.person_id
-		});
-		person = selected;
-	} else {
-		const { items } = await listPeople({
-			instance_id: event.locals.instance.id,
-			url: event.url
-		});
-		person = items[0];
-	}
-
-	let eventObject;
-	if (parsed.context.event_id) {
-		const selected = await readEvent({
+	try {
+		const newUUID = randomUUID();
+		const parsed = parse(sendTestEmail, await event.request.json());
+		//check if the person exists with the email address we're sending to. That will be most authentic.
+		const person = await _getPersonByEmail({
 			instanceId: event.locals.instance.id,
-			eventId: parsed.context.event_id
-		});
-		eventObject = selected;
-	}
-
-	const context = { event: eventObject, person, instance: event.locals.instance };
-
-	const renderedHtml = await renderEmail({
-		emailUnsubscribeToken: newUUID,
-		messageTemplate: parsed.message.html,
-		templateTemplate: template.html,
-		instanceId: event.locals.instance.id,
-		context,
-		t: event.locals.t
-	});
-	const renderedText = parsed.message.use_html_for_plaintext
-		? renderedHtml
-		: await renderEmail({
-				emailUnsubscribeToken: newUUID,
-				messageTemplate: parsed.message.text,
-				templateTemplate: template.text,
-				instanceId: event.locals.instance.id,
-				context,
-				t: event.locals.t
+			email: parsed.email,
+			t: event.locals.t
+		}).catch(async () => {
+			log.debug(`No person found with email ${parsed.email}`);
+			//return a default person (ie: the first person in the list)
+			const returnedList = await listPeople({
+				instance_id: event.locals.instance.id,
+				url: event.url
 			});
+			return returnedList.items[0];
+		});
 
-	await sendEmail({
-		from: parsed.message.from,
-		to: parsed.email,
-		subject: parsed.message.subject,
-		text: parsed.message.use_html_for_plaintext ? undefined : renderedText,
-		html: renderedHtml,
-		replyTo: parsed.message.reply_to || `${event.locals.instance.slug}@belcoda.org`,
-		stream: 'outbound'
-	});
+		const templateContext = { person, instance: event.locals.instance };
 
-	return json({ success: true });
+		const renderedHtml = await render({
+			context: templateContext,
+			template: parsed.message.html,
+			instanceId: event.locals.instance.id,
+			t: event.locals.t
+		});
+
+		const context = mainEmailOptions({
+			instance: event.locals.instance,
+			body: renderedHtml,
+			previewText: parsed.message.preview_text,
+			subject: parsed.message.subject,
+			language: person.preferred_language ?? event.locals.instance.language
+		});
+
+		await sendEmail({
+			from:
+				parsed.message.from ||
+				event.locals.instance.settings.communications.email.default_from_name,
+			to: parsed.email,
+			template: parsed.message.template_name,
+			context: context,
+			stream: 'broadcast'
+		});
+	} catch (err) {
+		log.error(err, 'Error sending test email');
+	} finally {
+		return json({ success: true });
+	}
 }

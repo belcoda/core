@@ -89,12 +89,12 @@
 	{/snippet}
 </PageHeader>
 <div class="text-muted-foreground space-y-2 mt-3">
-	{#if renderAddress(data.event, data.t, data.instance.country).text.length > 0}<div
+	{#if renderAddress(data.event, data.instance.country).text.length > 0}<div
 			class="flex items-center gap-1.5"
 		>
 			<MapPin size={16} />
-			<a href={renderAddress(data.event, data.t, data.instance.country).url} target="_blank"
-				>{renderAddress(data.event, data.t, data.instance.country).text}</a
+			<a href={renderAddress(data.event, data.instance.country).url} target="_blank"
+				>{renderAddress(data.event, data.instance.country).text}</a
 			>
 		</div>{/if}
 	<div class="flex items-center gap-1.5">

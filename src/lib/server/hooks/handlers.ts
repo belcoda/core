@@ -8,7 +8,6 @@ import emailHandler from '$lib/server/hooks/email/postmark';
 import { PUBLIC_ROOT_DOMAIN } from '$env/static/public';
 import worker from '$lib/server/hooks/worker';
 import { default as handlePageRender } from '$lib/server/hooks/website/handler';
-type MaybePromise<T> = T | Promise<T>;
 export type HandlerResponse =
 	| {
 			continue: true;
@@ -19,7 +18,7 @@ export type HandlerResponse =
 			response: Response;
 	  };
 
-type Resolve = (event: RequestEvent, opts?: ResolveOptions | undefined) => MaybePromise<Response>;
+type Resolve = (event: RequestEvent, opts?: ResolveOptions | undefined) => Promise<Response>;
 export default async function (event: RequestEvent, resolve: Resolve): Promise<HandlerResponse> {
 	if (event.url.pathname.startsWith('/webhooks/email')) {
 		log.info(`🌎 ${event.request.method} ${event.url.href}`);

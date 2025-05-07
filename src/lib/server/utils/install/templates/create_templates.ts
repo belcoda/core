@@ -15,7 +15,6 @@ import EmailEventTemplateText from '$lib/server/utils/install/templates/email/te
 import { type Read as ReadInstance } from '$lib/schema/core/instance';
 
 import { create as createWhatsAppTemplateApi } from '$lib/server/api/communications/whatsapp/templates';
-import { create as createEamilTemplateApi } from '$lib/server/api/communications/email/templates';
 import { create as createContentTypes } from '$lib/server/api/website/content_types';
 
 export default async function ({ instance, t }: { instance: ReadInstance; t: App.Localization }) {
@@ -36,35 +35,6 @@ export default async function ({ instance, t }: { instance: ReadInstance; t: App
 	const whatsAppFreeResponseTemplate = await createWhatsAppTemplateApi({
 		instanceId: instance.id,
 		body: templates.whatsApp.freeResponse
-	});
-	//email templates
-	const emailDefaultTemplate = await createEamilTemplateApi({
-		instanceId: instance.id,
-		t,
-		body: {
-			name: 'Event Default',
-			subject: '[Enter subject]',
-			from: instance.settings.communications.email.default_from_name,
-			preview_text: '',
-			text: templates.email.defaultText,
-			html: templates.email.default,
-			reply_to: `${instance.slug}@${PUBLIC_ROOT_DOMAIN}`,
-			active: true
-		}
-	});
-	const emailEventTemplate = await createEamilTemplateApi({
-		t,
-		instanceId: instance.id,
-		body: {
-			name: 'Event Notification',
-			subject: 'Notification: Event',
-			from: instance.settings.communications.email.default_from_name,
-			preview_text: 'Notification for upcoming event',
-			text: templates.email.eventText,
-			html: templates.email.event,
-			reply_to: `${instance.slug}@${PUBLIC_ROOT_DOMAIN}`,
-			active: true
-		}
 	});
 
 	//website templates
@@ -128,10 +98,6 @@ export default async function ({ instance, t }: { instance: ReadInstance; t: App
 		website: {
 			page: pageContentType,
 			post: postContentType
-		},
-		email: {
-			default: emailDefaultTemplate,
-			event: emailEventTemplate
 		},
 		whatsapp: {
 			invitation: whatsAppInvitationTemplate,

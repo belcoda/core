@@ -9,14 +9,18 @@ import {
 	shortString,
 	email,
 	longStringNotEmpty,
-	domainName
+	domainName,
+	phoneNumber
 } from '$lib/schema/valibot';
+
+import { PUBLIC_DEFAULT_WHATSAPP_PHONE_NUMBER } from '$env/static/public';
+import { emailTemplates } from '$lib/schema/communications/email/messages';
 
 export const settings = v.object({
 	default_admin_id: id,
 	home_page_url: v.nullable(url),
 	events: v.object({
-		default_email_template_id: id,
+		event_email_template_prefix: v.optional(shortString, ''), //prefix for the template name for event notifications incase we need to give some instances access to different templates
 		default_event_info_settings: v.object({
 			ask_email: v.optional(v.boolean(), true),
 			ask_phone_number: v.optional(v.boolean(), true),
@@ -31,11 +35,11 @@ export const settings = v.object({
 	communications: v.object({
 		email: v.object({
 			default_from_name: shortString,
-			default_template_id: id
+			default_template_name: v.optional(v.picklist(emailTemplates), 'main')
 		}),
 		whatsapp: v.object({
 			default_template_id: id,
-			phone_number_id: v.nullable(shortString),
+			phone_number: v.optional(phoneNumber, PUBLIC_DEFAULT_WHATSAPP_PHONE_NUMBER),
 			business_account_id: v.nullable(shortString)
 		})
 	}),

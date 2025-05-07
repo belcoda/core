@@ -49,22 +49,6 @@
 
 	<Card.Root class="mt-4">
 		<Card.Header>
-			<Card.Title>{m.pretty_ideal_earthworm_spin()}</Card.Title>
-		</Card.Header>
-		<Card.Content>
-			<Grid>
-				<Button variant="outline" href="/settings/communications/email/templates"
-					>{m.raw_fit_mare_scold()}</Button
-				>
-				<Button variant="outline" href="/settings/communications/email/templates/new"
-					>{m.good_awful_warbler_attend()}</Button
-				>
-			</Grid>
-		</Card.Content>
-	</Card.Root>
-
-	<Card.Root class="mt-4">
-		<Card.Header>
 			<Card.Title>{m.teary_fair_gazelle_create()}</Card.Title>
 		</Card.Header>
 		<Card.Content>

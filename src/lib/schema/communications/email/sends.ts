@@ -21,7 +21,8 @@ export type List = v.InferOutput<typeof list>;
 
 export const create = v.object({
 	name: base.entries.name,
-	list_id: v.optional(base.entries.list_id)
+	list_id: v.optional(base.entries.list_id),
+	message_id: base.entries.message_id
 });
 
 export const update = v.object({
