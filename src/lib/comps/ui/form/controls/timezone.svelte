@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type SuperForm, type FormPath } from 'sveltekit-superforms';
+	import { type SuperForm } from 'sveltekit-superforms';
 	type Props = {
 		name: string;
 		form: SuperForm<any>;
@@ -8,6 +8,8 @@
 		description?: string | null;
 		class?: string;
 		placeholder?: string;
+		onTimezoneChange?: (timezone: string) => void;
+		country?: string | null;
 	};
 
 	let {
@@ -17,7 +19,9 @@
 		label,
 		description,
 		class: className,
-		placeholder = 'Select a timezone'
+		placeholder = 'Select a timezone',
+		onTimezoneChange = () => {},
+		country = null
 	}: Props = $props();
 
 	import * as Form from '$lib/comps/ui/form';
@@ -29,23 +33,22 @@
 	import * as Command from '$lib/comps/ui/command';
 	import Button from '$lib/comps/ui/button/button.svelte';
 
-	import { onMount } from 'svelte';
+	import { getCountryTimezones } from '$lib/i18n/countries';
 
-	let timezones: string[] = $state([]);
-
-	onMount(() => {
-		if (typeof Intl.supportedValuesOf === 'function') {
-			timezones = Array.from(Intl.supportedValuesOf('timeZone'));
-		} else {
-			timezones = [];
+	const timezones = $derived(() => {
+		if (typeof Intl.supportedValuesOf !== 'function') {
 			console.error('Intl.supportedValuesOf is not supported in this environment.');
+			return [];
 		}
+		return country
+			? [...getCountryTimezones(country)]
+			: Array.from(Intl.supportedValuesOf('timeZone'));
 	});
 
 	let open = $state(false);
 	let triggerRef = $state<HTMLButtonElement>(null!);
 
-	const selectedValue = $derived(timezones.find((f) => f === value));
+	const selectedValue = $derived(timezones().find((f: string) => f === value));
 
 	function closeAndFocusTrigger() {
 		open = false;
@@ -81,13 +84,14 @@
 							<Command.List>
 								<Command.Empty>Select a timezone</Command.Empty>
 								<Command.Group>
-									{#each timezones as timezone}
+									{#each timezones() as timezone}
 										<Command.Item
 											keywords={[timezone]}
 											value={timezone}
 											onSelect={() => {
 												value = timezone;
 												closeAndFocusTrigger();
+												onTimezoneChange(timezone);
 											}}
 										>
 											<Check class={cn(value !== timezone && 'text-transparent')} />
