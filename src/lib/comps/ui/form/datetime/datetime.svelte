@@ -56,6 +56,7 @@
 		dateFormat?: string;
 		timezone?: string;
 		timezoneEditable?: boolean;
+		onTimezoneChange?: (timezone: string) => void;
 	};
 
 	let {
@@ -71,7 +72,8 @@
 		placeholder = '',
 		dateFormat = 'yyyy-MM-dd',
 		timezone = '',
-		timezoneEditable = false
+		timezoneEditable = false,
+		onTimezoneChange = () => {}
 	}: Props = $props();
 
 	// Validate minuteSteps to ensure it's a valid divisor of 60
@@ -323,6 +325,11 @@
 		}
 	}
 
+	function handleTimezoneChange(_timezone: string) {
+		timezone = _timezone;
+		onTimezoneChange(timezone);
+	}
+
 	onMount(() => {
 		// Initialize with current date/time if no value provided
 		if (!value) {
@@ -456,7 +463,13 @@
 						</div>
 
 						{#if timezoneEditable}
-							<Timezone {form} name="timezone" label="Timezone" bind:value={timezone} />
+							<Timezone
+								{form}
+								name="timezone"
+								label="Timezone"
+								bind:value={timezone}
+								onTimezoneChange={handleTimezoneChange}
+							/>
 						{:else}
 							<div
 								class="text-xs px-4 py-0.5 flex items-center justify-center text-muted-foreground gap-1 opacity-60"
