@@ -23,6 +23,7 @@ import { read as readAdmin } from '$lib/schema/core/admin';
 import { create as createPerson, read as readPerson } from '$lib/schema/people/people';
 import { read as readInstance } from '$lib/schema/core/instance';
 import { read as readEmailMessage } from '$lib/schema/communications/email/messages';
+import { timezone } from '../utils/datetime';
 
 export const eventUserInfoSettings = v.object({
 	ask_email: v.boolean(),
@@ -44,6 +45,7 @@ export const base = v.object({
 	html: longStringNotEmpty,
 	starts_at: timestamp,
 	ends_at: timestamp,
+	timezone: v.optional(timezone, 'Etc/UTC'),
 	online: v.boolean(),
 	online_url: v.nullable(url),
 	online_instructions: v.nullable(longString),
@@ -125,6 +127,7 @@ export const create = v.object({
 	html: base.entries.html,
 	starts_at: base.entries.starts_at,
 	ends_at: base.entries.ends_at,
+	timezone: base.entries.timezone,
 	...v.partial(eventUserInfoSettings).entries,
 
 	online: v.optional(base.entries.online, false),
