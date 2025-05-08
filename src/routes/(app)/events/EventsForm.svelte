@@ -40,6 +40,7 @@
 	import Alert from '$lib/comps/ui/alert/alert.svelte';
 	import Timezone from '$lib/comps/ui/form/controls/timezone.svelte';
 	import { getCountryTimezones } from '$lib/i18n/countries';
+	import { onMount } from 'svelte';
 	let editSlug = $state(false);
 	let timezoneEditable = $state(false);
 	function timezoneChaged(timezone: string) {
@@ -54,6 +55,12 @@
 			timezoneChaged('Etc/UTC');
 		}
 	}
+
+	onMount(() => {
+		if ($formData.country) {
+			countryChaged($formData.country);
+		}
+	});
 </script>
 
 <form use:enhance method="post">
