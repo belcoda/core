@@ -39,7 +39,8 @@ export function baseEventOptions(options: Input) {
 			dateTime: formatDateTimeRange(
 				options.event.starts_at,
 				options.event.ends_at,
-				options.language
+				options.language,
+				options.event.timezone
 			),
 			address: renderAddress(options.event, options.instance.country),
 			onlineUrl: options.event.online_url

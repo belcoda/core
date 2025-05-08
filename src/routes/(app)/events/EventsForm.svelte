@@ -38,7 +38,29 @@
 	);
 	import Link from 'lucide-svelte/icons/link';
 	import Alert from '$lib/comps/ui/alert/alert.svelte';
+	import Timezone from '$lib/comps/ui/form/controls/timezone.svelte';
+	import { getCountryTimezones } from '$lib/i18n/countries';
+	import { onMount } from 'svelte';
 	let editSlug = $state(false);
+	let timezoneEditable = $state(false);
+	function timezoneChaged(timezone: string) {
+		$formData.timezone = timezone;
+	}
+	function countryChaged(country: string) {
+		const timezones = getCountryTimezones(country);
+		if (timezones.length > 0) {
+			timezoneEditable = timezones.length > 1;
+			timezoneChaged(timezones[0]);
+		} else {
+			timezoneChaged('Etc/UTC');
+		}
+	}
+
+	onMount(() => {
+		if ($formData.country) {
+			countryChaged($formData.country);
+		}
+	});
 </script>
 
 <form use:enhance method="post">
@@ -93,6 +115,7 @@
 			name="ends_at"
 			label={m.close_nice_cowfish_savor()}
 			bind:value={$formData.ends_at}
+			onTimezoneChange={timezoneChaged}
 		/>
 	</Grid>
 {/snippet}
@@ -153,11 +176,23 @@
 					label={m.swift_white_hornet_dig()}
 					bind:value={$formData.postcode as string}
 				/>
+			</Grid>
+			<Grid cols={3}>
 				<Country
 					{form}
 					name="country"
 					label={m.fluffy_fair_gecko_arrive()}
 					bind:value={$formData.country as string}
+					onCountryChange={countryChaged}
+				/>
+				<Timezone
+					{form}
+					name="timezone"
+					label={m.close_stock_lion_bubble()}
+					bind:value={$formData.timezone as string}
+					onTimezoneChange={timezoneChaged}
+					country={$formData.country as string}
+					disabled={!timezoneEditable}
 				/>
 			</Grid>
 		{/if}

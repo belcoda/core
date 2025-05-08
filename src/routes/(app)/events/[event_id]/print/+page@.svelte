@@ -44,7 +44,12 @@
 			</div>{/if}
 		<div class="flex items-center gap-1.5">
 			<CalendarClock size={16} />
-			{formatDateTimeRange(data.event.starts_at, data.event.ends_at)}
+			{formatDateTimeRange(
+				data.event.starts_at,
+				data.event.ends_at,
+				undefined,
+				data.event.timezone
+			)}
 		</div>
 		{#if data.event.online}
 			<div class="flex items-center gap-1.5">

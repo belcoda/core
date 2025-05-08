@@ -41,7 +41,7 @@
 					{/if}
 					<div class="text-muted-foreground flex items-center gap-1">
 						<CalendarClock size={16} />
-						{formatDateTimeRange(item.starts_at, item.ends_at)}
+						{formatDateTimeRange(item.starts_at, item.ends_at, undefined, item.timezone)}
 						({data.timeAgo.format(item.starts_at)})
 					</div>
 				</a>
