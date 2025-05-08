@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { type SuperForm } from 'sveltekit-superforms';
+	import * as m from '$lib/paraglide/messages';
 	type Props = {
 		name: string;
 		form: SuperForm<any>;
@@ -20,7 +21,7 @@
 		label,
 		description,
 		class: className,
-		placeholder = 'Select a timezone',
+		placeholder = m.fun_raw_giraffe_treasure(),
 		onTimezoneChange = () => {},
 		country = null,
 		disabled = false
@@ -76,7 +77,7 @@
 								aria-expanded={open}
 								{disabled}
 							>
-								{selectedValue || 'Select a timezone'}
+								{selectedValue || placeholder}
 								<ChevronsUpDown class="opacity-50" />
 							</Button>
 						{/snippet}
@@ -85,7 +86,7 @@
 						<Command.Root>
 							<Command.Input {placeholder} />
 							<Command.List>
-								<Command.Empty>Select a timezone</Command.Empty>
+								<Command.Empty>{placeholder}</Command.Empty>
 								<Command.Group>
 									{#each timezones() as timezone}
 										<Command.Item

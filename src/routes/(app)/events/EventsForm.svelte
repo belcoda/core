@@ -188,7 +188,7 @@
 				<Timezone
 					{form}
 					name="timezone"
-					label="Timezone"
+					label={m.close_stock_lion_bubble()}
 					bind:value={$formData.timezone as string}
 					onTimezoneChange={timezoneChaged}
 					country={$formData.country as string}

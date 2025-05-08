@@ -660,5 +660,7 @@
 	"keen_agent_shell_mop": "Failed to delete record",
 	"dizzy_actual_elephant_evoke": "Record deleted successfully",
 	"tidy_cuddly_pelican_evoke": "No matching country found.",
-	"light_next_wasp_belong": "Must be a valid ISO 639-1 language code (eg: 'en' for English)"
+	"light_next_wasp_belong": "Must be a valid ISO 639-1 language code (eg: 'en' for English)",
+	"fun_raw_giraffe_treasure": "Select a timezone",
+	"close_stock_lion_bubble": "Timezone"
 }
