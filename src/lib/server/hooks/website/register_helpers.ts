@@ -26,7 +26,7 @@ export default function (
 	});
 
 	hb.registerHelper('render_event_time', function (event: EventRead) {
-		return formatDateTimeRange(event.starts_at, event.ends_at);
+		return formatDateTimeRange(event.starts_at, event.ends_at, undefined, event.timezone);
 	});
 	hb.registerHelper('time', function (date: string | Date) {
 		return new Date(date).toLocaleTimeString();
