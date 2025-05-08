@@ -21,13 +21,16 @@ export function formatDateOnly(date: Date): string {
 export function formatDateTimeRange(
 	startDate: Date,
 	endDate: Date,
-	locale?: SupportedLanguage
+	locale?: SupportedLanguage,
+	timezone?: string
 ): string {
 	const language = locale || getLocale();
 	const formatted = new Intl.DateTimeFormat(locale, {
 		timeZoneName: 'long'
 	}).formatToParts(startDate);
-	const timeZone = formatted.find((part) => part.type === 'timeZoneName')?.value;
+	const timeZone = timezone
+		? timezone
+		: formatted.find((part) => part.type === 'timeZoneName')?.value;
 	return `${tf.format(startDate)} - ${tf.format(endDate)}, ${df.format(startDate)} (${timeZone}) `;
 }
 

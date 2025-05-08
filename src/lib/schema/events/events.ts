@@ -21,7 +21,7 @@ import { read as readAdmin } from '$lib/schema/core/admin';
 
 import { create as createPerson, read as readPerson } from '$lib/schema/people/people';
 import { read as readEmailMessage } from '$lib/schema/communications/email/messages';
-import { timezone } from '../utils/datetime';
+import { timezone } from '$lib/schema/utils/datetime';
 
 export const eventUserInfoSettings = v.object({
 	ask_email: v.boolean(),
