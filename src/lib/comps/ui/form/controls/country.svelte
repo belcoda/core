@@ -12,6 +12,7 @@
 		description?: string | null;
 		class?: string;
 		placeholder?: string;
+		onCountryChange?: (country: string) => void;
 	};
 
 	let {
@@ -21,7 +22,8 @@
 		label,
 		description,
 		class: className,
-		placeholder = m.gross_royal_nuthatch_rise()
+		placeholder = m.gross_royal_nuthatch_rise(),
+		onCountryChange = () => {}
 	}: Props = $props();
 
 	import * as Form from '$lib/comps/ui/form';
@@ -99,6 +101,7 @@
 											onSelect={() => {
 												value = country.code;
 												closeAndFocusTrigger();
+												onCountryChange(country.code);
 											}}
 										>
 											<Check class={cn(value !== country.code && 'text-transparent')} />

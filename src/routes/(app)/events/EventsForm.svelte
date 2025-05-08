@@ -39,9 +39,18 @@
 	import Link from 'lucide-svelte/icons/link';
 	import Alert from '$lib/comps/ui/alert/alert.svelte';
 	import Timezone from '$lib/comps/ui/form/controls/timezone.svelte';
+	import { getCountryTimezones } from '$lib/i18n/countries';
 	let editSlug = $state(false);
 	function timezoneChaged(timezone: string) {
 		$formData.timezone = timezone;
+	}
+	function countryChaged(country: string) {
+		const timezones = getCountryTimezones(country);
+		if (timezones.length > 0) {
+			timezoneChaged(timezones[0]);
+		} else {
+			timezoneChaged('Etc/UTC');
+		}
 	}
 </script>
 
@@ -165,6 +174,7 @@
 					name="country"
 					label={m.fluffy_fair_gecko_arrive()}
 					bind:value={$formData.country as string}
+					onCountryChange={countryChaged}
 				/>
 				<Timezone
 					{form}
