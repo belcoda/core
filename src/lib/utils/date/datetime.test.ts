@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { roundMinutes, isValidMinuteStep } from './datetime';
+import { timezone } from '$lib/schema/utils/datetime';
+import { parse } from '$lib/schema/valibot';
 
 describe('DateTime Component Utils', () => {
 	describe('isValidMinuteStep', () => {
@@ -61,6 +63,50 @@ describe('DateTime Component Utils', () => {
 				expect(result.roundedMinutes).toBe(expected);
 				expect(result.wasRounded).toBe(input !== expected);
 			});
+		});
+	});
+});
+
+describe('Timezone Validation', () => {
+	it('should accept valid IANA timezones', () => {
+		const validTimezones = [
+			'Etc/UTC',
+			'America/New_York',
+			'Europe/London',
+			'Asia/Tokyo',
+			'Australia/Sydney',
+			'Pacific/Auckland'
+		];
+
+		validTimezones.forEach((tz) => {
+			expect(() => parse(timezone, tz)).not.toThrow();
+		});
+	});
+
+	it('should reject invalid timezone strings', () => {
+		const invalidTimezones = [
+			'Invalid/Timezone',
+			'Not/A/Timezone',
+			'Random/Place',
+			'Fake/Region',
+			'Test/Zone',
+			'Dummy/Area',
+			'Mock/Location',
+			'Example/Region',
+			'Sample/Zone',
+			'Dummy/Timezone'
+		];
+
+		invalidTimezones.forEach((tz) => {
+			expect(() => parse(timezone, tz)).toThrow();
+		});
+	});
+
+	it('should reject non-string values', () => {
+		const invalidValues = [123, true, false, null, undefined, {}, [], () => {}];
+
+		invalidValues.forEach((value) => {
+			expect(() => parse(timezone, value as any)).toThrow();
 		});
 	});
 });
