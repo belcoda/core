@@ -10,6 +10,7 @@
 		placeholder?: string;
 		onTimezoneChange?: (timezone: string) => void;
 		country?: string | null;
+		disabled?: boolean;
 	};
 
 	let {
@@ -21,7 +22,8 @@
 		class: className,
 		placeholder = 'Select a timezone',
 		onTimezoneChange = () => {},
-		country = null
+		country = null,
+		disabled = false
 	}: Props = $props();
 
 	import * as Form from '$lib/comps/ui/form';
@@ -72,6 +74,7 @@
 								{...props}
 								role="combobox"
 								aria-expanded={open}
+								{disabled}
 							>
 								{selectedValue || 'Select a timezone'}
 								<ChevronsUpDown class="opacity-50" />

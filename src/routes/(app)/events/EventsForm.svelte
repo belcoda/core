@@ -41,12 +41,14 @@
 	import Timezone from '$lib/comps/ui/form/controls/timezone.svelte';
 	import { getCountryTimezones } from '$lib/i18n/countries';
 	let editSlug = $state(false);
+	let timezoneEditable = $state(false);
 	function timezoneChaged(timezone: string) {
 		$formData.timezone = timezone;
 	}
 	function countryChaged(country: string) {
 		const timezones = getCountryTimezones(country);
 		if (timezones.length > 0) {
+			timezoneEditable = timezones.length > 1;
 			timezoneChaged(timezones[0]);
 		} else {
 			timezoneChaged('Etc/UTC');
@@ -183,6 +185,7 @@
 					bind:value={$formData.timezone as string}
 					onTimezoneChange={timezoneChaged}
 					country={$formData.country as string}
+					disabled={!timezoneEditable}
 				/>
 			</Grid>
 		{/if}
