@@ -574,7 +574,6 @@
 	"jumpy_alive_puffin_vent": "Você já se registrou para o evento {activityTitle}",
 	"full_tangy_cow_pull": "Você assinou a petição {activityTitle}",
 	"dizzy_mellow_otter_clap": "Você cancelou sua assinatura para a petição {activityTitle}",
-	"east_north_osprey_hurl": "Você já assinou a petição {activityTitle}",
 	"keen_agent_shell_mop": "Falha ao excluir o registro",
 	"dizzy_actual_elephant_evoke": "Registro excluído com sucesso",
 	"whole_still_macaw_bless": "Bem-vindo ao {instanceName}",
@@ -636,5 +635,6 @@
 	"warm_wild_grebe_gasp": "Ver página do evento",
 	"just_patient_finch_mix": "Sua inscrição foi cancelada. Não estaremos esperando você.",
 	"tidy_cuddly_pelican_evoke": "Nenhum país correspondente encontrado.",
-	"light_next_wasp_belong": "Deve ser um código de idioma ISO 639-1 válido (por exemplo: 'en' para inglês)"
+	"light_next_wasp_belong": "Deve ser um código de idioma ISO 639-1 válido (por exemplo: 'en' para inglês)",
+	"east_north_osprey_hurl": "Você já assinou a petição {activityTitle}"
 }

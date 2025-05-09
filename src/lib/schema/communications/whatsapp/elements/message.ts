@@ -227,3 +227,4 @@ export const successfulYCloudResponse = v.object({
 	),
 	bizType: v.optional(v.literal('whatsapp'))
 });
+export type SuccessfulYCloudResponse = v.InferOutput<typeof successfulYCloudResponse>;
