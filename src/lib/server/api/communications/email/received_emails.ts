@@ -10,16 +10,14 @@ function redisString(instanceId: number, personId: number) {
 
 export async function create({
 	instanceId,
-	body,
-	t
+	body
 }: {
 	instanceId: number;
 	body: schema.Create;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.create, body);
 	if (parsed.message_id) {
-		await messageExists({ instanceId, messageId: parsed.message_id, t });
+		await messageExists({ instanceId, messageId: parsed.message_id });
 	}
 	await personExists({ instanceId, personId: parsed.person_id });
 	const inserted = await db.insert('communications.received_emails', parsed).run(pool);

@@ -10,6 +10,9 @@
 	} from '$lib/schema/communications/email/messages';
 	import { type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { valibotClient } from 'sveltekit-superforms/adapters';
+	import { getFlash } from 'sveltekit-flash-message';
+
+	const flash = getFlash(page);
 
 	let {
 		mode,
@@ -38,6 +41,29 @@
 	import { buttonVariants } from '$lib/comps/ui/button/index.js';
 	import Separator from '$lib/comps/ui/separator/separator.svelte';
 	import SendTestEmail from '$lib/comps/forms/email/SendTestEmail.svelte';
+	import { goto } from '$app/navigation';
+
+	async function deleteMessage() {
+		if (!window.confirm(m.moving_acidic_crow_imagine())) {
+			return;
+		}
+		try {
+			const response = await fetch(`/api/v1/communications/email/messages/${messageId}`, {
+				method: 'DELETE'
+			});
+			if (!response.ok) {
+				throw new Error(m.keen_agent_shell_mop());
+			}
+			$flash = { type: 'success', message: m.dizzy_actual_elephant_evoke() };
+			goto(`/communications/email`);
+		} catch (error) {
+			if (error instanceof Error) {
+				$flash = { type: 'error', message: error.message };
+			} else {
+				$flash = { type: 'error', message: 'An error occurred' };
+			}
+		}
+	}
 </script>
 
 <Grid cols={1}>
@@ -87,8 +113,11 @@
 		/>
 		{#if messageId && !disabled}{@render sendTestEmail(messageId)}{/if}
 		{@render advancedSettings()}
-		<div class="flex items-center justify-end">
+		<div class="flex items-center justify-end gap-2">
 			<Button {disabled} type="submit">{m.empty_warm_squirrel_chop()}</Button>
+			<Button type="button" variant="destructive" onclick={deleteMessage}
+				>{m.wide_major_pig_swim()}</Button
+			>
 		</div>
 		<Debug data={$formData} />
 	</form>

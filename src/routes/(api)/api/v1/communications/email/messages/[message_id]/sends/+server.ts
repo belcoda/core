@@ -27,7 +27,6 @@ export async function POST(event) {
 		const body = await event.request.json();
 		const createdTemplate = await api.create({
 			instanceId: event.locals.instance.id,
-			t: event.locals.t,
 			adminId: event.locals.admin.id,
 			body
 		});

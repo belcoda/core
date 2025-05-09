@@ -14,16 +14,14 @@ export async function POST(event) {
 		const parsed = parse(emailPreviewOptions, body);
 		const message = await readMessage({
 			instanceId: event.locals.instance.id,
-			messageId: parsed.emailMessageId,
-			t: event.locals.t
+			messageId: parsed.emailMessageId
 		});
 		const { preview } = await generateEmailPreview(message.subject, message.html);
 		await updateMessage({
 			instanceId: event.locals.instance.id,
 			messageId: parsed.emailMessageId,
 			body: { preview_text: preview },
-			queue: event.locals.queue,
-			t: event.locals.t
+			queue: event.locals.queue
 		});
 		return json({ success: true });
 	} catch (err) {
