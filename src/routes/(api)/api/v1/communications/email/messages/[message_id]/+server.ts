@@ -41,3 +41,20 @@ export async function PUT(event) {
 		);
 	}
 }
+
+export async function DELETE(event) {
+	try {
+		const response = await api.del({
+			instanceId: event.locals.instance.id,
+			messageId: Number(event.params.message_id)
+		});
+		return json(response);
+	} catch (err) {
+		return error(
+			500,
+			'API:/api/v1/communications/emails/messages/[message_id]:DELETE01',
+			m.spry_ago_baboon_cure(),
+			err
+		);
+	}
+}

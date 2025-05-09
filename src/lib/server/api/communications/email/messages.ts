@@ -13,19 +13,21 @@ import * as m from '$lib/paraglide/messages';
 
 export async function exists({
 	instanceId,
-	messageId,
-	t
+	messageId
 }: {
 	instanceId: number;
 	messageId: number;
-	t: App.Localization;
 }): Promise<true> {
 	const cached = await redis.get(redisString(instanceId, messageId));
 	if (cached) {
 		return true;
 	}
 	await db
-		.selectExactlyOne('communications.email_messages', { id: messageId, instance_id: instanceId })
+		.selectExactlyOne('communications.email_messages', {
+			id: messageId,
+			instance_id: instanceId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(
@@ -184,4 +186,29 @@ export async function list({
 	const parsedList = parse(schema.list, { items: list, count: count });
 	await redis.set(redisString(instanceId, 'all'), parsedList);
 	return parsedList;
+}
+
+export async function del({
+	instanceId,
+	messageId
+}: {
+	instanceId: number;
+	messageId: number;
+}): Promise<void> {
+	if (!(await exists({ instanceId, messageId }))) {
+		throw new BelcodaError(
+			404,
+			'DATA:COMMUNICATIONS:EMAIL:MESSAGES:DEL:01',
+			m.pretty_tired_fly_lead()
+		);
+	}
+	await db
+		.update(
+			'communications.email_messages',
+			{ deleted_at: new Date() },
+			{ id: messageId, instance_id: instanceId }
+		)
+		.run(pool);
+	await redis.del(redisString(instanceId, messageId));
+	await redis.del(redisString(instanceId, 'all'));
 }
