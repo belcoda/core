@@ -79,13 +79,11 @@ export async function update({
 	instanceId,
 	messageId,
 	body,
-	t,
 	queue
 }: {
 	instanceId: number;
 	messageId: number;
 	body: schema.Update;
-	t: App.Localization;
 	queue: App.Queue;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
@@ -102,7 +100,7 @@ export async function update({
 	Given that this is a very low priority feature and custom preview text is very unlikely to be a priority for any of our users in the foreseeable future, 
 	I'm happy leaving it as is and coming back to it later.
 	*/
-	const messageBeforeUpdate = await read({ instanceId, messageId, t });
+	const messageBeforeUpdate = await read({ instanceId, messageId });
 	const autogeneratePreview = messageBeforeUpdate.preview_text === parsed.preview_text;
 
 	const updated = await db

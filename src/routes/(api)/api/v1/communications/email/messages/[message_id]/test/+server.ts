@@ -9,7 +9,6 @@ export async function PUT(event) {
 		//make sure the message is the latest info
 		const message = await read({
 			instanceId: event.locals.instance.id,
-			t: event.locals.t,
 			messageId: Number(event.params.message_id)
 		});
 		const parsed = parse(sendTestEmail, { ...body, message });

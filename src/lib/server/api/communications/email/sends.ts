@@ -12,13 +12,11 @@ function redisString(instanceId: number, messageId: number, sendId: number | 'al
 
 export async function create({
 	instanceId,
-	body,
-	t
+	body
 }: {
 	instanceId: number;
 	body: schema.Create;
 	adminId: number;
-	t: App.Localization;
 }): Promise<schema.Read> {
 	// the foreign key constraint will ensure that a message exists...
 	// but we don't want to allow creating a send on a message that belongs to another instance
@@ -26,8 +24,7 @@ export async function create({
 	const parsed = parse(schema.create, body);
 	await messageExists({
 		instanceId,
-		messageId: parsed.message_id,
-		t
+		messageId: parsed.message_id
 	});
 	const toInsert = {
 		instance_id: instanceId,
@@ -230,8 +227,7 @@ export async function send({
 	// but we don't want to allow sending a message that belongs to another instance
 	await messageExists({
 		instanceId,
-		messageId,
-		t
+		messageId
 	});
 	//make sure the message exists
 	await read({
