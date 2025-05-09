@@ -106,7 +106,11 @@ export async function update({
 	const autogeneratePreview = messageBeforeUpdate.preview_text === parsed.preview_text;
 
 	const updated = await db
-		.update('communications.email_messages', toUpdate, { id: messageId, instance_id: instanceId })
+		.update('communications.email_messages', toUpdate, {
+			id: messageId,
+			instance_id: instanceId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool);
 	if (updated.length !== 1) {
 		throw new BelcodaError(
@@ -130,18 +134,22 @@ export async function update({
 export async function read({
 	instanceId,
 	messageId,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	messageId: number;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, messageId));
-	if (cached) {
+	if (!includeDeleted && cached) {
 		return parse(schema.read, cached);
 	}
 	const read = await db
-		.selectExactlyOne('communications.email_messages', { id: messageId, instance_id: instanceId })
+		.selectExactlyOne('communications.email_messages', {
+			id: messageId,
+			instance_id: instanceId,
+			...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(
@@ -159,29 +167,26 @@ export async function read({
 export async function list({
 	instanceId,
 	url,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	url: URL;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const query = filterQuery(url);
 	if (query.filtered !== true) {
 		const cached = await redis.get(redisString(instanceId, 'all'));
-		if (cached) {
+		if (!includeDeleted && cached) {
 			return parse(schema.list, cached);
 		}
 	}
+	const where = { ...query.where, ...(includeDeleted ? {} : { deleted_at: db.conditions.isNull }) };
 	const list = await db
-		.select(
-			'communications.email_messages',
-			{ instance_id: instanceId, ...query.where },
-			query.options
-		)
+		.select('communications.email_messages', { instance_id: instanceId, ...where }, query.options)
 		.run(pool);
 
 	const count = await db
-		.count('communications.email_messages', { instance_id: instanceId, ...query.where })
+		.count('communications.email_messages', { instance_id: instanceId, ...where })
 		.run(pool);
 	const parsedList = parse(schema.list, { items: list, count: count });
 	await redis.set(redisString(instanceId, 'all'), parsedList);
