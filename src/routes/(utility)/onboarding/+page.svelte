@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { PUBLIC_HOST, PUBLIC_GOOGLE_AUTH_CLIENT_ID } from '$env/static/public';
-	import * as m from '$lib/paraglide/messages';
 	// Update the login_uri to include the continue parameter if it exists
 	const loginUri = `${PUBLIC_HOST}/onboarding/auth/google`;
 </script>
