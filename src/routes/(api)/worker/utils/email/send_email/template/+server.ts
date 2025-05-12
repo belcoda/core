@@ -7,13 +7,14 @@ import { read } from '$lib/server/api/people/people';
 import { create as createSentEmail } from '$lib/server/api/communications/email/sent_emails';
 
 import sendEmailTemplate from '$lib/server/utils/email/send_template_email_postmark';
-
+import { read as readEmailFrom } from '$lib/server/api/communications/email/from_signatures';
 import { parse } from '$lib/schema/valibot';
 import {
 	type EmailTemplateName,
 	emailTemplateMessage
 } from '$lib/schema/communications/email/messages';
 import { type Create as CreateSentEmail } from '$lib/schema/communications/email/sent_emails';
+import { PUBLIC_ROOT_DOMAIN } from '$env/static/public';
 
 const TRANSACTIONAL_TEMPLATES: EmailTemplateName[] = [
 	'transactional',
@@ -61,9 +62,24 @@ export async function POST(event) {
 
 		const stream = TRANSACTIONAL_TEMPLATES.includes(parsed.template) ? 'outbound' : 'broadcast'; //we need to use the bulk stream for non-transactional emails
 
+		//TODO: Make sure parsed.from_signature_id is actually on the incoming email objects
+		const fromSignature = await readEmailFrom({
+			instanceId: event.locals.instance.id,
+			fromSignatureId:
+				parsed.from_signature_id ??
+				event.locals.instance.settings.communications.email.default_from_signature_id ??
+				0 //this is an ID which will not work, so it will always fail and return the error case
+		})
+			.then((result) => {
+				return `${result.name} <${result.email}>`;
+			})
+			.catch((err) => {
+				return `${event.locals.instance.name} <${event.locals.instance.slug}@${PUBLIC_ROOT_DOMAIN}>`;
+			});
+
 		const sent = await sendEmailTemplate({
 			to: person.email.email,
-			from: parsed.from ?? event.locals.instance.settings.communications.email.default_from_name,
+			from: fromSignature,
 			template: parsed.template,
 			context: parsed.context,
 			stream: stream
