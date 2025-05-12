@@ -1,7 +1,9 @@
 import * as jose from 'jose';
-import { JWT_SIGNING_SECRET } from '$env/static/private';
+import { JWT_SIGNING_SECRET, JWT_NAME } from '$env/static/private';
 import { verify } from '../../../auth/google/verifyIdToken';
-import { json } from '@sveltejs/kit';
+import { dev } from '$app/environment';
+import { redirect } from '@sveltejs/kit';
+
 export async function POST(event) {
 	const tokenCookie = event.cookies.get('g_csrf_token');
 	const body = await event.request.formData();
@@ -12,7 +14,17 @@ export async function POST(event) {
 	if (tokenCookie !== tokenBody) throw new Error('Token mismatch. Unable to authenticate.');
 	if (typeof credential !== 'string') throw new Error('Invalid credential');
 	const jwt = await createJwt(credential);
-	return json(jwt);
+	// Set the session cookie to expire in 2 weeks
+	const today = new Date();
+	const expires = new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000);
+	event.cookies.set(JWT_NAME, jwt, {
+		path: '/',
+		expires: expires,
+		httpOnly: true,
+		secure: dev ? false : true,
+		sameSite: 'strict'
+	});
+	return redirect(302, '/onboarding/survey');
 }
 
 async function createJwt(token: string) {
@@ -37,16 +49,6 @@ async function createJwt(token: string) {
 		.setAudience('urn:example:audience')
 		.setExpirationTime('30days')
 		.sign(secret);
-
-	const parsed = await jose
-		.jwtVerify(jwt, secret, {
-			issuer: 'urn:example:issuer',
-			audience: 'urn:example:audience'
-		})
-		.catch((err) => {
-			console.error('Error verifying JWT', err);
-			throw new Error('Unable to verify JWT. ' + err.message);
-		});
 
 	return jwt;
 }
