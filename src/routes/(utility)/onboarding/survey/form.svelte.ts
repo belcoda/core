@@ -89,6 +89,8 @@ export default function Form<T extends Record<string, unknown>>({
 	return {
 		warnBeforeDiscard,
 		form,
+		capture: form.capture,
+		restore: form.restore,
 		data: form.form,
 		errors: form.errors,
 		isTainted: form.isTainted
