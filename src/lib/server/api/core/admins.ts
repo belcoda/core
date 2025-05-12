@@ -128,10 +128,8 @@ export async function update({
 }
 
 export async function signIn({
-	t,
 	body
 }: {
-	t: App.Localization;
 	body: schema.SignIn;
 }): Promise<{ admin: schema.Read; session: string }> {
 	const parsed = v.parse(schema.signIn, body);
