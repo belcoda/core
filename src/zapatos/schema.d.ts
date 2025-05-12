@@ -12771,6 +12771,537 @@ declare module 'zapatos/schema' {
 		/* --- tables --- */
 
 		/**
+		 * **communications.email_from_signatures**
+		 * - Table in database
+		 */
+		export namespace email_from_signatures {
+			export type Table = 'communications.email_from_signatures';
+			export interface Selectable {
+				/**
+				 * **communications.email_from_signatures.created_at**
+				 * - `timestamptz` in database
+				 * - Nullable, default: `CURRENT_TIMESTAMP`
+				 */
+				created_at: Date | null;
+				/**
+				 * **communications.email_from_signatures.deleted_at**
+				 * - `timestamptz` in database
+				 * - Nullable, no default
+				 */
+				deleted_at: Date | null;
+				/**
+				 * **communications.email_from_signatures.email**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				email: string;
+				/**
+				 * **communications.email_from_signatures.external_id**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				external_id: string;
+				/**
+				 * **communications.email_from_signatures.id**
+				 * - `int4` in database
+				 * - `NOT NULL`, default: `nextval('communications.email_from_signatures_id_seq'::regclass)`
+				 */
+				id: number;
+				/**
+				 * **communications.email_from_signatures.instance_id**
+				 * - `int4` in database
+				 * - `NOT NULL`, no default
+				 */
+				instance_id: number;
+				/**
+				 * **communications.email_from_signatures.name**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				name: string;
+				/**
+				 * **communications.email_from_signatures.return_path_domain**
+				 * - `varchar` in database
+				 * - Nullable, no default
+				 */
+				return_path_domain: string | null;
+				/**
+				 * **communications.email_from_signatures.return_path_domain_verified**
+				 * - `bool` in database
+				 * - `NOT NULL`, default: `false`
+				 */
+				return_path_domain_verified: boolean;
+				/**
+				 * **communications.email_from_signatures.updated_at**
+				 * - `timestamptz` in database
+				 * - Nullable, default: `CURRENT_TIMESTAMP`
+				 */
+				updated_at: Date | null;
+				/**
+				 * **communications.email_from_signatures.verified**
+				 * - `bool` in database
+				 * - `NOT NULL`, default: `false`
+				 */
+				verified: boolean;
+			}
+			export interface JSONSelectable {
+				/**
+				 * **communications.email_from_signatures.created_at**
+				 * - `timestamptz` in database
+				 * - Nullable, default: `CURRENT_TIMESTAMP`
+				 */
+				created_at: db.TimestampTzString | null;
+				/**
+				 * **communications.email_from_signatures.deleted_at**
+				 * - `timestamptz` in database
+				 * - Nullable, no default
+				 */
+				deleted_at: db.TimestampTzString | null;
+				/**
+				 * **communications.email_from_signatures.email**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				email: string;
+				/**
+				 * **communications.email_from_signatures.external_id**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				external_id: string;
+				/**
+				 * **communications.email_from_signatures.id**
+				 * - `int4` in database
+				 * - `NOT NULL`, default: `nextval('communications.email_from_signatures_id_seq'::regclass)`
+				 */
+				id: number;
+				/**
+				 * **communications.email_from_signatures.instance_id**
+				 * - `int4` in database
+				 * - `NOT NULL`, no default
+				 */
+				instance_id: number;
+				/**
+				 * **communications.email_from_signatures.name**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				name: string;
+				/**
+				 * **communications.email_from_signatures.return_path_domain**
+				 * - `varchar` in database
+				 * - Nullable, no default
+				 */
+				return_path_domain: string | null;
+				/**
+				 * **communications.email_from_signatures.return_path_domain_verified**
+				 * - `bool` in database
+				 * - `NOT NULL`, default: `false`
+				 */
+				return_path_domain_verified: boolean;
+				/**
+				 * **communications.email_from_signatures.updated_at**
+				 * - `timestamptz` in database
+				 * - Nullable, default: `CURRENT_TIMESTAMP`
+				 */
+				updated_at: db.TimestampTzString | null;
+				/**
+				 * **communications.email_from_signatures.verified**
+				 * - `bool` in database
+				 * - `NOT NULL`, default: `false`
+				 */
+				verified: boolean;
+			}
+			export interface Whereable {
+				/**
+				 * **communications.email_from_signatures.created_at**
+				 * - `timestamptz` in database
+				 * - Nullable, default: `CURRENT_TIMESTAMP`
+				 */
+				created_at?:
+					| (db.TimestampTzString | Date)
+					| db.Parameter<db.TimestampTzString | Date>
+					| db.SQLFragment
+					| db.ParentColumn
+					| db.SQLFragment<
+							any,
+							| (db.TimestampTzString | Date)
+							| db.Parameter<db.TimestampTzString | Date>
+							| db.SQLFragment
+							| db.ParentColumn
+					  >;
+				/**
+				 * **communications.email_from_signatures.deleted_at**
+				 * - `timestamptz` in database
+				 * - Nullable, no default
+				 */
+				deleted_at?:
+					| (db.TimestampTzString | Date)
+					| db.Parameter<db.TimestampTzString | Date>
+					| db.SQLFragment
+					| db.ParentColumn
+					| db.SQLFragment<
+							any,
+							| (db.TimestampTzString | Date)
+							| db.Parameter<db.TimestampTzString | Date>
+							| db.SQLFragment
+							| db.ParentColumn
+					  >;
+				/**
+				 * **communications.email_from_signatures.email**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				email?:
+					| string
+					| db.Parameter<string>
+					| db.SQLFragment
+					| db.ParentColumn
+					| db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+				/**
+				 * **communications.email_from_signatures.external_id**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				external_id?:
+					| string
+					| db.Parameter<string>
+					| db.SQLFragment
+					| db.ParentColumn
+					| db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+				/**
+				 * **communications.email_from_signatures.id**
+				 * - `int4` in database
+				 * - `NOT NULL`, default: `nextval('communications.email_from_signatures_id_seq'::regclass)`
+				 */
+				id?:
+					| number
+					| db.Parameter<number>
+					| db.SQLFragment
+					| db.ParentColumn
+					| db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+				/**
+				 * **communications.email_from_signatures.instance_id**
+				 * - `int4` in database
+				 * - `NOT NULL`, no default
+				 */
+				instance_id?:
+					| number
+					| db.Parameter<number>
+					| db.SQLFragment
+					| db.ParentColumn
+					| db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+				/**
+				 * **communications.email_from_signatures.name**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				name?:
+					| string
+					| db.Parameter<string>
+					| db.SQLFragment
+					| db.ParentColumn
+					| db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+				/**
+				 * **communications.email_from_signatures.return_path_domain**
+				 * - `varchar` in database
+				 * - Nullable, no default
+				 */
+				return_path_domain?:
+					| string
+					| db.Parameter<string>
+					| db.SQLFragment
+					| db.ParentColumn
+					| db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+				/**
+				 * **communications.email_from_signatures.return_path_domain_verified**
+				 * - `bool` in database
+				 * - `NOT NULL`, default: `false`
+				 */
+				return_path_domain_verified?:
+					| boolean
+					| db.Parameter<boolean>
+					| db.SQLFragment
+					| db.ParentColumn
+					| db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+				/**
+				 * **communications.email_from_signatures.updated_at**
+				 * - `timestamptz` in database
+				 * - Nullable, default: `CURRENT_TIMESTAMP`
+				 */
+				updated_at?:
+					| (db.TimestampTzString | Date)
+					| db.Parameter<db.TimestampTzString | Date>
+					| db.SQLFragment
+					| db.ParentColumn
+					| db.SQLFragment<
+							any,
+							| (db.TimestampTzString | Date)
+							| db.Parameter<db.TimestampTzString | Date>
+							| db.SQLFragment
+							| db.ParentColumn
+					  >;
+				/**
+				 * **communications.email_from_signatures.verified**
+				 * - `bool` in database
+				 * - `NOT NULL`, default: `false`
+				 */
+				verified?:
+					| boolean
+					| db.Parameter<boolean>
+					| db.SQLFragment
+					| db.ParentColumn
+					| db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+			}
+			export interface Insertable {
+				/**
+				 * **communications.email_from_signatures.created_at**
+				 * - `timestamptz` in database
+				 * - Nullable, default: `CURRENT_TIMESTAMP`
+				 */
+				created_at?:
+					| (db.TimestampTzString | Date)
+					| db.Parameter<db.TimestampTzString | Date>
+					| null
+					| db.DefaultType
+					| db.SQLFragment;
+				/**
+				 * **communications.email_from_signatures.deleted_at**
+				 * - `timestamptz` in database
+				 * - Nullable, no default
+				 */
+				deleted_at?:
+					| (db.TimestampTzString | Date)
+					| db.Parameter<db.TimestampTzString | Date>
+					| null
+					| db.DefaultType
+					| db.SQLFragment;
+				/**
+				 * **communications.email_from_signatures.email**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				email: string | db.Parameter<string> | db.SQLFragment;
+				/**
+				 * **communications.email_from_signatures.external_id**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				external_id: string | db.Parameter<string> | db.SQLFragment;
+				/**
+				 * **communications.email_from_signatures.id**
+				 * - `int4` in database
+				 * - `NOT NULL`, default: `nextval('communications.email_from_signatures_id_seq'::regclass)`
+				 */
+				id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+				/**
+				 * **communications.email_from_signatures.instance_id**
+				 * - `int4` in database
+				 * - `NOT NULL`, no default
+				 */
+				instance_id: number | db.Parameter<number> | db.SQLFragment;
+				/**
+				 * **communications.email_from_signatures.name**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				name: string | db.Parameter<string> | db.SQLFragment;
+				/**
+				 * **communications.email_from_signatures.return_path_domain**
+				 * - `varchar` in database
+				 * - Nullable, no default
+				 */
+				return_path_domain?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
+				/**
+				 * **communications.email_from_signatures.return_path_domain_verified**
+				 * - `bool` in database
+				 * - `NOT NULL`, default: `false`
+				 */
+				return_path_domain_verified?:
+					| boolean
+					| db.Parameter<boolean>
+					| db.DefaultType
+					| db.SQLFragment;
+				/**
+				 * **communications.email_from_signatures.updated_at**
+				 * - `timestamptz` in database
+				 * - Nullable, default: `CURRENT_TIMESTAMP`
+				 */
+				updated_at?:
+					| (db.TimestampTzString | Date)
+					| db.Parameter<db.TimestampTzString | Date>
+					| null
+					| db.DefaultType
+					| db.SQLFragment;
+				/**
+				 * **communications.email_from_signatures.verified**
+				 * - `bool` in database
+				 * - `NOT NULL`, default: `false`
+				 */
+				verified?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
+			}
+			export interface Updatable {
+				/**
+				 * **communications.email_from_signatures.created_at**
+				 * - `timestamptz` in database
+				 * - Nullable, default: `CURRENT_TIMESTAMP`
+				 */
+				created_at?:
+					| (db.TimestampTzString | Date)
+					| db.Parameter<db.TimestampTzString | Date>
+					| null
+					| db.DefaultType
+					| db.SQLFragment
+					| db.SQLFragment<
+							any,
+							| (db.TimestampTzString | Date)
+							| db.Parameter<db.TimestampTzString | Date>
+							| null
+							| db.DefaultType
+							| db.SQLFragment
+					  >;
+				/**
+				 * **communications.email_from_signatures.deleted_at**
+				 * - `timestamptz` in database
+				 * - Nullable, no default
+				 */
+				deleted_at?:
+					| (db.TimestampTzString | Date)
+					| db.Parameter<db.TimestampTzString | Date>
+					| null
+					| db.DefaultType
+					| db.SQLFragment
+					| db.SQLFragment<
+							any,
+							| (db.TimestampTzString | Date)
+							| db.Parameter<db.TimestampTzString | Date>
+							| null
+							| db.DefaultType
+							| db.SQLFragment
+					  >;
+				/**
+				 * **communications.email_from_signatures.email**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				email?:
+					| string
+					| db.Parameter<string>
+					| db.SQLFragment
+					| db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+				/**
+				 * **communications.email_from_signatures.external_id**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				external_id?:
+					| string
+					| db.Parameter<string>
+					| db.SQLFragment
+					| db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+				/**
+				 * **communications.email_from_signatures.id**
+				 * - `int4` in database
+				 * - `NOT NULL`, default: `nextval('communications.email_from_signatures_id_seq'::regclass)`
+				 */
+				id?:
+					| number
+					| db.Parameter<number>
+					| db.DefaultType
+					| db.SQLFragment
+					| db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+				/**
+				 * **communications.email_from_signatures.instance_id**
+				 * - `int4` in database
+				 * - `NOT NULL`, no default
+				 */
+				instance_id?:
+					| number
+					| db.Parameter<number>
+					| db.SQLFragment
+					| db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+				/**
+				 * **communications.email_from_signatures.name**
+				 * - `varchar` in database
+				 * - `NOT NULL`, no default
+				 */
+				name?:
+					| string
+					| db.Parameter<string>
+					| db.SQLFragment
+					| db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+				/**
+				 * **communications.email_from_signatures.return_path_domain**
+				 * - `varchar` in database
+				 * - Nullable, no default
+				 */
+				return_path_domain?:
+					| string
+					| db.Parameter<string>
+					| null
+					| db.DefaultType
+					| db.SQLFragment
+					| db.SQLFragment<
+							any,
+							string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment
+					  >;
+				/**
+				 * **communications.email_from_signatures.return_path_domain_verified**
+				 * - `bool` in database
+				 * - `NOT NULL`, default: `false`
+				 */
+				return_path_domain_verified?:
+					| boolean
+					| db.Parameter<boolean>
+					| db.DefaultType
+					| db.SQLFragment
+					| db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
+				/**
+				 * **communications.email_from_signatures.updated_at**
+				 * - `timestamptz` in database
+				 * - Nullable, default: `CURRENT_TIMESTAMP`
+				 */
+				updated_at?:
+					| (db.TimestampTzString | Date)
+					| db.Parameter<db.TimestampTzString | Date>
+					| null
+					| db.DefaultType
+					| db.SQLFragment
+					| db.SQLFragment<
+							any,
+							| (db.TimestampTzString | Date)
+							| db.Parameter<db.TimestampTzString | Date>
+							| null
+							| db.DefaultType
+							| db.SQLFragment
+					  >;
+				/**
+				 * **communications.email_from_signatures.verified**
+				 * - `bool` in database
+				 * - `NOT NULL`, default: `false`
+				 */
+				verified?:
+					| boolean
+					| db.Parameter<boolean>
+					| db.DefaultType
+					| db.SQLFragment
+					| db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
+			}
+			export type UniqueIndex = 'email_from_signatures_pkey';
+			export type Column = keyof Selectable;
+			export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
+			export type SQLExpression =
+				| Table
+				| db.ColumnNames<Updatable | (keyof Updatable)[]>
+				| db.ColumnValues<Updatable>
+				| Whereable
+				| Column
+				| db.ParentColumn
+				| db.GenericSQLExpression;
+			export type SQL = SQLExpression | SQLExpression[];
+		}
+
+		/**
 		 * **communications.email_messages**
 		 * - Table in database
 		 */
@@ -12795,6 +13326,12 @@ declare module 'zapatos/schema' {
 				 * - `NOT NULL`, no default
 				 */
 				from: string;
+				/**
+				 * **communications.email_messages.from_signature_id**
+				 * - `int4` in database
+				 * - Nullable, no default
+				 */
+				from_signature_id: number | null;
 				/**
 				 * **communications.email_messages.html**
 				 * - `text` in database
@@ -12887,6 +13424,12 @@ declare module 'zapatos/schema' {
 				 * - `NOT NULL`, no default
 				 */
 				from: string;
+				/**
+				 * **communications.email_messages.from_signature_id**
+				 * - `int4` in database
+				 * - Nullable, no default
+				 */
+				from_signature_id: number | null;
 				/**
 				 * **communications.email_messages.html**
 				 * - `text` in database
@@ -13006,6 +13549,17 @@ declare module 'zapatos/schema' {
 					| db.SQLFragment
 					| db.ParentColumn
 					| db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+				/**
+				 * **communications.email_messages.from_signature_id**
+				 * - `int4` in database
+				 * - Nullable, no default
+				 */
+				from_signature_id?:
+					| number
+					| db.Parameter<number>
+					| db.SQLFragment
+					| db.ParentColumn
+					| db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
 				/**
 				 * **communications.email_messages.html**
 				 * - `text` in database
@@ -13174,6 +13728,12 @@ declare module 'zapatos/schema' {
 				 */
 				from: string | db.Parameter<string> | db.SQLFragment;
 				/**
+				 * **communications.email_messages.from_signature_id**
+				 * - `int4` in database
+				 * - Nullable, no default
+				 */
+				from_signature_id?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment;
+				/**
 				 * **communications.email_messages.html**
 				 * - `text` in database
 				 * - `NOT NULL`, default: `''::text`
@@ -13297,6 +13857,21 @@ declare module 'zapatos/schema' {
 					| db.Parameter<string>
 					| db.SQLFragment
 					| db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+				/**
+				 * **communications.email_messages.from_signature_id**
+				 * - `int4` in database
+				 * - Nullable, no default
+				 */
+				from_signature_id?:
+					| number
+					| db.Parameter<number>
+					| null
+					| db.DefaultType
+					| db.SQLFragment
+					| db.SQLFragment<
+							any,
+							number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment
+					  >;
 				/**
 				 * **communications.email_messages.html**
 				 * - `text` in database
@@ -20385,6 +20960,7 @@ declare module 'zapatos/schema' {
 		/* --- aggregate types --- */
 
 		export type Table =
+			| email_from_signatures.Table
 			| email_messages.Table
 			| email_sends.Table
 			| received_emails.Table
@@ -20406,6 +20982,7 @@ declare module 'zapatos/schema' {
 			| whatsapp_templates.Table
 			| whatsapp_threads.Table;
 		export type Selectable =
+			| email_from_signatures.Selectable
 			| email_messages.Selectable
 			| email_sends.Selectable
 			| received_emails.Selectable
@@ -20427,6 +21004,7 @@ declare module 'zapatos/schema' {
 			| whatsapp_templates.Selectable
 			| whatsapp_threads.Selectable;
 		export type JSONSelectable =
+			| email_from_signatures.JSONSelectable
 			| email_messages.JSONSelectable
 			| email_sends.JSONSelectable
 			| received_emails.JSONSelectable
@@ -20448,6 +21026,7 @@ declare module 'zapatos/schema' {
 			| whatsapp_templates.JSONSelectable
 			| whatsapp_threads.JSONSelectable;
 		export type Whereable =
+			| email_from_signatures.Whereable
 			| email_messages.Whereable
 			| email_sends.Whereable
 			| received_emails.Whereable
@@ -20469,6 +21048,7 @@ declare module 'zapatos/schema' {
 			| whatsapp_templates.Whereable
 			| whatsapp_threads.Whereable;
 		export type Insertable =
+			| email_from_signatures.Insertable
 			| email_messages.Insertable
 			| email_sends.Insertable
 			| received_emails.Insertable
@@ -20490,6 +21070,7 @@ declare module 'zapatos/schema' {
 			| whatsapp_templates.Insertable
 			| whatsapp_threads.Insertable;
 		export type Updatable =
+			| email_from_signatures.Updatable
 			| email_messages.Updatable
 			| email_sends.Updatable
 			| received_emails.Updatable
@@ -20511,6 +21092,7 @@ declare module 'zapatos/schema' {
 			| whatsapp_templates.Updatable
 			| whatsapp_threads.Updatable;
 		export type UniqueIndex =
+			| email_from_signatures.UniqueIndex
 			| email_messages.UniqueIndex
 			| email_sends.UniqueIndex
 			| received_emails.UniqueIndex
@@ -20532,6 +21114,7 @@ declare module 'zapatos/schema' {
 			| whatsapp_templates.UniqueIndex
 			| whatsapp_threads.UniqueIndex;
 		export type Column =
+			| email_from_signatures.Column
 			| email_messages.Column
 			| email_sends.Column
 			| received_emails.Column
@@ -20554,6 +21137,7 @@ declare module 'zapatos/schema' {
 			| whatsapp_threads.Column;
 
 		export type AllBaseTables = [
+			email_from_signatures.Table,
 			email_messages.Table,
 			email_sends.Table,
 			received_emails.Table,
@@ -20579,6 +21163,7 @@ declare module 'zapatos/schema' {
 		export type AllViews = [];
 		export type AllMaterializedViews = [];
 		export type AllTablesAndViews = [
+			email_from_signatures.Table,
 			email_messages.Table,
 			email_sends.Table,
 			received_emails.Table,
@@ -25972,6 +26557,7 @@ declare module 'zapatos/schema' {
 		'website.redirects': website.redirects.Selectable;
 		'website.taggings': website.taggings.Selectable;
 		'website.uploads': website.uploads.Selectable;
+		'communications.email_from_signatures': communications.email_from_signatures.Selectable;
 		'communications.email_messages': communications.email_messages.Selectable;
 		'communications.email_sends': communications.email_sends.Selectable;
 		'communications.received_emails': communications.received_emails.Selectable;
@@ -26030,6 +26616,7 @@ declare module 'zapatos/schema' {
 		'website.redirects': website.redirects.JSONSelectable;
 		'website.taggings': website.taggings.JSONSelectable;
 		'website.uploads': website.uploads.JSONSelectable;
+		'communications.email_from_signatures': communications.email_from_signatures.JSONSelectable;
 		'communications.email_messages': communications.email_messages.JSONSelectable;
 		'communications.email_sends': communications.email_sends.JSONSelectable;
 		'communications.received_emails': communications.received_emails.JSONSelectable;
@@ -26088,6 +26675,7 @@ declare module 'zapatos/schema' {
 		'website.redirects': website.redirects.Whereable;
 		'website.taggings': website.taggings.Whereable;
 		'website.uploads': website.uploads.Whereable;
+		'communications.email_from_signatures': communications.email_from_signatures.Whereable;
 		'communications.email_messages': communications.email_messages.Whereable;
 		'communications.email_sends': communications.email_sends.Whereable;
 		'communications.received_emails': communications.received_emails.Whereable;
@@ -26146,6 +26734,7 @@ declare module 'zapatos/schema' {
 		'website.redirects': website.redirects.Insertable;
 		'website.taggings': website.taggings.Insertable;
 		'website.uploads': website.uploads.Insertable;
+		'communications.email_from_signatures': communications.email_from_signatures.Insertable;
 		'communications.email_messages': communications.email_messages.Insertable;
 		'communications.email_sends': communications.email_sends.Insertable;
 		'communications.received_emails': communications.received_emails.Insertable;
@@ -26204,6 +26793,7 @@ declare module 'zapatos/schema' {
 		'website.redirects': website.redirects.Updatable;
 		'website.taggings': website.taggings.Updatable;
 		'website.uploads': website.uploads.Updatable;
+		'communications.email_from_signatures': communications.email_from_signatures.Updatable;
 		'communications.email_messages': communications.email_messages.Updatable;
 		'communications.email_sends': communications.email_sends.Updatable;
 		'communications.received_emails': communications.received_emails.Updatable;
@@ -26262,6 +26852,7 @@ declare module 'zapatos/schema' {
 		'website.redirects': website.redirects.UniqueIndex;
 		'website.taggings': website.taggings.UniqueIndex;
 		'website.uploads': website.uploads.UniqueIndex;
+		'communications.email_from_signatures': communications.email_from_signatures.UniqueIndex;
 		'communications.email_messages': communications.email_messages.UniqueIndex;
 		'communications.email_sends': communications.email_sends.UniqueIndex;
 		'communications.received_emails': communications.received_emails.UniqueIndex;
@@ -26320,6 +26911,7 @@ declare module 'zapatos/schema' {
 		'website.redirects': website.redirects.Column;
 		'website.taggings': website.taggings.Column;
 		'website.uploads': website.uploads.Column;
+		'communications.email_from_signatures': communications.email_from_signatures.Column;
 		'communications.email_messages': communications.email_messages.Column;
 		'communications.email_sends': communications.email_sends.Column;
 		'communications.received_emails': communications.received_emails.Column;
@@ -26378,6 +26970,7 @@ declare module 'zapatos/schema' {
 		'website.redirects': website.redirects.SQL;
 		'website.taggings': website.taggings.SQL;
 		'website.uploads': website.uploads.SQL;
+		'communications.email_from_signatures': communications.email_from_signatures.SQL;
 		'communications.email_messages': communications.email_messages.SQL;
 		'communications.email_sends': communications.email_sends.SQL;
 		'communications.received_emails': communications.received_emails.SQL;
