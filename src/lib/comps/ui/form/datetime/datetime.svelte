@@ -474,7 +474,7 @@
 							<div
 								class="text-xs px-4 py-0.5 flex items-center justify-center text-muted-foreground gap-1 opacity-60"
 							>
-								{getLocalTimeZone()}
+								{timezone || getLocalTimeZone()}
 							</div>
 						{/if}
 					</Popover.Content>

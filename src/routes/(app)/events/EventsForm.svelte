@@ -109,13 +109,14 @@
 			name="starts_at"
 			label={m.proof_long_bird_love()}
 			bind:value={$formData.starts_at}
+			timezone={$formData.timezone}
 		/>
 		<DateTime
 			{form}
 			name="ends_at"
 			label={m.close_nice_cowfish_savor()}
 			bind:value={$formData.ends_at}
-			onTimezoneChange={timezoneChaged}
+			timezone={$formData.timezone}
 		/>
 	</Grid>
 {/snippet}
