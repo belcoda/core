@@ -83,7 +83,7 @@ export const emailTemplateMessage = v.object({
 	send_id: v.optional(id),
 	template: emailTemplateName,
 	context: jsonSchemaObject,
-	from: v.optional(shortStringNotEmpty),
+	from_signature_id: v.optional(id),
 	send_details: sendDetail,
 	reply_to: v.optional(v.nullable(email), null),
 	attachments: v.optional(v.array(emailAttachments))
