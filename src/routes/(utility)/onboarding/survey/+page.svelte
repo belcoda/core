@@ -7,9 +7,11 @@
 	import Loading from '$lib/comps/helpers/Loading.svelte';
 	import { dev } from '$app/environment';
 	import { goto } from '$app/navigation';
+	let error = $state(false);
 	const { form, data, warnBeforeDiscard, capture, restore } = createForm({
 		onSubmit: async (formData) => {
 			try {
+				error = false;
 				loading = true;
 				const response = await fetch('/onboarding/survey/onboard', {
 					method: 'POST',
@@ -23,6 +25,7 @@
 				}
 				await goto('/');
 			} catch (error) {
+				error = true;
 				console.error('Error submitting form:', error);
 			} finally {
 				loading = false;
@@ -45,6 +48,18 @@
 		</div>
 	</div>
 {:else}
+	{#if error}
+		<div
+			class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+			role="alert"
+		>
+			<strong class="font-bold">Error:</strong>
+			<span class="block sm:inline">
+				We weren't able to create an account. You can try again, but if this keeps happening, please
+				get in touch with the support team.
+			</span>
+		</div>
+	{/if}
 	<form method="POST" use:form.enhance class="grid grid-cols-1 gap-3">
 		{@render H1('Onboarding survey')}
 		<p>
