@@ -71,21 +71,24 @@ export async function read({
 
 export async function list({
 	instanceId,
-	url
+	url,
+	verifiedOnly = false
 }: {
 	instanceId: number;
 	url: URL;
+	verifiedOnly?: boolean;
 }): Promise<schema.List> {
 	const { options, where, filtered } = filterQuery(url);
 	if (!filtered) {
 		const cached = await redis.get(redisString(instanceId, 'all'));
 		if (cached) return parse(schema.list, cached);
 	}
-
+	const verified = verifiedOnly ? { verified: true } : {};
 	const result = await db
 		.select('communications.email_from_signatures', {
 			instance_id: instanceId,
 			deleted_at: db.conditions.isNull,
+			...verified,
 			...where
 		})
 		.run(pool)
@@ -275,6 +278,7 @@ export async function testVerificationStatus({
 				.run(pool);
 		}
 		await redis.del(redisString(instanceId, fromSignatureId));
+		await redis.del(redisString(instanceId, 'all'));
 	}
 	return await read({ instanceId, fromSignatureId });
 }
@@ -315,5 +319,54 @@ export async function _unsafeGetAllPendingDomainVerification(): Promise<schema.B
 				err
 			);
 		});
+
 	return parse(v.array(schema.base), result); //Needs to be base because we want the instance_id
+}
+
+export async function del({
+	instanceId,
+	fromSignatureId
+}: {
+	instanceId: number;
+	fromSignatureId: number;
+}): Promise<void> {
+	const signature = await read({
+		instanceId,
+		fromSignatureId
+	});
+
+	const fetchResult = await fetch(`https://api.postmarkapp.com/senders/${signature.external_id}`, {
+		method: 'DELETE',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			'X-Postmark-Account-Token': POSTMARK_ACCOUNT_TOKEN
+		}
+	});
+
+	if (!fetchResult.ok) {
+		const errorBody = await fetchResult.json();
+		if (errorBody?.Message !== 'This signature was not found.') {
+			// If it's not found, we don't care, let's just delete it from the DB
+			log.debug(await fetchResult.json(), 'Delete send signature failed. Response from postmark');
+			throw new BelcodaError(
+				422,
+				'DATA:COMMUNICATIONS:FROM_SIGNATURES:DELETE:01',
+				'Error deleting from signature'
+			);
+		}
+	}
+
+	await db
+		.update(
+			'communications.email_from_signatures',
+			{
+				deleted_at: new Date()
+			},
+			{ instance_id: instanceId, id: fromSignatureId }
+		)
+		.run(pool);
+	await redis.del(redisString(instanceId, fromSignatureId));
+	await redis.del(redisString(instanceId, 'all'));
+	return;
 }
