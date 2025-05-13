@@ -8,7 +8,7 @@ export async function POST(event) {
 			...(await api._unsafeGetAllPendingDomainVerification()),
 			...(await api._unsafeGetAllPendingVerification())
 		];
-
+		log.debug({ arrayToVerifiy }, 'array to verify');
 		for (let index = 0; index < arrayToVerifiy.length; index++) {
 			const fromSignature = arrayToVerifiy[index];
 			try {
