@@ -1,6 +1,5 @@
 <script lang="ts">
 	import * as Select from '$lib/comps/ui/select';
-	import { changeSignature } from '$lib/comps/forms/email/signatures';
 	import { type List as ListSignatures } from '$lib/schema/communications/email/from_signatures';
 	let {
 		fromSignatures,
