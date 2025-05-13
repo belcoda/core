@@ -288,7 +288,7 @@ export async function _unsafeGetAllPendingVerification(): Promise<schema.Base[]>
 		.select('communications.email_from_signatures', {
 			verified: false,
 			deleted_at: db.conditions.isNull,
-			created_at: db.conditions.lt(new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)) // If it hasn't been verified in 30 days, it's probably not going to be verified. Let's stop checking.
+			created_at: db.conditions.gt(new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)) // If it hasn't been verified in 30 days, it's probably not going to be verified. Let's stop checking.
 		})
 		.run(pool)
 		.catch((err) => {
@@ -308,7 +308,7 @@ export async function _unsafeGetAllPendingDomainVerification(): Promise<schema.B
 			return_path_domain_verified: false,
 			return_path_domain: db.conditions.isNotNull,
 			deleted_at: db.conditions.isNull,
-			created_at: db.conditions.lt(new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)) // If it hasn't been verified in 30 days, it's probably not going to be verified. Let's stop checking.
+			created_at: db.conditions.gt(new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)) // If it hasn't been verified in 30 days, it's probably not going to be verified. Let's stop checking.
 		})
 		.run(pool)
 		.catch((err) => {
