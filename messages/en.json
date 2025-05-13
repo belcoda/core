@@ -46,7 +46,7 @@
 	"stock_minor_barbel_zip": "Bad Request",
 	"that_tasty_dove_pop": "Not Found",
 	"full_grand_pelican_assure": "'Forbidden - You do not have permission to perform this action. This error occurs when your authorization credentials are valid, but do not have permissions to access the resource or undertake the requested action. Check your admin account permissions if you are receiving this unexpectedly.',",
-	"due_swift_lizard_list": "Unauthorized - You are not authorized to access this resource. This is usually because you are not logged in.",
+	"due_swift_lizard_list": "Unauthorized: You are not authorized to access this resource. This is usually because you are not logged in.",
 	"pretty_tired_fly_lead": "The requested resource was not found.",
 	"royal_aware_jay_build": "You don't have permission to perform this action.",
 	"dizzy_awful_anteater_sew": "Unable to sign in. Please check the details and try again.",
