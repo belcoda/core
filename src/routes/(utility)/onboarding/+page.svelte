@@ -2,6 +2,8 @@
 	import { PUBLIC_HOST, PUBLIC_GOOGLE_AUTH_CLIENT_ID } from '$env/static/public';
 	// Update the login_uri to include the continue parameter if it exists
 	const loginUri = `${PUBLIC_HOST}/onboarding/auth/google`;
+	import { page } from '$app/state';
+	const error = page.url.searchParams.get('error') === 'true';
 </script>
 
 <svelte:head>
@@ -11,6 +13,19 @@
 
 <div class="grid grid-cols-1 gap-3">
 	<h1 class="text-3xl lg:text-4xl font-extrabold text-gray-800">Welcome to Belcoda</h1>
+	{#if error}
+		<div
+			class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+			role="alert"
+		>
+			<strong class="font-bold">Error:</strong>
+			<span class="block sm:inline"
+				>We weren't able to create an account. The most common reason is that the email address of
+				your Google Account already has an account account on Belcoda. If you're not sure, please
+				try again with a different Google Account you have access to.</span
+			>
+		</div>
+	{/if}
 	<p class=" text-gray-600 text-base lg:text-lg">
 		In order to get started, we need to ask you a few questions about you and your organization.
 	</p>
