@@ -19,7 +19,7 @@ export const actions = {
 		if (response.error) return response.output;
 		const parsed = parse(read, response.output);
 		return redirect(event, {
-			location: `/settings/email/from_signatures/${parsed.id}`,
+			location: `/settings/email/from_signatures`,
 			message: m.white_acidic_koala_pop()
 		});
 	}
