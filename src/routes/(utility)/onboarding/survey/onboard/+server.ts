@@ -5,7 +5,12 @@ import { validationSchema } from '../form.svelte.js';
 import { parse } from '$lib/schema/valibot';
 import { type InstallOptions } from '$lib/server/utils/install/index.js';
 import * as jose from 'jose';
-import { JWT_SIGNING_SECRET, JWT_NAME, COOKIE_SESSION_NAME } from '$env/static/private';
+import {
+	JWT_SIGNING_SECRET,
+	JWT_NAME,
+	COOKIE_SESSION_NAME,
+	ONBOARDING_WEBHOOK_URL
+} from '$env/static/private';
 import { PUBLIC_HOST } from '$env/static/public';
 import type { RequestEvent } from './$types.js';
 import install from '$lib/server/utils/install/index.js';
@@ -58,6 +63,15 @@ export async function POST(event) {
 		httpOnly: true,
 		secure: dev ? false : true,
 		sameSite: 'strict'
+	});
+
+	// Send to Make
+	await fetch(`${ONBOARDING_WEBHOOK_URL}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(parsedBody)
 	});
 
 	log.debug('authenticated.. now redirecting to the dashboard...');
