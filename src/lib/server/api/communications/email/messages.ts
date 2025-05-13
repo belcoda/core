@@ -54,7 +54,11 @@ export async function create({
 		...parsed,
 		template_name:
 			parsed.template_name || instance.settings.communications.email.default_template_name,
-		from: parsed.from || instance.settings.communications.email.default_from_name
+		from: parsed.from || instance.settings.communications.email.default_from_name,
+		from_signature_id:
+			parsed.from_signature_id ||
+			instance.settings.communications.email.default_from_signature_id ||
+			null
 	};
 
 	const inserted = await db.insert('communications.email_messages', toInsert).run(pool);
