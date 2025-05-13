@@ -39,3 +39,21 @@ export async function PUT(event) {
 		);
 	}
 }
+
+export async function DELETE(event) {
+	try {
+		const deleted = await api.del({
+			instanceId: event.locals.instance.id,
+			fromSignatureId: Number(event.params.from_signature_id)
+		});
+		return json(deleted);
+	} catch (err) {
+		log.error(err);
+		return error(
+			500,
+			'API:/api/v1/communications/emails/from_signatures/[from_signature_id]:DELETE',
+			m.spry_ago_baboon_cure(),
+			err
+		);
+	}
+}
