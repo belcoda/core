@@ -6,7 +6,6 @@ export async function GET(event) {
 	try {
 		const read = await api.list({
 			instanceId: event.locals.instance.id,
-			t: event.locals.t,
 			url: event.url
 		});
 		return json(read);

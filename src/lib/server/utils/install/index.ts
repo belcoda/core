@@ -92,7 +92,7 @@ export default async function install(
 	//test data
 	if (options.options.testData) {
 		log.debug(`installing test data`);
-		await createTestData({ instance: updatedInstance, admin, t, queue });
+		await createTestData({ instance: updatedInstance, admin, queue });
 	}
 	log.debug('updating instance to set installed to true');
 	await _updateInstanceSetInstalled({

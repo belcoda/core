@@ -54,8 +54,7 @@ export async function POST(event) {
 
 		const messageResponse = await readMessage({
 			instanceId: event.locals.instance.id,
-			messageId: eventResponse.followup_email.id,
-			t: event.locals.t
+			messageId: eventResponse.followup_email.id
 		});
 
 		const sendToQueue: EmailTemplateMessage = {

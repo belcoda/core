@@ -1,148 +1,92 @@
-import { json, error, BelcodaError, pino } from '$lib/server';
-import { parsePhoneNumber } from 'awesome-phonenumber';
+import { json, pino } from '$lib/server';
 import { randomUUID } from 'crypto';
-import {
-	successfulYCloudResponse,
-	sendMessage,
-	type MessageWithBase,
-	type Message
-} from '$lib/schema/communications/whatsapp/elements/message';
-import { read as readMessage } from '$lib/server/api/communications/whatsapp/messages';
+
 import { parse } from '$lib/schema/valibot';
+import { sendMessage } from '$lib/schema/communications/whatsapp/elements/message';
+
+import { read as readMessage } from '$lib/server/api/communications/whatsapp/messages';
 import { _readSecretsUnsafe } from '$lib/server/api/core/instances';
-import { _updateWhatsappId, read } from '$lib/server/api/people/people';
-import * as m from '$lib/paraglide/messages';
-import type { AfterSend } from '$lib/schema/communications/whatsapp/worker/sending.js';
+import { _updateWhatsappId, read as readPerson } from '$lib/server/api/people/people';
+import { create as createSentMessage } from '$lib/server/api/communications/whatsapp/sent_messages';
+import { _getThreadByStartingMessageId } from '$lib/server/api/communications/whatsapp/threads';
+
+import * as actions from './actions';
+
+import { PUBLIC_DEFAULT_WHATSAPP_PHONE_NUMBER } from '$env/static/public';
+
 const log = pino(import.meta.url);
+
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
+		const parsedMessage = parse(sendMessage, body);
 
-		// Handle both formats: one with message_id and one with direct message object
-		let messageId: string;
-		let personId: number;
-		let fromAdminId: number;
-		let messageObj: { message: Message };
+		const phoneNumber =
+			event.locals.instance.settings.communications.whatsapp.phone_number ||
+			PUBLIC_DEFAULT_WHATSAPP_PHONE_NUMBER;
 
-		// Check if we have a direct message object or a message_id
-		if (body.message) {
-			personId = body.person_id;
-			fromAdminId = event.locals.admin.id;
-			messageId = '-1';
-			messageObj = { message: body.message };
-		} else {
-			// For messages that are already in the database
-			try {
-				const parsedMessage = parse(sendMessage, body);
-				personId = parsedMessage.person_id;
-				messageId = parsedMessage.message_id;
-				fromAdminId = parsedMessage.from_admin_id;
-
-				messageObj = await readMessage({
-					instanceId: event.locals.instance.id,
-					messageId: messageId
-				});
-			} catch (err) {
-				throw new BelcodaError(
-					400,
-					'DATA:/whatsapp/send_message/+server.ts:02',
-					event.locals.t.errors.generic(),
-					err
-				);
-			}
-		}
-
-		const { WHATSAPP_ACCESS_KEY } = await _readSecretsUnsafe({
-			instanceId: event.locals.instance.id
-		});
-		const PHONE_NUMBER = event.locals.instance.settings.communications.whatsapp.phone_number;
-		const person = await read({
+		const person = await readPerson({
 			instance_id: event.locals.instance.id,
-			person_id: personId
+			person_id: parsedMessage.person_id
 		});
-		await readMessage({
+
+		const message = await readMessage({
 			instanceId: event.locals.instance.id,
-			messageId: messageId
+			messageId: parsedMessage.message_id
 		});
 
-		if (!person.phone_number?.phone_number) {
-			throw new BelcodaError(
-				400,
-				'DATA:/whatsapp/send_message/+server.ts:01',
-				m.teary_dizzy_earthworm_urge()
-			);
-		}
-		const parsedPhoneNumberTo = parsePhoneNumber(person.phone_number.phone_number, {
-			regionCode: person.phone_number.country
-		});
-		if (!parsedPhoneNumberTo.valid) {
-			throw new BelcodaError(
-				400,
-				'DATA:/whatsapp/send_message/+server.ts:02',
-				m.teary_dizzy_earthworm_urge()
-			);
-		}
-
-		if (!PHONE_NUMBER) {
-			throw new BelcodaError(
-				400,
-				'DATA:/whatsapp/send_message/+server.ts:03',
-				m.teary_dizzy_earthworm_urge()
-			);
-		}
 		const sentMessageId = randomUUID();
 
-		const messageBody: MessageWithBase = {
-			to: parsedPhoneNumberTo.number.e164.replace('+', ''), //whatsapp only accepts without the +
-			from: PHONE_NUMBER, //we don't need to do any parsing of the instance phone number. It should be set correctly in the settings.
-			externalId: sentMessageId,
-			messaging_product: 'whatsapp',
-			recipient_type: 'individual',
-			...messageObj.message
-		};
-
-		//using the ycloud api
-
-		const response = await fetch(`https://api.ycloud.com/v2/whatsapp/messages`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				accept: 'application/json',
-				'X-API-Key': WHATSAPP_ACCESS_KEY
-			},
-			body: JSON.stringify({
-				...messageBody
-			})
+		const response = await actions.sendMessageToYCloud({
+			person,
+			message,
+			phoneNumber,
+			instanceId: event.locals.instance.id,
+			sentMessageId
 		});
-		log.debug(messageBody, 'the messge we send to the api');
 
-		if (response.ok) {
-			const responseBody = await response.json();
-			log.debug(responseBody);
-			const parsed = parse(successfulYCloudResponse, responseBody);
+		//updates the whatsapp ID of the user, confirming they have a phone number that is connected to WhatsApp.
+		await _updateWhatsappId({
+			instanceId: event.locals.instance.id,
+			personId: parsedMessage.person_id,
+			whatsappId: response.to
+		});
 
-			const afterSendBody: AfterSend = {
-				message_id: messageId,
-				sent_by_id: fromAdminId,
-				person_id: personId,
-				message: messageObj.message,
-				uniqueId: sentMessageId,
-				whatsapp_response: parsed
-			};
-			await event.locals.queue(
-				'/whatsapp/after_sent_ycloud',
-				event.locals.instance.id,
-				afterSendBody,
-				event.locals.admin.id
-			);
-		} else {
-			log.error('Whatsapp responded with an error');
-			log.error(await response.json());
-			log.error(response.status);
-			log.error('End whatsapp error');
-		}
-		return json({ success: true });
+		//TODO: Handle situations where message.message_status is not 'accepted', but rather sent for quality evaulation. The sent message should make that very clear
+		const sentMessageResponse = await createSentMessage({
+			instanceId: event.locals.instance.id,
+			body: {
+				id: sentMessageId,
+				person_id: parsedMessage.person_id,
+				message_id: parsedMessage.message_id,
+				message: message.message,
+				wamid: response.wamid || 'NO_WAMID_PROVIDED'
+			},
+			t: event.locals.t
+		});
+
+		//If the message has a "next message" set, that means after sending this message, we need to send the following one int he chain
+		await actions.sendNextMessageIfExists({
+			adminId: parsedMessage.from_admin_id,
+			instanceId: event.locals.instance.id,
+			t: event.locals.t,
+			message: message,
+			personId: parsedMessage.person_id,
+			queue: event.locals.queue
+		});
+
+		// create interaction
+		await actions.recordInteraction({
+			message,
+			instanceId: event.locals.instance.id,
+			t: event.locals.t,
+			adminId: parsedMessage.from_admin_id,
+			personId: parsedMessage.person_id,
+			sentMessageId: sentMessageResponse.id
+		});
 	} catch (err) {
-		return error(500, 'WORKER:/whatsapp/send_message/+server.ts:05', m.spry_ago_baboon_cure(), err);
+		log.error(err, 'Error sending WhatsApp message');
+	} finally {
+		return json({ success: true });
 	}
 }
