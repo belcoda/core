@@ -96,8 +96,8 @@
 				{#key page.url.pathname}<Sidebar />{/key}
 			</div>
 			<div class="col-span-12 lg:col-span-9 xl:col-span-10 lg:mb-0">
-				{#if !page.data.instance.settings.communications.email.default_from_signature_id}<MissingDefaultFromSignature
-					/>{/if}
+				<!-- {#if !page.data.instance.settings.communications.email.default_from_signature_id}<MissingDefaultFromSignature
+					/>{/if} -->
 				{#key page.url.pathname}<Breadcrumb />{/key}
 				{@render children()}
 			</div>
