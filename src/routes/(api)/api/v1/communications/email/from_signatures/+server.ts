@@ -4,11 +4,21 @@ import * as api from '$lib/server/api/communications/email/from_signatures';
 import * as m from '$lib/paraglide/messages';
 export async function GET(event) {
 	try {
-		const read = await api.list({
-			instanceId: event.locals.instance.id,
-			url: event.url
-		});
-		return json(read);
+		const list = event.url.searchParams.get('list');
+		if (list === 'verified') {
+			const verified = await api.list({
+				verifiedOnly: true,
+				instanceId: event.locals.instance.id,
+				url: event.url
+			});
+			return json(verified);
+		} else {
+			const read = await api.list({
+				instanceId: event.locals.instance.id,
+				url: event.url
+			});
+			return json(read);
+		}
 	} catch (err) {
 		log.error(err);
 		return error(
