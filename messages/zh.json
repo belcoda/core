@@ -636,5 +636,7 @@
 	"happy_inclusive_hyena_cuddle": "删除记录时出错，请重试",
 	"elegant_whole_mayfly_zap": "管理员已成功删除",
 	"wide_major_pig_swim": "删除",
-	"moving_acidic_crow_imagine": "您确定要删除此记录吗？此操作无法撤消？"
+	"moving_acidic_crow_imagine": "您确定要删除此记录吗？此操作无法撤消？",
+	"spare_good_marmot_laugh": "您没有设置默认发件人地址。所有电子邮件（包括活动提醒）将<inlang-LineFeed>从默认地址发送（ {emailAddress} ）。您可以在<a href=\"/settings/email/from_signatures\" class=\"text-blue-500 underline\">管理面板</a>中配置电子邮件设置。",
+	"yummy_muddy_capybara_nail": "您的电子邮件配置有问题！"
 }
