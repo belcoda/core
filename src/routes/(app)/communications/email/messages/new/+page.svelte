@@ -9,6 +9,7 @@
 <PageHeader title={m.ideal_fuzzy_grebe_cut()} />
 <EditMessageForm
 	mode="create"
+	fromSignatures={data.fromSignatures.items}
 	formObject={data.form}
 	actionUrl={`/communications/email/messages/new`}
 />
