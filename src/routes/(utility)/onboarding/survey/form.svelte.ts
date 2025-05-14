@@ -13,11 +13,11 @@ import { valibot } from 'sveltekit-superforms/adapters';
 
 export const validationSchema = v.object({
 	ownerName: shortStringNotEmpty,
-	whatsAppNumber: phoneNumber,
+	whatsAppNumber: v.optional(v.nullable(phoneNumber)),
 	country: country,
 	instanceName: shortStringNotEmpty,
 	instanceSlug: slug,
-	instanceLogoUrl: url,
+	instanceLogoUrl: v.optional(v.nullable(url)),
 
 	replyToEmail: email,
 

@@ -26,7 +26,7 @@ export async function POST(event) {
 		ownerEmail: signInDetails.email as string,
 		ownerProfilePictureUrl: signInDetails.profile_picture_url as string | undefined,
 		ownerName: parsedBody.ownerName,
-		logoUrl: parsedBody.instanceLogoUrl,
+		logoUrl: parsedBody.instanceLogoUrl || `${PUBLIC_HOST}/logos/logo.svg`,
 		country: parsedBody.country,
 		language: 'en',
 		homePageUrl: parsedBody.website || undefined,
