@@ -89,6 +89,7 @@ export async function create({
 		point_person_id: point_person_id,
 		preferred_language: parsed.preferred_language || DEFAULT_LANGUAGE,
 		...parsed,
+		dob: (parsed.dob as `${number}-${number}-${number}`) || null,
 		country: parsed.country || DEFAULT_COUNTRY
 	};
 	const inserted = await db.insert('people.people', toInsert).run(pool);
@@ -202,12 +203,16 @@ export async function update({
 }) {
 	try {
 		const parsed = parse(schema.update, body);
+		//fix type issue in date format (needs to be YYYY-MM-DD)
+		const toUpdate = {
+			...parsed,
+			...(parsed.dob ? { dob: parsed.dob as `${number}-${number}-${number}` } : {})
+		};
 		const updated = await db
 			.update(
 				'people.people',
-				{
-					...parsed
-				},
+				//@ts-ignore (this is an issue with passing a string where the db expects `${number}-${number}-${number}` for an ISO date. But we have already validated it as an iso date, and tried to typecase it above. Not sure what's going on here)
+				{ ...toUpdate },
 				{ instance_id, id: person_id, deleted_at: db.conditions.isNull }
 			)
 			.run(pool)
@@ -485,6 +490,7 @@ export async function _updateWhatsappId({
 	return true;
 }
 import { parsePhoneNumber } from 'awesome-phonenumber';
+import { date } from 'valibot';
 
 export async function _getPersonByWhatsappId({
 	instanceId,
@@ -543,6 +549,7 @@ export async function _createPersonByWhatsappId({
 				whapi_id: null,
 				whatsapp: true
 			},
+			dob: null,
 			country: DEFAULT_COUNTRY // TODO: Get country from phone number country code
 		},
 		method: 'event_registration',
