@@ -12,7 +12,6 @@ import {
 	url,
 	uuid
 } from '$lib/schema/valibot';
-import { fullName } from '../people/filters/defaults';
 
 export const base = v.object({
 	id: id,
