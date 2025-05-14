@@ -35,6 +35,7 @@
 		WithElementRef<HTMLAnchorAttributes> & {
 			variant?: ButtonVariant;
 			size?: ButtonSize;
+			onclick?: (event: MouseEvent) => void;
 		};
 </script>
 
@@ -49,6 +50,7 @@
 		href = undefined,
 		type = 'button',
 		children,
+		onclick,
 		...restProps
 	}: ButtonProps = $props();
 </script>
@@ -56,20 +58,20 @@
 {#if href}
 	<a
 		bind:this={ref}
-		class={cn(buttonVariants({ variant, size, className }))}
+		class={cn(buttonVariants({ variant, size }), className)}
 		{href}
 		{...restProps}
-		on:click
+		{onclick}
 	>
 		{@render children?.()}
 	</a>
 {:else}
 	<button
 		bind:this={ref}
-		class={cn(buttonVariants({ variant, size, className }))}
+		class={cn(buttonVariants({ variant, size }), className)}
 		{type}
 		{...restProps}
-		on:click
+		{onclick}
 	>
 		{@render children?.()}
 	</button>

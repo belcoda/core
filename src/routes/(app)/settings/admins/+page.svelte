@@ -65,7 +65,7 @@
 				<Button
 					size="sm"
 					variant="destructive"
-					on:click={() => {
+					onclick={() => {
 						if (window.confirm(m.moving_acidic_crow_imagine())) {
 							deleteAdmin(admin.id);
 						}
