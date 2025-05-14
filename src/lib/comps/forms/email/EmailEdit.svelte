@@ -1,6 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { Input, Button, Debug, Error, Grid, HTML, Textarea, Select } from '$lib/comps/ui/forms';
+	import {
+		Input,
+		Button,
+		Debug,
+		Error as ErrorComp,
+		Grid,
+		HTML,
+		Textarea,
+		Select
+	} from '$lib/comps/ui/forms';
 	import * as m from '$lib/paraglide/messages';
 	import {
 		update as updateMessage,
@@ -14,7 +23,6 @@
 
 	const flash = getFlash(page);
 
-	import RefreshCCW from 'lucide-svelte/icons/refresh-ccw';
 	import SelectSignature from '$lib/comps/forms/email/SelectSignature.svelte';
 	import { type List as ListSignatures } from '$lib/schema/communications/email/from_signatures';
 	let {
@@ -96,7 +104,7 @@
 		</Alert.Root>
 	{/if}
 	<form method="POST" action={actionUrl} use:enhance>
-		<Error error={$message} />
+		<ErrorComp error={$message} />
 		<input type="hidden" name="point_person_id" value={page.data.admin.id} />
 		{#if $formData.from_signature_id === null && fromSignatures.length === 0}
 			<div class="mt-4 mb-4 flex items-center gap-2">
