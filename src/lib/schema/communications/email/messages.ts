@@ -31,6 +31,7 @@ export const base = v.object({
 	template_name: emailTemplateName,
 	name: shortString,
 	from: mediumString,
+	from_signature_id: v.nullable(id),
 	reply_to: mediumString,
 	subject: mediumString,
 	preview_text: longString,
@@ -54,6 +55,7 @@ export type List = v.InferOutput<typeof list>;
 export const create = v.object({
 	name: base.entries.name,
 	from: base.entries.from,
+	from_signature_id: v.optional(base.entries.from_signature_id, null),
 	template_name: v.optional(base.entries.template_name, 'main'),
 	reply_to: base.entries.reply_to,
 	subject: base.entries.subject,
@@ -83,7 +85,7 @@ export const emailTemplateMessage = v.object({
 	send_id: v.optional(id),
 	template: emailTemplateName,
 	context: jsonSchemaObject,
-	from: v.optional(shortStringNotEmpty),
+	from_signature_id: v.optional(id),
 	send_details: sendDetail,
 	reply_to: v.optional(v.nullable(email), null),
 	attachments: v.optional(v.array(emailAttachments))

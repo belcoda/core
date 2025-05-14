@@ -1,6 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { Input, Button, Debug, Error, Grid, HTML, Textarea, Select } from '$lib/comps/ui/forms';
+	import {
+		Input,
+		Button,
+		Debug,
+		Error as ErrorComp,
+		Grid,
+		HTML,
+		Textarea,
+		Select
+	} from '$lib/comps/ui/forms';
 	import * as m from '$lib/paraglide/messages';
 	import {
 		update as updateMessage,
@@ -14,17 +23,21 @@
 
 	const flash = getFlash(page);
 
+	import SelectSignature from '$lib/comps/forms/email/SelectSignature.svelte';
+	import { type List as ListSignatures } from '$lib/schema/communications/email/from_signatures';
 	let {
 		mode,
 		actionUrl,
 		messageId,
 		disabled = false,
-		formObject
+		formObject,
+		fromSignatures
 	}: {
 		mode: 'create' | 'update';
 		actionUrl: string;
 		messageId?: number;
 		disabled?: boolean;
+		fromSignatures: ListSignatures['items'];
 		formObject: SuperValidated<UpdateMessage | CreateMessage>;
 	} = $props();
 
@@ -34,6 +47,7 @@
 	});
 	const { form: formData, enhance, message } = form;
 
+	let showSelector = $state(false);
 	import * as Alert from '$lib/comps/ui/alert/index.js';
 	import TriangleAlert from 'lucide-svelte/icons/triangle-alert';
 	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
@@ -41,6 +55,11 @@
 	import { buttonVariants } from '$lib/comps/ui/button/index.js';
 	import Separator from '$lib/comps/ui/separator/separator.svelte';
 	import SendTestEmail from '$lib/comps/forms/email/SendTestEmail.svelte';
+
+	$formData.from_signature_id =
+		$formData.from_signature_id ??
+		page.data.instance.settings.communications.email.default_from_signature_id ??
+		fromSignatures[0]?.id;
 	import { goto } from '$app/navigation';
 
 	async function deleteMessage() {
@@ -85,8 +104,23 @@
 		</Alert.Root>
 	{/if}
 	<form method="POST" action={actionUrl} use:enhance>
-		<Error error={$message} />
+		<ErrorComp error={$message} />
 		<input type="hidden" name="point_person_id" value={page.data.admin.id} />
+		{#if $formData.from_signature_id === null && fromSignatures.length === 0}
+			<div class="mt-4 mb-4 flex items-center gap-2">
+				<div class="text-sm font-medium">From:</div>
+				<div class="font-light font-mono text-sm text-muted-foreground">
+					{page.data.instance.name}
+					{`<${page.data.instance.slug}@belcoda.com>`}
+				</div>
+			</div>
+		{:else}
+			<div class="mt-4 mb-4 flex items-center gap-2">
+				<div class="text-sm font-medium">From:</div>
+				<SelectSignature {fromSignatures} bind:fromSignatureId={$formData.from_signature_id} />
+			</div>
+		{/if}
+
 		<Input
 			{disabled}
 			{form}
@@ -95,31 +129,33 @@
 			description={'A descriptive name for the email message. This will not be shown to the recipient.'}
 			bind:value={$formData.name as string}
 		/>
-		<Input
-			{form}
-			{disabled}
-			name="subject"
-			label={m.direct_mean_jurgen_buzz()}
-			description={m.patchy_sleek_lemur_enjoy()}
-			bind:value={$formData.subject as string}
-		/>
-		<HTML
-			{form}
-			{disabled}
-			name={'html'}
-			label={null}
-			description={null}
-			bind:value={$formData.html as string}
-		/>
-		{#if messageId && !disabled}{@render sendTestEmail(messageId)}{/if}
-		{@render advancedSettings()}
-		<div class="flex items-center justify-end gap-2">
-			<Button {disabled} type="submit">{m.empty_warm_squirrel_chop()}</Button>
-			<Button type="button" variant="destructive" onclick={deleteMessage}
-				>{m.wide_major_pig_swim()}</Button
-			>
+		<div>
+			<Input
+				{form}
+				{disabled}
+				name="subject"
+				label={m.direct_mean_jurgen_buzz()}
+				description={m.patchy_sleek_lemur_enjoy()}
+				bind:value={$formData.subject as string}
+			/>
+			<HTML
+				{form}
+				{disabled}
+				name={'html'}
+				label={null}
+				description={null}
+				bind:value={$formData.html as string}
+			/>
+			{#if messageId && !disabled}{@render sendTestEmail(messageId)}{/if}
+			{@render advancedSettings()}
+			<div class="flex items-center justify-end gap-2">
+				<Button {disabled} type="submit">{m.empty_warm_squirrel_chop()}</Button>
+				<Button type="button" variant="destructive" onclick={deleteMessage}
+					>{m.wide_major_pig_swim()}</Button
+				>
+			</div>
+			<Debug data={$formData} />
 		</div>
-		<Debug data={$formData} />
 	</form>
 </Grid>
 

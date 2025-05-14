@@ -14,6 +14,7 @@
 <div class="flex gap-4 lg:gap-8">
 	<div class="w-full lg:w-2/3 pt-6 lg:pt-8">
 		<EditMessageForm
+			fromSignatures={data.fromSignatures.items}
 			mode="update"
 			{disabled}
 			messageId={data.message.id}

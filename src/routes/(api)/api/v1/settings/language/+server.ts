@@ -5,8 +5,7 @@ export async function PUT(event) {
 	try {
 		const instanceId = event.locals.instance.id;
 		const body = await event.request.json();
-		const t = event.locals.t;
-		const updated = await update({ instanceId, body, t });
+		const updated = await update({ instanceId, body });
 		event.locals.instance = updated;
 		return json(updated);
 	} catch (e) {

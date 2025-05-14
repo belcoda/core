@@ -35,6 +35,7 @@ export const settings = v.object({
 	communications: v.object({
 		email: v.object({
 			default_from_name: shortString,
+			default_from_signature_id: v.optional(id),
 			default_template_name: v.optional(v.picklist(emailTemplates), 'main')
 		}),
 		whatsapp: v.object({

@@ -635,5 +635,7 @@
 	"just_patient_finch_mix": "ご登録はキャンセルされました。ご来場はお待ちいただけません。",
 	"tidy_cuddly_pelican_evoke": "一致する国が見つかりません。",
 	"east_north_osprey_hurl": "あなたはすでに請願書{activityTitle} に署名しています",
-	"light_next_wasp_belong": "有効な ISO 639-1 言語コードである必要があります (例: 英語の場合は「en」)"
+	"light_next_wasp_belong": "有効な ISO 639-1 言語コードである必要があります (例: 英語の場合は「en」)",
+	"spare_good_marmot_laugh": "デフォルトの送信元アドレスが設定されていません。すべてのメール（イベントリマインダーを含む）は<inlang-LineFeed>デフォルトのアドレス（ {emailAddress} ）から送信されます。メール設定は<a href=\"/settings/email/from_signatures\" class=\"text-blue-500 underline\">管理パネル</a>で行うことができます。",
+	"yummy_muddy_capybara_nail": "メールの設定に問題があります。"
 }

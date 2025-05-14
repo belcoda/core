@@ -90,8 +90,7 @@ export default async function install(
 	log.debug(newSettings);
 	const updatedInstance = await updateInstance({
 		instanceId: instance.id,
-		body: { settings: newSettings },
-		t
+		body: { settings: newSettings }
 	});
 	log.debug(`instance ${instance.id} updated`);
 
