@@ -20,6 +20,11 @@ export type HandlerResponse =
 
 type Resolve = (event: RequestEvent, opts?: ResolveOptions | undefined) => Promise<Response>;
 export default async function (event: RequestEvent, resolve: Resolve): Promise<HandlerResponse> {
+	if (event.url.pathname.startsWith('/onboarding')) {
+		log.info(`🌎 ${event.request.method} ${event.url.href}`);
+		return await { continue: false, response: await resolve(event) };
+	}
+
 	if (event.url.pathname.startsWith('/webhooks/email')) {
 		log.info(`🌎 ${event.request.method} ${event.url.href}`);
 		return await emailHandler(event, resolve);

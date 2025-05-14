@@ -128,10 +128,8 @@ export async function update({
 }
 
 export async function signIn({
-	t,
 	body
 }: {
-	t: App.Localization;
 	body: schema.SignIn;
 }): Promise<{ admin: schema.Read; session: string }> {
 	const parsed = v.parse(schema.signIn, body);
@@ -329,4 +327,14 @@ export async function del({
 	// Clear admins list from cache.
 	await redis.del(redisString(instance_id, admin_id));
 	await redis.del(redisString(instance_id, 'all'));
+}
+
+export async function _unsafeGetAdminByEmail({ email }: { email: string }): Promise<schema.Read> {
+	const response = await db
+		.selectExactlyOne('admins', { email, deleted_at: db.conditions.isNull })
+		.run(pool)
+		.catch((err: Error) => {
+			throw new BelcodaError(404, 'DATA:CORE:ADMINS:READ:01', m.pretty_tired_fly_lead(), err);
+		});
+	return v.parse(schema.read, response);
 }
