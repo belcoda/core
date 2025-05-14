@@ -34,7 +34,15 @@
 	});
 	export const snapshot = { capture, restore }; // This will make sure that the form is saved and restored when using browser back/forward buttons
 	import FileUpload from '$lib/comps/ui/form/controls/file_upload/simple_file_upload.svelte';
+	import { onMount } from 'svelte';
 	let loading = $state(false);
+
+	onMount(async () => {
+		const result = await fetch(`http://ip-api.com/json/`).then((res) => res.json());
+		if (result.countryCode?.length == 2) {
+			$data.country = result.countryCode.toLowerCase();
+		}
+	});
 </script>
 
 {#if loading}
