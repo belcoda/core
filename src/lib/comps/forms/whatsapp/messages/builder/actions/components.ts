@@ -260,3 +260,32 @@ export function hasUnfilledPlaceholders(
 
 	return false;
 }
+import { type List } from '$lib/schema/communications/whatsapp/messages';
+
+export function hasUnattachedButtons(
+	template: any | null,
+	components: any[],
+	templateMessage: { type: string },
+	messages: List['items']
+) {
+	if (!template || templateMessage.type !== 'template') return false;
+	for (const message of messages) {
+		if (message.message.type === 'interactive' && message.message.interactive.type === 'button') {
+			const numButtons = message.message.interactive.action.buttons.length;
+			const numActions = Object.keys(message.actions).length;
+			if (numButtons > numActions) {
+				return true;
+			}
+		}
+		// now do the same for the template message
+		if (message.message.type === 'template' && message.message.template.components) {
+			const numButtons = message.message.template.components.filter(
+				(component) => component.type === 'button' && component.sub_type === 'quick_reply'
+			).length;
+			const numActions = Object.keys(message.actions).length;
+			if (numButtons > numActions) {
+				return true;
+			}
+		}
+	}
+}
