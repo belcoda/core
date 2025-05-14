@@ -27,12 +27,12 @@ export async function POST(event) {
 			secure: dev ? false : true,
 			sameSite: 'strict'
 		});
-
-		return redirect(302, '/onboarding/survey');
 	} catch (error) {
 		console.error('Error during authentication:', error);
 		return redirect(302, '/onboarding?error=true');
 	}
+	// Redirect to the onboarding survey page if no erorr has been thrown
+	return redirect(302, '/onboarding/survey');
 }
 
 async function createJwt(token: string) {
