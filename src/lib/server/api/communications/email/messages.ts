@@ -13,19 +13,21 @@ import * as m from '$lib/paraglide/messages';
 
 export async function exists({
 	instanceId,
-	messageId,
-	t
+	messageId
 }: {
 	instanceId: number;
 	messageId: number;
-	t: App.Localization;
 }): Promise<true> {
 	const cached = await redis.get(redisString(instanceId, messageId));
 	if (cached) {
 		return true;
 	}
 	await db
-		.selectExactlyOne('communications.email_messages', { id: messageId, instance_id: instanceId })
+		.selectExactlyOne('communications.email_messages', {
+			id: messageId,
+			instance_id: instanceId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(
@@ -77,13 +79,11 @@ export async function update({
 	instanceId,
 	messageId,
 	body,
-	t,
 	queue
 }: {
 	instanceId: number;
 	messageId: number;
 	body: schema.Update;
-	t: App.Localization;
 	queue: App.Queue;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
@@ -100,11 +100,15 @@ export async function update({
 	Given that this is a very low priority feature and custom preview text is very unlikely to be a priority for any of our users in the foreseeable future, 
 	I'm happy leaving it as is and coming back to it later.
 	*/
-	const messageBeforeUpdate = await read({ instanceId, messageId, t });
+	const messageBeforeUpdate = await read({ instanceId, messageId });
 	const autogeneratePreview = messageBeforeUpdate.preview_text === parsed.preview_text;
 
 	const updated = await db
-		.update('communications.email_messages', toUpdate, { id: messageId, instance_id: instanceId })
+		.update('communications.email_messages', toUpdate, {
+			id: messageId,
+			instance_id: instanceId,
+			deleted_at: db.conditions.isNull
+		})
 		.run(pool);
 	if (updated.length !== 1) {
 		throw new BelcodaError(
@@ -128,18 +132,22 @@ export async function update({
 export async function read({
 	instanceId,
 	messageId,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	messageId: number;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.Read> {
 	const cached = await redis.get(redisString(instanceId, messageId));
-	if (cached) {
+	if (!includeDeleted && cached) {
 		return parse(schema.read, cached);
 	}
 	const read = await db
-		.selectExactlyOne('communications.email_messages', { id: messageId, instance_id: instanceId })
+		.selectExactlyOne('communications.email_messages', {
+			id: messageId,
+			instance_id: instanceId,
+			...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(
@@ -157,31 +165,53 @@ export async function read({
 export async function list({
 	instanceId,
 	url,
-	t
+	includeDeleted = false
 }: {
 	instanceId: number;
 	url: URL;
-	t: App.Localization;
+	includeDeleted?: boolean;
 }): Promise<schema.List> {
 	const query = filterQuery(url);
 	if (query.filtered !== true) {
 		const cached = await redis.get(redisString(instanceId, 'all'));
-		if (cached) {
+		if (!includeDeleted && cached) {
 			return parse(schema.list, cached);
 		}
 	}
+	const where = { ...query.where, ...(includeDeleted ? {} : { deleted_at: db.conditions.isNull }) };
 	const list = await db
-		.select(
-			'communications.email_messages',
-			{ instance_id: instanceId, ...query.where },
-			query.options
-		)
+		.select('communications.email_messages', { instance_id: instanceId, ...where }, query.options)
 		.run(pool);
 
 	const count = await db
-		.count('communications.email_messages', { instance_id: instanceId, ...query.where })
+		.count('communications.email_messages', { instance_id: instanceId, ...where })
 		.run(pool);
 	const parsedList = parse(schema.list, { items: list, count: count });
 	await redis.set(redisString(instanceId, 'all'), parsedList);
 	return parsedList;
+}
+
+export async function del({
+	instanceId,
+	messageId
+}: {
+	instanceId: number;
+	messageId: number;
+}): Promise<void> {
+	if (!(await exists({ instanceId, messageId }))) {
+		throw new BelcodaError(
+			404,
+			'DATA:COMMUNICATIONS:EMAIL:MESSAGES:DEL:01',
+			m.pretty_tired_fly_lead()
+		);
+	}
+	await db
+		.update(
+			'communications.email_messages',
+			{ deleted_at: new Date() },
+			{ id: messageId, instance_id: instanceId }
+		)
+		.run(pool);
+	await redis.del(redisString(instanceId, messageId));
+	await redis.del(redisString(instanceId, 'all'));
 }

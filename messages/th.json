@@ -574,7 +574,6 @@
 	"jumpy_alive_puffin_vent": "คุณได้ลงทะเบียนเข้าร่วมกิจกรรมแล้ว {activityTitle}",
 	"full_tangy_cow_pull": "คุณได้ลงนามในคำร้อง {activityTitle}",
 	"dizzy_mellow_otter_clap": "คุณได้ยกเลิกการลงนามในคำร้อง {activityTitle}",
-	"east_north_osprey_hurl": "คุณได้ลงนามในคำร้องแล้ว {activityTitle}",
 	"keen_agent_shell_mop": "ไม่สามารถลบข้อมูลได้",
 	"dizzy_actual_elephant_evoke": "ลบข้อมูลสำเร็จแล้ว",
 	"whole_still_macaw_bless": "ยินดีต้อนรับสู่ {instanceName}",
@@ -638,5 +637,6 @@
 	"tidy_cuddly_pelican_evoke": "ไม่พบประเทศที่ตรงกัน",
 	"light_next_wasp_belong": "ต้องเป็นรหัสภาษา ISO 639-1 ที่ถูกต้อง (เช่น: 'en' สำหรับภาษาอังกฤษ)",
 	"fun_raw_giraffe_treasure": "เลือกเขตเวลา",
-	"close_stock_lion_bubble": "เขตเวลา"
+	"close_stock_lion_bubble": "เขตเวลา",
+	"east_north_osprey_hurl": "คุณได้ลงนามในคำร้องแล้ว {activityTitle}"
 }

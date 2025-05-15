@@ -28,8 +28,7 @@ export async function POST(event) {
 
 		const message = await readMessage({
 			instanceId: event.locals.instance.id,
-			messageId: parsed.message_id,
-			t: event.locals.t
+			messageId: parsed.message_id
 		});
 
 		if (!send.list_id) {

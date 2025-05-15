@@ -573,7 +573,6 @@
 	"jumpy_alive_puffin_vent": "Tayari umejiandikisha kwa tukio {activityTitle}",
 	"full_tangy_cow_pull": "Umetia sahihi ombi {activityTitle}",
 	"dizzy_mellow_otter_clap": "Umeghairi saini yako ya ombi {activityTitle}",
-	"east_north_osprey_hurl": "Tayari umetia sahihi ombi {activityTitle}",
 	"keen_agent_shell_mop": "Imeshindwa kufuta rekodi",
 	"dizzy_actual_elephant_evoke": "Rekodi imefutwa",
 	"whole_still_macaw_bless": "Karibu kwenye {instanceName}",
@@ -635,7 +634,8 @@
 	"warm_wild_grebe_gasp": "Tazama ukurasa wa tukio",
 	"just_patient_finch_mix": "Usajili wako umeghairiwa. Hatutakutarajia.",
 	"tidy_cuddly_pelican_evoke": "Hakuna nchi inayolingana iliyopatikana.",
-	"light_next_wasp_belong": "Lazima iwe msimbo halali wa lugha wa ISO 639-1 (km: 'en' kwa Kiingereza)",
 	"fun_raw_giraffe_treasure": "Chagua saa za eneo",
-	"close_stock_lion_bubble": "Saa za eneo"
+	"close_stock_lion_bubble": "Saa za eneo",
+	"east_north_osprey_hurl": "Tayari umetia sahihi ombi {activityTitle}",
+	"light_next_wasp_belong": "Lazima iwe msimbo halali wa lugha wa ISO 639-1 (km: 'en' kwa Kiingereza)"
 }

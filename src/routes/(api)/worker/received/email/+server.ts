@@ -25,8 +25,7 @@ export async function POST(event: RequestEvent) {
 				subject: parsed.Subject || '[NO_SUBJECT]',
 				message_id: null,
 				message: parsed.StrippedTextReply || parsed.TextBody || parsed.HtmlBody || '[NO_BODY]'
-			},
-			t: event.locals.t
+			}
 		});
 		const person = await readPerson({
 			instance_id: event.locals.instance.id,

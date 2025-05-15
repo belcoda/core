@@ -172,7 +172,8 @@ export async function read({
 					point_person: db.selectExactlyOne('admins', { id: db.parent('point_person_id') }),
 
 					followup_email: db.selectExactlyOne('communications.email_messages', {
-						id: db.parent('followup_email')
+						id: db.parent('followup_email'),
+						...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
 					}),
 
 					registered: db.count('events.attendees', {
@@ -226,7 +227,8 @@ export async function readBySlug({
 					}),
 
 					followup_email: db.selectExactlyOne('communications.email_messages', {
-						id: db.parent('followup_email')
+						id: db.parent('followup_email'),
+						deleted_at: db.conditions.isNull
 					}),
 
 					registered: db.count('events.attendees', {

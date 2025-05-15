@@ -77,9 +77,13 @@ export const list = v.object({
 
 export type List = v.InferOutput<typeof list>;
 
-export const create = v.pick(base, ['email', 'full_name']);
+export const create = v.object({
+	email: base.entries.email,
+	full_name: base.entries.full_name,
+	profile_picture_url: v.optional(base.entries.profile_picture_url, null)
+});
 
-export type Create = v.InferOutput<typeof create>;
+export type Create = v.InferInput<typeof create>;
 
 export const readApiKey = v.pick(base, ['api_key']);
 

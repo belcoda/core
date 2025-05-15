@@ -573,7 +573,6 @@
 	"jumpy_alive_puffin_vent": "Vous êtes déjà inscrit à l'événement {activityTitle}",
 	"full_tangy_cow_pull": "Vous avez signé la pétition {activityTitle}",
 	"dizzy_mellow_otter_clap": "Vous avez annulé votre signature pour la pétition {activityTitle}",
-	"east_north_osprey_hurl": "Vous avez déjà signé la pétition {activityTitle}",
 	"keen_agent_shell_mop": "Échec de la suppression de l'enregistrement",
 	"dizzy_actual_elephant_evoke": "Enregistrement supprimé avec succès",
 	"whole_still_macaw_bless": "Bienvenue dans {instanceName}",
@@ -637,5 +636,6 @@
 	"tidy_cuddly_pelican_evoke": "Aucun pays correspondant trouvé.",
 	"light_next_wasp_belong": "Doit être un code de langue ISO 639-1 valide (par exemple : « en » pour l'anglais)",
 	"fun_raw_giraffe_treasure": "Sélectionnez un fuseau horaire",
-	"close_stock_lion_bubble": "Fuseau horaire"
+	"close_stock_lion_bubble": "Fuseau horaire",
+	"east_north_osprey_hurl": "Vous avez déjà signé la pétition {activityTitle}"
 }

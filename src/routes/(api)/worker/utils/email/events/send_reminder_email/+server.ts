@@ -2,7 +2,6 @@ import { json, error, pino } from '$lib/server';
 import { triggerEventMessage, type SendEventEmailMessage } from '$lib/schema/utils/email';
 import { read as readPerson } from '$lib/server/api/people/people';
 import { read as readEvent } from '$lib/server/api/events/events';
-import { read as readMessage } from '$lib/server/api/communications/email/messages';
 import { queue as queueInteraction } from '$lib/server/api/people/interactions';
 import * as m from '$lib/paraglide/messages';
 const log = pino(import.meta.url);

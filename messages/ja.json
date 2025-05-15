@@ -573,7 +573,6 @@
 	"jumpy_alive_puffin_vent": "イベント{activityTitle} にすでに登録されています",
 	"full_tangy_cow_pull": "あなたは請願書{activityTitle} に署名しました",
 	"dizzy_mellow_otter_clap": "請願書{activityTitle} への署名を取り消しました",
-	"east_north_osprey_hurl": "あなたはすでに請願書{activityTitle} に署名しています",
 	"keen_agent_shell_mop": "レコードの削除に失敗しました",
 	"dizzy_actual_elephant_evoke": "レコードが正常に削除されました",
 	"whole_still_macaw_bless": "{instanceName}へようこそ",
@@ -635,7 +634,8 @@
 	"warm_wild_grebe_gasp": "イベントページを見る",
 	"just_patient_finch_mix": "ご登録はキャンセルされました。ご来場はお待ちいただけません。",
 	"tidy_cuddly_pelican_evoke": "一致する国が見つかりません。",
-	"light_next_wasp_belong": "有効な ISO 639-1 言語コードである必要があります (例: 英語の場合は「en」)",
 	"fun_raw_giraffe_treasure": "タイムゾーンを選択",
-	"close_stock_lion_bubble": "タイムゾーン"
+	"close_stock_lion_bubble": "タイムゾーン",
+	"east_north_osprey_hurl": "あなたはすでに請願書{activityTitle} に署名しています",
+	"light_next_wasp_belong": "有効な ISO 639-1 言語コードである必要があります (例: 英語の場合は「en」)"
 }

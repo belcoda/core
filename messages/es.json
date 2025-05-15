@@ -574,7 +574,6 @@
 	"jumpy_alive_puffin_vent": "Ya te has registrado para el evento {activityTitle}",
 	"full_tangy_cow_pull": "Has firmado la petición {activityTitle}",
 	"dizzy_mellow_otter_clap": "Has cancelado tu firma para la petición {activityTitle}",
-	"east_north_osprey_hurl": "Ya has firmado la petición {activityTitle}",
 	"keen_agent_shell_mop": "No se pudo eliminar el registro",
 	"dizzy_actual_elephant_evoke": "Registro eliminado exitosamente",
 	"whole_still_macaw_bless": "Bienvenido a {instanceName}",
@@ -638,5 +637,6 @@
 	"tidy_cuddly_pelican_evoke": "No se encontró ningún país coincidente.",
 	"light_next_wasp_belong": "Debe ser un código de idioma ISO 639-1 válido (por ejemplo: 'en' para inglés)",
 	"fun_raw_giraffe_treasure": "Seleccione una zona horaria",
-	"close_stock_lion_bubble": "Zona horaria"
+	"close_stock_lion_bubble": "Zona horaria",
+	"east_north_osprey_hurl": "Ya has firmado la petición {activityTitle}"
 }
