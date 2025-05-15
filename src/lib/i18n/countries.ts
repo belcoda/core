@@ -1,1016 +1,1442 @@
 import { type LanguageCode } from '$lib/i18n/languages';
 
-export const countryList = [
+export type CountryEntry = {
+	code: string;
+	flag: string;
+	timezones: readonly string[];
+	name?: string;
+};
+
+export const countryList: readonly CountryEntry[] = [
 	{
 		code: 'af',
-		flag: '🇦🇫'
+		flag: '🇦🇫',
+		timezones: ['Asia/Kabul']
 	},
 	{
 		code: 'al',
-		flag: '🇦🇱'
+		flag: '🇦🇱',
+		timezones: ['Europe/Tirane']
 	},
 	{
 		code: 'dz',
-		flag: '🇩🇿'
+		flag: '🇩🇿',
+		timezones: ['Africa/Algiers']
 	},
 	{
 		code: 'as',
-		flag: '🇦🇸'
+		flag: '🇦🇸',
+		timezones: ['Pacific/Pago_Pago']
 	},
 	{
 		code: 'ad',
-		flag: '🇦🇩'
+		flag: '🇦🇩',
+		timezones: ['Europe/Andorra']
 	},
 	{
 		code: 'ao',
-		flag: '🇦🇴'
+		flag: '🇦🇴',
+		timezones: ['Africa/Luanda']
 	},
 	{
 		code: 'ai',
-		flag: '🇦🇮'
+		flag: '🇦🇮',
+		timezones: ['America/Anguilla']
 	},
 	{
 		code: 'aq',
-		flag: '🇦🇶'
+		flag: '🇦🇶',
+		timezones: [
+			'Antarctica/McMurdo',
+			'Antarctica/Casey',
+			'Antarctica/Davis',
+			'Antarctica/DumontDUrville',
+			'Antarctica/Mawson',
+			'Antarctica/Palmer',
+			'Antarctica/Rothera',
+			'Antarctica/Syowa',
+			'Antarctica/Troll',
+			'Antarctica/Vostok'
+		]
 	},
 	{
 		code: 'ag',
-		flag: '🇦🇬'
+		flag: '🇦🇬',
+		timezones: ['America/Antigua']
 	},
 	{
 		code: 'ar',
-		flag: '🇦🇷'
+		flag: '🇦🇷',
+		timezones: [
+			'America/Argentina/Buenos_Aires',
+			'America/Argentina/Cordoba',
+			'America/Argentina/Salta',
+			'America/Argentina/Jujuy',
+			'America/Argentina/Tucuman',
+			'America/Argentina/Catamarca',
+			'America/Argentina/La_Rioja',
+			'America/Argentina/San_Juan',
+			'America/Argentina/Mendoza',
+			'America/Argentina/San_Luis',
+			'America/Argentina/Rio_Gallegos',
+			'America/Argentina/Ushuaia'
+		]
 	},
 	{
 		code: 'am',
-		flag: '🇦🇲'
+		flag: '🇦🇲',
+		timezones: ['Asia/Yerevan']
 	},
 	{
 		code: 'aw',
-		flag: '🇦🇼'
+		flag: '🇦🇼',
+		timezones: ['America/Aruba']
 	},
 	{
 		code: 'au',
-		flag: '🇦🇺'
+		flag: '🇦🇺',
+		timezones: [
+			'Australia/Sydney',
+			'Australia/Melbourne',
+			'Australia/Brisbane',
+			'Australia/Adelaide',
+			'Australia/Perth',
+			'Australia/Darwin',
+			'Australia/Hobart',
+			'Australia/Lord_Howe',
+			'Antarctica/Macquarie',
+			'Australia/Broken_Hill',
+			'Australia/Lindeman',
+			'Australia/Eucla'
+		]
 	},
 	{
 		code: 'at',
-		flag: '🇦🇹'
+		flag: '🇦🇹',
+		timezones: ['Europe/Vienna']
 	},
 	{
 		code: 'az',
-		flag: '🇦🇿'
+		flag: '🇦🇿',
+		timezones: ['Asia/Baku']
 	},
 	{
 		code: 'bs',
-		flag: '🇧🇸'
+		flag: '🇧🇸',
+		timezones: ['America/Nassau']
 	},
 	{
 		code: 'bh',
-		flag: '🇧🇭'
+		flag: '🇧🇭',
+		timezones: ['Asia/Bahrain']
 	},
 	{
 		code: 'bd',
-		flag: '🇧🇩'
+		flag: '🇧🇩',
+		timezones: ['Asia/Dhaka']
 	},
 	{
 		code: 'bb',
-		flag: '🇧🇧'
+		flag: '🇧🇧',
+		timezones: ['America/Barbados']
 	},
 	{
 		code: 'by',
-		flag: '🇧🇾'
+		flag: '🇧🇾',
+		timezones: ['Europe/Minsk']
 	},
 	{
 		code: 'be',
-		flag: '🇧🇪'
+		flag: '🇧🇪',
+		timezones: ['Europe/Brussels']
 	},
 	{
 		code: 'bz',
-		flag: '🇧🇿'
+		flag: '🇧🇿',
+		timezones: ['America/Belize']
 	},
 	{
 		code: 'bj',
-		flag: '🇧🇯'
+		flag: '🇧🇯',
+		timezones: ['Africa/Porto-Novo']
 	},
 	{
 		code: 'bm',
-		flag: '🇧🇲'
+		flag: '🇧🇲',
+		timezones: ['Atlantic/Bermuda']
 	},
 	{
 		code: 'bt',
-		flag: '🇧🇹'
+		flag: '🇧🇹',
+		timezones: ['Asia/Thimphu']
 	},
 	{
 		code: 'bo',
-		flag: '🇧🇴'
+		flag: '🇧🇴',
+		timezones: ['America/La_Paz']
 	},
 	{
 		code: 'bq',
-		flag: '🇧🇶'
+		flag: '🇧🇶',
+		timezones: ['America/Kralendijk']
 	},
 	{
 		code: 'ba',
-		flag: '🇧🇦'
+		flag: '🇧🇦',
+		timezones: ['Europe/Sarajevo']
 	},
 	{
 		code: 'bw',
-		flag: '🇧🇼'
+		flag: '🇧🇼',
+		timezones: ['Africa/Gaborone']
 	},
 	{
 		code: 'bv',
-		flag: '🇧🇻'
+		flag: '🇧🇻',
+		timezones: ['Europe/Oslo'] // Bouvet Island uses Norway's timezone
 	},
 	{
 		code: 'br',
-		flag: '🇧🇷'
+		flag: '🇧🇷',
+		timezones: [
+			'America/Sao_Paulo',
+			'America/Noronha',
+			'America/Belem',
+			'America/Fortaleza',
+			'America/Recife',
+			'America/Araguaina',
+			'America/Maceio',
+			'America/Bahia',
+			'America/Campo_Grande',
+			'America/Cuiaba',
+			'America/Santarem',
+			'America/Porto_Velho',
+			'America/Boa_Vista',
+			'America/Manaus',
+			'America/Eirunepe',
+			'America/Rio_Branco'
+		]
 	},
 	{
 		code: 'io',
-		flag: '🇮🇴'
+		flag: '🇮🇴',
+		timezones: ['Indian/Chagos']
 	},
 	{
 		code: 'bn',
-		flag: '🇧🇳'
+		flag: '🇧🇳',
+		timezones: ['Asia/Brunei']
 	},
 	{
 		code: 'bg',
-		flag: '🇧🇬'
+		flag: '🇧🇬',
+		timezones: ['Europe/Sofia']
 	},
 	{
 		code: 'bf',
-		flag: '🇧🇫'
+		flag: '🇧🇫',
+		timezones: ['Africa/Ouagadougou']
 	},
 	{
 		code: 'bi',
-		flag: '🇧🇮'
+		flag: '🇧🇮',
+		timezones: ['Africa/Bujumbura']
 	},
 	{
 		code: 'cv',
-		flag: '🇨🇻'
+		flag: '🇨🇻',
+		timezones: ['Atlantic/Cape_Verde']
 	},
 	{
 		code: 'kh',
-		flag: '🇰🇭'
+		flag: '🇰🇭',
+		timezones: ['Asia/Phnom_Penh']
 	},
 	{
 		code: 'cm',
-		flag: '🇨🇲'
+		flag: '🇨🇲',
+		timezones: ['Africa/Douala']
 	},
 	{
 		code: 'ca',
-		flag: '🇨🇦'
+		flag: '🇨🇦',
+		timezones: [
+			'America/Toronto',
+			'America/Vancouver',
+			'America/Edmonton',
+			'America/Winnipeg',
+			'America/Halifax',
+			'America/St_Johns',
+			'America/Regina',
+			'America/Glace_Bay',
+			'America/Moncton',
+			'America/Goose_Bay',
+			'America/Nipigon',
+			'America/Thunder_Bay',
+			'America/Iqaluit',
+			'America/Pangnirtung',
+			'America/Rainy_River',
+			'America/Resolute',
+			'America/Rankin_Inlet',
+			'America/Swift_Current',
+			'America/Cambridge_Bay',
+			'America/Yellowknife',
+			'America/Inuvik',
+			'America/Dawson_Creek',
+			'America/Fort_Nelson',
+			'America/Whitehorse',
+			'America/Dawson',
+			'America/Creston'
+		]
 	},
 	{
 		code: 'ky',
-		flag: '🇰🇾'
+		flag: '🇰🇾',
+		timezones: ['America/Cayman']
 	},
 	{
 		code: 'cf',
-		flag: '🇨🇫'
+		flag: '🇨🇫',
+		timezones: ['Africa/Bangui']
 	},
 	{
 		code: 'td',
-		flag: '🇹🇩'
+		flag: '🇹🇩',
+		timezones: ['Africa/Ndjamena']
 	},
 	{
 		code: 'cl',
-		flag: '🇨🇱'
+		flag: '🇨🇱',
+		timezones: ['America/Santiago', 'America/Punta_Arenas', 'Pacific/Easter']
 	},
 	{
 		code: 'cn',
-		flag: '🇨🇳'
+		flag: '🇨🇳',
+		timezones: ['Asia/Shanghai', 'Asia/Urumqi']
 	},
 	{
 		code: 'cx',
-		flag: '🇨🇽'
+		flag: '🇨🇽',
+		timezones: ['Indian/Christmas']
 	},
 	{
 		code: 'cc',
-		flag: '🇨🇨'
+		flag: '🇨🇨',
+		timezones: ['Indian/Cocos']
 	},
 	{
 		code: 'co',
-		flag: '🇨🇴'
+		flag: '🇨🇴',
+		timezones: ['America/Bogota']
 	},
 	{
 		code: 'km',
-		flag: '🇰🇲'
+		flag: '🇰🇲',
+		timezones: ['Indian/Comoro']
 	},
 	{
 		code: 'cd',
-		flag: '🇨🇩'
+		flag: '🇨🇩',
+		timezones: ['Africa/Kinshasa', 'Africa/Lubumbashi']
 	},
 	{
 		code: 'cg',
-		flag: '🇨🇬'
+		flag: '🇨🇬',
+		timezones: ['Africa/Brazzaville']
 	},
 	{
 		code: 'ck',
-		flag: '🇨🇰'
+		flag: '🇨🇰',
+		timezones: ['Pacific/Rarotonga']
 	},
 	{
 		code: 'cr',
-		flag: '🇨🇷'
+		flag: '🇨🇷',
+		timezones: ['America/Costa_Rica']
 	},
 	{
 		code: 'hr',
-		flag: '🇭🇷'
+		flag: '🇭🇷',
+		timezones: ['Europe/Zagreb']
 	},
 	{
 		code: 'cu',
-		flag: '🇨🇺'
+		flag: '🇨🇺',
+		timezones: ['America/Havana']
 	},
 	{
 		code: 'cw',
-		flag: '🇨🇼'
+		flag: '🇨🇼',
+		timezones: ['America/Curacao']
 	},
 	{
 		code: 'cy',
-		flag: '🇨🇾'
+		flag: '🇨🇾',
+		timezones: ['Asia/Nicosia', 'Asia/Famagusta']
 	},
 	{
 		code: 'cz',
-		flag: '🇨🇿'
+		flag: '🇨🇿',
+		timezones: ['Europe/Prague']
 	},
 	{
 		code: 'ci',
-		flag: '🇨🇮'
+		flag: '🇨🇮',
+		timezones: ['Africa/Abidjan']
 	},
 	{
 		code: 'dk',
-		flag: '🇩🇰'
+		flag: '🇩🇰',
+		timezones: ['Europe/Copenhagen']
 	},
 	{
 		code: 'dj',
-		flag: '🇩🇯'
+		flag: '🇩🇯',
+		timezones: ['Africa/Djibouti']
 	},
 	{
 		code: 'dm',
-		flag: '🇩🇲'
+		flag: '🇩🇲',
+		timezones: ['America/Dominica']
 	},
 	{
 		code: 'do',
-		flag: '🇩🇴'
+		flag: '🇩🇴',
+		timezones: ['America/Santo_Domingo']
 	},
 	{
 		code: 'ec',
-		flag: '🇪🇨'
+		flag: '🇪🇨',
+		timezones: ['America/Guayaquil', 'Pacific/Galapagos']
 	},
 	{
 		code: 'eg',
-		flag: '🇪🇬'
+		flag: '🇪🇬',
+		timezones: ['Africa/Cairo']
 	},
 	{
 		code: 'sv',
-		flag: '🇸🇻'
+		flag: '🇸🇻',
+		timezones: ['America/El_Salvador']
 	},
 	{
 		code: 'gq',
-		flag: '🇬🇶'
+		flag: '🇬🇶',
+		timezones: ['Africa/Malabo']
 	},
 	{
 		code: 'er',
-		flag: '🇪🇷'
+		flag: '🇪🇷',
+		timezones: ['Africa/Asmara']
 	},
 	{
 		code: 'ee',
-		flag: '🇪🇪'
+		flag: '🇪🇪',
+		timezones: ['Europe/Tallinn']
 	},
 	{
 		code: 'sz',
-		flag: '🇸🇿'
+		flag: '🇸🇿',
+		timezones: ['Africa/Mbabane']
 	},
 	{
 		code: 'et',
-		flag: '🇪🇹'
+		flag: '🇪🇹',
+		timezones: ['Africa/Addis_Ababa']
 	},
 	{
 		code: 'fk',
-		flag: '🇫🇰'
+		flag: '🇫🇰',
+		timezones: ['Atlantic/Stanley']
 	},
 	{
 		code: 'fo',
-		flag: '🇫🇴'
+		flag: '🇫🇴',
+		timezones: ['Atlantic/Faroe']
 	},
 	{
 		code: 'fj',
-		flag: '🇫🇯'
+		flag: '🇫🇯',
+		timezones: ['Pacific/Fiji']
 	},
 	{
 		code: 'fi',
-		flag: '🇫🇮'
+		flag: '🇫🇮',
+		timezones: ['Europe/Helsinki']
 	},
 	{
 		code: 'fr',
-		flag: '🇫🇷'
+		flag: '🇫🇷',
+		timezones: ['Europe/Paris']
 	},
 	{
 		code: 'gf',
-		flag: '🇬🇫'
+		flag: '🇬🇫',
+		timezones: ['America/Cayenne']
 	},
 	{
 		code: 'pf',
-		flag: '🇵🇫'
+		flag: '🇵🇫',
+		timezones: ['Pacific/Tahiti', 'Pacific/Marquesas', 'Pacific/Gambier']
 	},
 	{
 		code: 'tf',
-		flag: '🇹🇫'
+		flag: '🇹🇫',
+		timezones: ['Indian/Kerguelen']
 	},
 	{
 		code: 'ga',
-		flag: '🇬🇦'
+		flag: '🇬🇦',
+		timezones: ['Africa/Libreville']
 	},
 	{
 		code: 'gm',
-		flag: '🇬🇲'
+		flag: '🇬🇲',
+		timezones: ['Africa/Banjul']
 	},
 	{
 		code: 'ge',
-		flag: '🇬🇪'
+		flag: '🇬🇪',
+		timezones: ['Asia/Tbilisi']
 	},
 	{
 		code: 'de',
-		flag: '🇩🇪'
+		flag: '🇩🇪',
+		timezones: ['Europe/Berlin', 'Europe/Busingen']
 	},
 	{
 		code: 'gh',
-		flag: '🇬🇭'
+		flag: '🇬🇭',
+		timezones: ['Africa/Accra']
 	},
 	{
 		code: 'gi',
-		flag: '🇬🇮'
+		flag: '🇬🇮',
+		timezones: ['Europe/Gibraltar']
 	},
 	{
 		code: 'gr',
-		flag: '🇬🇷'
+		flag: '🇬🇷',
+		timezones: ['Europe/Athens']
 	},
 	{
 		code: 'gl',
-		flag: '🇬🇱'
+		flag: '🇬🇱',
+		timezones: ['America/Godthab', 'America/Danmarkshavn', 'America/Scoresbysund', 'America/Thule']
 	},
 	{
 		code: 'gd',
-		flag: '🇬🇩'
+		flag: '🇬🇩',
+		timezones: ['America/Grenada']
 	},
 	{
 		code: 'gp',
-		flag: '🇬🇵'
+		flag: '🇬🇵',
+		timezones: ['America/Guadeloupe']
 	},
 	{
 		code: 'gu',
-		flag: '🇬🇺'
+		flag: '🇬🇺',
+		timezones: ['Pacific/Guam']
 	},
 	{
 		code: 'gt',
-		flag: '🇬🇹'
+		flag: '🇬🇹',
+		timezones: ['America/Guatemala']
 	},
 	{
 		code: 'gg',
-		flag: '🇬🇬'
+		flag: '🇬🇬',
+		timezones: ['Europe/Guernsey']
 	},
 	{
 		code: 'gn',
-		flag: '🇬🇳'
+		flag: '🇬🇳',
+		timezones: ['Africa/Conakry']
 	},
 	{
 		code: 'gw',
-		flag: '🇬🇼'
+		flag: '🇬🇼',
+		timezones: ['Africa/Bissau']
 	},
 	{
 		code: 'gy',
-		flag: '🇬🇾'
+		flag: '🇬🇾',
+		timezones: ['America/Guyana']
 	},
 	{
 		code: 'ht',
-		flag: '🇭🇹'
+		flag: '🇭🇹',
+		timezones: ['America/Port-au-Prince']
 	},
 	{
 		code: 'hm',
-		flag: '🇭🇲'
+		flag: '🇭🇲',
+		timezones: ['Indian/Kerguelen'] // Heard and McDonald Islands use same timezone as French Southern Territories
 	},
 	{
 		code: 'va',
-		flag: '🇻🇦'
+		flag: '🇻🇦',
+		timezones: ['Europe/Vatican']
 	},
 	{
 		code: 'hn',
-		flag: '🇭🇳'
+		flag: '🇭🇳',
+		timezones: ['America/Tegucigalpa']
 	},
 	{
 		code: 'hk',
-		flag: '🇭🇰'
+		flag: '🇭🇰',
+		timezones: ['Asia/Hong_Kong']
 	},
 	{
 		code: 'hu',
-		flag: '🇭🇺'
+		flag: '🇭🇺',
+		timezones: ['Europe/Budapest']
 	},
 	{
 		code: 'is',
-		flag: '🇮🇸'
+		flag: '🇮🇸',
+		timezones: ['Atlantic/Reykjavik']
 	},
 	{
 		code: 'in',
-		flag: '🇮🇳'
+		flag: '🇮🇳',
+		timezones: ['Asia/Kolkata']
 	},
 	{
 		code: 'id',
-		flag: '🇮🇩'
+		flag: '🇮🇩',
+		timezones: ['Asia/Jakarta', 'Asia/Makassar', 'Asia/Pontianak', 'Asia/Jayapura']
 	},
 	{
 		code: 'ir',
-		flag: '🇮🇷'
+		flag: '🇮🇷',
+		timezones: ['Asia/Tehran']
 	},
 	{
 		code: 'iq',
-		flag: '🇮🇶'
+		flag: '🇮🇶',
+		timezones: ['Asia/Baghdad']
 	},
 	{
 		code: 'ie',
-		flag: '🇮🇪'
+		flag: '🇮🇪',
+		timezones: ['Europe/Dublin']
 	},
 	{
 		code: 'im',
-		flag: '🇮🇲'
+		flag: '🇮🇲',
+		timezones: ['Europe/Isle_of_Man']
 	},
 	{
 		code: 'il',
-		flag: '🇮🇱'
+		flag: '🇮🇱',
+		timezones: ['Asia/Jerusalem']
 	},
 	{
 		code: 'it',
-		flag: '🇮🇹'
+		flag: '🇮🇹',
+		timezones: ['Europe/Rome']
 	},
 	{
 		code: 'jm',
-		flag: '🇯🇲'
+		flag: '🇯🇲',
+		timezones: ['America/Jamaica']
 	},
 	{
 		code: 'jp',
-		flag: '🇯🇵'
+		flag: '🇯🇵',
+		timezones: ['Asia/Tokyo']
 	},
 	{
 		code: 'je',
-		flag: '🇯🇪'
+		flag: '🇯🇪',
+		timezones: ['Europe/Jersey']
 	},
 	{
 		code: 'jo',
-		flag: '🇯🇴'
+		flag: '🇯🇴',
+		timezones: ['Asia/Amman']
 	},
 	{
 		code: 'kz',
-		flag: '🇰🇿'
+		flag: '🇰🇿',
+		timezones: [
+			'Asia/Almaty',
+			'Asia/Qyzylorda',
+			'Asia/Qostanay',
+			'Asia/Aqtobe',
+			'Asia/Aqtau',
+			'Asia/Atyrau',
+			'Asia/Oral'
+		]
 	},
 	{
 		code: 'ke',
-		flag: '🇰🇪'
+		flag: '🇰🇪',
+		timezones: ['Africa/Nairobi']
 	},
 	{
 		code: 'ki',
-		flag: '🇰🇮'
+		flag: '🇰🇮',
+		timezones: ['Pacific/Tarawa', 'Pacific/Enderbury', 'Pacific/Kiritimati']
 	},
 	{
-		name: `Korea, Democratic People's Repubkic of`,
+		name: "Korea, Democratic People's Repubkic of",
 		code: 'kp',
-		flag: '🇰🇵'
+		flag: '🇰🇵',
+		timezones: ['Asia/Pyongyang']
 	},
 	{
 		code: 'kr',
-		flag: '🇰🇷'
+		flag: '🇰🇷',
+		timezones: ['Asia/Seoul']
 	},
 	{
 		code: 'kw',
-		flag: '🇰🇼'
+		flag: '🇰🇼',
+		timezones: ['Asia/Kuwait']
 	},
 	{
 		code: 'kg',
-		flag: '🇰🇬'
+		flag: '🇰🇬',
+		timezones: ['Asia/Bishkek']
 	},
 	{
 		name: "Lao People's Democratic Republic",
 		code: 'la',
-		flag: '🇱🇦'
+		flag: '🇱🇦',
+		timezones: ['Asia/Vientiane']
 	},
 	{
 		code: 'lv',
-		flag: '🇱🇻'
+		flag: '🇱🇻',
+		timezones: ['Europe/Riga']
 	},
 	{
 		code: 'lb',
-		flag: '🇱🇧'
+		flag: '🇱🇧',
+		timezones: ['Asia/Beirut']
 	},
 	{
 		code: 'ls',
-		flag: '🇱🇸'
+		flag: '🇱🇸',
+		timezones: ['Africa/Maseru']
 	},
 	{
 		code: 'lr',
-		flag: '🇱🇷'
+		flag: '🇱🇷',
+		timezones: ['Africa/Monrovia']
 	},
 	{
 		code: 'ly',
-		flag: '🇱🇾'
+		flag: '🇱🇾',
+		timezones: ['Africa/Tripoli']
 	},
 	{
 		code: 'li',
-		flag: '🇱🇮'
+		flag: '🇱🇮',
+		timezones: ['Europe/Vaduz']
 	},
 	{
 		code: 'lt',
-		flag: '🇱🇹'
+		flag: '🇱🇹',
+		timezones: ['Europe/Vilnius']
 	},
 	{
 		code: 'lu',
-		flag: '🇱🇺'
+		flag: '🇱🇺',
+		timezones: ['Europe/Luxembourg']
 	},
 	{
 		code: 'mo',
-		flag: '🇲🇴'
+		flag: '🇲🇴',
+		timezones: ['Asia/Macau']
 	},
 	{
 		code: 'mg',
-		flag: '🇲🇬'
+		flag: '🇲🇬',
+		timezones: ['Indian/Antananarivo']
 	},
 	{
 		code: 'mw',
-		flag: '🇲🇼'
+		flag: '🇲🇼',
+		timezones: ['Africa/Blantyre']
 	},
 	{
 		code: 'my',
-		flag: '🇲🇾'
+		flag: '🇲🇾',
+		timezones: ['Asia/Kuala_Lumpur', 'Asia/Kuching']
 	},
 	{
 		code: 'mv',
-		flag: '🇲🇻'
+		flag: '🇲🇻',
+		timezones: ['Indian/Maldives']
 	},
 	{
 		code: 'ml',
-		flag: '🇲🇱'
+		flag: '🇲🇱',
+		timezones: ['Africa/Bamako']
 	},
 	{
 		code: 'mt',
-		flag: '🇲🇹'
+		flag: '🇲🇹',
+		timezones: ['Europe/Malta']
 	},
 	{
 		code: 'mh',
-		flag: '🇲🇭'
+		flag: '🇲🇭',
+		timezones: ['Pacific/Majuro', 'Pacific/Kwajalein']
 	},
 	{
 		code: 'mq',
-		flag: '🇲🇶'
+		flag: '🇲🇶',
+		timezones: ['America/Martinique']
 	},
 	{
 		code: 'mr',
-		flag: '🇲🇦'
+		flag: '🇲🇦',
+		timezones: ['Africa/Nouakchott']
 	},
 	{
 		code: 'mu',
-		flag: '🇲🇺'
+		flag: '🇲🇺',
+		timezones: ['Indian/Mauritius']
 	},
 	{
 		code: 'yt',
-		flag: '🇾🇹'
+		flag: '🇾🇹',
+		timezones: ['Indian/Mayotte']
 	},
 	{
 		code: 'mx',
-		flag: '🇲🇽'
+		flag: '🇲🇽',
+		timezones: [
+			'America/Mexico_City',
+			'America/Tijuana',
+			'America/Monterrey',
+			'America/Cancun',
+			'America/Merida',
+			'America/Matamoros',
+			'America/Mazatlan',
+			'America/Chihuahua',
+			'America/Ojinaga',
+			'America/Hermosillo',
+			'America/Bahia_Banderas'
+		]
 	},
 	{
 		code: 'fm',
-		flag: '🇫🇲'
+		flag: '🇫🇲',
+		timezones: ['Pacific/Pohnpei', 'Pacific/Chuuk', 'Pacific/Kosrae']
 	},
 	{
 		code: 'md',
-		flag: '🇲🇩'
+		flag: '🇲🇩',
+		timezones: ['Europe/Chisinau']
 	},
 	{
 		code: 'mc',
-		flag: '🇲🇨'
+		flag: '🇲🇨',
+		timezones: ['Europe/Monaco']
 	},
 	{
 		code: 'mn',
-		flag: '🇲🇳'
+		flag: '🇲🇳',
+		timezones: ['Asia/Ulaanbaatar', 'Asia/Hovd', 'Asia/Choibalsan']
 	},
 	{
 		code: 'me',
-		flag: '🇲🇪'
+		flag: '🇲🇪',
+		timezones: ['Europe/Podgorica']
 	},
 	{
 		code: 'ms',
-		flag: '🇲🇸'
+		flag: '🇲🇸',
+		timezones: ['America/Montserrat']
 	},
 	{
 		code: 'ma',
-		flag: '🇲🇦'
+		flag: '🇲🇦',
+		timezones: ['Africa/Casablanca']
 	},
 	{
 		code: 'mz',
-		flag: '🇲🇿'
+		flag: '🇲🇿',
+		timezones: ['Africa/Maputo']
 	},
 	{
 		code: 'mm',
-		flag: '🇲🇲'
+		flag: '🇲🇲',
+		timezones: ['Asia/Yangon']
 	},
 	{
 		code: 'na',
-		flag: '🇳🇦'
+		flag: '🇳🇦',
+		timezones: ['Africa/Windhoek']
 	},
 	{
 		code: 'nr',
-		flag: '🇳🇷'
+		flag: '🇳🇷',
+		timezones: ['Pacific/Nauru']
 	},
 	{
 		code: 'np',
-		flag: '🇳🇵'
+		flag: '🇳🇵',
+		timezones: ['Asia/Kathmandu']
 	},
 	{
 		code: 'nl',
-		flag: '🇳🇱'
+		flag: '🇳🇱',
+		timezones: ['Europe/Amsterdam']
 	},
 	{
 		code: 'nc',
-		flag: '🇳🇨'
+		flag: '🇳🇨',
+		timezones: ['Pacific/Noumea']
 	},
 	{
 		code: 'nz',
-		flag: '🇳🇿'
+		flag: '🇳🇿',
+		timezones: ['Pacific/Auckland', 'Pacific/Chatham']
 	},
 	{
 		code: 'ni',
-		flag: '🇳🇮'
+		flag: '🇳🇮',
+		timezones: ['America/Managua']
 	},
 	{
 		code: 'ne',
-		flag: '🇳🇪'
+		flag: '🇳🇪',
+		timezones: ['Africa/Niamey']
 	},
 	{
 		code: 'ng',
-		flag: '🇳🇬'
+		flag: '🇳🇬',
+		timezones: ['Africa/Lagos']
 	},
 	{
 		code: 'nu',
-		flag: '🇳🇺'
+		flag: '🇳🇺',
+		timezones: ['Pacific/Niue']
 	},
 	{
 		code: 'nf',
-		flag: '🇳🇫'
+		flag: '🇳🇫',
+		timezones: ['Pacific/Norfolk']
 	},
 	{
 		code: 'mk',
-		flag: '🇲🇰'
+		flag: '🇲🇰',
+		timezones: ['Europe/Skopje']
 	},
 	{
 		code: 'mp',
-		flag: '🇲🇵'
+		flag: '🇲🇵',
+		timezones: ['Pacific/Saipan']
 	},
 	{
 		code: 'no',
-		flag: '🇳🇴'
+		flag: '🇳🇴',
+		timezones: ['Europe/Oslo']
 	},
 	{
 		code: 'om',
-		flag: '🇴🇲'
+		flag: '🇴🇲',
+		timezones: ['Asia/Muscat']
 	},
 	{
 		code: 'pk',
-		flag: '🇵🇰'
+		flag: '🇵🇰',
+		timezones: ['Asia/Karachi']
 	},
 	{
 		code: 'pw',
-		flag: '🇵🇼'
+		flag: '🇵🇼',
+		timezones: ['Pacific/Palau']
 	},
 	{
 		code: 'ps',
-		flag: '🇵🇸'
+		flag: '🇵🇸',
+		timezones: ['Asia/Gaza', 'Asia/Hebron']
 	},
 	{
 		code: 'pa',
-		flag: '🇵🇦'
+		flag: '🇵🇦',
+		timezones: ['America/Panama']
 	},
 	{
 		code: 'pg',
-		flag: '🇵🇬'
+		flag: '🇵🇬',
+		timezones: ['Pacific/Port_Moresby', 'Pacific/Bougainville']
 	},
 	{
 		code: 'py',
-		flag: '🇵🇾'
+		flag: '🇵🇾',
+		timezones: ['America/Asuncion']
 	},
 	{
 		code: 'pe',
-		flag: '🇵🇪'
+		flag: '🇵🇪',
+		timezones: ['America/Lima']
 	},
 	{
 		code: 'ph',
-		flag: '🇵🇭'
+		flag: '🇵🇭',
+		timezones: ['Asia/Manila']
 	},
 	{
 		code: 'pn',
-		flag: '🇵🇳'
+		flag: '🇵🇳',
+		timezones: ['Pacific/Pitcairn']
 	},
 	{
 		code: 'pl',
-		flag: '🇵🇱'
+		flag: '🇵🇱',
+		timezones: ['Europe/Warsaw']
 	},
 	{
 		code: 'pt',
-		flag: '🇵🇹'
+		flag: '🇵🇹',
+		timezones: ['Europe/Lisbon', 'Atlantic/Madeira', 'Atlantic/Azores']
 	},
 	{
 		code: 'pr',
-		flag: '🇵🇷'
+		flag: '🇵🇷',
+		timezones: ['America/Puerto_Rico']
 	},
 	{
 		code: 'qa',
-		flag: '🇶🇦'
+		flag: '🇶🇦',
+		timezones: ['Asia/Qatar']
 	},
 	{
 		code: 'ro',
-		flag: '🇷🇴'
+		flag: '🇷🇴',
+		timezones: ['Europe/Bucharest']
 	},
 	{
 		code: 'ru',
-		flag: '🇷🇺'
+		flag: '🇷🇺',
+		timezones: [
+			'Europe/Moscow',
+			'Europe/Kaliningrad',
+			'Europe/Simferopol',
+			'Europe/Kirov',
+			'Europe/Volgograd',
+			'Europe/Astrakhan',
+			'Europe/Saratov',
+			'Europe/Ulyanovsk',
+			'Europe/Samara',
+			'Asia/Yekaterinburg',
+			'Asia/Omsk',
+			'Asia/Novosibirsk',
+			'Asia/Barnaul',
+			'Asia/Tomsk',
+			'Asia/Novokuznetsk',
+			'Asia/Krasnoyarsk',
+			'Asia/Irkutsk',
+			'Asia/Chita',
+			'Asia/Yakutsk',
+			'Asia/Khandyga',
+			'Asia/Vladivostok',
+			'Asia/Ust-Nera',
+			'Asia/Magadan',
+			'Asia/Sakhalin',
+			'Asia/Srednekolymsk',
+			'Asia/Kamchatka',
+			'Asia/Anadyr'
+		]
 	},
 	{
 		code: 'rw',
-		flag: '🇷🇼'
+		flag: '🇷🇼',
+		timezones: ['Africa/Kigali']
 	},
 	{
 		code: 're',
-		flag: '🇷🇪'
+		flag: '🇷🇪',
+		timezones: ['Indian/Reunion']
 	},
 	{
 		code: 'bl',
-		flag: '🇧🇱'
+		flag: '🇧🇱',
+		timezones: ['America/St_Barthelemy']
 	},
 	{
 		code: 'sh',
-		flag: '🇸🇭'
+		flag: '🇸🇭',
+		timezones: ['Atlantic/St_Helena']
 	},
 	{
 		code: 'kn',
-		flag: '🇰🇳'
+		flag: '🇰🇳',
+		timezones: ['America/St_Kitts']
 	},
 	{
 		code: 'lc',
-		flag: '🇱🇨'
+		flag: '🇱🇨',
+		timezones: ['America/St_Lucia']
 	},
 	{
 		code: 'mf',
-		flag: '🇲🇫'
+		flag: '🇲🇫',
+		timezones: ['America/Marigot']
 	},
 	{
 		code: 'pm',
-		flag: '🇵🇲'
+		flag: '🇵🇲',
+		timezones: ['America/Miquelon']
 	},
 	{
 		code: 'vc',
-		flag: '🇻🇨'
+		flag: '🇻🇨',
+		timezones: ['America/St_Vincent']
 	},
 	{
 		code: 'ws',
-		flag: '🇼🇸'
+		flag: '🇼🇸',
+		timezones: ['Pacific/Apia']
 	},
 	{
 		code: 'sm',
-		flag: '🇸🇲'
+		flag: '🇸🇲',
+		timezones: ['Europe/San_Marino']
 	},
 	{
 		code: 'st',
-		flag: '🇸🇹'
+		flag: '🇸🇹',
+		timezones: ['Africa/Sao_Tome']
 	},
 	{
 		code: 'sa',
-		flag: '🇸🇦'
+		flag: '🇸🇦',
+		timezones: ['Asia/Riyadh']
 	},
 	{
 		code: 'sn',
-		flag: '🇸🇳'
+		flag: '🇸🇳',
+		timezones: ['Africa/Dakar']
 	},
 	{
 		code: 'rs',
-		flag: '🇷🇸'
+		flag: '🇷🇸',
+		timezones: ['Europe/Belgrade']
 	},
 	{
 		code: 'sc',
-		flag: '🇸🇨'
+		flag: '🇸🇨',
+		timezones: ['Indian/Mahe']
 	},
 	{
 		code: 'sl',
-		flag: '🇸🇱'
+		flag: '🇸🇱',
+		timezones: ['Africa/Freetown']
 	},
 	{
 		code: 'sg',
-		flag: '🇸🇬'
+		flag: '🇸🇬',
+		timezones: ['Asia/Singapore']
 	},
 	{
 		code: 'sx',
-		flag: '🇸🇽'
+		flag: '🇸🇽',
+		timezones: ['America/Lower_Princes']
 	},
 	{
 		code: 'sk',
-		flag: '🇸🇰'
+		flag: '🇸🇰',
+		timezones: ['Europe/Bratislava']
 	},
 	{
 		code: 'si',
-		flag: '🇸🇮'
+		flag: '🇸🇮',
+		timezones: ['Europe/Ljubljana']
 	},
 	{
 		code: 'sb',
-		flag: '🇸🇧'
+		flag: '🇸🇧',
+		timezones: ['Pacific/Guadalcanal']
 	},
 	{
 		code: 'so',
-		flag: '🇸🇴'
+		flag: '🇸🇴',
+		timezones: ['Africa/Mogadishu']
 	},
 	{
 		code: 'za',
-		flag: '🇿🇦'
+		flag: '🇿🇦',
+		timezones: ['Africa/Johannesburg']
 	},
 	{
 		code: 'gs',
-		flag: '🇬🇸'
+		flag: '🇬🇸',
+		timezones: ['Atlantic/South_Georgia']
 	},
 	{
 		code: 'ss',
-		flag: '🇸🇸'
+		flag: '🇸🇸',
+		timezones: ['Africa/Juba']
 	},
 	{
 		code: 'es',
-		flag: '🇪🇸'
+		flag: '🇪🇸',
+		timezones: ['Europe/Madrid', 'Africa/Ceuta', 'Atlantic/Canary']
 	},
 	{
 		code: 'lk',
-		flag: '🇱🇰'
+		flag: '🇱🇰',
+		timezones: ['Asia/Colombo']
 	},
 	{
 		code: 'sd',
-		flag: '🇸🇩'
+		flag: '🇸🇩',
+		timezones: ['Africa/Khartoum']
 	},
 	{
 		code: 'sr',
-		flag: '🇸🇷'
+		flag: '🇸🇷',
+		timezones: ['America/Paramaribo']
 	},
 	{
 		code: 'sj',
-		flag: '🇸🇯'
+		flag: '🇸🇯',
+		timezones: ['Arctic/Longyearbyen']
 	},
 	{
 		code: 'se',
-		flag: '🇸🇪'
+		flag: '🇸🇪',
+		timezones: ['Europe/Stockholm']
 	},
 	{
 		code: 'ch',
-		flag: '🇨🇭'
+		flag: '🇨🇭',
+		timezones: ['Europe/Zurich']
 	},
 	{
 		code: 'sy',
-		flag: '🇸🇾'
+		flag: '🇸🇾',
+		timezones: ['Asia/Damascus']
 	},
 	{
 		code: 'tw',
-		flag: '🇹🇼'
+		flag: '🇹🇼',
+		timezones: ['Asia/Taipei']
 	},
 	{
 		code: 'tj',
-		flag: '🇹🇯'
+		flag: '🇹🇯',
+		timezones: ['Asia/Dushanbe']
 	},
 	{
 		code: 'tz',
-		flag: '🇹🇿'
+		flag: '🇹🇿',
+		timezones: ['Africa/Dar_es_Salaam']
 	},
 	{
 		code: 'th',
-		flag: '🇹🇭'
+		flag: '🇹🇭',
+		timezones: ['Asia/Bangkok']
 	},
 	{
 		code: 'tl',
-		flag: '🇹🇱'
+		flag: '🇹🇱',
+		timezones: ['Asia/Dili']
 	},
 	{
 		code: 'tg',
-		flag: '🇹🇬'
+		flag: '🇹🇬',
+		timezones: ['Africa/Lome']
 	},
 	{
 		code: 'tk',
-		flag: '🇹🇰'
+		flag: '🇹🇰',
+		timezones: ['Pacific/Fakaofo']
 	},
 	{
 		code: 'to',
-		flag: '🇹🇴'
+		flag: '🇹🇴',
+		timezones: ['Pacific/Tongatapu']
 	},
 	{
 		code: 'tt',
-		flag: '🇹🇹'
+		flag: '🇹🇹',
+		timezones: ['America/Port_of_Spain']
 	},
 	{
 		code: 'tn',
-		flag: '🇹🇳'
+		flag: '🇹🇳',
+		timezones: ['Africa/Tunis']
 	},
 	{
 		code: 'tm',
-		flag: '🇹🇲'
+		flag: '🇹🇲',
+		timezones: ['Asia/Ashgabat']
 	},
 	{
 		code: 'tc',
-		flag: '🇹🇨'
+		flag: '🇹🇨',
+		timezones: ['America/Grand_Turk']
 	},
 	{
 		code: 'tv',
-		flag: '🇹🇻'
+		flag: '🇹🇻',
+		timezones: ['Pacific/Funafuti']
 	},
 	{
 		code: 'tr',
-		flag: '🇹🇷'
+		flag: '🇹🇷',
+		timezones: ['Europe/Istanbul']
 	},
 	{
 		code: 'ug',
-		flag: '🇺🇬'
+		flag: '🇺🇬',
+		timezones: ['Africa/Kampala']
 	},
 	{
 		code: 'ua',
-		flag: '🇺🇦'
+		flag: '🇺🇦',
+		timezones: ['Europe/Kiev', 'Europe/Uzhgorod', 'Europe/Zaporozhye']
 	},
 	{
 		code: 'ae',
-		flag: '🇦🇪'
+		flag: '🇦🇪',
+		timezones: ['Asia/Dubai']
 	},
 	{
 		code: 'gb',
-		flag: '🇬🇧'
+		flag: '🇬🇧',
+		timezones: ['Europe/London']
 	},
 	{
 		code: 'um',
-		flag: '🇺🇲'
+		flag: '🇺🇲',
+		timezones: ['Pacific/Wake', 'Pacific/Midway', 'Pacific/Johnston']
 	},
 	{
 		code: 'us',
-		flag: '🇺🇸'
+		flag: '🇺🇸',
+		timezones: [
+			'America/New_York',
+			'America/Chicago',
+			'America/Denver',
+			'America/Los_Angeles',
+			'America/Anchorage',
+			'Pacific/Honolulu',
+			'America/Phoenix',
+			'America/Detroit',
+			'America/Kentucky/Louisville',
+			'America/Kentucky/Monticello',
+			'America/Indiana/Indianapolis',
+			'America/Indiana/Vincennes',
+			'America/Indiana/Winamac',
+			'America/Indiana/Marengo',
+			'America/Indiana/Petersburg',
+			'America/Indiana/Vevay',
+			'America/Indiana/Tell_City',
+			'America/Indiana/Knox',
+			'America/Menominee',
+			'America/North_Dakota/Center',
+			'America/North_Dakota/New_Salem',
+			'America/North_Dakota/Beulah',
+			'America/Boise',
+			'America/Juneau',
+			'America/Sitka',
+			'America/Metlakatla',
+			'America/Yakutat',
+			'America/Nome',
+			'America/Adak'
+		]
 	},
 	{
 		code: 'uy',
-		flag: '🇺🇾'
+		flag: '🇺🇾',
+		timezones: ['America/Montevideo']
 	},
 	{
 		code: 'uz',
-		flag: '🇺🇿'
+		flag: '🇺🇿',
+		timezones: ['Asia/Tashkent', 'Asia/Samarkand']
 	},
 	{
 		code: 'vu',
-		flag: '🇻🇺'
+		flag: '🇻🇺',
+		timezones: ['Pacific/Efate']
 	},
 	{
 		code: 've',
-		flag: '🇻🇪'
+		flag: '🇻🇪',
+		timezones: ['America/Caracas']
 	},
 	{
 		code: 'vn',
-		flag: '🇻🇳'
+		flag: '🇻🇳',
+		timezones: ['Asia/Ho_Chi_Minh']
 	},
 	{
 		code: 'vg',
-		flag: '🇻🇬'
+		flag: '🇻🇬',
+		timezones: ['America/Tortola']
 	},
 	{
 		code: 'vi',
-		flag: '🇻🇮'
+		flag: '🇻🇮',
+		timezones: ['America/St_Thomas']
 	},
 	{
 		code: 'wf',
-		flag: '🇼🇫'
+		flag: '🇼🇫',
+		timezones: ['Pacific/Wallis']
 	},
 	{
 		code: 'eh',
-		flag: '🇪🇭'
+		flag: '🇪🇭',
+		timezones: ['Africa/El_Aaiun']
 	},
 	{
 		code: 'ye',
-		flag: '🇾🇪'
+		flag: '🇾🇪',
+		timezones: ['Asia/Aden']
 	},
 	{
 		code: 'zm',
-		flag: '🇿🇲'
+		flag: '🇿🇲',
+		timezones: ['Africa/Lusaka']
 	},
 	{
 		code: 'zw',
-		flag: '🇿🇼'
+		flag: '🇿🇼',
+		timezones: ['Africa/Harare']
 	},
 	{
 		code: 'ax',
-		flag: '🇦🇽'
+		flag: '🇦🇽',
+		timezones: ['Europe/Mariehamn']
 	}
 ] as const;
 
 export type Country = (typeof countryList)[number];
 export type CountryCode = Country['code'];
-export const countryCode = countryList.map((c) => c.code);
 export type CountryFlag = Country['flag'];
+export type CountryTimezones = Country['timezones'];
+
+export const countryCode = countryList.map((c) => c.code);
+
 export function getCountry(code: CountryCode): Country {
 	const country = countryList.find((c) => c.code === code);
 	if (!country) {
 		throw new Error(`Country with code ${code} not found`);
 	}
 	return country;
+}
+
+export function getCountryTimezones(code: CountryCode): readonly string[] {
+	return getCountry(code).timezones;
+}
+
+export function getDefaultTimezone(code: CountryCode): string {
+	return getCountryTimezones(code)[0];
 }
 
 export function renderLocalizedCountryName(

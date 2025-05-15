@@ -24,6 +24,7 @@
 	import Input from '$lib/comps/ui/input/input.svelte';
 	import { onMount } from 'svelte';
 	import * as m from '$lib/paraglide/messages';
+	import Timezone from '../controls/timezone.svelte';
 
 	// Format for displaying date
 	const df = new DateFormatter('en-US', {
@@ -53,6 +54,9 @@
 		use24HourTime?: boolean;
 		placeholder?: string;
 		dateFormat?: string;
+		timezone?: string;
+		timezoneEditable?: boolean;
+		onTimezoneChange?: (timezone: string) => void;
 	};
 
 	let {
@@ -66,7 +70,10 @@
 		dateOnly = false,
 		use24HourTime = false,
 		placeholder = '',
-		dateFormat = 'yyyy-MM-dd'
+		dateFormat = 'yyyy-MM-dd',
+		timezone = '',
+		timezoneEditable = false,
+		onTimezoneChange = () => {}
 	}: Props = $props();
 
 	// Validate minuteSteps to ensure it's a valid divisor of 60
@@ -318,11 +325,19 @@
 		}
 	}
 
+	function handleTimezoneChange(_timezone: string) {
+		timezone = _timezone;
+		onTimezoneChange(timezone);
+	}
+
 	onMount(() => {
 		// Initialize with current date/time if no value provided
 		if (!value) {
 			const now = new Date();
 			value = now;
+		}
+		if (!timezone) {
+			timezone = getLocalTimeZone();
 		}
 	});
 </script>
@@ -447,11 +462,21 @@
 							/>
 						</div>
 
-						<div
-							class="text-xs px-4 py-0.5 flex items-center justify-center text-muted-foreground gap-1 opacity-60"
-						>
-							{getLocalTimeZone()}
-						</div>
+						{#if timezoneEditable}
+							<Timezone
+								{form}
+								name="timezone"
+								label="Timezone"
+								bind:value={timezone}
+								onTimezoneChange={handleTimezoneChange}
+							/>
+						{:else}
+							<div
+								class="text-xs px-4 py-0.5 flex items-center justify-center text-muted-foreground gap-1 opacity-60"
+							>
+								{timezone || getLocalTimeZone()}
+							</div>
+						{/if}
 					</Popover.Content>
 				</Popover.Root>
 			</div>

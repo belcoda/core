@@ -38,7 +38,77 @@
 	);
 	import Link from 'lucide-svelte/icons/link';
 	import Alert from '$lib/comps/ui/alert/alert.svelte';
+	import Timezone from '$lib/comps/ui/form/controls/timezone.svelte';
+	import { getCountryTimezones } from '$lib/i18n/countries';
+	import { onMount } from 'svelte';
+	import {
+		getISOStringWithOffset,
+		setWallClockTimeToNewTimeZone,
+		convertToTimezone
+	} from '$lib/utils/date/datetime';
 	let editSlug = $state(false);
+	let timezoneEditable = $state(false);
+	let startsAt = $state(convertToTimezone($formData.starts_at, $formData.timezone));
+	let endsAt = $state(convertToTimezone($formData.ends_at, $formData.timezone));
+	function timezoneChaged(timezone: string) {
+		$formData.timezone = timezone;
+	}
+	function countryChaged(country: string) {
+		const timezones = getCountryTimezones(country);
+		if (timezones.length > 0) {
+			timezoneEditable = timezones.length > 1;
+			timezoneChaged(timezones[0]);
+		} else {
+			timezoneChaged('Etc/UTC');
+		}
+	}
+
+	onMount(() => {
+		if ($formData.country) {
+			countryChaged($formData.country);
+		}
+	});
+
+	// Track previous values to detect actual changes
+	let prevStartsAt: Date | null = $state(null);
+	let prevEndsAt: Date | null = $state(null);
+	let prevTimezone: string | null = $state(null);
+
+	$effect(() => {
+		// Initialize on first run
+		if (prevStartsAt === null) {
+			prevStartsAt = startsAt;
+			prevEndsAt = endsAt;
+			prevTimezone = $formData.timezone;
+		}
+
+		// Only run when inputs actually change
+		if (startsAt === prevStartsAt && endsAt === prevEndsAt && $formData.timezone === prevTimezone) {
+			return;
+		}
+
+		// Update previous values
+		prevStartsAt = startsAt;
+		prevEndsAt = endsAt;
+		prevTimezone = $formData.timezone;
+
+		let newStartsAt = setWallClockTimeToNewTimeZone(
+			startsAt instanceof Date ? getISOStringWithOffset(startsAt) : startsAt,
+			$formData.timezone
+		);
+		let newEndsAt = setWallClockTimeToNewTimeZone(
+			endsAt instanceof Date ? getISOStringWithOffset(endsAt) : endsAt,
+			$formData.timezone
+		);
+
+		// Only update if values have actually changed to prevent circular updates
+		if (newStartsAt !== $formData.starts_at) {
+			$formData.starts_at = newStartsAt;
+		}
+		if (newEndsAt !== $formData.ends_at) {
+			$formData.ends_at = newEndsAt;
+		}
+	});
 </script>
 
 <form use:enhance method="post">
@@ -86,13 +156,15 @@
 			{form}
 			name="starts_at"
 			label={m.proof_long_bird_love()}
-			bind:value={$formData.starts_at}
+			bind:value={startsAt}
+			timezone={$formData.timezone}
 		/>
 		<DateTime
 			{form}
 			name="ends_at"
 			label={m.close_nice_cowfish_savor()}
-			bind:value={$formData.ends_at}
+			bind:value={endsAt}
+			timezone={$formData.timezone}
 		/>
 	</Grid>
 {/snippet}
@@ -153,11 +225,23 @@
 					label={m.swift_white_hornet_dig()}
 					bind:value={$formData.postcode as string}
 				/>
+			</Grid>
+			<Grid cols={3}>
 				<Country
 					{form}
 					name="country"
 					label={m.fluffy_fair_gecko_arrive()}
 					bind:value={$formData.country as string}
+					onCountryChange={countryChaged}
+				/>
+				<Timezone
+					{form}
+					name="timezone"
+					label={m.close_stock_lion_bubble()}
+					bind:value={$formData.timezone as string}
+					onTimezoneChange={timezoneChaged}
+					country={$formData.country as string}
+					disabled={!timezoneEditable}
 				/>
 			</Grid>
 		{/if}
