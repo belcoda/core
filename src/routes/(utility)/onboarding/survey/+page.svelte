@@ -119,8 +119,8 @@
 		<CountrySelect
 			superform={form}
 			field="country"
-			label="Country"
-			description="The country in which your organization is based. If you operate in multiple countries, then choose the country that you yourself reside in."
+			label="Country(*)"
+			description="The country in which your organization is based. If you operate in multiple countries, then choose the country that you yourself reside in. This question is mandatory."
 		/>
 		{@render H2('A quick question about email')}
 		<p>
