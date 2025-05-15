@@ -82,6 +82,18 @@ export const domainName = v.pipe(
 	v.regex(/^(?!-)([a-z0-9-]{1,63}(?<!-)\.)+[a-z]{2,6}$/iu, m.legal_antsy_alpaca_drip())
 );
 
+export const domainOrUrl = v.union([
+	domainName,
+	v.pipe(
+		v.string(),
+		v.maxLength(
+			LONG_STRING_MAX_LENGTH,
+			m.proud_house_thrush_shine({ maxLength: LONG_STRING_MAX_LENGTH })
+		),
+		v.url(m.whole_polite_loris_edit())
+	)
+]);
+
 export const email = v.pipe(v.string(), v.email(m.actual_early_anteater_endure()));
 export const url = v.pipe(
 	v.string(),

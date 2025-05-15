@@ -6,7 +6,8 @@ import {
 	url,
 	email,
 	country,
-	mediumString
+	mediumString,
+	domainOrUrl
 } from '$lib/schema/valibot';
 import { superForm, defaults, type SuperValidated } from 'sveltekit-superforms';
 import { valibot } from 'sveltekit-superforms/adapters';
@@ -21,7 +22,7 @@ export const validationSchema = v.object({
 
 	replyToEmail: email,
 
-	website: v.optional(v.nullable(url)),
+	website: v.optional(v.nullable(domainOrUrl)),
 	facebook: v.optional(v.nullable(mediumString)),
 	instagram: v.optional(v.nullable(mediumString)),
 	twitter: v.optional(v.nullable(mediumString))
