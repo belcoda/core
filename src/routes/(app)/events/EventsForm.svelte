@@ -41,11 +41,15 @@
 	import Timezone from '$lib/comps/ui/form/controls/timezone.svelte';
 	import { getCountryTimezones } from '$lib/i18n/countries';
 	import { onMount } from 'svelte';
-	import { getISOStringWithOffset, setWallClockTimeToNewTimeZone } from '$lib/utils/date/datetime';
+	import {
+		getISOStringWithOffset,
+		setWallClockTimeToNewTimeZone,
+		convertToTimezone
+	} from '$lib/utils/date/datetime';
 	let editSlug = $state(false);
 	let timezoneEditable = $state(false);
-	let startsAt = $state($formData.starts_at);
-	let endsAt = $state($formData.ends_at);
+	let startsAt = $state(convertToTimezone($formData.starts_at, $formData.timezone));
+	let endsAt = $state(convertToTimezone($formData.ends_at, $formData.timezone));
 	function timezoneChaged(timezone: string) {
 		$formData.timezone = timezone;
 	}
@@ -66,9 +70,9 @@
 	});
 
 	// Track previous values to detect actual changes
-	let prevStartsAt = $state(null);
-	let prevEndsAt = $state(null);
-	let prevTimezone = $state(null);
+	let prevStartsAt: Date | null = $state(null);
+	let prevEndsAt: Date | null = $state(null);
+	let prevTimezone: string | null = $state(null);
 
 	$effect(() => {
 		// Initialize on first run
