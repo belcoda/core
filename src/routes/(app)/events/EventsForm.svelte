@@ -41,8 +41,11 @@
 	import Timezone from '$lib/comps/ui/form/controls/timezone.svelte';
 	import { getCountryTimezones } from '$lib/i18n/countries';
 	import { onMount } from 'svelte';
+	import { getISOStringWithOffset, setWallClockTimeToNewTimeZone } from '$lib/utils/date/datetime';
 	let editSlug = $state(false);
 	let timezoneEditable = $state(false);
+	let startsAt = $state($formData.starts_at);
+	let endsAt = $state($formData.ends_at);
 	function timezoneChaged(timezone: string) {
 		$formData.timezone = timezone;
 	}
@@ -59,6 +62,47 @@
 	onMount(() => {
 		if ($formData.country) {
 			countryChaged($formData.country);
+		}
+	});
+
+	// Track previous values to detect actual changes
+	let prevStartsAt = $state(null);
+	let prevEndsAt = $state(null);
+	let prevTimezone = $state(null);
+
+	$effect(() => {
+		// Initialize on first run
+		if (prevStartsAt === null) {
+			prevStartsAt = startsAt;
+			prevEndsAt = endsAt;
+			prevTimezone = $formData.timezone;
+		}
+
+		// Only run when inputs actually change
+		if (startsAt === prevStartsAt && endsAt === prevEndsAt && $formData.timezone === prevTimezone) {
+			return;
+		}
+
+		// Update previous values
+		prevStartsAt = startsAt;
+		prevEndsAt = endsAt;
+		prevTimezone = $formData.timezone;
+
+		let newStartsAt = setWallClockTimeToNewTimeZone(
+			startsAt instanceof Date ? getISOStringWithOffset(startsAt) : startsAt,
+			$formData.timezone
+		);
+		let newEndsAt = setWallClockTimeToNewTimeZone(
+			endsAt instanceof Date ? getISOStringWithOffset(endsAt) : endsAt,
+			$formData.timezone
+		);
+
+		// Only update if values have actually changed to prevent circular updates
+		if (newStartsAt !== $formData.starts_at) {
+			$formData.starts_at = newStartsAt;
+		}
+		if (newEndsAt !== $formData.ends_at) {
+			$formData.ends_at = newEndsAt;
 		}
 	});
 </script>
@@ -108,14 +152,14 @@
 			{form}
 			name="starts_at"
 			label={m.proof_long_bird_love()}
-			bind:value={$formData.starts_at}
+			bind:value={startsAt}
 			timezone={$formData.timezone}
 		/>
 		<DateTime
 			{form}
 			name="ends_at"
 			label={m.close_nice_cowfish_savor()}
-			bind:value={$formData.ends_at}
+			bind:value={endsAt}
 			timezone={$formData.timezone}
 		/>
 	</Grid>
