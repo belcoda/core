@@ -23,6 +23,7 @@
 	import { getFlash } from 'sveltekit-flash-message';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import { convertToTimezone } from '$lib/utils/date/datetime';
 	const flash = getFlash(page);
 	let copied = $state(false);
 	const attendanceStatus: ['registered', 'attended', 'cancelled', 'noshow'] = [
@@ -99,7 +100,12 @@
 		</div>{/if}
 	<div class="flex items-center gap-1.5">
 		<CalendarClock size={16} />
-		{formatDateTimeRange(data.event.starts_at, data.event.ends_at, undefined, data.event.timezone)}
+		{formatDateTimeRange(
+			convertToTimezone(data.event.starts_at, data.event.timezone),
+			convertToTimezone(data.event.ends_at, data.event.timezone),
+			undefined,
+			data.event.timezone
+		)}
 	</div>
 	<div class="flex items-center gap-1.5">
 		<Link size={16} />

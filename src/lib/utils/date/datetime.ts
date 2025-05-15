@@ -47,6 +47,14 @@ export function convertToUserTimezone(date: Date): ZonedDateTime {
 	return parseAbsoluteToLocal(date.toISOString());
 }
 
+export function convertToTimezone(date: Date, tzString: string): Date {
+	return new Date(
+		date.toLocaleString('en-US', {
+			timeZone: tzString
+		})
+	);
+}
+
 /**
  * Validates that minuteSteps is a valid divisor of 60
  * @param steps - The number of minutes to step by

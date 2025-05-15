@@ -4,6 +4,7 @@
 	import { page } from '$app/state';
 	import { type List } from '$lib/schema/events/attendees';
 	import * as Table from '$lib/comps/ui/table/index';
+	import { convertToTimezone } from '$lib/utils/date/datetime.js';
 	//Have to use parseInt because Number(page.url.searchParams.get('additionalRows')) returns 0 when null
 	const amountOfAdditionalRows = isNaN(parseInt(page.url.searchParams.get('additionalRows') || ''))
 		? 20
@@ -45,8 +46,8 @@
 		<div class="flex items-center gap-1.5">
 			<CalendarClock size={16} />
 			{formatDateTimeRange(
-				data.event.starts_at,
-				data.event.ends_at,
+				convertToTimezone(data.event.starts_at, data.event.timezone),
+				convertToTimezone(data.event.ends_at, data.event.timezone),
 				undefined,
 				data.event.timezone
 			)}
