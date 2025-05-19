@@ -1,18 +1,17 @@
-<script lang="ts" module>
-	type T = Record<string, unknown>;
-</script>
-
-<script lang="ts" generics="T extends Record<string, unknown>">
-	import { type SuperForm, type FormPath } from 'sveltekit-superforms';
+<script lang="ts">
+	import { type SuperForm } from 'sveltekit-superforms';
+	import * as m from '$lib/paraglide/messages';
 	type Props = {
-		name: FormPath<T>;
-		form: SuperForm<T>;
+		name: string;
+		form: SuperForm<any>;
 		value: string;
 		label?: string | null;
 		description?: string | null;
 		class?: string;
 		placeholder?: string;
-		onCountryChange?: (country: string) => void;
+		onTimezoneChange?: (timezone: string) => void;
+		country?: string | null;
+		disabled?: boolean;
 	};
 
 	let {
@@ -22,44 +21,38 @@
 		label,
 		description,
 		class: className,
-		placeholder = m.gross_royal_nuthatch_rise(),
-		onCountryChange = () => {}
+		placeholder = m.fun_raw_giraffe_treasure(),
+		onTimezoneChange = () => {},
+		country = null,
+		disabled = false
 	}: Props = $props();
 
 	import * as Form from '$lib/comps/ui/form';
 	import { cn } from '$lib/utils';
-	import { renderLocalizedCountryName, countryList } from '$lib/i18n/countries';
-	// Everything above this can be copied
-
-	import * as m from '$lib/paraglide/messages';
-
-	import * as Select from '$lib/comps/ui/select';
-	import { SUPPORTED_COUNTRIES } from '$lib/i18n';
-
-	import { getLocale } from '$lib/paraglide/runtime';
 	import { tick } from 'svelte';
-
 	import * as Popover from '$lib/comps/ui/popover';
 	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
 	import Check from 'lucide-svelte/icons/check';
 	import * as Command from '$lib/comps/ui/command';
 	import Button from '$lib/comps/ui/button/button.svelte';
 
-	const locale = getLocale();
+	import { getCountryTimezones } from '$lib/i18n/countries';
 
-	const options = countryList.map((country) => ({
-		value: country.code,
-		label: `${country.flag} ${renderLocalizedCountryName(country.code, locale)}`
-	}));
+	const timezones = $derived(() => {
+		if (typeof Intl.supportedValuesOf !== 'function') {
+			console.error('Intl.supportedValuesOf is not supported in this environment.');
+			return [];
+		}
+		return country
+			? [...getCountryTimezones(country)]
+			: Array.from(Intl.supportedValuesOf('timeZone'));
+	});
 
 	let open = $state(false);
 	let triggerRef = $state<HTMLButtonElement>(null!);
 
-	const selectedValue = $derived(options.find((f) => f.value === value)?.label);
+	const selectedValue = $derived(timezones().find((f: string) => f === value));
 
-	// We want to refocus the trigger button when the user selects
-	// an item from the list so users can continue navigating the
-	// rest of the form with the keyboard.
 	function closeAndFocusTrigger() {
 		open = false;
 		tick().then(() => {
@@ -82,8 +75,9 @@
 								{...props}
 								role="combobox"
 								aria-expanded={open}
+								{disabled}
 							>
-								{selectedValue || 'Select a framework...'}
+								{selectedValue || placeholder}
 								<ChevronsUpDown class="opacity-50" />
 							</Button>
 						{/snippet}
@@ -92,20 +86,20 @@
 						<Command.Root>
 							<Command.Input {placeholder} />
 							<Command.List>
-								<Command.Empty>{m.tidy_cuddly_pelican_evoke()}</Command.Empty>
+								<Command.Empty>{placeholder}</Command.Empty>
 								<Command.Group>
-									{#each countryList as country}
+									{#each timezones() as timezone}
 										<Command.Item
-											keywords={[renderLocalizedCountryName(country.code, locale)]}
-											value={country.code}
+											keywords={[timezone]}
+											value={timezone}
 											onSelect={() => {
-												value = country.code;
+												value = timezone;
 												closeAndFocusTrigger();
-												onCountryChange(country.code);
+												onTimezoneChange(timezone);
 											}}
 										>
-											<Check class={cn(value !== country.code && 'text-transparent')} />
-											{`${country.flag} ${renderLocalizedCountryName(country.code, locale)}`}
+											<Check class={cn(value !== timezone && 'text-transparent')} />
+											{timezone}
 										</Command.Item>
 									{/each}
 								</Command.Group>
