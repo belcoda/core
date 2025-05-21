@@ -85,6 +85,9 @@
 			<Button variant="outline" target="_blank" href={previewUrl}
 				>{m.alive_silly_antelope_build()}</Button
 			>
+			<Button href="/events/{data.event.id}/edit/notifications" variant="outline"
+				>{m.large_seemly_crocodile_spur()}</Button
+			>
 			<Button href="/events/{data.event.id}/edit">{m.giant_misty_shrimp_stop()}</Button>
 		</div>
 	{/snippet}
