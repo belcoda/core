@@ -638,5 +638,8 @@
 	"light_next_wasp_belong": "Deve ser um código de idioma ISO 639-1 válido (por exemplo: 'en' para inglês)",
 	"fun_raw_giraffe_treasure": "Selecione um fuso horário",
 	"close_stock_lion_bubble": "Fuso horário",
-	"east_north_osprey_hurl": "Você já assinou a petição {activityTitle}"
+	"east_north_osprey_hurl": "Você já assinou a petição {activityTitle}",
+	"such_weird_lamb_feel": "Observação",
+	"aqua_weird_badger_cook": "Os participantes receberão notificações sobre o evento. Você pode alterar quais notificações eles receberão e quando, alterando as configurações de notificação em",
+	"large_seemly_crocodile_spur": "Gerenciar notificações"
 }

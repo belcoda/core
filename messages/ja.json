@@ -637,5 +637,8 @@
 	"fun_raw_giraffe_treasure": "タイムゾーンを選択",
 	"close_stock_lion_bubble": "タイムゾーン",
 	"east_north_osprey_hurl": "あなたはすでに請願書{activityTitle} に署名しています",
-	"light_next_wasp_belong": "有効な ISO 639-1 言語コードである必要があります (例: 英語の場合は「en」)"
+	"light_next_wasp_belong": "有効な ISO 639-1 言語コードである必要があります (例: 英語の場合は「en」)",
+	"such_weird_lamb_feel": "注記",
+	"aqua_weird_badger_cook": "参加者はイベントに関する通知を受け取ります。通知の種類と受信タイミングは、以下の通知設定を変更することで変更できます。",
+	"large_seemly_crocodile_spur": "通知を管理する"
 }

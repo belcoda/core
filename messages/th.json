@@ -638,5 +638,8 @@
 	"light_next_wasp_belong": "ต้องเป็นรหัสภาษา ISO 639-1 ที่ถูกต้อง (เช่น: 'en' สำหรับภาษาอังกฤษ)",
 	"fun_raw_giraffe_treasure": "เลือกเขตเวลา",
 	"close_stock_lion_bubble": "เขตเวลา",
-	"east_north_osprey_hurl": "คุณได้ลงนามในคำร้องแล้ว {activityTitle}"
+	"east_north_osprey_hurl": "คุณได้ลงนามในคำร้องแล้ว {activityTitle}",
+	"such_weird_lamb_feel": "บันทึก",
+	"aqua_weird_badger_cook": "ผู้เข้าร่วมจะได้รับการแจ้งเตือนเกี่ยวกับกิจกรรม คุณสามารถเปลี่ยนการแจ้งเตือนที่พวกเขาจะได้รับและเวลาที่พวกเขาจะได้รับโดยเปลี่ยนการตั้งค่าการแจ้งเตือนภายใต้",
+	"large_seemly_crocodile_spur": "จัดการการแจ้งเตือน"
 }
