@@ -1,12 +1,11 @@
 import { db, pool, redis, pino, BelcodaError, error, filterQuery, type s } from '$lib/server';
 import * as m from '$lib/paraglide/messages';
-import { filterInteractions } from '$lib/server/utils/filters/filter';
 import { format } from 'node-pg-format';
 import * as schema from '$lib/schema/people/people';
 import { read as instanceApi } from '$lib/server/api/core/instances';
 import { filterPersonTags } from '$lib/server/utils/filters/filter';
 import { DEFAULT_COUNTRY, DEFAULT_LANGUAGE } from '$lib/i18n';
-import { queue as queueInteraction } from '$lib/server/api/people/interactions';
+import { queue as queueInteraction } from '$lib/server/api/people/interactions/queue.js';
 import { getUniqueKeys } from '$lib/utils/objects/get_unique_keys';
 import { parse, v, mediumString, longString } from '$lib/schema/valibot';
 import { whatsappNumberForVerification } from '$lib/schema/people/channels/channels';
