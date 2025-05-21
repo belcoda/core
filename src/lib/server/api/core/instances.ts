@@ -28,12 +28,10 @@ export const create = async ({
 
 export const update = async ({
 	instanceId,
-	body,
-	t
+	body
 }: {
 	instanceId: number;
 	body: schema.Update;
-	t: App.Localization;
 }): Promise<schema.Read> => {
 	const parsed = v.parse(schema.update, body);
 	const response = await db.update('instances', parsed, { id: instanceId }).run(pool);

@@ -11,8 +11,7 @@ export async function PUT(event) {
 		const parsed = parse(secretSchema, body.secrets);
 		await updateSecrets({
 			instanceId,
-			body: { secrets: parsed },
-			t: event.locals.t
+			body: { secrets: parsed }
 		});
 		const secrets = await _readSecretsUnsafe({ instanceId });
 		return json(secrets);

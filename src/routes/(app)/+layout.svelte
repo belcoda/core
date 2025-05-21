@@ -10,7 +10,6 @@
 		breadcrumbs as breadcrumbsConstructor,
 		renderBreadcrumb
 	} from '$lib/comps/nav/breadcrumbs/breadcrumbs';
-	import { getLocale } from '$lib/paraglide/runtime';
 	import Button from '$lib/comps/ui/button/button.svelte';
 	import { PUBLIC_UMAMI_WEBSITE_ID } from '$env/static/public';
 	import { PUBLIC_SENTRY_DSN } from '$env/static/public';
@@ -71,6 +70,7 @@
 			window.umami.identify({ team: page.data.instance.slug, id: page.data.admin.id });
 		}
 	}
+	import MissingDefaultFromSignature from '$lib/comps/alerts/MissingDefaultFromSignature.svelte';
 </script>
 
 <svelte:head>
@@ -95,6 +95,8 @@
 				{#key page.url.pathname}<Sidebar />{/key}
 			</div>
 			<div class="col-span-12 lg:col-span-9 xl:col-span-10 lg:mb-0">
+				<!-- {#if !page.data.instance.settings.communications.email.default_from_signature_id}<MissingDefaultFromSignature
+					/>{/if} -->
 				{#key page.url.pathname}<Breadcrumb />{/key}
 				{@render children()}
 			</div>

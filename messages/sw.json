@@ -640,5 +640,7 @@
 	"light_next_wasp_belong": "Lazima iwe msimbo halali wa lugha wa ISO 639-1 (km: 'en' kwa Kiingereza)",
 	"such_weird_lamb_feel": "Kumbuka",
 	"aqua_weird_badger_cook": "Washiriki watapokea arifa kuhusu tukio hilo. Unaweza kubadilisha arifa wanazopokea na wanapozipokea kwa kubadilisha mipangilio ya arifa chini ya",
-	"large_seemly_crocodile_spur": "Dhibiti arifa"
+	"large_seemly_crocodile_spur": "Dhibiti arifa",
+	"spare_good_marmot_laugh": "Huna chaguo-msingi kutoka kwa anwani iliyosanidiwa. Barua pepe zote (ikiwa ni pamoja na vikumbusho vya matukio) zitatumwa\nimetumwa kutoka kwa anwani chaguo-msingi ( {emailAddress} ). Unaweza kusanidi mipangilio yako ya barua pepe kwenye <a href=\"/settings/email/from_signatures\" class=\"text-blue-500 underline\">paneli ya msimamizi</a> .",
+	"yummy_muddy_capybara_nail": "Kuna tatizo na usanidi wa barua pepe yako!"
 }
