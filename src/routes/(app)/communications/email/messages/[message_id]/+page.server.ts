@@ -19,6 +19,7 @@ import {
 	create as createMessage
 } from '$lib/schema/communications/email/messages';
 import { list as listSends, create as createSend } from '$lib/schema/communications/email/sends';
+import { list as listFromSignatures } from '$lib/schema/communications/email/from_signatures';
 import { parse } from '$lib/schema/valibot';
 import * as m from '$lib/paraglide/messages';
 
@@ -41,6 +42,11 @@ export async function load(event) {
 	const sendsBody = await sendsResponse.json();
 	const sendsParsed = parse(listSends, sendsBody);
 
+	const fromSignatureResponse = await event.fetch(`/api/v1/communications/email/from_signatures`);
+	if (!fromSignatureResponse.ok) return loadError(fromSignatureResponse);
+	const fromSignatureBody = await fromSignatureResponse.json();
+	const fromSignatureParsed = parse(listFromSignatures, fromSignatureBody);
+
 	const form = await superValidate(parsed, valibot(update));
 
 	const sendsForm = await superValidate(
@@ -52,6 +58,7 @@ export async function load(event) {
 		message: parsed,
 		sends: sendsParsed,
 		form,
+		fromSignatures: fromSignatureParsed,
 		sendsForm,
 		pageTitle: [{ key: 'MESSAGEID', title: body.id }]
 	};

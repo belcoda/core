@@ -635,7 +635,9 @@
 	"just_patient_finch_mix": "Votre inscription a été annulée. Nous ne vous attendons plus.",
 	"tidy_cuddly_pelican_evoke": "Aucun pays correspondant trouvé.",
 	"light_next_wasp_belong": "Doit être un code de langue ISO 639-1 valide (par exemple : « en » pour l'anglais)",
+	"east_north_osprey_hurl": "Vous avez déjà signé la pétition {activityTitle}",
+	"spare_good_marmot_laugh": "Vous n'avez pas d'adresse d'expéditeur par défaut. Tous les e-mails (y compris les rappels d'événements) seront\nEnvoyé depuis l'adresse par défaut ( {emailAddress} ). Vous pouvez configurer vos paramètres de messagerie dans <a href=\"/settings/email/from_signatures\" class=\"text-blue-500 underline\">le panneau d'administration</a> .",
+	"yummy_muddy_capybara_nail": "Il y a un problème avec la configuration de votre e-mail !",
 	"fun_raw_giraffe_treasure": "Sélectionnez un fuseau horaire",
-	"close_stock_lion_bubble": "Fuseau horaire",
-	"east_north_osprey_hurl": "Vous avez déjà signé la pétition {activityTitle}"
+	"close_stock_lion_bubble": "Fuseau horaire"
 }

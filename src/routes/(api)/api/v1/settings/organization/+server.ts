@@ -9,8 +9,7 @@ export async function PUT(event) {
 		const parsed = parse(update, body);
 		const updated = await updateApi({
 			instanceId: event.locals.instance.id,
-			body: parsed,
-			t: event.locals.t
+			body: parsed
 		});
 		return json(updated);
 	} catch (err) {

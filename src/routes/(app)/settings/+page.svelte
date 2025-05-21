@@ -77,4 +77,22 @@
 			</Grid>
 		</Card.Content>
 	</Card.Root>
+
+	<Card.Root class="mt-4">
+		<Card.Header>
+			<Card.Title>Email settings</Card.Title>
+			<!-- TODO TRANSLATE -->
+		</Card.Header>
+		<Card.Content>
+			<Grid>
+				<Button variant="outline" href="/settings/email/from_signatures"
+					>Manage email from signatures</Button
+				>
+				<!-- TODO TRANSLATE -->
+				<Button variant="outline" href="/settings/email/from_signatures/new"
+					>New email from signature</Button
+				><!-- TODO TRANSLATE -->
+			</Grid>
+		</Card.Content>
+	</Card.Root>
 </Grid>

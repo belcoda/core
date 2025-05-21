@@ -55,8 +55,7 @@ describe('PUT /settings/secrets', () => {
 		expect(response.body).toEqual(mockSecrets);
 		expect(updateSecrets).toHaveBeenCalledWith({
 			instanceId: '123',
-			body: { secrets: mockSecrets },
-			t: event.locals.t
+			body: { secrets: mockSecrets }
 		});
 	});
 

@@ -636,7 +636,9 @@
 	"just_patient_finch_mix": "Tu registro fue cancelado. No te esperamos.",
 	"tidy_cuddly_pelican_evoke": "No se encontró ningún país coincidente.",
 	"light_next_wasp_belong": "Debe ser un código de idioma ISO 639-1 válido (por ejemplo: 'en' para inglés)",
+	"east_north_osprey_hurl": "Ya has firmado la petición {activityTitle}",
+	"spare_good_marmot_laugh": "No tienes una dirección de remitente predeterminada configurada. Todos los correos electrónicos (incluidos los recordatorios de eventos) se enviarán\nSe envía desde la dirección predeterminada ( {emailAddress} ). Puede configurar sus ajustes de correo electrónico en <a href=\"/settings/email/from_signatures\" class=\"text-blue-500 underline\">el panel de administración</a> .",
+	"yummy_muddy_capybara_nail": "¡Hay un problema con tu configuración de correo electrónico!",
 	"fun_raw_giraffe_treasure": "Seleccione una zona horaria",
-	"close_stock_lion_bubble": "Zona horaria",
-	"east_north_osprey_hurl": "Ya has firmado la petición {activityTitle}"
+	"close_stock_lion_bubble": "Zona horaria"
 }
