@@ -51,8 +51,7 @@
 	const { children } = $props();
 
 	import { getFlash } from 'sveltekit-flash-message';
-	//TODO: Replace with svelte-french-toast when it supports svelte 5
-	import toast, { Toaster } from 'svelte-hot-french-toast';
+	import toast, { Toaster } from 'svelte-french-toast';
 	const flash = getFlash(page);
 	flash.subscribe(($flash) => {
 		if (!$flash) return;

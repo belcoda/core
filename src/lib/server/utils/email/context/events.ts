@@ -17,7 +17,7 @@ import * as m from '$lib/paraglide/messages';
 import { formatDateTimeRange } from '$lib/utils/text/date';
 import { renderAddress } from '$lib/utils/text/address';
 import { htmlToPlaintext } from '$lib/utils/text/string';
-
+import { convertToTimezone } from '$lib/utils/date/datetime';
 export function baseEventOptions(options: Input) {
 	const eventUrl = `${dev ? 'http://' : 'https://'}${options.instance.slug}.${PUBLIC_ROOT_DOMAIN}/events/${options.event.slug}`;
 	return {
@@ -37,9 +37,10 @@ export function baseEventOptions(options: Input) {
 			},
 			isOnline: options.event.online,
 			dateTime: formatDateTimeRange(
-				options.event.starts_at,
-				options.event.ends_at,
-				options.language
+				convertToTimezone(options.event.starts_at, options.event.timezone),
+				convertToTimezone(options.event.ends_at, options.event.timezone),
+				options.language,
+				options.event.timezone
 			),
 			address: renderAddress(options.event, options.instance.country),
 			onlineUrl: options.event.online_url

@@ -102,6 +102,13 @@
 			$flash = { type: 'error', message: 'Please fill in all placeholders before sending' };
 			return;
 		}
+		if (componentActions.hasUnattachedButtons(template, components, templateMessage, messages)) {
+			$flash = {
+				type: 'error',
+				message: 'Please make sure all buttons have actions before sending.'
+			};
+			return;
+		}
 		goto(`/communications/whatsapp/${data.thread.id}/sends`);
 	}
 </script>

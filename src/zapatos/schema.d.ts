@@ -22299,6 +22299,12 @@ declare module 'zapatos/schema' {
 				 */
 				state: string | null;
 				/**
+				 * **events.events.timezone**
+				 * - `text` in database
+				 * - `NOT NULL`, default: `'Etc/UTC'::text`
+				 */
+				timezone: string;
+				/**
 				 * **events.events.updated_at**
 				 * - `timestamptz` in database
 				 * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -22594,6 +22600,12 @@ declare module 'zapatos/schema' {
 				 * - Nullable, no default
 				 */
 				state: string | null;
+				/**
+				 * **events.events.timezone**
+				 * - `text` in database
+				 * - `NOT NULL`, default: `'Etc/UTC'::text`
+				 */
+				timezone: string;
 				/**
 				 * **events.events.updated_at**
 				 * - `timestamptz` in database
@@ -23182,6 +23194,17 @@ declare module 'zapatos/schema' {
 					| db.ParentColumn
 					| db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
 				/**
+				 * **events.events.timezone**
+				 * - `text` in database
+				 * - `NOT NULL`, default: `'Etc/UTC'::text`
+				 */
+				timezone?:
+					| string
+					| db.Parameter<string>
+					| db.SQLFragment
+					| db.ParentColumn
+					| db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+				/**
 				 * **events.events.updated_at**
 				 * - `timestamptz` in database
 				 * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -23548,6 +23571,12 @@ declare module 'zapatos/schema' {
 				 * - Nullable, no default
 				 */
 				state?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
+				/**
+				 * **events.events.timezone**
+				 * - `text` in database
+				 * - `NOT NULL`, default: `'Etc/UTC'::text`
+				 */
+				timezone?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment;
 				/**
 				 * **events.events.updated_at**
 				 * - `timestamptz` in database
@@ -24186,6 +24215,17 @@ declare module 'zapatos/schema' {
 							any,
 							string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment
 					  >;
+				/**
+				 * **events.events.timezone**
+				 * - `text` in database
+				 * - `NOT NULL`, default: `'Etc/UTC'::text`
+				 */
+				timezone?:
+					| string
+					| db.Parameter<string>
+					| db.DefaultType
+					| db.SQLFragment
+					| db.SQLFragment<any, string | db.Parameter<string> | db.DefaultType | db.SQLFragment>;
 				/**
 				 * **events.events.updated_at**
 				 * - `timestamptz` in database

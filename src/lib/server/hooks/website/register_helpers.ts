@@ -8,6 +8,7 @@ import { formatDateOnly, formatDateTimeRange } from '$lib/utils/text/date';
 import { renderAddress } from '$lib/utils/text/address';
 import { renderRegistrationLink } from '$lib/utils/text/whatsapp';
 import { type Read as ReadInstance } from '$lib/schema/core/instance';
+import { convertToTimezone } from '$lib/utils/date/datetime';
 export default function (
 	hb: typeof Handlebars,
 	blocks: Read[],
@@ -26,7 +27,12 @@ export default function (
 	});
 
 	hb.registerHelper('render_event_time', function (event: EventRead) {
-		return formatDateTimeRange(event.starts_at, event.ends_at);
+		return formatDateTimeRange(
+			convertToTimezone(event.starts_at, event.timezone),
+			convertToTimezone(event.ends_at, event.timezone),
+			undefined,
+			event.timezone
+		);
 	});
 	hb.registerHelper('time', function (date: string | Date) {
 		return new Date(date).toLocaleTimeString();

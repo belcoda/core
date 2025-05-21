@@ -15,10 +15,12 @@ import {
 
 import { PUBLIC_DEFAULT_WHATSAPP_PHONE_NUMBER } from '$env/static/public';
 import { emailTemplates } from '$lib/schema/communications/email/messages';
+import { timezone } from '$lib/schema/utils/datetime';
 
 export const settings = v.object({
 	default_admin_id: id,
 	home_page_url: v.nullable(url),
+	default_timezone: v.optional(timezone, 'Etc/UTC'),
 	events: v.object({
 		event_email_template_prefix: v.optional(shortString, ''), //prefix for the template name for event notifications incase we need to give some instances access to different templates
 		default_event_info_settings: v.object({
