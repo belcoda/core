@@ -2,7 +2,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 import { sentrySvelteKit } from '@sentry/sveltekit';
 import { paraglideVitePlugin } from '@inlang/paraglide-js';
-
+import circleDependency from 'vite-plugin-circular-dependency';
 export default defineConfig({
 	optimizeDeps: {
 		exclude: ['lucide-svelte']
@@ -13,6 +13,9 @@ export default defineConfig({
 		paraglideVitePlugin({
 			project: './project.inlang',
 			outdir: './src/lib/paraglide'
+		}),
+		circleDependency({
+			outputFilePath: './circular-dependencies.txt'
 		})
 	],
 	test: {
