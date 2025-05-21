@@ -640,5 +640,8 @@
 	"spare_good_marmot_laugh": "No tienes una dirección de remitente predeterminada configurada. Todos los correos electrónicos (incluidos los recordatorios de eventos) se enviarán\nSe envía desde la dirección predeterminada ( {emailAddress} ). Puede configurar sus ajustes de correo electrónico en <a href=\"/settings/email/from_signatures\" class=\"text-blue-500 underline\">el panel de administración</a> .",
 	"yummy_muddy_capybara_nail": "¡Hay un problema con tu configuración de correo electrónico!",
 	"fun_raw_giraffe_treasure": "Seleccione una zona horaria",
-	"close_stock_lion_bubble": "Zona horaria"
+	"close_stock_lion_bubble": "Zona horaria",
+	"such_weird_lamb_feel": "Nota",
+	"aqua_weird_badger_cook": "Los participantes recibirán notificaciones sobre el evento. Puedes cambiar qué notificaciones reciben y cuándo las reciben modificando la configuración de notificaciones en",
+	"large_seemly_crocodile_spur": "Administrar notificaciones"
 }

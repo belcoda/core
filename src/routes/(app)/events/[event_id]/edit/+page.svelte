@@ -14,7 +14,7 @@
 				>{m.warm_jumpy_poodle_find()}</Button
 			>
 			<Button href="/events/{$page.params.event_id}/edit/notifications" variant="outline"
-				>Manage notifications</Button
+				>{m.large_seemly_crocodile_spur()}</Button
 			>
 			<Button href="/events/{$page.params.event_id}">Back</Button>
 		</div>

@@ -85,6 +85,9 @@
 			<Button variant="outline" target="_blank" href={previewUrl}
 				>{m.alive_silly_antelope_build()}</Button
 			>
+			<Button href="/events/{data.event.id}/edit/notifications" variant="outline"
+				>{m.large_seemly_crocodile_spur()}</Button
+			>
 			<Button href="/events/{data.event.id}/edit">{m.giant_misty_shrimp_stop()}</Button>
 		</div>
 	{/snippet}
@@ -145,6 +148,18 @@
 			>{#snippet header()}{/snippet}</PointPerson
 		>
 	</div>
+</div>
+<div
+	class="p-4 mt-4 text-sm text-blue-800 rounded-lg bg-blue-100 dark:bg-gray-800 dark:text-blue-300"
+	role="alert"
+>
+	<p>
+		<span class="font-medium"
+			>{m.such_weird_lamb_feel()}: {m.aqua_weird_badger_cook()} "<strong
+				>{m.large_seemly_crocodile_spur()}</strong
+			>".</span
+		>
+	</p>
 </div>
 <div class="mt-12">
 	<DataGrid title={m.petty_vexed_jurgen_nurture()} items={attendees} count={data.attendees.count}>
