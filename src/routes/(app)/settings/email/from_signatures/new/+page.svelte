@@ -28,12 +28,28 @@
 				</div>
 			</div>
 		{/if}
+		<div
+			class="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
+			role="alert"
+		>
+			<p>
+				<span class="font-medium">Note: Public email providers (eg: @gmail.com) not possible:</span>
+				You can't use email addresses from public email providers (for example @gmail.com or @yahoo.com)
+				as an email send signature. You must use an email address from a domain for your organization
+				or group. If you try to to use a public email address, you will receive an error.
+			</p>
+			<p class="mt-2">
+				You can, however, direct replies to a public email provider email address (eg:
+				yourname@gmail.com) in the reply-to settings of any emails you send.
+			</p>
+		</div>
 		<Input
 			{form}
 			label={m.extra_wild_earthworm_commend()}
 			bind:value={$formData.name as string}
 			name="name"
 		/>
+
 		<Input
 			{form}
 			type="email"
