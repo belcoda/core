@@ -82,7 +82,6 @@
 		"@sveltejs/adapter-node": "^5.2.9",
 		"@tinymce/tinymce-svelte": "^3.0.0",
 		"@types/knex": "^0.16.1",
-		"@valibot/to-json-schema": "^1.0.0-beta.3",
 		"@vitest/coverage-v8": "^1.6.0",
 		"awesome-phonenumber": "^6.9.0",
 		"clsx": "^2.1.1",
