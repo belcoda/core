@@ -8,7 +8,9 @@ export default defineConfig({
 		exclude: ['lucide-svelte']
 	},
 	plugins: [
-		sentrySvelteKit(),
+		sentrySvelteKit({
+			autoUploadSourceMaps: true
+		}),
 		sveltekit(),
 		paraglideVitePlugin({
 			project: './project.inlang',
