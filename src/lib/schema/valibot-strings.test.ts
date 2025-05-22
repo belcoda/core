@@ -325,3 +325,42 @@ describe('uuid', () => {
 		expect(() => parse(uuid, '')).toThrow();
 	});
 });
+
+import { domainOrUrl } from '$lib/schema/valibot';
+describe('domainOrUrl', () => {
+	it('should parse a valid domain', () => {
+		expect(parse(domainOrUrl, 'example.com')).toBe('https://example.com/');
+		expect(parse(domainOrUrl, 'acts.eco')).toBe('https://acts.eco/');
+		expect(parse(domainOrUrl, 'good-domain.com')).toBe('https://good-domain.com/');
+		expect(parse(domainOrUrl, 'sub.domain.co.uk')).toBe('https://sub.domain.co.uk/');
+		expect(parse(domainOrUrl, 'sub.domain.co.uk/path')).toBe('https://sub.domain.co.uk/path');
+	});
+
+	it('should parse a valid URL, regardless of protocol', () => {
+		expect(parse(domainOrUrl, 'https://example.com')).toBe('https://example.com/');
+
+		expect(parse(domainOrUrl, 'http://sub.domain.co.uk/path')).toBe('http://sub.domain.co.uk/path');
+		expect(parse(domainOrUrl, 'ftp://sub.domain.co.uk/path')).toBe('ftp://sub.domain.co.uk/path');
+	});
+
+	it('should throw for an invalid URL', () => {
+		expect(() => parse(domainOrUrl, 'not a url')).toThrow();
+	});
+
+	it('should handle an extra slash in the protocol', () => {
+		expect(parse(domainOrUrl, 'http:///example.com')).toBe('http://example.com/');
+		expect(parse(domainOrUrl, 'https:///example.com')).toBe('https://example.com/');
+		expect(parse(domainOrUrl, 'https:///example.com/')).toBe('https://example.com/');
+	});
+
+	it('should throw if the URL is too long', () => {
+		const longUrl = 'https://example.com/' + 'a'.repeat(LONG_STRING_MAX_LENGTH);
+		expect(() => parse(domainOrUrl, longUrl)).toThrow();
+	});
+
+	it('should throw for non-string inputs', () => {
+		expect(() => parse(domainOrUrl, 123)).toThrow();
+		expect(() => parse(domainOrUrl, null)).toThrow();
+		expect(() => parse(domainOrUrl, {})).toThrow();
+	});
+});
