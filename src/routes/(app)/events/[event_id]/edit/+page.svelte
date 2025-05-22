@@ -2,7 +2,6 @@
 	import EventsForm from '../../EventsForm.svelte';
 	import PageHeader from '$lib/comps/layout/PageHeader.svelte';
 	import Button from '$lib/comps/ui/button/button.svelte';
-	export let data;
 	import { page } from '$app/stores';
 	import * as m from '$lib/paraglide/messages';
 </script>

@@ -11,8 +11,10 @@ import { read as readInstance } from '$lib/server/api/core/instances';
 
 const log = pino(import.meta.url);
 
-const redisString = (instance_id: number, admin_id: number | 'all') =>
-	`i:${instance_id}:admin:${admin_id}`;
+import { redisString } from '$lib/server/api/core/admins/cache';
+
+import { read } from '$lib/server/api/core/admins/read.js';
+export { read };
 
 export async function exists({
 	instanceId,
@@ -64,37 +66,6 @@ export async function create({
 		await queue('utils/people/match_sanction', instance_id, { adminId: createdParsed.id }, adminId);
 	}
 	return createdParsed;
-}
-
-export async function read({
-	instance_id,
-	t,
-	admin_id,
-	includeDeleted = false
-}: {
-	instance_id: number;
-	t: App.Localization;
-	admin_id: number;
-	includeDeleted?: boolean;
-}): Promise<schema.Read> {
-	if (!includeDeleted) {
-		const cached = await redis.get(redisString(instance_id, admin_id));
-		if (cached) return v.parse(schema.read, cached);
-	}
-	const response = await db
-		.selectExactlyOne('admins', {
-			instance_id,
-			id: admin_id,
-			...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
-		})
-		.run(pool)
-		.catch((err: Error) => {
-			throw new BelcodaError(404, 'DATA:CORE:ADMINS:READ:01', m.pretty_tired_fly_lead(), err);
-		});
-	const parsedResponse = v.parse(schema.read, response);
-	await redis.set(redisString(instance_id, admin_id), parsedResponse);
-
-	return parsedResponse;
 }
 
 export async function update({

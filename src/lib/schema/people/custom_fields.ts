@@ -6,7 +6,6 @@ import {
 	type ValidationArray,
 	validationArray
 } from '$lib/schema/people/custom_fields/validation';
-import { value } from 'valibot';
 
 export { validation, type ValidationArray, type Validation, validationArray };
 

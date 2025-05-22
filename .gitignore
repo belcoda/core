@@ -23,3 +23,6 @@ vite.config.ts.timestamp-*
 
 # DB
 ca-certificate.crt
+
+# Circular dependency tracking
+circular-dependencies.txt

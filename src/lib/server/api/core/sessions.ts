@@ -7,7 +7,7 @@ import * as schemaAdmin from '$lib/schema/core/admin';
 import * as schemaInstance from '$lib/schema/core/instance';
 import { v } from '$lib/schema/valibot';
 
-import { read as readAdmin } from '$lib/server/api/core/admins';
+import { read as readAdmin } from '$lib/server/api/core/admins/read.js';
 import { read as readInstance } from '$lib/server/api/core/instances';
 
 export const create = async ({

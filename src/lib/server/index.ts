@@ -6,7 +6,7 @@ export { filterQuery } from '$lib/server/utils/filters/filter';
 
 import * as m from '$lib/paraglide/messages';
 
-import { pino } from '$lib/server';
+import { pino } from '$lib/server/utils/logs/pino';
 const log = pino(import.meta.url);
 import { error as returnError, type NumericRange } from '@sveltejs/kit';
 import { randomUUID } from 'crypto';

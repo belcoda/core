@@ -1,4 +1,3 @@
-import type { ObjectSchema } from 'valibot';
 export type ChangePointPersonType =
 	| 'event'
 	| 'email_message'
