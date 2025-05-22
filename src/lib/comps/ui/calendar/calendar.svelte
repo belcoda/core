@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Calendar as CalendarPrimitive, type WithoutChildrenOrChild } from 'bits-ui';
-	// @circle-ignore (this is a shadcn-svelte component, so i won't mess with its internals)
+	// @circular-ignore (this is a shadcn-svelte component, so i won't mess with its internals)
 	import * as Calendar from './index.js';
 	import { cn } from '$lib/utils/shadcn.js';
 
