@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { type FilterGroup } from '$lib/schema/people/filters/filters';
 	import { defaultFullName } from '$lib/schema/people/filters/defaults';
+	// @circular-ignore (this is a circular import, but the svelte docs suggest this is now fine: https://svelte.dev/docs/svelte/legacy-svelte-self)
 	import FilterGroupWidet from './FilterGroupWidget.svelte';
-	import { page } from '$app/stores';
 	let {
 		filter = $bindable(),
 		root,
