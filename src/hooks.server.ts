@@ -34,6 +34,8 @@ export async function handleFetch({ event, request, fetch }) {
 	return await fetch(request);
 }
 
+export async function init() {}
+
 defineGetLocale(() => {
 	const l = locale.getStore() ?? baseLocale;
 	return l;
