@@ -54,7 +54,7 @@ export async function POST(event) {
 						v.picklist(['male', 'female', 'other', 'not_specified'])
 					)
 				),
-				date_of_birth: v.nullable(v.pipe(v.string(), v.regex(new RegExp(/^\d{4}-\d{2}-\d{2}$/)))),
+				date_of_birth: v.nullable(v.string()),
 				preferred_language: v.nullable(
 					v.pipe(
 						v.string(),
@@ -117,7 +117,12 @@ export async function POST(event) {
 					position: input.position,
 					preferred_language: input.preferred_language,
 					gender: input.gender,
-					dob: input.date_of_birth,
+					dob:
+						!input.date_of_birth || input.date_of_birth.trim() === ''
+							? null
+							: /^\d{4}-\d{2}-\d{2}$/.test(input.date_of_birth)
+								? input.date_of_birth
+								: null,
 					tags: filteredTags,
 					events: filteredEvents
 				};
