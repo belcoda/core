@@ -30,7 +30,30 @@ export async function POST(event) {
 				country: v.nullable(v.pipe(v.string(), v.length(2))),
 				organization: v.nullable(v.string()),
 				position: v.nullable(v.string()),
-				gender: v.nullable(v.picklist(['male', 'female', 'other', 'not_specified'])),
+				gender: v.nullable(
+					v.pipe(
+						v.string(),
+						v.transform((input) => {
+							if (!input) return null;
+							const normalized = input.toLowerCase().trim();
+							switch (normalized) {
+								case 'male':
+								case 'm':
+									return 'male';
+								case 'female':
+								case 'f':
+									return 'female';
+								case 'other':
+									return 'other';
+								case 'not_specified':
+									return 'not_specified';
+								default:
+									return 'not_specified';
+							}
+						}),
+						v.picklist(['male', 'female', 'other', 'not_specified'])
+					)
+				),
 				date_of_birth: v.nullable(v.pipe(v.string(), v.regex(new RegExp(/^\d{4}-\d{2}-\d{2}$/)))),
 				preferred_language: v.nullable(v.pipe(v.string(), v.length(2))),
 				tags: v.optional(v.nullable(v.string()), null),
