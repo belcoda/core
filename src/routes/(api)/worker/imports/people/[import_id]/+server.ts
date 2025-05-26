@@ -27,7 +27,27 @@ export async function POST(event) {
 				city: v.nullable(v.string()),
 				postcode: v.nullable(v.string()),
 				state: v.nullable(v.string()),
-				country: v.nullable(v.pipe(v.string(), v.length(2))),
+				country: v.nullable(
+					v.pipe(
+						v.string(),
+						v.transform((input) => {
+							if (!input || input.trim() === '') return event.locals.instance.country;
+
+							const normalized = input.toLowerCase().trim();
+
+							// If it's already a valid 2-letter ISO code
+							if (
+								normalized.length === 2 &&
+								SUPPORTED_COUNTRIES.includes(normalized.toUpperCase() as SupportedCountry)
+							) {
+								return normalized.toUpperCase();
+							}
+
+							// Default to instance country if no match found
+							return event.locals.instance.country;
+						})
+					)
+				),
 				organization: v.nullable(v.string()),
 				position: v.nullable(v.string()),
 				gender: v.nullable(
