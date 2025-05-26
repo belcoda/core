@@ -172,7 +172,19 @@ export async function POST(event) {
 				log.error(err);
 			})
 			.on('data', function (row) {
-				records.push(row);
+				// Check if all values in the row are empty or null
+				const isEntirelyEmptyRow = Object.values(row).every(
+					(value) => value === null || String(value).trim() === ''
+				);
+
+				// Check if both family_name and given_name are empty
+				const familyName = row.family_name ? String(row.family_name).trim() : '';
+				const givenName = row.given_name ? String(row.given_name).trim() : '';
+				const isNameEmpty = familyName === '' && givenName === '';
+
+				if (!isEntirelyEmptyRow && !isNameEmpty) {
+					records.push(row);
+				}
 			})
 			.on('end', async function (rowCount: number) {
 				log.debug(`Parsed ${rowCount} rows`);
