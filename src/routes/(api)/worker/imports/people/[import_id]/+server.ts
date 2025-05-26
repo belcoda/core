@@ -9,6 +9,7 @@ import { create as createSchema } from '$lib/schema/people/people';
 import { renderName } from '$lib/utils/text/names';
 import { v, parse } from '$lib/schema/valibot';
 import * as m from '$lib/paraglide/messages';
+import { getCsvFromLocalFolderAsync } from '$lib/utils/testing/csv_reader.js';
 const log = pino(import.meta.url);
 
 export async function POST(event) {
@@ -125,7 +126,8 @@ export async function POST(event) {
 						: {
 								phone_number: input.phone_number,
 								subscribed: input.phone_subscribed === 'true',
-								country: input.country || event.locals.instance.country
+								country: input.country || event.locals.instance.country,
+								strict: false
 							},
 					address_line_1: input.address_line_1,
 					address_line_2: input.address_line_2,
