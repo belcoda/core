@@ -55,7 +55,21 @@ export async function POST(event) {
 					)
 				),
 				date_of_birth: v.nullable(v.pipe(v.string(), v.regex(new RegExp(/^\d{4}-\d{2}-\d{2}$/)))),
-				preferred_language: v.nullable(v.pipe(v.string(), v.length(2))),
+				preferred_language: v.nullable(
+					v.pipe(
+						v.string(),
+						v.transform((input) => {
+							if (!input) return null;
+							const trimmed = input.trim();
+							// Check if it's a valid 2-letter code (letters only)
+							if (trimmed.length === 2 && /^[a-zA-Z]{2}$/.test(trimmed)) {
+								return trimmed.toLowerCase();
+							}
+							// Default to instance language if invalid
+							return event.locals.instance.language;
+						})
+					)
+				),
 				tags: v.optional(v.nullable(v.string()), null),
 				events: v.optional(v.nullable(v.string()), null)
 			}),
