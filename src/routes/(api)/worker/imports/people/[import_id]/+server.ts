@@ -203,7 +203,7 @@ export async function POST(event) {
 						const createdPerson = await createPerson({
 							instance_id: event.locals.instance.id,
 							admin_id: event.locals.admin.id,
-							body: parsedItem,
+							body: strippedPerson,
 							queue: event.locals.queue,
 							method: 'import'
 						});
