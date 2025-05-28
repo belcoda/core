@@ -1,0 +1,25 @@
+given_name,family_name,email,email_subscribed,phone_number,phone_subscribed,address_line_1,address_line_2,city,postcode,state,country,nationality,organization,position,gender,gender_detail,date_of_birth,age_range,preferred_language,tags,events
+Esther,Doe,estherdoe@gmail.com,TRUE,254700123321,TRUE,,,,,,ke,tz,,,Female,,1985-12-06,21-25,en,climatejustice|walk|march,Climate Justice March
+Leonard,Smith,leonardsmith@example.com,TRUE,+44 34 3434 3434,TRUE,,,,,,tz,ug,,,Male,,1995-05-29,36-40,sw,,
+Empty,Fields,,,,,,,,,,,,,,m,,,,,,
+JOHN,ROSS,pamovolunteers@gmail.com,TRUE,256000222455,TRUE,,,,,,ug,ug,,,male,,1956-01-01,Over 60,en,,
+Tony,Stark,nayarit.tierra@gmail.com,TRUE,5037776666,TRUE,,,,,,bo,bo,,,F,,1959-10-08,Over 60,Luhya,,
+,,,,5910009999,TRUE,,,,,,gt,gt,,,Female,,,51-60,es,,
+Sam,Wilson,jilguero.anamaria@gmail.com,TRUE,5981231234,TRUE,,,,,,mx,mx,,,female,,1962-07-11,51-60,es,,
+Natasha,Romanoff,cathy-mae@mindfulnessinitiative.org,TRUE,4567,TRUE,,,,,,gb,mx,,,Female,,1964-05-04,51-60,en,,
+Clint,Burton,cramoya@greenpeace.org,TRUE,255768999999,TRUE,67 Place Montana,Unit 7,Nairobi,100,,xx,xx,,,m,,1965-03-14,51-60,en,,
+Bruce,Barner,director@shdf.org.zw,TRUE,263700777777,TRUE,,,,,,zw,zw,,,Female,,Fake-date,51-60,sn,,
+Gwen,Stacy,gs@newyoker.com,TRUE,2348000222222,TRUE,,,,,,ng,ng,,,Male,,1967-08-10,51-60,en,,
+,,,,,,,,,,,tn,tn,,,Female,,1999-04-28,21-25,ar,,
+,,,,,,,,,,,,,,,,,,,,,
+John,Doe,john.doe@belcoda.com,true,+1234567890,true,123 Main St,Apt 1,Test City,12345,CA,us,us,Test Org,Manager,Male,,1990-01-01,31-35,en,test-tag,test-event
+Jane,,jane-invalid-email,false,invalid-phone,false,,,,,,,xx,gb,,,Female,,not-a-date,invalid-age,zz,
+,Smith,valid@belcoda.com,true,,true,Very Long Address Line,,,99999999999999,InvalidState,zz,zz,Test Company,Position Title,Other,Custom Gender,2000-13-45,Over 100,invalid-lang,tag1,event1
+Special Chars,Test!@#$%,test+special@belcoda.com,TRUE,+44 20 7946 0958,FALSE,Line with quotes and commas,,City with commas,SW1A 1AA,London,gb,gb,Org & Co.,Manager & Director,other,non-binary,1985-02-29,36-40,en,tag spaces,
+Empty Fields,Test,empty@belcoda.com,true,123456789,true,,,,,,,us,us,,,Male,,1990-01-01,31-35,en,
+Unicode Test,Tëst Ñamé,tëst@belcoda.com,true,+33 1 23 45 67 89,true,123 Rue dé là Paix,Àppartëmënt 1,Pärís,75001,Île-de-France,fr,fr,Tëst Örgånîzåtîon,Mångër,Female,,1992-12-25,31-35,fr,tàg-ünîcødë,
+Valid User 1,Johnson,user1@belcoda.com,true,+1555123456,true,123 Test St,,Test City,12345,Test State,us,us,,,Male,,1985-06-15,36-40,en,,
+Valid User 2,Williams,user2@belcoda.com,false,+44123456789,false,456 Another St,Apt 2,Another City,54321,Another State,gb,gb,,,Female,,1990-12-25,31-35,en,,
+Valid User 3,Brown,user3@belcoda.com,true,+33987654321,true,789 Third St,,Third City,98765,Third State,fr,fr,,,Male,,1988-03-10,31-35,fr,,
+Valid User 4,Davis,user4@belcoda.com,true,+49123456789,true,321 Fourth St,Unit 4,Fourth City,13579,Fourth State,de,de,,,Female,,1992-09-22,31-35,de,,
+Valid User 5,Miller,user5@belcoda.com,false,+61987654321,false,654 Fifth St,,Fifth City,24680,Fifth State,au,au,,,Male,,1987-11-05,36-40,en,,
