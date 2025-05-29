@@ -267,3 +267,32 @@ export async function list({
 	}
 	return parsedResult;
 }
+
+export async function del({
+	instanceId,
+	petitionId
+}: {
+	instanceId: number;
+	petitionId: number;
+}): Promise<schema.Read> {
+	const deleted = await db
+		.update(
+			'petitions.petitions',
+			{ deleted_at: new Date() },
+			{ id: petitionId, instance_id: instanceId, deleted_at: db.conditions.isNull }
+		)
+		.run(pool)
+		.catch((err) => {
+			throw new BelcodaError(
+				404,
+				'DATA:PETITIONS:PETITIONS:DELETE:01',
+				m.pretty_tired_fly_lead(),
+				err
+			);
+		});
+	if (deleted.length !== 1)
+		throw new BelcodaError(404, 'DATA:PETITIONS:PETITIONS:DELETE:02', m.pretty_tired_fly_lead());
+	await redis.del(redisString(instanceId, petitionId));
+	await redis.del(redisString(instanceId, 'all'));
+	return parse(schema.read, deleted[0]);
+}

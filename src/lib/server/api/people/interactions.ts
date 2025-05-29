@@ -16,6 +16,8 @@ import {
 } from '$lib/server/api/people/people';
 import { exists as adminExists } from '$lib/server/api/core/admins';
 
+import { queue } from '$lib/server/api/people/interactions/queue';
+export { queue };
 function redisString(
 	instance_id: number,
 	person_id: number,
@@ -96,27 +98,6 @@ export async function create({
 	await redis.del(personRedisString(instanceId, parsed.person_id));
 	await redis.del(redisString(instanceId, parsed.person_id));
 	return parsedOut;
-}
-
-export async function queue({
-	instanceId,
-	personId,
-	adminId,
-	details,
-	queue
-}: {
-	instanceId: number;
-	personId: number;
-	adminId: number;
-	details: Create['details'];
-	queue: App.Queue;
-}): Promise<void> {
-	await queue(
-		'/utils/people/record_interaction',
-		instanceId,
-		{ person_id: personId, admin_id: adminId, details },
-		adminId
-	);
 }
 
 export async function read({

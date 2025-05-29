@@ -2,7 +2,7 @@ import { filterQuery, db, pool } from '$lib/server';
 import { parse } from '$lib/schema/valibot';
 import * as schema from '$lib/schema/people/people';
 import * as groupSchema from '$lib/schema/people/groups';
-import { exists } from '$lib/server/api/people/groups';
+import { exists } from '$lib/server/api/people/groups/exists.js';
 export async function list({
 	instance_id,
 	url,
