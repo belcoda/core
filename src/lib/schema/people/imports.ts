@@ -37,7 +37,15 @@ export const update = v.partial(
 		status: v.optional(base.entries.status),
 		total_rows: v.optional(base.entries.total_rows),
 		processed_rows: v.optional(base.entries.processed_rows),
-		failed_rows: v.optional(base.entries.failed_rows)
+		failed_rows: v.optional(base.entries.failed_rows),
+		failed_rows_details: v.optional(
+			v.array(
+				v.object({
+					row: v.number(),
+					error: v.string()
+				})
+			)
+		)
 	})
 );
 export type Update = v.InferOutput<typeof update>;
@@ -79,45 +87,41 @@ export function getParseSchema(instance: ReadInstance) {
 			),
 			organization: v.nullable(v.string()),
 			position: v.nullable(v.string()),
-			gender: v.nullable(
-				v.pipe(
-					v.string(),
-					v.transform((input) => {
-						if (!input) return null;
-						const normalized = input.toLowerCase().trim();
-						switch (normalized) {
-							case 'male':
-							case 'm':
-								return 'male';
-							case 'female':
-							case 'f':
-								return 'female';
-							case 'other':
-								return 'other';
-							case 'not_specified':
-								return 'not_specified';
-							default:
-								return 'not_specified';
-						}
-					}),
-					v.picklist(['male', 'female', 'other', 'not_specified'])
-				)
+			gender: v.pipe(
+				v.nullable(v.string()),
+				v.transform((input) => {
+					if (!input || input.trim() === '') return null;
+					const normalized = input.toLowerCase().trim();
+					switch (normalized) {
+						case 'male':
+						case 'm':
+							return 'male';
+						case 'female':
+						case 'f':
+							return 'female';
+						case 'other':
+							return 'other';
+						case 'not_specified':
+							return 'not_specified';
+						default:
+							return 'not_specified';
+					}
+				}),
+				v.nullable(v.picklist(['male', 'female', 'other', 'not_specified']))
 			),
 			date_of_birth: v.nullable(v.string()),
-			preferred_language: v.nullable(
-				v.pipe(
-					v.string(),
-					v.transform((input) => {
-						if (!input) return null;
-						const trimmed = input.trim();
-						// Check if it's a valid 2-letter code (letters only)
-						if (trimmed.length === 2 && /^[a-zA-Z]{2}$/.test(trimmed)) {
-							return trimmed.toLowerCase();
-						}
-						// Default to instance language if invalid
-						return instance.language;
-					})
-				)
+			preferred_language: v.pipe(
+				v.nullable(v.string()),
+				v.transform((input) => {
+					if (!input || input.trim() === '') return null;
+					const trimmed = input.trim();
+					// Check if it's a valid 2-letter code (letters only)
+					if (trimmed.length === 2 && /^[a-zA-Z]{2}$/.test(trimmed)) {
+						return trimmed.toLowerCase();
+					}
+					// Default to instance language if invalid
+					return instance.language;
+				})
 			),
 			tags: v.optional(v.nullable(v.string()), null),
 			events: v.optional(v.nullable(v.string()), null)
@@ -165,8 +169,8 @@ export function getParseSchema(instance: ReadInstance) {
 				country: inputCountry,
 				organization: input.organization,
 				position: input.position,
-				preferred_language: input.preferred_language,
-				gender: input.gender,
+				preferred_language: input.preferred_language || instance.language,
+				gender: input.gender || 'not_specified',
 				dob:
 					!input.date_of_birth || input.date_of_birth.trim() === ''
 						? null

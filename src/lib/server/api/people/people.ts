@@ -695,12 +695,7 @@ export async function parseImportCsv(
 					(value) => value === null || String(value).trim() === ''
 				);
 
-				// Check if both family_name and given_name are empty
-				const familyName = row.family_name ? String(row.family_name).trim() : '';
-				const givenName = row.given_name ? String(row.given_name).trim() : '';
-				const isNameEmpty = familyName === '' && givenName === '';
-
-				if (!isEntirelyEmptyRow && !isNameEmpty) {
+				if (!isEntirelyEmptyRow) {
 					records.push(row);
 				}
 			})
@@ -708,12 +703,20 @@ export async function parseImportCsv(
 				log.debug(`Parsed ${rowCount} rows`);
 				let successCount = 0;
 				let failedCount = 0;
+				let failedRows: { row: number; error: string }[] = [];
 
 				for (let i = 0; i < records.length; i++) {
-					const parsed = parse(getParseSchema(instance), records[i]);
-					log.debug(parsed);
 					try {
-						//todo: transform phoneNumber, etc into the budgets and add them to the created entries
+						const parsed = parse(getParseSchema(instance), records[i]);
+						log.debug(parsed);
+
+						// Check if both family_name and given_name are empty
+						const familyName = parsed.family_name ? String(parsed.family_name).trim() : '';
+						const givenName = parsed.given_name ? String(parsed.given_name).trim() : '';
+						if (familyName === '' && givenName === '') {
+							throw new Error(`Name is empty for row: ${i + 1}`);
+						}
+
 						const parsedItem = v.parse(v.looseObject({ ...createSchema.entries }), parsed); //because we want to allow custom fields to be passed through to the function
 						const { events, tags, ...strippedPerson } = parsedItem; //remove events and tags from the person object
 						const createdPerson = await create({
@@ -742,9 +745,12 @@ export async function parseImportCsv(
 							});
 						}
 						successCount++;
-					} catch (err) {
-						log.error(err);
+					} catch (err: unknown) {
 						failedCount++;
+						failedRows.push({
+							row: i + 1,
+							error: err instanceof Error ? err.message : 'Unknown error'
+						});
 					}
 				}
 
@@ -757,7 +763,8 @@ export async function parseImportCsv(
 						status: 'complete',
 						total_rows: records.length,
 						processed_rows: successCount,
-						failed_rows: failedCount
+						failed_rows: failedCount,
+						failed_rows_details: failedRows
 					}
 				});
 

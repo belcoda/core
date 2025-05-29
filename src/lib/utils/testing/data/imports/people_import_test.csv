@@ -1,5 +1,5 @@
 given_name,family_name,email,email_subscribed,phone_number,phone_subscribed,address_line_1,address_line_2,city,postcode,state,country,nationality,organization,position,gender,gender_detail,date_of_birth,age_range,preferred_language,tags,events
-Esther,Doe,estherdoe@gmail.com,TRUE,254700123321,TRUE,,,,,,ke,tz,,,Female,,1985-12-06,21-25,en,climatejustice|walk|march,Climate Justice March
+Esther,Doe,estherdoe@gmail.com,TRUE,254700123321,TRUE,Nairobi Street 1,Kenya,Nairobi,00100,,ke,tz,,,Female,,1985-12-06,21-25,en,climatejustice|walk|march,Climate Justice March
 Leonard,Smith,leonardsmith@example.com,TRUE,+44 34 3434 3434,TRUE,,,,,,tz,ug,,,Male,,1995-05-29,36-40,sw,,
 Empty,Fields,,,,,,,,,,,,,,m,,,,,,
 JOHN,ROSS,pamovolunteers@gmail.com,TRUE,256000222455,TRUE,,,,,,ug,ug,,,male,,1956-01-01,Over 60,en,,
