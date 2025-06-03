@@ -88,7 +88,11 @@ export async function update({
 	t: App.Localization;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
-	const toUpdate = parsed.status === 'complete' ? { completed_at: new Date(), ...parsed } : parsed;
+	const { failed_rows_details, ...parsedWithoutFailedRowDetails } = parsed;
+	const toUpdate =
+		parsed.status === 'complete'
+			? { completed_at: new Date(), ...parsedWithoutFailedRowDetails }
+			: parsedWithoutFailedRowDetails;
 	const result = await db
 		.update('people.imports', toUpdate, { instance_id: instanceId, id: importId })
 		.run(pool);
