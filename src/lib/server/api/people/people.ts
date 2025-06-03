@@ -751,6 +751,12 @@ export async function parseImportCsv(
 							row: i + 1,
 							error: err instanceof Error ? err.message : 'Unknown error'
 						});
+						log.error(
+							'Import failed for row: ',
+							i + 1,
+							' error: ',
+							err instanceof Error ? err.message : 'Unknown error'
+						);
 					}
 				}
 
