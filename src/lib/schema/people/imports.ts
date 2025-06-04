@@ -151,13 +151,13 @@ export function getParseSchema(instance: ReadInstance) {
 					? null
 					: {
 							email: input.email,
-							subscribed: input.email_subscribed === 'true'
+							subscribed: input.email_subscribed.toLowerCase() === 'true'
 						},
 				phone_number: !hasPhoneNumber
 					? null
 					: {
 							phone_number: input.phone_number,
-							subscribed: input.phone_subscribed === 'true',
+							subscribed: input.phone_subscribed.toLowerCase() === 'true',
 							country: input.country || instance.country,
 							strict: false
 						},
