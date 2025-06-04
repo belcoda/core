@@ -75,9 +75,9 @@ export function getParseSchema(instance: ReadInstance) {
 						// If it's already a valid 2-letter ISO code
 						if (
 							normalized.length === 2 &&
-							SUPPORTED_COUNTRIES.includes(normalized.toUpperCase() as SupportedCountry)
+							SUPPORTED_COUNTRIES.includes(normalized as SupportedCountry)
 						) {
-							return normalized.toUpperCase();
+							return normalized;
 						}
 
 						// Default to instance country if no match found
@@ -158,7 +158,7 @@ export function getParseSchema(instance: ReadInstance) {
 					: {
 							phone_number: input.phone_number,
 							subscribed: input.phone_subscribed.toLowerCase() === 'true',
-							country: input.country || instance.country,
+							country: inputCountry,
 							strict: false
 						},
 				address_line_1: input.address_line_1,
