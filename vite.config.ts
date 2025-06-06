@@ -15,10 +15,10 @@ export default defineConfig({
 		paraglideVitePlugin({
 			project: './project.inlang',
 			outdir: './src/lib/paraglide'
-		}),
-		circleDependency({
-			outputFilePath: './circular-dependencies.txt'
 		})
+		/* circleDependency({
+			outputFilePath: './circular-dependencies.txt'
+		}) */
 	],
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}'],
