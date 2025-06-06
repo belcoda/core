@@ -119,8 +119,8 @@ export function getParseSchema(instance: ReadInstance) {
 					if (trimmed.length === 2 && /^[a-zA-Z]{2}$/.test(trimmed)) {
 						return trimmed.toLowerCase();
 					}
-					// Default to instance language if invalid
-					return instance.language;
+					// Accept other strings as-is
+					return trimmed;
 				})
 			),
 			tags: v.optional(v.nullable(v.string()), null),
