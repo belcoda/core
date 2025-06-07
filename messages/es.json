@@ -139,7 +139,7 @@
 	"minor_gaudy_wolf_reap": "Agregado al firmar <a href=\"/petitions/{petition_id}\">{petition_name}</a>",
 	"home_fuzzy_tern_bake": "Se unió al firmar <a href=\"/petitions/{details.petition_id}\">{details.petition_name}</a>",
 	"heroic_zippy_quail_talk": "Actualizado manualmente",
-	"heroic_crazy_grebe_pat": "Actualizado mediante la firma de una petición",
+	"heroic_crazy_grebe_pat": "Actualizado al firmar una petición",
 	"white_day_pig_love": "Actualizado al registrarse para un evento",
 	"left_mealy_elephant_jolt": "Actualizado al registrarse en el sitio web",
 	"fuzzy_alert_crow_approve": "{adminName} agregó notas",
