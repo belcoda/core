@@ -644,7 +644,7 @@
 	"day_wise_newt_promise": "Inscripción confirmada: {eventTitle}",
 	"orange_sound_beaver_fear": "Inscripción confirmada",
 	"jolly_lofty_chicken_work": "Esta es una notificación de que tu inscripción para asistir a <strong>{eventTitle}</strong> ( {dateTime} ) ha sido cancelada.",
-	"gross_raw_gazelle_fetch": "Esta es una notificación de que su inscripción para asistir a ** {eventTitle} ** ( {dateTime} ) ha sido cancelada.",
+	"gross_raw_gazelle_fetch": "Esta es una notificación de que tu inscripción para asistir a ** {eventTitle} ** ( {dateTime} ) ha sido cancelada.",
 	"factual_heavy_shrike_thrive": "Cancelado: {eventTitle}",
 	"super_curly_boar_hug": "Invitación: Únete a {instanceName} en Belcoda",
 	"deft_deft_polecat_stab": "Invitación: Únete {instanceName} en Belcoda",
