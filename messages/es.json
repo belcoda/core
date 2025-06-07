@@ -427,7 +427,7 @@
 	"basic_teal_termite_lend": "Las respuestas a este correo se enviarán a esta dirección. Si la cambias, dejarás de recibir respuestas automáticamente dentro de Belcoda.",
 	"honest_sour_giraffe_seek": "Vista previa del texto",
 	"weird_whole_mallard_play": "Este es el texto que aparece en la vista previa del cliente de correo electrónico. Si no lo modificas, se generará automáticamente una vista previa basada en el asunto y el cuerpo del correo electrónico.",
-	"tense_basic_grizzly_walk": "Utilice el formato \"Nombre<email@example.com> \"",
+	"tense_basic_grizzly_walk": "Utilice el formato \"Nombre<email@ejemplo.com> \"",
 	"suave_brief_jackdaw_aim": "Si se marca, se generará una versión de texto sin formato y se enviará a los usuarios que no pueden recibir correos electrónicos HTML.",
 	"each_topical_hawk_hack": "Utilice HTML como texto sin formato",
 	"upper_giant_kitten_dart": "Enviar correo electrónico de prueba",
