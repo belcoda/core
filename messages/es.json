@@ -621,7 +621,7 @@
 	"key_steep_lamb_persist": "No se pudieron guardar los datos actualizados del correo electrónico. No se envió el correo de prueba.",
 	"tame_male_cheetah_blend": "No se pudo leer el cuerpo del mensaje; no se pudieron guardar los detalles antes de enviar el correo de prueba. El correo de prueba no se envió.",
 	"lazy_bad_nuthatch_arise": "Introduce una dirección de correo electrónico para enviar una prueba.",
-	"deft_warm_mink_accept": "Se produjo un error desconocido. Compruebe si se envió el mensaje de prueba y, de no ser así, inténtelo de nuevo.",
+	"deft_warm_mink_accept": "Se produjo un error desconocido. Comprueba si se envió el mensaje de prueba y, de no ser así, inténtalo de nuevo.",
 	"wise_sleek_tern_thrive": "El mensaje de prueba se envió a {testEmail} correctamente.",
 	"blue_petty_jackdaw_beam": "No se pudieron guardar los datos del correo electrónico. El correo electrónico no se envió.",
 	"clean_tense_eel_jump": "No se puede analizar el correo electrónico. Por favor, revísalo y vuelve a intentarlo. El correo electrónico no se envió.",
