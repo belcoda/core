@@ -150,7 +150,7 @@
 	"icy_wild_badger_explore": "Firma agregada a <a href=\"{petitionUrl}\">{petitionName}</a> por {adminName}",
 	"brave_orange_boar_compose": "{personName} firmó <a href=\"{petitionUrl}\">{petitionName}</a>",
 	"great_heavy_donkey_care": "{personName} se registró para <a href={eventUrl}>{eventName}</a>",
-	"brave_long_iguana_nurture": "Registrado para <a href=\"{eventUrl}\">{eventName}</a> by {adminName}",
+	"brave_long_iguana_nurture": "Registrado para <a href=\"{eventUrl}\">{eventName}</a> por {adminName}",
 	"ago_noisy_ray_inspire": "Registro para <a href={eventUrl}>{eventName}</a> cancelado por {adminName}",
 	"stout_formal_jay_snap": "{personName} canceló su registro en <a href={eventUrl}>{eventName}</a>",
 	"round_long_weasel_forgive": "{personName} asistió a <a href={eventUrl}>{eventName}</a>",
