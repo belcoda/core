@@ -429,7 +429,7 @@
 	"weird_whole_mallard_play": "Este es el texto que aparece en la vista previa del cliente de correo electrónico. Si no lo modificas, se generará automáticamente una vista previa basada en el asunto y el cuerpo del correo electrónico.",
 	"tense_basic_grizzly_walk": "Utilice el formato \"Nombre<email@ejemplo.com> \"",
 	"suave_brief_jackdaw_aim": "Si se marca, se generará una versión de texto sin formato y se enviará a los usuarios que no pueden recibir correos electrónicos HTML.",
-	"each_topical_hawk_hack": "Utilice HTML como texto sin formato",
+	"each_topical_hawk_hack": "Utiliza HTML como texto sin formato",
 	"upper_giant_kitten_dart": "Enviar correo electrónico de prueba",
 	"known_ornate_parrot_clip": "Plantilla",
 	"watery_bad_mouse_breathe": "Selecciona una plantilla para el correo electrónico. Las plantillas se pueden gestionar en la sección \"Plantillas de correo electrónico\".",
