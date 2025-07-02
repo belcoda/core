@@ -49,13 +49,11 @@ export async function exists({
 export async function create({
 	instanceId,
 	body,
-	defaultEmailTemplateId,
 	adminId,
 	queue
 }: {
 	instanceId: number;
 	body: schema.Create;
-	defaultEmailTemplateId: number;
 	adminId: number;
 	queue: App.Queue;
 }): Promise<schema.Read> {
@@ -64,42 +62,7 @@ export async function create({
 
 	const toInsert = {
 		instance_id: instanceId,
-		followup_email: await createEventEmailNotification({
-			instance,
-			adminId,
-			instanceId,
-			defaultEmailTemplateId,
-			type: 'followup',
-			body: parsed,
-			queue
-		}),
-		registration_email: await createEventEmailNotification({
-			instance,
-			adminId,
-			instanceId,
-			defaultEmailTemplateId,
-			type: 'registration',
-			body: parsed,
-			queue
-		}),
-		reminder_email: await createEventEmailNotification({
-			instance,
-			adminId,
-			instanceId,
-			defaultEmailTemplateId,
-			type: 'reminder',
-			body: parsed,
-			queue
-		}),
-		cancellation_email: await createEventEmailNotification({
-			instance,
-			adminId,
-			instanceId,
-			defaultEmailTemplateId,
-			type: 'cancellation',
-			body: parsed,
-			queue
-		}),
+
 		point_person_id: parsed.point_person_id || adminId,
 		country: parsed.country || instance.country || DEFAULT_COUNTRY,
 		...parsed
@@ -207,18 +170,12 @@ export async function read({
 						id: db.parent('feature_image_upload_id')
 					}),
 					point_person: db.selectExactlyOne('admins', { id: db.parent('point_person_id') }),
-					reminder_email: db.selectExactlyOne('communications.email_messages', {
-						id: db.parent('reminder_email')
-					}),
-					registration_email: db.selectExactlyOne('communications.email_messages', {
-						id: db.parent('registration_email')
-					}),
+
 					followup_email: db.selectExactlyOne('communications.email_messages', {
-						id: db.parent('followup_email')
+						id: db.parent('followup_email'),
+						...(includeDeleted ? {} : { deleted_at: db.conditions.isNull })
 					}),
-					cancellation_email: db.selectExactlyOne('communications.email_messages', {
-						id: db.parent('cancellation_email')
-					}),
+
 					registered: db.count('events.attendees', {
 						event_id: db.parent('id'),
 						status: 'registered'
@@ -268,18 +225,12 @@ export async function readBySlug({
 					feature_image: db.selectOne('website.uploads', {
 						id: db.parent('feature_image_upload_id')
 					}),
-					reminder_email: db.selectExactlyOne('communications.email_messages', {
-						id: db.parent('reminder_email')
-					}),
-					registration_email: db.selectExactlyOne('communications.email_messages', {
-						id: db.parent('registration_email')
-					}),
+
 					followup_email: db.selectExactlyOne('communications.email_messages', {
-						id: db.parent('followup_email')
+						id: db.parent('followup_email'),
+						deleted_at: db.conditions.isNull
 					}),
-					cancellation_email: db.selectExactlyOne('communications.email_messages', {
-						id: db.parent('cancellation_email')
-					}),
+
 					registered: db.count('events.attendees', {
 						event_id: db.parent('id'),
 						status: 'registered'
@@ -371,65 +322,6 @@ export async function list({
 	return parsedResult;
 }
 
-import htmlEmailRegistration from '$lib/utils/templates/email/events/event_registration_html.handlebars?raw';
-import textEmailRegistration from '$lib/utils/templates/email/events/event_registration_text.handlebars?raw';
-import htmlEmailReminder from '$lib/utils/templates/email/events/event_reminder_email_html.handlebars?raw';
-import textEmailReminder from '$lib/utils/templates/email/events/event_reminder_email_text.handlebars?raw';
-import htmlEmailFollowup from '$lib/utils/templates/email/events/event_followup_email_html.handlebars?raw';
-import textEmailFollowup from '$lib/utils/templates/email/events/event_followup_email_text.handlebars?raw';
-import htmlEmailCancellation from '$lib/utils/templates/email/events/event_registration_cancelled_html.handlebars?raw';
-import textEmailCancellation from '$lib/utils/templates/email/events/event_registration_cancelled_text.handlebars?raw';
-function returnHtmlTextEmails(type: 'registration' | 'reminder' | 'cancellation' | 'followup') {
-	switch (type) {
-		case 'registration':
-			return { htmlEmail: htmlEmailRegistration, textEmail: textEmailRegistration };
-		case 'reminder':
-			return { htmlEmail: htmlEmailReminder, textEmail: textEmailReminder };
-		case 'followup':
-			return { htmlEmail: htmlEmailFollowup, textEmail: textEmailFollowup };
-		case 'cancellation':
-			return { htmlEmail: htmlEmailCancellation, textEmail: textEmailCancellation };
-	}
-}
-
-async function createEventEmailNotification({
-	type,
-	body,
-	instanceId,
-	adminId,
-	instance,
-	defaultEmailTemplateId,
-	queue
-}: {
-	type: 'registration' | 'reminder' | 'cancellation' | 'followup';
-	body: schema.Create;
-	instanceId: number;
-	adminId: number;
-	instance: ReadInstance;
-	defaultEmailTemplateId: number;
-	queue: App.Queue;
-}): Promise<number> {
-	const { htmlEmail, textEmail } = returnHtmlTextEmails(type);
-	const registrationEmail = await createEmailMessage({
-		instanceId,
-		body: {
-			name: randomUUID(),
-			point_person_id: adminId,
-			from: `${instance.name} <${instance.slug}@belcoda.com>`,
-			reply_to: `${instance.slug}@belcoda.com`,
-			subject: `${type}: ${body.heading}`,
-			html: htmlEmail,
-			text: textEmail,
-			preview_text: `${type} confirmation for {{event.name}}`,
-			use_html_for_plaintext: true,
-			template_id: defaultEmailTemplateId
-		},
-		queue: queue,
-		defaultTemplateId: defaultEmailTemplateId
-	});
-	return registrationEmail.id;
-}
-
 export async function selectEventsForReminderFollowupEmail(): Promise<{
 	reminders: { id: number; instance_id: number; point_person_id: number }[];
 	followups: { id: number; instance_id: number; point_person_id: number }[];
@@ -450,6 +342,41 @@ export async function selectEventsForReminderFollowupEmail(): Promise<{
 		reminders,
 		followups
 	};
+}
+
+export async function setEventReminderFollowupEmailSent({
+	eventId,
+	instanceId,
+	type
+}: {
+	eventId: number;
+	instanceId: number;
+	type: 'reminder' | 'followup';
+}) {
+	switch (type) {
+		case 'reminder': {
+			await db
+				.update(
+					'events.events',
+					{ reminder_sent_at: new Date(Date.now()) },
+					{ id: eventId, instance_id: instanceId }
+				)
+				.run(pool);
+			break;
+		}
+		case 'followup': {
+			await db
+				.update(
+					'events.events',
+					{ followup_sent_at: new Date(Date.now()) },
+					{ id: eventId, instance_id: instanceId }
+				)
+				.run(pool);
+			break;
+		}
+	}
+	await redis.del(redisString(instanceId, eventId));
+	await redis.del(redisString(instanceId, 'all'));
 }
 
 export async function del({

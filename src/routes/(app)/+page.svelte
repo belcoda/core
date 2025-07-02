@@ -15,6 +15,7 @@
 
 	import { renderAddress } from '$lib/utils/text/address';
 	import { formatDateTimeRange } from '$lib/utils/text/date';
+	import { convertToTimezone } from '$lib/utils/date/datetime';
 	let contentType: 'posts' | 'pages' = $state('posts');
 
 	const dataGridOptions = {
@@ -142,15 +143,20 @@
 						<Link size={16} />
 						{item.online_url}
 					</div>
-				{:else if renderAddress(item, data.t, data.instance.country).text !== ''}
+				{:else if renderAddress(item, data.instance.country).text !== ''}
 					<div class="text-muted-foreground text-sm flex items-center gap-1">
 						<MapPin size={16} />
-						{renderAddress(item, data.t, data.instance.country).text}
+						{renderAddress(item, data.instance.country).text}
 					</div>
 				{/if}
 				<div class="text-muted-foreground flex items-center gap-1 text-sm">
 					<CalendarClock size={16} />
-					{formatDateTimeRange(item.starts_at, item.ends_at)}
+					{formatDateTimeRange(
+						convertToTimezone(item.starts_at, item.timezone),
+						convertToTimezone(item.ends_at, item.timezone),
+						undefined,
+						item.timezone
+					)}
 					({data.timeAgo.format(item.starts_at)})
 				</div>
 			</a>

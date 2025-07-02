@@ -573,7 +573,6 @@
 	"jumpy_alive_puffin_vent": "Você já se registrou para o evento {activityTitle}",
 	"full_tangy_cow_pull": "Você assinou a petição {activityTitle}",
 	"dizzy_mellow_otter_clap": "Você cancelou sua assinatura para a petição {activityTitle}",
-	"east_north_osprey_hurl": "Você já assinou a petição {activityTitle}",
 	"keen_agent_shell_mop": "Falha ao excluir o registro",
 	"dizzy_actual_elephant_evoke": "Registro excluído com sucesso",
 	"whole_still_macaw_bless": "Bem-vindo ao {instanceName}",
@@ -636,5 +635,13 @@
 	"just_patient_finch_mix": "Sua inscrição foi cancelada. Não estaremos esperando você.",
 	"tidy_cuddly_pelican_evoke": "Nenhum país correspondente encontrado.",
 	"light_next_wasp_belong": "Deve ser um código de idioma ISO 639-1 válido (por exemplo: 'en' para inglês)",
-	"misty_awful_kitten_walk": "dados.t.forms.campos.código_personalizado.js_personalizado.rótulo()"
+	"misty_awful_kitten_walk": "dados.t.forms.campos.código_personalizado.js_personalizado.rótulo()",
+	"fun_raw_giraffe_treasure": "Selecione um fuso horário",
+	"close_stock_lion_bubble": "Fuso horário",
+	"east_north_osprey_hurl": "Você já assinou a petição {activityTitle}",
+	"spare_good_marmot_laugh": "Você não tem um endereço de remetente padrão configurado. Todos os e-mails (incluindo lembretes de eventos) serão\nenviado do endereço padrão ( {emailAddress} ). Você pode configurar suas configurações de e-mail no <a href=\"/settings/email/from_signatures\" class=\"text-blue-500 underline\">painel de administração</a> .",
+	"yummy_muddy_capybara_nail": "Há um problema com a configuração do seu e-mail!",
+	"such_weird_lamb_feel": "Observação",
+	"aqua_weird_badger_cook": "Os participantes receberão notificações sobre o evento. Você pode alterar quais notificações eles receberão e quando, alterando as configurações de notificação em",
+	"large_seemly_crocodile_spur": "Gerenciar notificações"
 }

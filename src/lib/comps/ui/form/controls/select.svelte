@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	type T = Record<string, unknown>;
 </script>
 
@@ -9,6 +9,7 @@
 	import * as Form from '$lib/comps/ui/form';
 	export let label: string | null;
 	export let description: string | null = null;
+	export let disabled: boolean = false;
 	import { cn } from '$lib/utils';
 	let className = '';
 	export { className as class };
@@ -38,7 +39,7 @@
 			<!-- Start form control block -->
 			<div class="flex flex-col gap-2">
 				{#if label}<Form.Label>{label}</Form.Label>{/if}
-				<Select.Root type="single" bind:value name={props.name}>
+				<Select.Root type="single" bind:value name={props.name} {disabled}>
 					<Select.Trigger {...props} class={cn('focus-visible:border-2', className)}>
 						{selectedItem ? selectedItem.label : placeholder}
 					</Select.Trigger>

@@ -111,7 +111,7 @@ You can also open an issue as a feature request.
 
 #### Is managed hosting available for Belcoda?
 
-Yes. At the moment, Belcoda is in closed alpha testing, and new users for the managed hosting product are being onboarded directly. For more information, please see [the website](https://belcoda.org).
+Yes, for supported partner organizations. For more information, please see [the website](https://belcoda.org).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

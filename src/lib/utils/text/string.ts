@@ -41,3 +41,43 @@ export function slugify(str: string) {
 
 	return str;
 }
+
+export function decodeHTMLEntities(text: string): string {
+	const entities: Record<string, string> = {
+		'&amp;': '&',
+		'&lt;': '<',
+		'&gt;': '>',
+		'&quot;': '"',
+		'&#39;': "'",
+		'&nbsp;': ' '
+	};
+
+	return text.replace(/&[a-zA-Z0-9#]+;/g, (entity) => entities[entity] || entity);
+}
+
+export function htmlToPlaintext(html: string): string {
+	if (!html) return '';
+
+	let text = html;
+
+	// Convert <strong>/<b> to **text**
+	text = text.replace(/<(strong|b)[^>]*>(.*?)<\/\1>/gi, '**$2**');
+
+	// Convert <em>/<i> to _text_
+	text = text.replace(/<(em|i)[^>]*>(.*?)<\/\1>/gi, '_$2_');
+
+	// Convert <br> to line breaks
+	text = text.replace(/<\s*br\s*\/?>/gi, '\n');
+
+	// Convert <p> to double line breaks
+	text = text.replace(/<\s*p[^>]*>/gi, '\n\n').replace(/<\s*\/p\s*>/gi, '');
+
+	// Strip all other tags
+	text = text.replace(/<[^>]+>/g, '');
+
+	// Decode HTML entities
+	text = decodeHTMLEntities(text);
+
+	// Normalize spacing
+	return text.replace(/\n{3,}/g, '\n\n').trim();
+}

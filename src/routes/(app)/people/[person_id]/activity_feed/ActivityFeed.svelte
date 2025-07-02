@@ -322,10 +322,19 @@
 
 	{#if interaction.details.type === 'received_event_reminder_email'}
 		<SystemMessage
-			message={m.sea_cute_nils_rise({
+			message={m.east_blue_mallard_lift({
 				eventId: interaction.details.event_id,
-				eventName: interaction.details.event_name,
-				messageId: interaction.details.message_id
+				eventName: interaction.details.event_name
+			})}
+			timeAgo={interaction.created_at}
+		/>
+	{/if}
+
+	{#if interaction.details.type === 'received_event_registration_email'}
+		<SystemMessage
+			message={m.any_great_mouse_agree({
+				eventId: interaction.details.event_id,
+				eventName: interaction.details.event_name
 			})}
 			timeAgo={interaction.created_at}
 		/>
@@ -333,28 +342,27 @@
 
 	{#if interaction.details.type === 'received_event_cancellation_email'}
 		<SystemMessage
-			message={m.sad_due_canary_slurp({
+			message={m.flat_mushy_boar_shine({
 				eventId: interaction.details.event_id,
-				eventName: interaction.details.event_name,
-				messageId: interaction.details.message_id
+				eventName: interaction.details.event_name
 			})}
 			timeAgo={interaction.created_at}
 		/>
 	{/if}
-	{#if interaction.details.type === 'received_event_registration_email'}
+
+	{#if interaction.details.type === 'received_event_reminder_email'}
 		<SystemMessage
-			message={m.deft_tame_seahorse_fulfill({
+			message={m.mealy_crisp_turtle_loop({
 				eventId: interaction.details.event_id,
-				eventName: interaction.details.event_name,
-				messageId: interaction.details.message_id
+				eventName: interaction.details.event_name
 			})}
 			timeAgo={interaction.created_at}
 		/>
 	{/if}
+
 	{#if interaction.details.type === 'received_petition_autoresponse_email'}
 		<SystemMessage
-			message={m.antsy_ornate_felix_zoom({
-				messageId: interaction.details.message_id,
+			message={m.proud_least_snail_walk({
 				petitionId: interaction.details.petition_id,
 				petitionName: interaction.details.petition_name
 			})}

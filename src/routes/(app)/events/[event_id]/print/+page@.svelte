@@ -4,6 +4,7 @@
 	import { page } from '$app/state';
 	import { type List } from '$lib/schema/events/attendees';
 	import * as Table from '$lib/comps/ui/table/index';
+	import { convertToTimezone } from '$lib/utils/date/datetime.js';
 	//Have to use parseInt because Number(page.url.searchParams.get('additionalRows')) returns 0 when null
 	const amountOfAdditionalRows = isNaN(parseInt(page.url.searchParams.get('additionalRows') || ''))
 		? 20
@@ -34,17 +35,22 @@
 	<div class="font-bold text-4xl">{data.event.heading}</div>
 
 	<div class="text-muted-foreground space-y-2 mt-3">
-		{#if renderAddress(data.event, data.t, data.instance.country).text.length > 0}<div
+		{#if renderAddress(data.event, data.instance.country).text.length > 0}<div
 				class="flex items-center gap-1.5"
 			>
 				<MapPin size={16} />
-				<a href={renderAddress(data.event, data.t, data.instance.country).url} target="_blank"
-					>{renderAddress(data.event, data.t, data.instance.country).text}</a
+				<a href={renderAddress(data.event, data.instance.country).url} target="_blank"
+					>{renderAddress(data.event, data.instance.country).text}</a
 				>
 			</div>{/if}
 		<div class="flex items-center gap-1.5">
 			<CalendarClock size={16} />
-			{formatDateTimeRange(data.event.starts_at, data.event.ends_at)}
+			{formatDateTimeRange(
+				convertToTimezone(data.event.starts_at, data.event.timezone),
+				convertToTimezone(data.event.ends_at, data.event.timezone),
+				undefined,
+				data.event.timezone
+			)}
 		</div>
 		{#if data.event.online}
 			<div class="flex items-center gap-1.5">

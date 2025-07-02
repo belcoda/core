@@ -10,6 +10,10 @@ vi.mock('$lib/server/api/core/instances', () => ({
 	update: vi.fn()
 }));
 
+vi.mock('$lib/schema/communications/email/messages', () => ({
+	emailTemplates: ['main'] // mocks imported email template schema
+}));
+
 vi.mock('$lib/server', () => ({
 	json: vi.fn((data) => ({
 		status: 200,
@@ -56,8 +60,7 @@ describe('PUT /settings/secrets', () => {
 		expect(response.body).toEqual(mockSecrets);
 		expect(updateSecrets).toHaveBeenCalledWith({
 			instanceId: '123',
-			body: { secrets: mockSecrets },
-			t: event.locals.t
+			body: { secrets: mockSecrets }
 		});
 	});
 

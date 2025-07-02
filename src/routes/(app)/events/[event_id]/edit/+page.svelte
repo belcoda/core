@@ -2,7 +2,6 @@
 	import EventsForm from '../../EventsForm.svelte';
 	import PageHeader from '$lib/comps/layout/PageHeader.svelte';
 	import Button from '$lib/comps/ui/button/button.svelte';
-	export let data;
 	import { page } from '$app/stores';
 	import * as m from '$lib/paraglide/messages';
 </script>
@@ -14,7 +13,7 @@
 				>{m.warm_jumpy_poodle_find()}</Button
 			>
 			<Button href="/events/{$page.params.event_id}/edit/notifications" variant="outline"
-				>Manage notifications</Button
+				>{m.large_seemly_crocodile_spur()}</Button
 			>
 			<Button href="/events/{$page.params.event_id}">Back</Button>
 		</div>

@@ -636,5 +636,16 @@
 	"just_patient_finch_mix": "您的注册已取消。我们不会再接待您。",
 	"tidy_cuddly_pelican_evoke": "未找到匹配的国家。",
 	"light_next_wasp_belong": "必须是有效的 ISO 639-1 语言代码（例如：'en' 代表英语）",
-	"misty_awful_kitten_walk": "数据.t.forms.fields.custom_code.custom_js.标签()"
+	"misty_awful_kitten_walk": "数据.t.forms.fields.custom_code.custom_js.标签()",
+	"fun_raw_giraffe_treasure": "选择时区",
+	"close_stock_lion_bubble": "时区",
+	"happy_inclusive_hyena_cuddle": "删除记录时出错，请重试",
+	"elegant_whole_mayfly_zap": "管理员已成功删除",
+	"wide_major_pig_swim": "删除",
+	"moving_acidic_crow_imagine": "您确定要删除此记录吗？此操作无法撤消？",
+	"such_weird_lamb_feel": "笔记",
+	"aqua_weird_badger_cook": "参与者将收到有关活动的通知。您可以通过更改通知设置来更改他们接收的通知内容和接收时间。",
+	"large_seemly_crocodile_spur": "管理通知",
+	"spare_good_marmot_laugh": "您没有设置默认发件人地址。所有电子邮件（包括活动提醒）将<inlang-LineFeed>从默认地址发送（ {emailAddress} ）。您可以在<a href=\"/settings/email/from_signatures\" class=\"text-blue-500 underline\">管理面板</a>中配置电子邮件设置。",
+	"yummy_muddy_capybara_nail": "您的电子邮件配置有问题！"
 }

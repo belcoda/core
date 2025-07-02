@@ -34,6 +34,43 @@ export async function create({
 	return parsedResult;
 }
 
+export async function upsert({
+	instanceId,
+	personId,
+	whatsAppId,
+	type = 'marketing',
+	threadId = null,
+	t
+}: {
+	instanceId: number;
+	personId: number;
+	whatsAppId: string;
+	type: string;
+	threadId: number | null;
+	t: App.Localization;
+}): Promise<schema.Read> {
+	if (threadId) await threadExists({ instanceId, threadId, t });
+	await personExists({ instanceId, personId, t });
+	const upserted = await db
+		.upsert(
+			'communications.whatsapp_conversations',
+			{
+				person_id: personId,
+				whatsapp_id: whatsAppId,
+				type: type,
+				thread_id: threadId,
+				expires_at: db.raw(
+					`now() + interval '24 hours'`
+				) as unknown as `${number}-${number}-${number}T${number}:${number}Z` //necessary to avoid type error with db.raw
+			},
+			['person_id', 'whatsapp_id']
+		)
+		.run(pool);
+	const parsedResult = parse(schema.read, upserted);
+
+	return parsedResult;
+}
+
 export async function read({
 	instanceId,
 	conversationId,

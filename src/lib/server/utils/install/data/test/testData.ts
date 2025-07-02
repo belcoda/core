@@ -28,10 +28,8 @@ import { PUBLIC_HOST } from '$env/static/public';
 export default async function ({
 	instance,
 	admin,
-	t,
 	queue
 }: {
-	t: App.Localization;
 	instance: ReadInstance;
 	admin: ReadAdmin;
 	queue: App.Queue;
@@ -125,10 +123,7 @@ export default async function ({
 	await createSend({
 		instanceId: instance.id,
 		body: emailSendBody,
-		adminId: admin.id,
-		defaultTemplateId: instance.settings.communications.email.default_template_id,
-		t: t,
-		queue
+		adminId: admin.id
 	});
 
 	await createTag({ instanceId: instance.id, body: { name: 'topic:energy' } });

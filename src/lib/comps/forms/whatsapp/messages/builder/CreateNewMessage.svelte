@@ -28,6 +28,7 @@
 			class="btn btn-primary"
 			onclick={() => {
 				oncreate(message);
+				message.text.body = '';
 			}}
 		>
 			{m.tidy_watery_ape_lift()}

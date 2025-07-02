@@ -14,15 +14,14 @@ import {
 	url,
 	slug,
 	customCode,
-	htmlMetatags,
-	timestampNoDefault
+	htmlMetatags
 } from '$lib/schema/valibot';
 
 import { read as readAdmin } from '$lib/schema/core/admin';
 
 import { create as createPerson, read as readPerson } from '$lib/schema/people/people';
-import { read as readInstance } from '$lib/schema/core/instance';
 import { read as readEmailMessage } from '$lib/schema/communications/email/messages';
+import { timezone } from '$lib/schema/utils/datetime';
 
 export const eventUserInfoSettings = v.object({
 	ask_email: v.boolean(),
@@ -44,6 +43,7 @@ export const base = v.object({
 	html: longStringNotEmpty,
 	starts_at: timestamp,
 	ends_at: timestamp,
+	timezone: v.optional(timezone, 'Etc/UTC'),
 	online: v.boolean(),
 	online_url: v.nullable(url),
 	online_instructions: v.nullable(longString),
@@ -52,15 +52,14 @@ export const base = v.object({
 
 	...eventUserInfoSettings.entries,
 
-	registration_email: id,
-	reminder_email: id,
-	cancellation_email: id,
-	followup_email: id,
+	followup_email: v.nullable(id),
 
 	send_registration_email: v.boolean(),
 	send_reminder_email: v.boolean(),
 	send_cancellation_email: v.boolean(),
 	send_followup_email: v.boolean(),
+	send_update_email: v.boolean(),
+	send_event_cancellation_email: v.boolean(),
 	reminder_sent_at: v.nullable(timestamp),
 	followup_sent_at: v.nullable(timestamp),
 	send_reminder_hours_before_start: v.pipe(v.number(), v.integer(), v.minValue(0)),
@@ -80,19 +79,9 @@ export const base = v.object({
 import { read as readUpload } from '$lib/schema/website/uploads';
 
 export const read = v.object({
-	...v.omit(base, [
-		'instance_id',
-		'point_person_id',
-		'reminder_email',
-		'registration_email',
-		'followup_email',
-		'cancellation_email'
-	]).entries,
+	...v.omit(base, ['instance_id', 'point_person_id', 'followup_email']).entries,
 	point_person: readAdmin,
-	reminder_email: readEmailMessage,
-	registration_email: readEmailMessage,
-	followup_email: readEmailMessage,
-	cancellation_email: readEmailMessage,
+	followup_email: v.nullable(readEmailMessage),
 	registered: count,
 	attended: count,
 	cancelled: count,
@@ -103,16 +92,7 @@ export type Read = v.InferOutput<typeof read>;
 
 export const list = v.object({
 	items: v.array(
-		v.omit(read, [
-			'html',
-			'custom_code',
-			'html_metatags',
-			'reminder_email',
-			'cancellation_email',
-			'registration_email',
-			'followup_email',
-			'feature_image'
-		])
+		v.omit(read, ['html', 'custom_code', 'html_metatags', 'followup_email', 'feature_image'])
 	),
 	count: count
 });
@@ -125,15 +105,13 @@ export const create = v.object({
 	html: base.entries.html,
 	starts_at: base.entries.starts_at,
 	ends_at: base.entries.ends_at,
+	timezone: base.entries.timezone,
 	...v.partial(eventUserInfoSettings).entries,
 
 	online: v.optional(base.entries.online, false),
 	online_url: v.optional(base.entries.online_url),
 	online_instructions: v.optional(base.entries.online_instructions),
 
-	registration_email: v.optional(base.entries.registration_email),
-	reminder_email: v.optional(base.entries.reminder_email),
-	cancellation_email: v.optional(base.entries.cancellation_email),
 	followup_email: v.optional(base.entries.followup_email),
 
 	send_registration_email: v.optional(base.entries.send_registration_email, true),
@@ -157,11 +135,7 @@ export const create = v.object({
 export type Create = v.InferOutput<typeof create>;
 
 export const update = v.object({
-	...v.partial(
-		v.omit(create, ['registration_email', 'cancellation_email', 'followup_email', 'reminder_email'])
-	).entries,
-	followup_sent_at: v.optional(base.entries.followup_sent_at),
-	reminder_sent_at: v.optional(base.entries.reminder_sent_at)
+	...v.partial(create).entries
 });
 export type Update = v.InferOutput<typeof update>;
 

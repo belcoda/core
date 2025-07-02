@@ -125,6 +125,7 @@ export async function update({
 	return parsedResult;
 }
 
+//this function is unsafe because we're not checking that the messageId or the personId belong to the instance
 export async function _getSentWhatsappMessageById({
 	sentMessageId
 }: {

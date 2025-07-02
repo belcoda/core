@@ -16,6 +16,7 @@ export type InstallOptions = {
 	instanceSlug: string;
 	ownerEmail: string;
 	ownerName: string;
+	ownerProfilePictureUrl?: string;
 	logoUrl: string;
 	faviconUrl?: string;
 	country: SupportedCountry;
@@ -67,7 +68,11 @@ export default async function install(
 	log.debug(`instance ${instance.id} created`);
 	const admin = await createAdmin({
 		instance_id: instance.id,
-		body: { email: options.ownerEmail, full_name: options.ownerName },
+		body: {
+			email: options.ownerEmail,
+			full_name: options.ownerName,
+			profile_picture_url: options.ownerProfilePictureUrl
+		},
 		queue
 	});
 	log.debug(`admin ${admin.id} created`);
@@ -85,15 +90,14 @@ export default async function install(
 	log.debug(newSettings);
 	const updatedInstance = await updateInstance({
 		instanceId: instance.id,
-		body: { settings: newSettings },
-		t
+		body: { settings: newSettings }
 	});
 	log.debug(`instance ${instance.id} updated`);
 
 	//test data
 	if (options.options.testData) {
 		log.debug(`installing test data`);
-		await createTestData({ instance: updatedInstance, admin, t, queue });
+		await createTestData({ instance: updatedInstance, admin, queue });
 	}
 	log.debug('updating instance to set installed to true');
 	await _updateInstanceSetInstalled({

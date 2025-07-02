@@ -4,7 +4,8 @@ import { REDIS_URL } from '$env/static/private';
 const DEFAULT_CACHE_TIME: number = 5000;
 const CACHE_PREFIX: string = 'bc:';
 
-import { error, pino } from '$lib/server';
+import { error } from '$lib/server/utils/error/index.js';
+import { pino } from '$lib/server/utils/logs/pino.js';
 import { building, dev } from '$app/environment';
 
 const log = pino(import.meta.url);

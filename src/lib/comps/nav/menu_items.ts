@@ -192,11 +192,6 @@ function menus(t: Localization): { [key: string]: MenuItem } {
 					icon: Users
 				},
 				{
-					title: () => m.yummy_inclusive_pony_explore(),
-					href: () => '/settings/communications',
-					icon: Megaphone
-				},
-				{
 					title: () => m.long_great_dachshund_favor(),
 					href: () => '/settings/website',
 					icon: Globe

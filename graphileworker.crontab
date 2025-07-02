@@ -1,1 +1,1 @@
-*/10 * * * * send_event_notifications
+*/10 * * * * every_ten_minutes

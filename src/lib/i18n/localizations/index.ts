@@ -1,4 +1,5 @@
-import { type SupportedLanguage } from '$lib/i18n/index';
+// @circular-ignore
+import { type SupportedLanguage } from '$lib/i18n/index'; // this is a type-only circular dependency so probably okay
 import errors from '$lib/i18n/localizations/errors';
 import pages from '$lib/i18n/localizations/pages';
 import forms from '$lib/i18n/localizations/forms';

@@ -18,7 +18,8 @@ const config = {
 					'self',
 					'*.sentry.io',
 					'https://api-gateway.umami.dev/api/send',
-					`https://*.amazonaws.com/`
+					`https://*.amazonaws.com/`,
+					`http://ip-api.com/json/`
 				],
 				// for now we need to keep 'unsafe-inline' for a couple of bits-ui components that inject inline event handlers
 				// we also need it for our custom code options, which currently inject inline styles.

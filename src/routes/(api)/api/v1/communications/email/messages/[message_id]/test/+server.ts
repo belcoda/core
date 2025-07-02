@@ -6,9 +6,9 @@ import * as m from '$lib/paraglide/messages';
 export async function PUT(event) {
 	try {
 		const body = await event.request.json();
+		//make sure the message is the latest info
 		const message = await read({
 			instanceId: event.locals.instance.id,
-			t: event.locals.t,
 			messageId: Number(event.params.message_id)
 		});
 		const parsed = parse(sendTestEmail, { ...body, message });

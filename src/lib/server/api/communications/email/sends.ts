@@ -1,77 +1,61 @@
 import { db, pool, redis, filterQuery, BelcodaError } from '$lib/server';
 import * as schema from '$lib/schema/communications/email/sends';
-import { type Create as CreateMessage } from '$lib/schema/communications/email/messages';
 import { parse } from '$lib/schema/valibot';
-import { create as createMessage } from '$lib/server/api/communications/email/messages';
-import { read as readTemplate } from '$lib/server/api/communications/email/templates';
-import { randomUUID } from 'crypto';
+import { type SendEmailToListSchema } from '$lib/schema/utils/email';
+
+import { exists as messageExists } from '$lib/server/api/communications/email/messages';
+
 import * as m from '$lib/paraglide/messages';
-function redisString(instanceId: number, sendId: number | 'all') {
-	return `i:${instanceId}:email_sends:${sendId}`;
+function redisString(instanceId: number, messageId: number, sendId: number | 'all') {
+	return `i:${instanceId}:email:${messageId}:sends:${sendId}`;
 }
 
 export async function create({
 	instanceId,
-	body,
-	defaultTemplateId,
-	t,
-	adminId,
-	queue
+	body
 }: {
 	instanceId: number;
 	body: schema.Create;
-	defaultTemplateId: number;
 	adminId: number;
-	t: App.Localization;
-	queue: App.Queue;
 }): Promise<schema.Read> {
+	// the foreign key constraint will ensure that a message exists...
+	// but we don't want to allow creating a send on a message that belongs to another instance
+
 	const parsed = parse(schema.create, body);
-	const template = await readTemplate({ instanceId, templateId: defaultTemplateId, t });
-	const messageBody: CreateMessage = {
-		name: randomUUID(),
-		template_id: template.id,
-		subject: template.subject,
-		html: '',
-		text: '',
-		preview_text: template.preview_text,
-		from: template.from,
-		reply_to: template.reply_to,
-		point_person_id: adminId,
-		use_html_for_plaintext: true
-	};
-	const message = await createMessage({
+	await messageExists({
 		instanceId,
-		defaultTemplateId,
-		body: messageBody,
-		queue: queue
+		messageId: parsed.message_id
 	});
 	const toInsert = {
 		instance_id: instanceId,
-		message_id: message.id,
 		...parsed
 	};
 	const inserted = await db.insert('communications.email_sends', toInsert).run(pool);
 	const parsedInserted = parse(schema.read, inserted);
-	await redis.del(redisString(instanceId, 'all'));
-	await redis.set(redisString(instanceId, parsedInserted.id), parsedInserted);
+	await redis.del(redisString(instanceId, parsed.message_id, 'all'));
+	await redis.set(redisString(instanceId, parsed.message_id, parsedInserted.id), parsedInserted);
 	return parsedInserted;
 }
 
 export async function read({
 	instanceId,
 	sendId,
-	t
+	messageId
 }: {
 	instanceId: number;
 	sendId: number;
-	t: App.Localization;
+	messageId: number;
 }): Promise<schema.Read> {
-	const cached = await redis.get(redisString(instanceId, sendId));
+	const cached = await redis.get(redisString(instanceId, messageId, sendId));
 	if (cached) {
 		return parse(schema.read, cached);
 	}
 	const selected = await db
-		.selectExactlyOne('communications.email_sends', { id: sendId, instance_id: instanceId })
+		.selectExactlyOne('communications.email_sends', {
+			id: sendId,
+			instance_id: instanceId,
+			message_id: messageId
+		})
 		.run(pool)
 		.catch((err) => {
 			throw new BelcodaError(
@@ -81,7 +65,7 @@ export async function read({
 				err
 			);
 		});
-	await redis.set(redisString(instanceId, sendId), selected);
+	await redis.set(redisString(instanceId, messageId, sendId), selected);
 	return parse(schema.read, selected);
 }
 
@@ -89,16 +73,22 @@ export async function update({
 	instanceId,
 	t,
 	sendId,
+	messageId,
 	body
 }: {
 	instanceId: number;
 	t: App.Localization;
 	sendId: number;
+	messageId: number;
 	body: schema.Update;
 }): Promise<schema.Read> {
 	const parsed = parse(schema.update, body);
 	const updated = await db
-		.update('communications.email_sends', parsed, { id: sendId, instance_id: instanceId })
+		.update('communications.email_sends', parsed, {
+			id: sendId,
+			instance_id: instanceId,
+			message_id: messageId
+		})
 		.run(pool);
 	if (updated.length !== 1) {
 		throw new BelcodaError(
@@ -107,19 +97,21 @@ export async function update({
 			m.pretty_tired_fly_lead()
 		);
 	}
-	await redis.del(redisString(instanceId, 'all'));
+	await redis.del(redisString(instanceId, messageId, 'all'));
 	const parsedUpdated = parse(schema.read, updated[0]);
-	await redis.set(redisString(instanceId, sendId), parsedUpdated);
+	await redis.set(redisString(instanceId, messageId, sendId), parsedUpdated);
 	return parsedUpdated;
 }
 
 export async function markAsStarted({
 	instanceId,
 	sendId,
+	messageId,
 	t
 }: {
 	instanceId: number;
 	sendId: number;
+	messageId: number;
 	t: App.Localization;
 }): Promise<schema.Read> {
 	const updated = await db
@@ -129,6 +121,7 @@ export async function markAsStarted({
 			{
 				id: sendId,
 				instance_id: instanceId,
+				message_id: messageId,
 				started_at: db.conditions.isNull,
 				completed_at: db.conditions.isNull
 			}
@@ -141,26 +134,28 @@ export async function markAsStarted({
 			m.pretty_tired_fly_lead()
 		);
 	}
-	await redis.del(redisString(instanceId, 'all'));
+	await redis.del(redisString(instanceId, messageId, 'all'));
 	const parsedUpdated = parse(schema.read, updated[0]);
-	await redis.set(redisString(instanceId, sendId), parsedUpdated);
+	await redis.set(redisString(instanceId, messageId, sendId), parsedUpdated);
 	return parsedUpdated;
 }
 
 export async function markAsComplete({
 	instanceId,
 	sendId,
+	messageId,
 	t
 }: {
 	instanceId: number;
 	sendId: number;
+	messageId: number;
 	t: App.Localization;
 }): Promise<schema.Read> {
 	const updated = await db
 		.update(
 			'communications.email_sends',
 			{ completed_at: db.conditions.now },
-			{ id: sendId, instance_id: instanceId }
+			{ id: sendId, instance_id: instanceId, message_id: messageId }
 		)
 		.run(pool);
 	if (updated.length !== 1) {
@@ -170,24 +165,24 @@ export async function markAsComplete({
 			m.pretty_tired_fly_lead()
 		);
 	}
-	await redis.del(redisString(instanceId, 'all'));
+	await redis.del(redisString(instanceId, messageId, 'all'));
 	const parsedUpdated = parse(schema.read, updated[0]);
-	await redis.set(redisString(instanceId, sendId), parsedUpdated);
+	await redis.set(redisString(instanceId, messageId, sendId), parsedUpdated);
 	return parsedUpdated;
 }
 
 export async function list({
 	instanceId,
-	t,
+	messageId,
 	url
 }: {
 	instanceId: number;
-	t: App.Localization;
+	messageId: number;
 	url: URL;
 }) {
 	const query = filterQuery(url);
 	if (query.filtered !== true) {
-		const cached = await redis.get(redisString(instanceId, 'all'));
+		const cached = await redis.get(redisString(instanceId, messageId, 'all'));
 		if (cached) {
 			return parse(schema.list, cached);
 		}
@@ -195,33 +190,55 @@ export async function list({
 	const selected = await db
 		.select(
 			'communications.email_sends',
-			{ instance_id: instanceId, ...query.where },
+			{ instance_id: instanceId, message_id: messageId, ...query.where },
 			{
 				...query.options
 			}
 		)
 		.run(pool);
 	const count = await db
-		.count('communications.email_sends', { instance_id: instanceId, ...query.where })
+		.count('communications.email_sends', {
+			instance_id: instanceId,
+			message_id: messageId,
+			...query.where
+		})
 		.run(pool);
 	const parsedSelected = parse(schema.list, { items: selected, count });
-	if (!query.filtered) await redis.set(redisString(instanceId, 'all'), parsedSelected);
+	if (!query.filtered) await redis.set(redisString(instanceId, messageId, 'all'), parsedSelected);
 	return parsedSelected;
 }
 
 export async function send({
 	instanceId,
 	sendId,
+	messageId,
 	adminId,
 	queue,
 	t
 }: {
 	instanceId: number;
+	messageId: number;
 	sendId: number;
 	adminId: number;
 	queue: App.Queue;
 	t: App.Localization;
 }): Promise<void> {
-	const sendObject = await read({ instanceId, sendId, t });
+	// the foreign key constraint will ensure that a message exists...
+	// but we don't want to allow sending a message that belongs to another instance
+	await messageExists({
+		instanceId,
+		messageId
+	});
+	//make sure the message exists
+	await read({
+		instanceId,
+		sendId,
+		messageId
+	});
+	//make sure send belongs to the correct message
+	const sendObject: SendEmailToListSchema = {
+		send_id: sendId,
+		message_id: messageId
+	};
 	await queue('/utils/email/send_to_list', instanceId, sendObject, adminId);
 }

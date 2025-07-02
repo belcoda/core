@@ -1,16 +1,20 @@
 import { db, pool, redis, pino, BelcodaError, error, filterQuery, type s } from '$lib/server';
 import * as m from '$lib/paraglide/messages';
-import { filterInteractions } from '$lib/server/utils/filters/filter';
 import { format } from 'node-pg-format';
 import * as schema from '$lib/schema/people/people';
 import { read as instanceApi } from '$lib/server/api/core/instances';
 import { filterPersonTags } from '$lib/server/utils/filters/filter';
 import { DEFAULT_COUNTRY, DEFAULT_LANGUAGE } from '$lib/i18n';
-import { queue as queueInteraction } from '$lib/server/api/people/interactions';
+import { queue as queueInteraction } from '$lib/server/api/people/interactions/queue.js';
 import { getUniqueKeys } from '$lib/utils/objects/get_unique_keys';
 import { parse, v, mediumString, longString } from '$lib/schema/valibot';
 import { whatsappNumberForVerification } from '$lib/schema/people/channels/channels';
 import type { WhatsappInboundMessage } from '$lib/schema/communications/whatsapp/webhooks/ycloud';
+import * as csv from 'fast-csv';
+import { type Read as ReadInstance } from '$lib/schema/core/instance';
+import { create as createSchema } from '$lib/schema/people/people';
+import { update as updateImport } from '$lib/server/api/people/imports';
+import { getParseSchema, type ImportResult } from '$lib/schema/people/imports';
 
 export const redisString = (instance_id: number, person_id: number | 'all') =>
 	`i:${instance_id}:people:${person_id}`;
@@ -89,6 +93,7 @@ export async function create({
 		point_person_id: point_person_id,
 		preferred_language: parsed.preferred_language || DEFAULT_LANGUAGE,
 		...parsed,
+		dob: (parsed.dob as `${number}-${number}-${number}`) || null,
 		country: parsed.country || DEFAULT_COUNTRY
 	};
 	const inserted = await db.insert('people.people', toInsert).run(pool);
@@ -202,12 +207,16 @@ export async function update({
 }) {
 	try {
 		const parsed = parse(schema.update, body);
+		//fix type issue in date format (needs to be YYYY-MM-DD)
+		const toUpdate = {
+			...parsed,
+			...(parsed.dob ? { dob: parsed.dob as `${number}-${number}-${number}` } : {})
+		};
 		const updated = await db
 			.update(
 				'people.people',
-				{
-					...parsed
-				},
+				//@ts-ignore (this is an issue with passing a string where the db expects `${number}-${number}-${number}` for an ISO date. But we have already validated it as an iso date, and tried to typecase it above. Not sure what's going on here)
+				{ ...toUpdate },
 				{ instance_id, id: person_id, deleted_at: db.conditions.isNull }
 			)
 			.run(pool)
@@ -543,6 +552,7 @@ export async function _createPersonByWhatsappId({
 				whapi_id: null,
 				whatsapp: true
 			},
+			dob: null,
 			country: DEFAULT_COUNTRY // TODO: Get country from phone number country code
 		},
 		method: 'event_registration',
@@ -635,6 +645,213 @@ export async function getPersonOrCreatePersonByWhatsappId(
 			});
 		} else {
 			throw err;
+		}
+	}
+}
+
+export async function _getPersonByEmail({
+	instanceId,
+	email,
+	t
+}: {
+	instanceId: number;
+	email: string;
+	t: App.Localization;
+}): Promise<schema.Read> {
+	const person =
+		await db.sql`SELECT id FROM ${'people.people'} WHERE (email->>'email' = ${db.param(email)}) AND instance_id = ${db.param(instanceId)} AND deleted_at IS NULL LIMIT 1`.run(
+			pool
+		);
+	if (person.length !== 1) {
+		throw new BelcodaError(
+			404,
+			'DATA:PEOPLE:PEOPLE:GET_PERSON_BY_EMAIL:01',
+			m.every_formal_jellyfish_stop()
+		);
+	}
+	return await read({ instance_id: instanceId, person_id: person[0].id });
+}
+
+export async function parseImportCsv(
+	csvString: string,
+	importId: number,
+	instance: ReadInstance,
+	adminId: number,
+	queue: App.Queue,
+	t: App.Localization
+): Promise<ImportResult> {
+	const records: unknown[] = [];
+	return new Promise((resolve, reject) => {
+		csv
+			.parseString(csvString, { headers: true })
+			.on('error', function (err) {
+				log.error(err);
+			})
+			.on('data', function (row) {
+				// Check if all values in the row are empty or null
+				const isEntirelyEmptyRow = Object.values(row).every(
+					(value) => value === null || String(value).trim() === ''
+				);
+
+				if (!isEntirelyEmptyRow) {
+					records.push(row);
+				}
+			})
+			.on('end', async function (rowCount: number) {
+				log.debug(`Parsed ${rowCount} rows`);
+				let successCount = 0;
+				let failedCount = 0;
+				let failedRows: { row: number; error: string }[] = [];
+
+				for (let i = 0; i < records.length; i++) {
+					try {
+						const parsed = parse(getParseSchema(instance), records[i]);
+						log.debug(parsed);
+
+						// Check if both family_name and given_name are empty
+						const familyName = parsed.family_name ? String(parsed.family_name).trim() : '';
+						const givenName = parsed.given_name ? String(parsed.given_name).trim() : '';
+						if (familyName === '' && givenName === '') {
+							throw new Error(`Name is empty for row: ${i + 1}`);
+						}
+
+						const parsedItem = v.parse(v.looseObject({ ...createSchema.entries }), parsed); //because we want to allow custom fields to be passed through to the function
+						const { events, tags, ...strippedPerson } = parsedItem; //remove events and tags from the person object
+						const createdPerson = await create({
+							instance_id: instance.id,
+							admin_id: adminId,
+							body: strippedPerson,
+							queue: queue,
+							method: 'import'
+						});
+						for (const tag of parsed.tags) {
+							await addPersonToTag({
+								instanceId: instance.id,
+								personId: createdPerson.id,
+								tagName: tag,
+								t
+							});
+						}
+						for (const eventSlug of parsed.events) {
+							await addPersonToEvent({
+								instanceId: instance.id,
+								personId: createdPerson.id,
+								eventSlug,
+								t,
+								queue,
+								importId
+							});
+						}
+						successCount++;
+					} catch (err: unknown) {
+						failedCount++;
+						failedRows.push({
+							row: i + 1,
+							error: err instanceof Error ? err.message : 'Unknown error'
+						});
+						log.error(
+							'Import failed for row: ',
+							i + 1,
+							' error: ',
+							err instanceof Error ? err.message : 'Unknown error'
+						);
+					}
+				}
+
+				//await update the import record with the success and failed count and the status
+				await updateImport({
+					instanceId: instance.id,
+					importId,
+					t,
+					body: {
+						status: 'complete',
+						total_rows: records.length,
+						processed_rows: successCount,
+						failed_rows: failedCount,
+						failed_rows_details: failedRows
+					}
+				});
+
+				resolve({
+					totalRows: records.length,
+					successCount,
+					failedCount,
+					records
+				});
+			});
+	});
+}
+
+import { readBySlug } from '$lib/server/api/events/events';
+import { create as createAttendee } from '$lib/server/api/events/attendees';
+async function addPersonToEvent({
+	instanceId,
+	personId,
+	eventSlug,
+	t,
+	queue,
+	importId
+}: {
+	instanceId: number;
+	personId: number;
+	eventSlug: string;
+	t: App.Localization;
+	queue: App.Queue;
+	importId: number;
+}): Promise<void> {
+	try {
+		const event = await readBySlug({ instanceId, slug: eventSlug });
+		await createAttendee({
+			instanceId,
+			eventId: event.id,
+			body: {
+				person_id: personId,
+				status: 'attended',
+				send_notifications: false,
+				notes: `import:${importId}`,
+				response_channel: 'none'
+			},
+			t,
+			queue
+		});
+		log.debug({ instanceId, personId, eventSlug }, 'Added person to event');
+	} catch (err) {
+		//no event?
+		log.debug(
+			{ instanceId, personId, eventSlug },
+			'Unable to add person to event. Probably no event exists with this slug'
+		);
+	}
+}
+
+import { readByName, create as createTag } from '$lib/server/api/core/tags';
+import { create as createTagging } from '$lib/server/api/people/taggings';
+async function addPersonToTag({
+	instanceId,
+	personId,
+	tagName,
+	t
+}: {
+	instanceId: number;
+	personId: number;
+	tagName: string;
+	t: App.Localization;
+}): Promise<void> {
+	try {
+		//try to add them to an existing tag
+		const tag = await readByName({ instanceId, tagName });
+		await createTagging({ instanceId, personId, tagId: tag.id, t });
+		log.debug({ instanceId, personId, tagName }, 'Added tag');
+	} catch (err) {
+		//if no tag exists, readByName will error. So we create a new tag
+		try {
+			const newTag = await createTag({ instanceId, body: { name: tagName } });
+			log.debug(newTag, 'Created new tag');
+			await createTagging({ instanceId, personId, tagId: newTag.id, t });
+			log.debug({ instanceId, personId, tagName, newTag }, 'Added person to new tag');
+		} catch (err) {
+			//If something went wrong with the creation or adding of a new tag.
+			log.debug({ instanceId, personId, tagName }, 'Unable to create tag');
 		}
 	}
 }

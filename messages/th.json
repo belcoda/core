@@ -573,7 +573,6 @@
 	"jumpy_alive_puffin_vent": "คุณได้ลงทะเบียนเข้าร่วมกิจกรรมแล้ว {activityTitle}",
 	"full_tangy_cow_pull": "คุณได้ลงนามในคำร้อง {activityTitle}",
 	"dizzy_mellow_otter_clap": "คุณได้ยกเลิกการลงนามในคำร้อง {activityTitle}",
-	"east_north_osprey_hurl": "คุณได้ลงนามในคำร้องแล้ว {activityTitle}",
 	"keen_agent_shell_mop": "ไม่สามารถลบข้อมูลได้",
 	"dizzy_actual_elephant_evoke": "ลบข้อมูลสำเร็จแล้ว",
 	"whole_still_macaw_bless": "ยินดีต้อนรับสู่ {instanceName}",
@@ -636,5 +635,13 @@
 	"just_patient_finch_mix": "การลงทะเบียนของคุณถูกยกเลิก เราจะไม่รอคุณอีกแล้ว",
 	"tidy_cuddly_pelican_evoke": "ไม่พบประเทศที่ตรงกัน",
 	"light_next_wasp_belong": "ต้องเป็นรหัสภาษา ISO 639-1 ที่ถูกต้อง (เช่น: 'en' สำหรับภาษาอังกฤษ)",
-	"misty_awful_kitten_walk": "ข้อมูล.t.forms.fields.custom_code.custom_js.label()"
+	"misty_awful_kitten_walk": "ข้อมูล.t.forms.fields.custom_code.custom_js.label()",
+	"spare_good_marmot_laugh": "คุณไม่ได้ตั้งค่าที่อยู่อีเมลเริ่มต้น อีเมลทั้งหมด (รวมทั้งการแจ้งเตือนเหตุการณ์) จะถูกตั้งค่าเป็น\nส่งจากที่อยู่อีเมลเริ่มต้น ( {emailAddress} ) คุณสามารถกำหนดค่าการตั้งค่าอีเมลของคุณได้ใน <a href=\"/settings/email/from_signatures\" class=\"text-blue-500 underline\">แผงควบคุมผู้ดูแลระบบ</a>",
+	"yummy_muddy_capybara_nail": "มีปัญหาเกี่ยวกับการกำหนดค่าอีเมล์ของคุณ!",
+	"fun_raw_giraffe_treasure": "เลือกเขตเวลา",
+	"close_stock_lion_bubble": "เขตเวลา",
+	"east_north_osprey_hurl": "คุณได้ลงนามในคำร้องแล้ว {activityTitle}",
+	"such_weird_lamb_feel": "บันทึก",
+	"aqua_weird_badger_cook": "ผู้เข้าร่วมจะได้รับการแจ้งเตือนเกี่ยวกับกิจกรรม คุณสามารถเปลี่ยนการแจ้งเตือนที่พวกเขาจะได้รับและเวลาที่พวกเขาจะได้รับโดยเปลี่ยนการตั้งค่าการแจ้งเตือนภายใต้",
+	"large_seemly_crocodile_spur": "จัดการการแจ้งเตือน"
 }

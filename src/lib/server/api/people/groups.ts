@@ -6,26 +6,11 @@ import * as membersSchema from '$lib/schema/people/group_members';
 import { list as listInGroup } from '$lib/server/api/people/filters/in_group';
 import { parse } from '$lib/schema/valibot';
 import { linkWhatsappGroup as linkWhatsappGroupWhapi } from '$lib/server/utils/whapi/groups';
-function redisString(instanceId: number, groupId: number | 'all', banned?: boolean) {
-	const bannedSuffix = banned ? ':banned' : '';
-	return `i:${instanceId}:groups:${groupId}${bannedSuffix}`;
-}
+import { redisString } from '$lib/server/api/people/groups/cache.js';
+export { redisString };
 
-export async function exists({ instanceId, groupId }: { instanceId: number; groupId: number }) {
-	const cached = await redis.get(redisString(instanceId, groupId));
-	if (cached) return true;
-	await db
-		.selectExactlyOne('people.groups', {
-			instance_id: instanceId,
-			id: groupId,
-			deleted_at: db.conditions.isNull
-		})
-		.run(pool)
-		.catch((err) => {
-			throw new BelcodaError(404, 'DATA:PEOPLE:GROUPS:EXISTS:01', m.pretty_tired_fly_lead(), err);
-		});
-	return true;
-}
+import { exists } from '$lib/server/api/people/groups/exists.js';
+export { exists };
 
 export async function personExists({ personId, groupId }: { personId: number; groupId: number }) {
 	await db

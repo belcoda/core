@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	type T = Record<string, unknown>;
 </script>
 
@@ -8,6 +8,7 @@
 	export let name: FormPath<T>;
 	import * as Form from '$lib/comps/ui/form';
 	export let label: string | null;
+	export let disabled: boolean = false;
 	export let description: string | null = null;
 	import { cn } from '$lib/utils';
 	let className = '';
@@ -32,6 +33,7 @@
 				{#if description}<Form.Description>{description}</Form.Description>{/if}
 				<Editor
 					bind:value
+					{disabled}
 					{...props}
 					scriptSrc="/vendor/tinymce/tinymce.min.js"
 					apiKey="no-api"

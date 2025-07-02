@@ -18,6 +18,10 @@ export type LocalizationFunction = (locale: SupportedLanguage, ...args: any[]) =
 export type AlreadyLocalizedLocalizationFunction = (...args: any[]) => string;
 export type SL = SupportedLanguage;
 
+import * as i18n from './localizations';
+export { i18n };
+export type LocalizationObject = typeof i18n;
+
 export function returnLocalizationString(locale: SupportedLanguage, key: LocalizationKey): string {
 	if (key[locale] && typeof key[locale] === 'string') {
 		//For some reason this cannot be statically analyzed? Let's make sure we check here if we are having issues...
@@ -26,10 +30,6 @@ export function returnLocalizationString(locale: SupportedLanguage, key: Localiz
 		return key[DEFAULT_LANGUAGE];
 	}
 }
-
-import * as i18n from './localizations';
-export { i18n };
-export type LocalizationObject = typeof i18n;
 
 export function parseLocale(event: RequestEvent): SupportedLanguage {
 	const url_locale = event.url.searchParams.get('lng');

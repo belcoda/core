@@ -22,7 +22,6 @@ export const POST = async function (event) {
 		const signInDetails = await verify(credential);
 		const parsedSignInDetails = parse(validateSignIn, signInDetails);
 		const { session, admin } = await signIn({
-			t: new Localization(event.locals.language),
 			body: parsedSignInDetails
 		});
 

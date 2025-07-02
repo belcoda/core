@@ -224,3 +224,68 @@ export function createMessageComponentsFromTemplateComponents(
 	}
 	return { components, actions: actionsObject };
 }
+
+export function hasUnfilledPlaceholders(
+	template: any | null,
+	components: any[],
+	templateMessage: { type: string }
+) {
+	if (!template || templateMessage.type !== 'template') return false;
+
+	// Check header
+	const headerComponent = template.message.components.find(
+		(comp: any) => comp.type === 'HEADER' && comp.format === 'TEXT'
+	);
+	if (headerComponent && 'text' in headerComponent) {
+		const headerPlaceholders = countTextTemplatePlaceholders(headerComponent.text);
+		const headerParams = components.find((comp) => comp.type === 'header')?.parameters || [];
+		if (headerPlaceholders > headerParams.length) return true;
+
+		for (const param of headerParams) {
+			if (param.type === 'text' && /{{[0-9]+}}/.test(param.text)) return true;
+		}
+	}
+
+	// Check body
+	const bodyComponent = template.message.components.find((comp: any) => comp.type === 'BODY');
+	if (bodyComponent && 'text' in bodyComponent) {
+		const bodyPlaceholders = countTextTemplatePlaceholders(bodyComponent.text);
+		const bodyParams = components.find((comp) => comp.type === 'body')?.parameters || [];
+		if (bodyPlaceholders > bodyParams.length) return true;
+
+		for (const param of bodyParams) {
+			if (param.type === 'text' && /{{[0-9]+}}/.test(param.text)) return true;
+		}
+	}
+
+	return false;
+}
+import { type List } from '$lib/schema/communications/whatsapp/messages';
+
+export function hasUnattachedButtons(
+	template: any | null,
+	components: any[],
+	templateMessage: { type: string },
+	messages: List['items']
+) {
+	if (!template || templateMessage.type !== 'template') return false;
+	for (const message of messages) {
+		if (message.message.type === 'interactive' && message.message.interactive.type === 'button') {
+			const numButtons = message.message.interactive.action.buttons.length;
+			const numActions = Object.keys(message.actions).length;
+			if (numButtons > numActions) {
+				return true;
+			}
+		}
+		// now do the same for the template message
+		if (message.message.type === 'template' && message.message.template.components) {
+			const numButtons = message.message.template.components.filter(
+				(component) => component.type === 'button' && component.sub_type === 'quick_reply'
+			).length;
+			const numActions = Object.keys(message.actions).length;
+			if (numButtons > numActions) {
+				return true;
+			}
+		}
+	}
+}

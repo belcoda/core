@@ -23,11 +23,12 @@ export const events = {
 export const communications = {
 	email: {
 		default_from_name: 'Test',
-		default_template_id: 3
+		default_template_id: 3,
+		default_template_name: 'main' as const
 	},
 	whatsapp: {
 		default_template_id: 4,
-		phone_number_id: '+1234567890',
+		phone_number: '+1234567890',
 		business_account_id: null
 	}
 };
@@ -50,10 +51,14 @@ export const website = {
 export const settings = {
 	default_admin_id: 1,
 	home_page_url: 'localhost',
-	events,
+	events: {
+		...events,
+		event_email_template_prefix: 'test-'
+	},
 	communications,
 	petitions,
-	website
+	website,
+	default_timezone: 'Europe/London'
 };
 
 export const instance: Read = {

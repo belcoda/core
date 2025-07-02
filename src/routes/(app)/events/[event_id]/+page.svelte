@@ -23,6 +23,7 @@
 	import { getFlash } from 'sveltekit-flash-message';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import { convertToTimezone } from '$lib/utils/date/datetime';
 	const flash = getFlash(page);
 	let copied = $state(false);
 	const attendanceStatus: ['registered', 'attended', 'cancelled', 'noshow'] = [
@@ -84,22 +85,30 @@
 			<Button variant="outline" target="_blank" href={previewUrl}
 				>{m.alive_silly_antelope_build()}</Button
 			>
+			<Button href="/events/{data.event.id}/edit/notifications" variant="outline"
+				>{m.large_seemly_crocodile_spur()}</Button
+			>
 			<Button href="/events/{data.event.id}/edit">{m.giant_misty_shrimp_stop()}</Button>
 		</div>
 	{/snippet}
 </PageHeader>
 <div class="text-muted-foreground space-y-2 mt-3">
-	{#if renderAddress(data.event, data.t, data.instance.country).text.length > 0}<div
+	{#if renderAddress(data.event, data.instance.country).text.length > 0}<div
 			class="flex items-center gap-1.5"
 		>
 			<MapPin size={16} />
-			<a href={renderAddress(data.event, data.t, data.instance.country).url} target="_blank"
-				>{renderAddress(data.event, data.t, data.instance.country).text}</a
+			<a href={renderAddress(data.event, data.instance.country).url} target="_blank"
+				>{renderAddress(data.event, data.instance.country).text}</a
 			>
 		</div>{/if}
 	<div class="flex items-center gap-1.5">
 		<CalendarClock size={16} />
-		{formatDateTimeRange(data.event.starts_at, data.event.ends_at)}
+		{formatDateTimeRange(
+			convertToTimezone(data.event.starts_at, data.event.timezone),
+			convertToTimezone(data.event.ends_at, data.event.timezone),
+			undefined,
+			data.event.timezone
+		)}
 	</div>
 	<div class="flex items-center gap-1.5">
 		<Link size={16} />
@@ -139,6 +148,18 @@
 			>{#snippet header()}{/snippet}</PointPerson
 		>
 	</div>
+</div>
+<div
+	class="p-4 mt-4 text-sm text-blue-800 rounded-lg bg-blue-100 dark:bg-gray-800 dark:text-blue-300"
+	role="alert"
+>
+	<p>
+		<span class="font-medium"
+			>{m.such_weird_lamb_feel()}: {m.aqua_weird_badger_cook()} "<strong
+				>{m.large_seemly_crocodile_spur()}</strong
+			>".</span
+		>
+	</p>
 </div>
 <div class="mt-12">
 	<DataGrid title={m.petty_vexed_jurgen_nurture()} items={attendees} count={data.attendees.count}>

@@ -96,14 +96,27 @@
 	}
 	import * as m from '$lib/paraglide/messages';
 	import { goto } from '$app/navigation';
+
+	async function handleSendClick() {
+		if (componentActions.hasUnfilledPlaceholders(template, components, templateMessage)) {
+			$flash = { type: 'error', message: 'Please fill in all placeholders before sending' };
+			return;
+		}
+		if (componentActions.hasUnattachedButtons(template, components, templateMessage, messages)) {
+			$flash = {
+				type: 'error',
+				message: 'Please make sure all buttons have actions before sending.'
+			};
+			return;
+		}
+		goto(`/communications/whatsapp/${data.thread.id}/sends`);
+	}
 </script>
 
 <PageHeader title={'Edit thread'}>
 	{#snippet button()}
 		<div class="flex justify-end gap-2">
-			<Button variant="secondary" href="/communications/whatsapp/{data.thread.id}/sends">
-				Send
-			</Button>
+			<Button variant="secondary" onclick={handleSendClick}>Send</Button>
 			<Button onclick={saveThread}>{m.empty_warm_squirrel_chop()}</Button>
 		</div>
 	{/snippet}

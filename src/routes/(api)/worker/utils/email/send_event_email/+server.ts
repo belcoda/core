@@ -1,61 +1,46 @@
 import { json, error, pino } from '$lib/server';
-import {
-	sendEventEmailMessage,
-	sendEmailMessage,
-	type SendEmailMessage
-} from '$lib/schema/utils/email';
-import renderEmail from '$lib/server/utils/handlebars/render_email';
-import { read } from '$lib/server/api/communications/email/templates';
-const log = pino(import.meta.url);
-import { randomUUID } from 'crypto';
 import { parse } from '$lib/schema/valibot';
+import { sendEventEmailMessage } from '$lib/schema/utils/email';
+import { type EmailTemplateMessage } from '$lib/schema/communications/email/messages';
+
+const log = pino(import.meta.url);
 import * as m from '$lib/paraglide/messages';
+
+import { eventReminderOptions } from '$lib/server/utils/email/context/eventReminder';
+import { eventRegistrationOptions } from '$lib/server/utils/email/context/eventRegistration';
 
 export async function POST(event) {
 	try {
 		const body = await event.request.json();
 		const parsed = parse(sendEventEmailMessage, body);
-		const sentEmailId = randomUUID();
 
-		const template = await read({
-			instanceId: event.locals.instance.id,
-			templateId: parsed.email.template_id,
-			t: event.locals.t
-		});
-
-		// handlebars the templates...
-
-		const renderedHtml = await renderEmail({
-			emailUnsubscribeToken: sentEmailId,
-			messageTemplate: parsed.email.html,
-			templateTemplate: template.html,
-			instanceId: event.locals.instance.id,
-			context: { event: parsed.event, person: parsed.person, instance: parsed.instance },
-			t: event.locals.t
-		});
-		const renderedText = parsed.email.use_html_for_plaintext
-			? renderedHtml
-			: await renderEmail({
-					emailUnsubscribeToken: sentEmailId,
-					messageTemplate: parsed.email.text,
-					templateTemplate: template.text,
-					instanceId: event.locals.instance.id,
-					context: { event: parsed.event, person: parsed.person, instance: parsed.instance },
-					t: event.locals.t
-				});
-		const sendToQueue: SendEmailMessage = {
-			person_id: parsed.person.id,
-			email: { ...parsed.email, html: renderedHtml, text: renderedText },
-			sent_email_id: sentEmailId,
-			email_message_id: parsed.email.id
+		const contextOptions = {
+			instance: event.locals.instance,
+			event: parsed.event,
+			language: parsed.person.preferred_language || event.locals.instance.language
 		};
-		const parsedSendToQueue = parse(sendEmailMessage, sendToQueue);
+
+		// the only two types of event_email are reminder and registration
+		const context =
+			parsed.details.type === 'event_reminder'
+				? eventReminderOptions(contextOptions)
+				: eventRegistrationOptions(contextOptions);
+
+		const output: EmailTemplateMessage = {
+			context,
+			send_details: parsed.details,
+			template: parsed.template,
+			person_id: parsed.person.id,
+			reply_to: null
+		};
+
 		await event.locals.queue(
-			'utils/email/send_email',
+			'utils/email/send_email/template',
 			event.locals.instance.id,
-			parsedSendToQueue,
+			output,
 			event.locals.admin.id
 		);
+		log.debug(output, 'Sent event email to queue with these details');
 		return json({ success: true });
 	} catch (err) {
 		return error(

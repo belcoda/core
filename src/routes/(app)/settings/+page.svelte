@@ -49,22 +49,6 @@
 
 	<Card.Root class="mt-4">
 		<Card.Header>
-			<Card.Title>{m.pretty_ideal_earthworm_spin()}</Card.Title>
-		</Card.Header>
-		<Card.Content>
-			<Grid>
-				<Button variant="outline" href="/settings/communications/email/templates"
-					>{m.raw_fit_mare_scold()}</Button
-				>
-				<Button variant="outline" href="/settings/communications/email/templates/new"
-					>{m.good_awful_warbler_attend()}</Button
-				>
-			</Grid>
-		</Card.Content>
-	</Card.Root>
-
-	<Card.Root class="mt-4">
-		<Card.Header>
 			<Card.Title>{m.teary_fair_gazelle_create()}</Card.Title>
 		</Card.Header>
 		<Card.Content>
@@ -90,6 +74,24 @@
 				<Button variant="outline" href="/settings/people/imports/new"
 					>{m.top_maroon_grizzly_edit()}</Button
 				>
+			</Grid>
+		</Card.Content>
+	</Card.Root>
+
+	<Card.Root class="mt-4">
+		<Card.Header>
+			<Card.Title>Email settings</Card.Title>
+			<!-- TODO TRANSLATE -->
+		</Card.Header>
+		<Card.Content>
+			<Grid>
+				<Button variant="outline" href="/settings/email/from_signatures"
+					>Manage email from signatures</Button
+				>
+				<!-- TODO TRANSLATE -->
+				<Button variant="outline" href="/settings/email/from_signatures/new"
+					>New email from signature</Button
+				><!-- TODO TRANSLATE -->
 			</Grid>
 		</Card.Content>
 	</Card.Root>
